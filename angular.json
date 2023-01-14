@@ -90,6 +90,103 @@
           }
         }
       }
+    },
+    "01-b-angular-adv-tarea-01-master": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "projects/01-b-angular-adv-tarea-01-master",
+      "sourceRoot": "projects/01-b-angular-adv-tarea-01-master/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/01-b-angular-adv-tarea-01-master",
+            "index": "projects/01-b-angular-adv-tarea-01-master/src/index.html",
+            "main": "projects/01-b-angular-adv-tarea-01-master/src/main.ts",
+            "polyfills": [
+              "zone.js"
+            ],
+            "tsConfig": "projects/01-b-angular-adv-tarea-01-master/tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              "projects/01-b-angular-adv-tarea-01-master/src/favicon.ico",
+              "projects/01-b-angular-adv-tarea-01-master/src/assets"
+            ],
+            "styles": [
+              "projects/01-b-angular-adv-tarea-01-master/src/styles.scss"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "browserTarget": "01-b-angular-adv-tarea-01-master:build:production"
+            },
+            "development": {
+              "browserTarget": "01-b-angular-adv-tarea-01-master:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "01-b-angular-adv-tarea-01-master:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ],
+            "tsConfig": "projects/01-b-angular-adv-tarea-01-master/tsconfig.spec.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              "projects/01-b-angular-adv-tarea-01-master/src/favicon.ico",
+              "projects/01-b-angular-adv-tarea-01-master/src/assets"
+            ],
+            "styles": [
+              "projects/01-b-angular-adv-tarea-01-master/src/styles.scss"
+            ],
+            "scripts": []
+          }
+        }
+      }
     }
   }
 }

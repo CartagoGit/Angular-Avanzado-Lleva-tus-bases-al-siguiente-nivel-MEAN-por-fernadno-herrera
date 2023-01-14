@@ -7,7 +7,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "dev:clitest" : "ng serve --project='01-clitest'"
+    "dev:clitest" : "ng serve --project='01-clitest'",
+    "dev:clitest-ejercicio" : "ng serve --project='01-b-angular-adv-tarea-01-master'"
 
   },
   "private": true,
