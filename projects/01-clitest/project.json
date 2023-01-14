@@ -1,0 +1,89 @@
+{
+  "name": "01-clitest",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "generators": {
+    "@schematics/angular:component": {
+      "style": "scss"
+    }
+  },
+  "sourceRoot": "projects/01-clitest/src",
+  "prefix": "app",
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:browser",
+      "options": {
+        "outputPath": "dist/01-clitest",
+        "index": "projects/01-clitest/src/index.html",
+        "main": "projects/01-clitest/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "projects/01-clitest/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          "projects/01-clitest/src/favicon.ico",
+          "projects/01-clitest/src/assets"
+        ],
+        "styles": ["projects/01-clitest/src/styles.scss"],
+        "scripts": []
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "browserTarget": "01-clitest:build:production"
+        },
+        "development": {
+          "browserTarget": "01-clitest:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "browserTarget": "01-clitest:build"
+      }
+    },
+    "test": {
+      "executor": "@angular-devkit/build-angular:karma",
+      "options": {
+        "polyfills": ["zone.js", "zone.js/testing"],
+        "tsConfig": "projects/01-clitest/tsconfig.spec.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          "projects/01-clitest/src/favicon.ico",
+          "projects/01-clitest/src/assets"
+        ],
+        "styles": ["projects/01-clitest/src/styles.scss"],
+        "scripts": []
+      }
+    }
+  }
+}
