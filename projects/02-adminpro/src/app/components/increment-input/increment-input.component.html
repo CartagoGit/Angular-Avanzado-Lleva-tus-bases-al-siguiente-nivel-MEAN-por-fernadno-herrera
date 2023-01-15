@@ -1,0 +1,24 @@
+<div class="input-group">
+  <span class="input-group-btn">
+    <button class="btn btn-primary" type="button" (click)="changeProgress(-5)">
+      <i class="fa fa-minus"></i>
+    </button>
+  </span>
+
+  <input
+    #inputProgress
+    min="0"
+    max="100"
+    type="number"
+    class="form-control symbol-euro"
+    placeholder="Cambiar progreso"
+    [ngModel]="getProgress"
+    (ngModelChange)="changeInputProgress($event, inputProgress)"
+  />
+  <span class="input-group-addon">%</span>
+  <span class="input-group-btn">
+    <button class="btn btn-primary" type="button" (click)="changeProgress(5)">
+      <i class="fa fa-plus"></i>
+    </button>
+  </span>
+</div>
