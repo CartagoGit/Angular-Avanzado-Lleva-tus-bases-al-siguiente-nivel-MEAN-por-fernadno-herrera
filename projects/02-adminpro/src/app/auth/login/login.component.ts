@@ -3,12 +3,6 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styles: [
-    `
-      :host {
-        display: block;
-      }
-    `,
-  ],
+  styleUrls: ['../../../assets/css/auth/auth.css'],
 })
 export class LoginComponent {}

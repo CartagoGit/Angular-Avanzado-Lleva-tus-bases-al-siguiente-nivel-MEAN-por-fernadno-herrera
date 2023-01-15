@@ -8,6 +8,7 @@ import { BreadcrumbsComponent } from './shared/breadcrumbs/breadcrumbs.component
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { HeaderComponent } from './shared/header/header.component';
 import { SidebarComponent } from './shared/sidebar/sidebar.component';
+import { PagesComponent } from './pages/pages.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { SidebarComponent } from './shared/sidebar/sidebar.component';
     BreadcrumbsComponent,
     SidebarComponent,
     HeaderComponent,
+    PagesComponent,
   ],
   imports: [BrowserModule, AppRoutingModule],
   providers: [],

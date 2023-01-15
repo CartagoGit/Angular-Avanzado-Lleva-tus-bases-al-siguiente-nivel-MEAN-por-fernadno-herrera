@@ -6,32 +6,42 @@ import { ProgressComponent } from './pages/progress/progress.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { LoginComponent } from './auth/login/login.component';
 import { NopagefoundComponent } from './pages/nopagefound/nopagefound.component';
+import { PagesComponent } from './pages/pages.component';
 
 const routes: Routes = [
+  //* Hay que estar logueado
   {
-    path: 'dashboard',
-    component: DashboardComponent,
+    path: '',
+    component: PagesComponent,
+    children: [
+      {
+        path: 'dashboard',
+        component: DashboardComponent,
+      },
+      {
+        path: 'progress',
+        component: ProgressComponent,
+      },
+      {
+        path: 'graphic01',
+        component: Graphic01Component,
+      },
+      {
+        path: '',
+        redirectTo: '/dashboard',
+        pathMatch: 'full',
+      },
+    ],
   },
-  {
-    path: 'login',
-    component: LoginComponent,
-  },
+
+  //* Publicas
   {
     path: 'register',
     component: RegisterComponent,
   },
   {
-    path: 'progress',
-    component: ProgressComponent,
-  },
-  {
-    path: 'graphic01',
-    component: Graphic01Component,
-  },
-  {
-    path: '',
-    redirectTo: '/dashboard',
-    pathMatch: 'full',
+    path: 'login',
+    component: LoginComponent,
   },
   {
     path: '**',
