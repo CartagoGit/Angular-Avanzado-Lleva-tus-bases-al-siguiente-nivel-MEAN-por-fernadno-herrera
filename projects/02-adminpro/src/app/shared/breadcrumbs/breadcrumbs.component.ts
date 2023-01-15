@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-breadcrumbs',
-  template: ` <p>breadcrumbs works!</p> `,
+  templateUrl: './breadcrumbs.component.html',
   styles: [],
 })
 export class BreadcrumbsComponent {}
