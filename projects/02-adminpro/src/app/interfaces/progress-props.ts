@@ -5,6 +5,7 @@ import { TypeNumber } from './type-numbers';
  */
 export interface ProgressProps {
   value: number;
+  valueWithType?: string;
   title?: string;
   colorBootstrap?: ColorBootstrap;
   percent?: number;
@@ -12,5 +13,5 @@ export interface ProgressProps {
   typeNumber?: TypeNumber;
   max?: number;
   min?: number;
-  range? : number;
+  range?: number;
 }

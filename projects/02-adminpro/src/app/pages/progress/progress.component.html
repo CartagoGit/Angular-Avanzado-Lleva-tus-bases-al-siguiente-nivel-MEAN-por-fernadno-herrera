@@ -21,8 +21,11 @@
                   [colorType]="example.colorBootstrap || 'primary'"
                   [value]="example.value"
                   [numberType]="example.typeNumber!"
-                  (returnPercentWithSymbol)="example.percentWithSymbol = $event"
                   (returnValueNumber)="example.value = $event"
+                  (returnValueWithType)="example.valueWithType = $event"
+                  (returnPercent)="example.percent = $event"
+                  (returnPercentWithSymbol)="example.percentWithSymbol = $event"
+
                   [max]="example.max || 100"
                   [min]="example.min || 0"
                   [range]="example.range || 10"
