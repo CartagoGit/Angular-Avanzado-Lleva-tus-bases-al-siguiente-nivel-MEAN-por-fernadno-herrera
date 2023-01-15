@@ -1,1 +1,70 @@
-<p>progress works!</p>
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Striped Progress bar</h4>
+        <div class="progress m-t-20">
+          <div
+            class="progress-bar bg-primary progress-bar-striped active"
+            style="height: 5px"
+            [style.width]="getProgressPercent"
+            role="progressbar"
+          ></div>
+        </div>
+        <div class="progress m-t-20">
+          <div
+            class="progress-bar bg-info progress-bar-striped active"
+            style="height: 5px"
+            [style.width]="getProgressPercent"
+            role="progressbar"
+          ></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-6">
+    <div class="card">
+      <div class="card-body">
+        <div class="input-group">
+          <span class="input-group-btn">
+            <button
+              class="btn btn-primary"
+              type="button"
+              (click)="changeProgress(-5)"
+            >
+              <i class="fa fa-minus"></i>
+            </button>
+          </span>
+          <input
+            #inputProgress
+            min="0"
+            max="100"
+            type="number"
+            class="form-control"
+            placeholder="Cambiar progreso"
+            [(ngModel)]="progress"
+            (ngModelChange)="changeInputProgress($event, inputProgress)"
+          />
+          <span class="input-group-btn">
+            <button
+              class="btn btn-primary"
+              type="button"
+              (click)="changeProgress(5)"
+            >
+              <i class="fa fa-plus"></i>
+            </button>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-6">
+    <div class="card">
+      <div class="card-body">aLGO</div>
+    </div>
+  </div>
+</div>
