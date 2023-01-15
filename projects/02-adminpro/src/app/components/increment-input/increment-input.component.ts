@@ -1,55 +1,76 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ColorBootstrap } from '../../interfaces/color.interface';
 
 @Component({
   selector: 'app-increment-input',
   templateUrl: './increment-input.component.html',
-  styles: [
-    `
-      input {
-        border-right: 0;
-      }
-
-      .input-group-addon {
-        background: linear-gradient(
-          90deg,
-          rgba(255, 255, 255, 0) 0%,
-          rgba(221, 221, 221, 1) 100%
-        );
-      }
-
-      .btn {
-        height: 100%;
-        display: flex;
-        align-items: center;
-      }
-    `,
-  ],
+  styleUrls: ['./increment-input.component.css'],
 })
 export class IncrementInputComponent {
-  private _progress: number = 0;
+  // ANCHOR : Variables
+  @Output() returnValueNumber = new EventEmitter<number>();
+  @Output() returnValueWithType = new EventEmitter<string>();
 
-  get getProgress(): number {
-    return this._progress;
+  @Input() colorType: ColorBootstrap = 'light';
+  @Input() numberType: 'euro' | 'perceint' | 'dolar' | 'none' = 'none';
+  @Input() max: number | undefined = undefined;
+  @Input() min: number | undefined = undefined;
+  @Input() range: number = 5;
+
+  private _value: number = 0;
+  @Input('value') set setValue(value: number) {
+    this._value = value;
   }
-  get getProgressPercent(): string {
-    return `${this._progress}%`;
+  get getValue(): number {
+    return this._value;
+  }
+  get getValueWithType(): string {
+    return `${this._value}${this.getSymbolType}`;
+  }
+  get getSymbolType(): string {
+    const symbols: { [key in typeof this.numberType]: string } = {
+      dolar: '$',
+      euro: '€',
+      perceint: '%',
+      none: '',
+    };
+    return symbols[this.numberType];
   }
 
-  public changeProgress(value: number): void {
-    this._progress += value;
-    this._checkAndSetProgressInRange();
+  // ANCHOR : Constructor
+
+  ngAfterViewInit(): void {
+    if (this.numberType === 'perceint') {
+      this.max = 100;
+      this.min = 0;
+    }
   }
 
-  public changeInputProgress(value: number, element: HTMLInputElement) {
+  // ANCHOR : Metodos
+
+  public clickChangeValue(value: number): void {
+    this._value += value;
+    this._checkAndSetValueInRange();
+    this._returnValue();
+  }
+
+  public changeInputValue(value: number, element: HTMLInputElement) {
     if (isNaN(value) || value === null) value = 0;
-
-    this._progress = value;
-    this._checkAndSetProgressInRange();
-    element.value = this._progress.toString();
+    this._value = value;
+    this._checkAndSetValueInRange();
+    element.value = this._value.toString();
+    this._returnValue();
   }
 
-  private _checkAndSetProgressInRange(): void {
-    this._progress < 0 && (this._progress = 0);
-    this._progress > 100 && (this._progress = 100);
+  private _checkAndSetValueInRange(): void {
+    if (this.min !== undefined && this._value < this.min)
+      this._value = this.min;
+    if (this.max !== undefined && this._value > this.max)
+      this._value = this.max;
+  }
+
+  private _returnValue(): void {
+    this.returnValueNumber.emit(this.getValue);
+    this.returnValueWithType.emit(this.getValueWithType);
   }
 }

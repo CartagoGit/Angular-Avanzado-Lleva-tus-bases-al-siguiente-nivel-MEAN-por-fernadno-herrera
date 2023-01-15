@@ -3,39 +3,52 @@
     <div class="card">
       <div class="card-body">
         <h4 class="card-title">Striped Progress bar</h4>
-        <div class="progress m-t-20">
-          <div
-            class="progress-bar bg-primary progress-bar-striped active"
-            style="height: 5px"
-            role="progressbar"
-            ></div>
-            <!-- [style.width]="getProgressPercent" -->
-        </div>
-        <div class="progress m-t-20">
-          <div
-            class="progress-bar bg-info progress-bar-striped active"
-            style="height: 5px"
-            role="progressbar"
-            ></div>
-            <!-- [style.width]="getProgressPercent" -->
+        <div class="row justify-content-around">
+          <div class="col-4">
+            <div class="progress m-t-20">
+              <div
+                class="progress-bar progress-bar-striped active"
+                [ngClass]="['bg-' + example01]"
+                style="height: 5px"
+                role="progressbar"
+                [style.width]="progress01"
+              ></div>
+            </div>
+            <div class="card">
+              <div class="card-body">
+                <app-increment-input
+                  [colorType]="example01"
+                  [value]="initProgress01"
+                  numberType="perceint"
+                  (returnValueWithType)="progress01 = $event"
+                ></app-increment-input>
+              </div>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="progress m-t-20">
+              <div
+                class="progress-bar progress-bar-striped active"
+                [ngClass]="['bg-' + example02]"
+                style="height: 5px"
+                role="progressbar"
+                [style.width]="progress02"
+              ></div>
+            </div>
+            <div class="card">
+              <div class="card-body">
+                <app-increment-input
+                  [colorType]="example02"
+                  [value]="initProgress02"
+                  numberType="perceint"
+                  [range]="10"
+                  (returnValueWithType)="progress02 = $event"
+                ></app-increment-input>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-</div>
-
-<div class="row">
-  <div class="col-6">
-    <div class="card">
-      <div class="card-body">
-        <app-increment-input></app-increment-input>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-6">
-    <div class="card">
-      <div class="card-body">aLGO</div>
     </div>
   </div>
 </div>
