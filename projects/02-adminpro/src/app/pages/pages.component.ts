@@ -5,4 +5,6 @@ import { Component } from '@angular/core';
   templateUrl: './pages.component.html',
   styles: [],
 })
-export class PagesComponent {}
+export class PagesComponent {
+  public actualYear = new Date().getFullYear()
+}
