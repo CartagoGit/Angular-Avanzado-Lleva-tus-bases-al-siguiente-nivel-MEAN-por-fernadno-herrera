@@ -1,25 +1,16 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
+// Rutas
 import { AppRoutingModule } from './app-routing.module';
-
+// Modulos
+import { PagesModule } from './pages/pages.module';
+// Componentes
 import { AppComponent } from './app.component';
-import { BreadcrumbsComponent } from './shared/breadcrumbs/breadcrumbs.component';
-import { DashboardComponent } from './pages/dashboard/dashboard.component';
-import { HeaderComponent } from './shared/header/header.component';
-import { SidebarComponent } from './shared/sidebar/sidebar.component';
-import { PagesComponent } from './pages/pages.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    DashboardComponent,
-    BreadcrumbsComponent,
-    SidebarComponent,
-    HeaderComponent,
-    PagesComponent,
-  ],
-  imports: [BrowserModule, AppRoutingModule],
+  declarations: [AppComponent],
+  imports: [BrowserModule, AppRoutingModule, PagesModule],
   providers: [],
   bootstrap: [AppComponent],
 })
