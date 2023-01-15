@@ -20,9 +20,12 @@
     [ngModel]="getValue"
     (ngModelChange)="changeInputValue($event, inputValue)"
   />
-  <span class="input-group-addon" *ngIf="numberType !== 'none'">{{
-    getSymbolType
-  }}</span>
+  <span
+    class="input-group-addon"
+    *ngIf="numberType !== 'none' && !!showNumberType"
+  >
+    {{ getSymbolType }}
+  </span>
   <span class="input-group-btn">
     <button
       class="btn"

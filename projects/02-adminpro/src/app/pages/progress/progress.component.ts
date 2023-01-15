@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ColorBootstrap } from '../../interfaces/color.interface';
+import { ProgressProps } from '../../interfaces/progress-props';
 
 @Component({
   selector: 'app-progress',
@@ -7,12 +7,38 @@ import { ColorBootstrap } from '../../interfaces/color.interface';
   styleUrls: ['./progress.component.css'],
 })
 export class ProgressComponent {
-  public example01: ColorBootstrap = 'primary';
-  public example02: ColorBootstrap = 'info';
-
-  public initProgress01 = 15;
-  public initProgress02 = 30;
-
-  public progress01: string = this.initProgress01 + '%';
-  public progress02: string = this.initProgress02 + '%';
+  public examples: ProgressProps[] = [
+    {
+      colorBootstrap: 'primary',
+      value: 15,
+      typeNumber: 'percent',
+      title: 'Example - With percent',
+    },
+    {
+      value: 30,
+      colorBootstrap: 'info',
+      typeNumber: 'pixel',
+      title: 'Example - With pixels',
+      max: 150,
+      min: 0,
+    },
+    {
+      value: 300,
+      colorBootstrap: 'success',
+      typeNumber: 'euro',
+      title: 'Example - With euros',
+      max: 5000,
+      min: -3000,
+      range: 1000,
+    },
+    {
+      value: 5000,
+      colorBootstrap: 'danger',
+      typeNumber: 'dolar',
+      title: 'Example - With dollars',
+      max: 100000,
+      min: -100000,
+      range: 5000,
+    },
+  ];
 }

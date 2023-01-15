@@ -4,49 +4,33 @@
       <div class="card-body">
         <h4 class="card-title">Striped Progress bar</h4>
         <div class="row justify-content-around">
-          <div class="col-4">
+          <div class="col-5" *ngFor="let example of examples; let i = index">
+            <h4>{{ i + 1 }} - {{ example.title }}</h4>
             <div class="progress m-t-20">
               <div
                 class="progress-bar progress-bar-striped active"
-                [ngClass]="['bg-' + example01]"
+                [ngClass]="['bg-' + example.colorBootstrap]"
                 style="height: 5px"
                 role="progressbar"
-                [style.width]="progress01"
+                [style.width]="example.percentWithSymbol"
               ></div>
             </div>
             <div class="card">
               <div class="card-body">
                 <app-increment-input
-                  [colorType]="example01"
-                  [value]="initProgress01"
-                  numberType="perceint"
-                  (returnValueWithType)="progress01 = $event"
+                  [colorType]="example.colorBootstrap || 'primary'"
+                  [value]="example.value"
+                  [numberType]="example.typeNumber!"
+                  (returnPercentWithSymbol)="example.percentWithSymbol = $event"
+                  (returnValueNumber)="example.value = $event"
+                  [max]="example.max || 100"
+                  [min]="example.min || 0"
+                  [range]="example.range || 10"
                 ></app-increment-input>
               </div>
             </div>
           </div>
-          <div class="col-4">
-            <div class="progress m-t-20">
-              <div
-                class="progress-bar progress-bar-striped active"
-                [ngClass]="['bg-' + example02]"
-                style="height: 5px"
-                role="progressbar"
-                [style.width]="progress02"
-              ></div>
-            </div>
-            <div class="card">
-              <div class="card-body">
-                <app-increment-input
-                  [colorType]="example02"
-                  [value]="initProgress02"
-                  numberType="perceint"
-                  [range]="10"
-                  (returnValueWithType)="progress02 = $event"
-                ></app-increment-input>
-              </div>
-            </div>
-          </div>
+       
         </div>
       </div>
     </div>

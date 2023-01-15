@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { getPercent } from '../../helpers/get-percent';
 import { ColorBootstrap } from '../../interfaces/color.interface';
+import { TypeNumber } from '../../interfaces/type-numbers';
 
 @Component({
   selector: 'app-increment-input',
@@ -10,11 +12,14 @@ export class IncrementInputComponent {
   // ANCHOR : Variables
   @Output() returnValueNumber = new EventEmitter<number>();
   @Output() returnValueWithType = new EventEmitter<string>();
+  @Output() returnPercent = new EventEmitter<number>();
+  @Output() returnPercentWithSymbol = new EventEmitter<string>();
 
   @Input() colorType: ColorBootstrap = 'light';
-  @Input() numberType: 'euro' | 'perceint' | 'dolar' | 'none' = 'none';
-  @Input() max: number | undefined = undefined;
-  @Input() min: number | undefined = undefined;
+  @Input() numberType: TypeNumber = 'none';
+  @Input() showNumberType: boolean = true;
+  @Input() max: number = 100;
+  @Input() min: number = 0;
   @Input() range: number = 5;
 
   private _value: number = 0;
@@ -27,34 +32,49 @@ export class IncrementInputComponent {
   get getValueWithType(): string {
     return `${this._value}${this.getSymbolType}`;
   }
+  get getPercent(): number {
+    return this._getPercentCalculated();
+  }
+  get getPercentWithSymbol(): string {
+    return `${this._getPercentCalculated()}%`;
+  }
   get getSymbolType(): string {
     const symbols: { [key in typeof this.numberType]: string } = {
       dolar: '$',
       euro: '€',
-      perceint: '%',
+      percent: '%',
+      pixel: 'px',
       none: '',
     };
     return symbols[this.numberType];
   }
 
   // ANCHOR : Constructor
-
   ngAfterViewInit(): void {
-    if (this.numberType === 'perceint') {
-      this.max = 100;
-      this.min = 0;
-    }
+    //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
+    //Add 'implements AfterViewInit' to the class.
+    this._returnValue();
   }
 
   // ANCHOR : Metodos
 
+  /**
+   * ? Al hacer click recibe el valor a incrementar o decrementar
+   * @param value
+   */
   public clickChangeValue(value: number): void {
     this._value += value;
     this._checkAndSetValueInRange();
     this._returnValue();
   }
 
+  /**
+   * ? Recibe el valor del input y el elemento html del input al que se le asignara el valor
+   * @param value
+   * @param element
+   */
   public changeInputValue(value: number, element: HTMLInputElement) {
+    console.log(1);
     if (isNaN(value) || value === null) value = 0;
     this._value = value;
     this._checkAndSetValueInRange();
@@ -62,15 +82,29 @@ export class IncrementInputComponent {
     this._returnValue();
   }
 
+  /**
+   * ? Comprueba que el valor se encuentra entre el minimo y el maximo permitido
+   */
   private _checkAndSetValueInRange(): void {
-    if (this.min !== undefined && this._value < this.min)
-      this._value = this.min;
-    if (this.max !== undefined && this._value > this.max)
-      this._value = this.max;
+    if (this._value < this.min) this._value = this.min;
+    if (this._value > this.max) this._value = this.max;
   }
 
+  /**
+   * ? Emite los cambios en el valor
+   */
   private _returnValue(): void {
     this.returnValueNumber.emit(this.getValue);
     this.returnValueWithType.emit(this.getValueWithType);
+    this.returnPercent.emit(this.getPercent);
+    this.returnPercentWithSymbol.emit(this.getPercentWithSymbol);
+  }
+
+  /**
+   * ? Devuelve el porcentage calculado del valor entre el maximo y el minimo
+   * @returns
+   */
+  private _getPercentCalculated(): number {
+    return getPercent({ value: this._value, max: this.max, min: this.min });
   }
 }
