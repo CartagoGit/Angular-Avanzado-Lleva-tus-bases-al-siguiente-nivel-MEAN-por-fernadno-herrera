@@ -12,7 +12,7 @@ import { Graphic01Component } from './graphic01/graphic01.component';
 import { ProgressComponent } from './progress/progress.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { PagesComponent } from './pages.component';
-import { NgChartsModule } from 'ng2-charts';
+
 
 @NgModule({
   declarations: [
@@ -24,7 +24,6 @@ import { NgChartsModule } from 'ng2-charts';
   imports: [
     CommonModule,
     FormsModule,
-    NgChartsModule,
     SharedModule,
     RouterModule,
     ComponentsModule,

@@ -1,16 +1,11 @@
-<div class="row">
-  <div class="col-6">
+<div class="row justify-content-around">
+  <div class="col-3" *ngFor="let example of examples">
     <div class="card">
+      <div class="card-header">
+        <h6>Example - {{ example.title }}</h6>
+      </div>
       <div class="card-body d-flex">
-        <h6></h6>
-        <canvas
-          baseChart
-          class="chart w-100 h-100"
-          [data]="doughnutChartData"
-          [type]="doughnutChartType"
-          [options]="{ responsive: true }"
-        >
-        </canvas>
+        <app-dona [props]="example" class="w-100 h-100"></app-dona>
       </div>
     </div>
   </div>
