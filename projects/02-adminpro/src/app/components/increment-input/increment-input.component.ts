@@ -14,6 +14,7 @@ export class IncrementInputComponent {
   @Output() returnValueWithType = new EventEmitter<string>();
   @Output() returnPercent = new EventEmitter<number>();
   @Output() returnPercentWithSymbol = new EventEmitter<string>();
+  @Output() returnSymbol = new EventEmitter<string>();
 
   @Input() colorType: ColorBootstrap = 'light';
   @Input() numberType: TypeNumber = 'none';
@@ -51,8 +52,6 @@ export class IncrementInputComponent {
 
   // ANCHOR : Constructor
   ngAfterViewInit(): void {
-    //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
-    //Add 'implements AfterViewInit' to the class.
     this._returnValue();
   }
 
@@ -73,7 +72,7 @@ export class IncrementInputComponent {
    * @param value
    * @param element
    */
-  public changeInputValue(value: number, element: HTMLInputElement) {
+  public onChangeInput(value: number, element: HTMLInputElement) {
     console.log(1);
     if (isNaN(value) || value === null) value = 0;
     this._value = value;
@@ -98,6 +97,7 @@ export class IncrementInputComponent {
     this.returnValueWithType.emit(this.getValueWithType);
     this.returnPercent.emit(this.getPercent);
     this.returnPercentWithSymbol.emit(this.getPercentWithSymbol);
+    this.returnSymbol.emit(this.getSymbolType);
   }
 
   /**

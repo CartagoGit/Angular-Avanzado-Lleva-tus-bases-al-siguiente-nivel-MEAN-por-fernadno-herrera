@@ -14,4 +14,5 @@ export interface ProgressProps {
   max?: number;
   min?: number;
   range?: number;
+  symbol?: string;
 }

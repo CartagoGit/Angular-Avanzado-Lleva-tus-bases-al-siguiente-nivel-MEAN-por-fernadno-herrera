@@ -5,7 +5,41 @@
         <h4 class="card-title">Striped Progress bar</h4>
         <div class="row justify-content-around">
           <div class="col-5" *ngFor="let example of examples; let i = index">
-            <h4>{{ i + 1 }} - {{ example.title }}</h4>
+            <h4>
+              <span>{{ i + 1 }} - {{ example.title }}</span>
+            </h4>
+            <hr />
+            <div class="d-flex justify-content-between">
+              <span class="ml-5">Valor %: </span>
+              <span class="mr-5">{{ example.percentWithSymbol }}</span>
+            </div>
+            <div class="d-flex justify-content-between">
+              <span class="ml-5">Min: </span>
+              <span class="mr-5">{{ example.min || 0 }}</span>
+            </div>
+            <div class="d-flex justify-content-between">
+              <span class="ml-5">Max: </span>
+              <span class="mr-5">{{ example.max || 100 }}</span>
+            </div>
+            <div class="d-flex justify-content-between">
+              <span class="ml-5">Rango: </span>
+              <span class="mr-5">{{ example.range || 10 }}</span>
+            </div>
+            <div class="d-flex justify-content-between">
+              <span class="ml-5">Color Bootstrap: </span>
+              <span class="mr-5">{{
+                example.colorBootstrap || 'primary'
+              }}</span>
+            </div>
+            <div class="d-flex justify-content-between">
+              <span class="ml-5">Tipo de número: </span>
+              <span class="mr-5">{{ example.typeNumber || 'none' }}</span>
+            </div>
+            <div class="d-flex justify-content-between">
+              <span class="ml-5">Simbolo del tipo: </span>
+              <span class="mr-5">{{ example.symbol || '' }}</span>
+            </div>
+
             <div class="progress m-t-20">
               <div
                 class="progress-bar progress-bar-striped active"
@@ -20,12 +54,12 @@
                 <app-increment-input
                   [colorType]="example.colorBootstrap || 'primary'"
                   [value]="example.value"
-                  [numberType]="example.typeNumber!"
+                  [numberType]="example.typeNumber || 'none'"
                   (returnValueNumber)="example.value = $event"
                   (returnValueWithType)="example.valueWithType = $event"
                   (returnPercent)="example.percent = $event"
                   (returnPercentWithSymbol)="example.percentWithSymbol = $event"
-
+                  (returnSymbol)="example.symbol = $event"
                   [max]="example.max || 100"
                   [min]="example.min || 0"
                   [range]="example.range || 10"
@@ -33,7 +67,6 @@
               </div>
             </div>
           </div>
-       
         </div>
       </div>
     </div>

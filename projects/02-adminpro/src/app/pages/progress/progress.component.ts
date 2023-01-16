@@ -32,11 +32,11 @@ export class ProgressComponent {
       range: 1000,
     },
     {
-      value: 5000,
+      value: -50000,
       colorBootstrap: 'danger',
       typeNumber: 'dolar',
       title: 'Example - With dollars',
-      max: 100000,
+      max: -10000,
       min: -100000,
       range: 5000,
     },

@@ -18,7 +18,7 @@
     class="form-control symbol-euro"
     placeholder="Cambiar progreso"
     [ngModel]="getValue"
-    (ngModelChange)="changeInputValue($event, inputValue)"
+    (ngModelChange)="onChangeInput($event, inputValue)"
   />
   <span
     class="input-group-addon"
