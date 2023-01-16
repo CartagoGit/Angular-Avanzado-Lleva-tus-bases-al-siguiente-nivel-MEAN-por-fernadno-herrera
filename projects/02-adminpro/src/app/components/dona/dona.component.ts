@@ -40,7 +40,7 @@ export class DonaComponent {
   }
 
   ngAfterViewInit(): void {
-    console.log(this.chart);
-    this.chart?.update();
+
+    // this.chart?.update();
   }
 }
