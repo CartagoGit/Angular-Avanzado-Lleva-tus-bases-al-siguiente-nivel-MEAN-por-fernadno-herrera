@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { ProgressProps } from '../../interfaces/progress-props';
 
 @Component({
@@ -41,4 +41,11 @@ export class ProgressComponent {
       range: 5000,
     },
   ];
+
+  // ANCHOR: Constructor
+
+  constructor(private _cdRef: ChangeDetectorRef) {}
+  ngAfterViewInit() {
+    this._cdRef.detectChanges();
+  }
 }

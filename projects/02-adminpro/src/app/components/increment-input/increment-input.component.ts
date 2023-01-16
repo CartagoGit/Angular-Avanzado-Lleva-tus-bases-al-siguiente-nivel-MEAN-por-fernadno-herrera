@@ -51,6 +51,7 @@ export class IncrementInputComponent {
   }
 
   // ANCHOR : Constructor
+
   ngAfterViewInit(): void {
     this._returnValue();
   }
