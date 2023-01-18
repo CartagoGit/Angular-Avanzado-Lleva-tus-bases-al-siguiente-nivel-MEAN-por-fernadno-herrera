@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { getUrlTheme } from '../helpers/get-url-theme';
 
 @Component({
   selector: 'app-pages',
@@ -11,6 +12,9 @@ export class PagesComponent {
 
   // ANCHOR : Constructor
   ngOnInit(): void {
-    this._urlTheme?.setAttribute('href', localStorage.getItem('theme') || '');
+    this._urlTheme?.setAttribute(
+      'href',
+      localStorage.getItem('theme') || getUrlTheme('default-dark')
+    );
   }
 }
