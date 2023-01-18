@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { getUrlTheme } from '../../helpers/get-url-theme';
+import { SettingsService } from '../../services/settings.service';
 
 @Component({
   selector: 'app-account-settings',
@@ -26,32 +26,20 @@ import { getUrlTheme } from '../../helpers/get-url-theme';
 })
 export class AccountSettingsComponent {
   // ANCHOR : Variables
-  private _linkTheme = document.querySelector('#theme');
   private _links!: NodeListOf<Element>;
 
   // ANCHOR: Constructor
+  constructor(private _settingsSvc: SettingsService) {}
 
   ngOnInit(): void {
     this._links = document.querySelectorAll('.selector');
-    this.checkCurrentTheme();
+    this._settingsSvc.setLinksThemes = this._links;
+    this._settingsSvc.checkCurrentTheme();
   }
 
   // ANCHOR : Métodos
-  public changeTheme(theme: string): void {
-    const urlTheme = getUrlTheme(theme);
-    this._linkTheme?.setAttribute('href', urlTheme);
-    localStorage.setItem('theme', urlTheme);
-    this.checkCurrentTheme();
-  }
 
-  public checkCurrentTheme(): void {
-    this._links.forEach((element) => {
-      element.classList.remove('working');
-      const btnTheme = element.getAttribute('data-theme')!;
-      const btnThemeUrl = getUrlTheme(btnTheme);
-      const currentTheme = this._linkTheme?.getAttribute('href');
-
-      if (btnThemeUrl === currentTheme) element.classList.add('working');
-    });
+  public changeTheme(theme: string) {
+    this._settingsSvc.changeTheme(theme);
   }
 }

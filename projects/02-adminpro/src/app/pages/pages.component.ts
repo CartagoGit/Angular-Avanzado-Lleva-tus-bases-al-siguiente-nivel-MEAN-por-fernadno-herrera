@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { getUrlTheme } from '../helpers/get-url-theme';
+import { SettingsService } from '../services/settings.service';
 
 @Component({
   selector: 'app-pages',
@@ -7,14 +7,13 @@ import { getUrlTheme } from '../helpers/get-url-theme';
   styles: [],
 })
 export class PagesComponent {
+  // ANCHOR : Variables
   public actualYear = new Date().getFullYear();
-  private _urlTheme = document.querySelector('#theme');
 
   // ANCHOR : Constructor
-  ngOnInit(): void {
-    this._urlTheme?.setAttribute(
-      'href',
-      localStorage.getItem('theme') || getUrlTheme('default-dark')
-    );
+  constructor(private _settingsSvc: SettingsService) {
+    this._settingsSvc;
   }
+
+  ngOnInit(): void {}
 }
