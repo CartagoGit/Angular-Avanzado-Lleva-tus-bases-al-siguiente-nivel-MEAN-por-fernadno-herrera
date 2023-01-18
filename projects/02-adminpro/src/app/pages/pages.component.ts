@@ -6,5 +6,11 @@ import { Component } from '@angular/core';
   styles: [],
 })
 export class PagesComponent {
-  public actualYear = new Date().getFullYear()
+  public actualYear = new Date().getFullYear();
+  private _urlTheme = document.querySelector('#theme');
+
+  // ANCHOR : Constructor
+  ngOnInit(): void {
+    this._urlTheme?.setAttribute('href', localStorage.getItem('theme') || '');
+  }
 }
