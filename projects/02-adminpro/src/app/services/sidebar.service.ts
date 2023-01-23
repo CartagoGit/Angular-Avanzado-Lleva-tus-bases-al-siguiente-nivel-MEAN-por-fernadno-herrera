@@ -18,12 +18,12 @@ export class SidebarService {
 					url: 'progress',
 				},
 				{
-					title: 'Graphic',
-					url: 'graphic01',
-				},
-				{
 					title: 'Promises',
 					url: 'promises',
+				},
+				{
+					title: 'Graphic',
+					url: 'graphic01',
 				},
 			],
 		},
