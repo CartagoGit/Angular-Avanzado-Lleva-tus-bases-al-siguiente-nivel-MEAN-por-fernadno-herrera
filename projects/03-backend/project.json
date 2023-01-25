@@ -1,0 +1,52 @@
+{
+	"name": "03-backend",
+	"$schema": "../../node_modules/nx/schemas/project-schema.json",
+	"sourceRoot": "projects/03-backend/src",
+	"projectType": "application",
+	"targets": {
+		"build": {
+			"executor": "@nrwl/esbuild:esbuild",
+			"outputs": ["{options.outputPath}"],
+			"options": {
+				"outputPath": "dist/projects/03-backend",
+				"format": ["cjs"],
+				"main": "projects/03-backend/src/main.ts",
+				"tsConfig": "projects/03-backend/tsconfig.app.json",
+				"assets": ["projects/03-backend/src/assets"]
+			}
+		},
+		"serve": {
+			"executor": "@nrwl/js:node",
+			"options": {
+				"buildTarget": "projects/03-backend:build"
+			},
+			"configurations": {
+				"production": {
+					"buildTarget": "projects/03-backend:build:production"
+				}
+			}
+		},
+		"lint": {
+			"executor": "@nrwl/linter:eslint",
+			"outputs": ["{options.outputFile}"],
+			"options": {
+				"lintFilePatterns": ["projects/03-backend/**/*.ts"]
+			}
+		},
+		"test": {
+			"executor": "@nrwl/jest:jest",
+			"outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+			"options": {
+				"jestConfig": "projects/03-backend/jest.config.ts",
+				"passWithNoTests": true
+			},
+			"configurations": {
+				"ci": {
+					"ci": true,
+					"codeCoverage": true
+				}
+			}
+		}
+	},
+	"tags": []
+}
