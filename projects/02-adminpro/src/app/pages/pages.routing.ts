@@ -7,6 +7,7 @@ import { ProgressComponent } from './progress/progress.component';
 import { PagesComponent } from './pages.component';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
 import { PromisesComponent } from './promises/promises.component';
+import { RxjsComponent } from './rxjs/rxjs.component';
 
 const routes: Routes = [
 	{
@@ -34,8 +35,12 @@ const routes: Routes = [
 				component: PromisesComponent,
 			},
 			{
+				path: 'rxjs',
+				component: RxjsComponent,
+			},
+			{
 				path: '',
-				redirectTo: '/dashboard',
+				redirectTo: 'dashboard',
 				pathMatch: 'full',
 			},
 		],

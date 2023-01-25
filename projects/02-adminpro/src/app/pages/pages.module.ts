@@ -14,6 +14,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { PagesComponent } from './pages.component';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
 import { PromisesComponent } from './promises/promises.component';
+import { RxjsComponent } from './rxjs/rxjs.component';
 
 @NgModule({
 	declarations: [
@@ -23,6 +24,7 @@ import { PromisesComponent } from './promises/promises.component';
 		ProgressComponent,
 		AccountSettingsComponent,
 		PromisesComponent,
+		RxjsComponent,
 	],
 	imports: [
 		CommonModule,
