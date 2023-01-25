@@ -18,11 +18,11 @@
 		"serve": {
 			"executor": "@nrwl/js:node",
 			"options": {
-				"buildTarget": "projects/03-backend:build"
+				"buildTarget": "03-backend:build"
 			},
 			"configurations": {
 				"production": {
-					"buildTarget": "projects/03-backend:build:production"
+					"buildTarget": "03-backend:build:production"
 				}
 			}
 		},

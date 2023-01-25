@@ -1,6 +1,8 @@
 import express from 'express';
+import { environment } from './environments/env.dev';
 
-const port = process.env['PORT'] ? Number(process.env['PORT']) : 3000;
+
+const port = process.env['PORT'] ? Number(process.env['PORT']) : environment.PORT;
 
 const app = express();
 
