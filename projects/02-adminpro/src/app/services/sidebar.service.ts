@@ -1,10 +1,21 @@
 import { Injectable } from '@angular/core';
 
+interface SubmenuRoutes {
+	title: string;
+	url: string;
+}
+
+interface MenuRoutes {
+	title: string;
+	icon: string;
+	submenu: SubmenuRoutes[];
+}
+
 @Injectable({
 	providedIn: 'root',
 })
 export class SidebarService {
-	public menu: any[] = [
+	public menu: MenuRoutes[] = [
 		{
 			title: 'Dashboard',
 			icon: 'mdi mdi-gauge',
