@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { ActivationEnd, Router } from '@angular/router';
-import { filter, map } from 'rxjs';
+import {  ActivationEnd, Router } from '@angular/router';
+import { filter, map, Subscription } from 'rxjs';
 
 @Component({
 	selector: 'app-breadcrumbs',
@@ -8,14 +8,19 @@ import { filter, map } from 'rxjs';
 	styles: [],
 })
 export class BreadcrumbsComponent {
+	private _tituloSubs$!: Subscription;
 	public titulo: string = '';
 
-	constructor(private router: Router) {
-		this.getArgsRouter();
+	constructor(private router: Router, ) {
+		this._tituloSubs$ = this._getArgsRouter();
 	}
 
-	private getArgsRouter() {
-		this.router.events
+	ngOnDestroy(): void {
+		this._tituloSubs$.unsubscribe();
+	}
+
+	private _getArgsRouter(): Subscription {
+		return this.router.events
 			.pipe(
 				filter(
 					(event): event is ActivationEnd =>
