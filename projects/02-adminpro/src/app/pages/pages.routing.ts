@@ -17,26 +17,32 @@ const routes: Routes = [
 			{
 				path: '',
 				component: DashboardComponent,
+				data: { titulo: 'Dashboard' },
 			},
 			{
 				path: 'progress',
 				component: ProgressComponent,
+				data: { titulo: 'Barra de progreso' }
 			},
 			{
 				path: 'graphic01',
 				component: Graphic01Component,
+				data: { titulo: 'Gráfica 1' }
 			},
 			{
 				path: 'account-settings',
 				component: AccountSettingsComponent,
+				data: { titulo: 'Ajustes de cuenta' }
 			},
 			{
 				path: 'promises',
 				component: PromisesComponent,
+				data: { titulo: 'Promises' }
 			},
 			{
 				path: 'rxjs',
 				component: RxjsComponent,
+				data: { titulo: 'Rxjs' }
 			},
 			{
 				path: '',
