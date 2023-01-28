@@ -1,18 +1,25 @@
 import express from 'express';
-import { environment } from '../environments/env.dev';
+import { environment } from '../environments/config';
+
+export const config =
+	environment[!!process.env['PORT'] ? 'production' : 'development'];
 
 export const initExpress = () => {
-	const port = process.env['PORT']
-		? Number(process.env['PORT'])
-		: environment.PORT;
+	const port = Number(config.PORT);
+	const initLog = `[ready in ${config.MODE}] ${config.URL}`;
 
 	const app = express();
 
-	app.get('/', (req, res) => {
-		res.send({ message: 'Hello API' });
+	app.get('/', (_req, res) => {
+		res.json({
+			message: 'Home Api Backend',
+			ok: true,
+			mode: config.MODE,
+			log: initLog,
+		});
 	});
 
 	app.listen(port, () => {
-		console.log(`[ ready ] http://localhost:${port}`);
+		console.log(initLog);
 	});
 };
