@@ -17,6 +17,7 @@ export const initExpress = () => {
 			mode: config.MODE,
 			log: initLog,
 		});
+		console.log(config.MONGO_URL);
 	});
 
 	app.listen(port, () => {

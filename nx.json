@@ -20,7 +20,7 @@
 			"!{projectRoot}/**/*.spec.[jt]s",
 			"!{projectRoot}/karma.conf.js",
 			"!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
-			"!{projectRoot}/jest.config.[jt]s",
+			"!{projectRoot}/jest.config.[jt]s"
 
 		]
 	},

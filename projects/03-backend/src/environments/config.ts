@@ -1,26 +1,6 @@
-interface ConfigProps {
-	PORT: number;
-	MODE: string;
-	URL_BASE: string;
-}
+import { Mode, Config } from './config.model';
 
-class Config implements ConfigProps {
-	public PORT!: number;
-	public MODE!: string;
-	public URL_BASE!: string;
-
-	get URL() {
-		return this.URL_BASE + this.PORT;
-	}
-
-	constructor(data: ConfigProps) {
-		this.PORT = data.PORT;
-		this.MODE = data.MODE;
-		this.URL_BASE = data.URL_BASE;
-	}
-}
-
-export const environment: { [key in string]: Config } = {
+export const environment: Record<Mode, Config> = {
 	development: new Config({
 		PORT: 5000,
 		MODE: 'development',

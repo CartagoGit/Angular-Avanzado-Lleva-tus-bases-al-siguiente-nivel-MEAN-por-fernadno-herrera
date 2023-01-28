@@ -45,3 +45,5 @@ Thumbs.db
 /.deprecated
 
 .angular
+
+global/hide_environments.ts
