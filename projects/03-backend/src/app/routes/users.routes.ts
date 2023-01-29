@@ -1,12 +1,6 @@
-import { Request, Response } from 'express';
 import { Routes } from '../models/routes.model';
 import { coreRoutes } from './core.routes';
 import { UserModel } from '../models/mongo/user.model';
-import {
-	defaultErrorResponse,
-	getErrorUniqueParam,
-} from '../helpers/default-responses';
-import { CallbackMethod } from '../interfaces/response.interface';
 import { check } from 'express-validator';
 import { validatorCheck } from '../middlewares/validator.middleware';
 import { getStringErrorUniqueParam } from '../helpers/default-responses';
@@ -46,9 +40,8 @@ export const usersRoutes: Routes = new Routes({
 				.isEmpty()
 				.custom(async (email) => {
 					const existEmail = await UserModel.findOne({ email });
-					if (!!existEmail) {
+					if (!!existEmail)
 						return Promise.reject(getStringErrorUniqueParam({ email }));
-					}
 					return;
 				}),
 			validatorCheck,
