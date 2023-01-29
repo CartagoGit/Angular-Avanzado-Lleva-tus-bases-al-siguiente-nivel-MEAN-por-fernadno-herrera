@@ -28,4 +28,10 @@ export const UserSchema = new Schema({
 	},
 });
 
+UserSchema.method('toJSON', function () {
+	const { __v, _id, ...rest } = this.toObject();
+
+	return { ...rest, id: _id };
+});
+
 export const UserModel = model('User', UserSchema);

@@ -1,11 +1,10 @@
-import { Router, Request, Response, NextFunction } from 'express';
+import { Router } from 'express';
 import { mongoState } from '../db/init-mongo';
+import { CallbackMethod } from '../interfaces/response.interface';
 
 export interface RoutesProps {
 	route: string;
-	callback:
-		| ((req: Request, res: Response, next?: NextFunction) => void)
-		| Router;
+	callback: CallbackMethod | Router;
 	// callback: (...args: any[]) => void;
 	type?: 'get' | 'post' | 'patch' | 'put' | 'delete' | 'use';
 	router?: Router;
