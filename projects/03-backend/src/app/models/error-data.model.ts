@@ -1,9 +1,9 @@
 export class ErrorData extends Error {
 	public status_code;
-	public error_param;
-	constructor(data: any) {
+	public keyValue;
+	constructor(data: { message: string; status_code: number; keyValue: {} }) {
 		super(data.message);
 		this.status_code = data.status_code;
-		this.error_param = data.error_param;
+		this.keyValue = data.keyValue;
 	}
 }

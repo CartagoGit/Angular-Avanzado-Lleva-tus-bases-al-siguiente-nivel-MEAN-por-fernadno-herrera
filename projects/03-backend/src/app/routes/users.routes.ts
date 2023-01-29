@@ -23,7 +23,7 @@ export const usersRoutes: Routes = new Routes({
 				defaultErrorResponse(
 					res,
 					req,
-					getErrorUniqueParam({email}),
+					getErrorUniqueParam({ email }),
 					'MONGO',
 					409
 				);
