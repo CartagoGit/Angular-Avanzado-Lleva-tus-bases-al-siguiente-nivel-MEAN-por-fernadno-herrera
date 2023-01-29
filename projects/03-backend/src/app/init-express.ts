@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors'
 import { config } from '../environments/config';
 import { isMongoConnected } from './db/init-mongo';
 import { log } from './helpers/logs';
@@ -8,6 +9,8 @@ export const initExpress = () => {
 	const initLog = `Ready in ${config.MODE}, access into ${config.API_URL}`;
 
 	const app = express();
+
+	app.use(cors())
 
 	app.get('/', (_req, res) => {
 		res.json({
