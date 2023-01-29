@@ -1,4 +1,4 @@
-import { LogType } from '../../interfaces/logs.interfaces';
+import { LogType } from '../interfaces/logs.interfaces';
 
 export const logError = (
 	error: string,

@@ -1,8 +1,8 @@
 import express from 'express';
 import cors from 'cors'
-import { config } from '../environments/config';
-import { isMongoConnected } from './db/init-mongo';
-import { log } from './helpers/logs';
+import { config } from '../../environments/config';
+import { isMongoConnected } from './init-mongo';
+import { log } from '../helpers/logs';
 
 export const initExpress = () => {
 	const port = Number(config.PORT);
