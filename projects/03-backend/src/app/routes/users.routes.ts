@@ -1,24 +1,26 @@
 import { Routes } from '../models/routes.model';
 import { Request, Response } from 'express';
+import { usersController } from '../controllers/users.controller';
+import { rootResponse } from '../helpers/root-response';
+
+/**
+ * * /api/users
+ */
 
 export const usersRoutes: Routes = new Routes({
 	base: {
 		route: '/',
 		middleware: (_req: Request, res: Response) => {
-			res.json({
-				message: 'really? Api Backend',
-				ok: true,
-			});
+			rootResponse('users', res);
 		},
 		type: 'get',
 	},
 	users: {
-		route: '/users',
-		middleware: (_req: Request, res: Response) => {
-			res.json({
-				message: 'Users Home Api',
-				ok: true,
-			});
-		},
+		route: '/get-all',
+		middleware: usersController.getUsers,
+	},
+	userById: {
+		route: '/get-by-id',
+		middleware: usersController.getUserById,
 	},
 });

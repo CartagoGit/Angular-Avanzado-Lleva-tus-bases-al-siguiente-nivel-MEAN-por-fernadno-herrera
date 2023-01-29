@@ -1,7 +1,7 @@
 import mongoose, { Model } from 'mongoose';
 import { config } from '../../environments/config';
 import { forkJoin, from, fromEvent, Observable, switchMap, tap } from 'rxjs';
-import { logError, log } from '../helpers/logs';
+import { logError, log } from '../helpers/logs.helper';
 
 export const initMongo = () => {
 	mongoose.set('strictQuery', false);
