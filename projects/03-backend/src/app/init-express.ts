@@ -1,6 +1,6 @@
 import express from 'express';
 import { config } from '../environments/config';
-import { initMongo, isMongoConnected } from './db/init-mongo';
+import { isMongoConnected } from './db/init-mongo';
 import { log } from './helpers/logs';
 
 export const initExpress = () => {
