@@ -10,7 +10,7 @@ export const initMongo = () => {
 		.pipe(
 			tap(() => log(config.MONGO_URL_APP, 'MONGO', 'URL')),
 			switchMap((_resp) => {
-				isMongoConnected = true;
+				mongoState.isMongoConnected = true;
 				log('Connected succesfully', 'MONGO');
 				return getObservableMongooseChange();
 			})
@@ -27,7 +27,7 @@ export const initMongo = () => {
 			},
 			error: (error) => {
 				logError(error, 'MONGO', 'Mongo connection');
-				isMongoConnected = false;
+				mongoState.isMongoConnected = false;
 			},
 		});
 };
@@ -40,4 +40,9 @@ export const getObservableMongooseChange = () => {
 	return from(mongoose.connection.db.watch());
 };
 
-export let isMongoConnected = false;
+export const mongoState = {
+	isMongoConnected: false,
+	getState: function () {
+		return !!this.isMongoConnected ? 'Connected' : 'Disconnected';
+	},
+};

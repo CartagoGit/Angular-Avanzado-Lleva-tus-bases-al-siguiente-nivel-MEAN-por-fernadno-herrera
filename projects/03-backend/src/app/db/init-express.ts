@@ -1,8 +1,9 @@
 import express from 'express';
-import cors from 'cors'
+import cors from 'cors';
 import { config } from '../../environments/config';
-import { isMongoConnected } from './init-mongo';
 import { log } from '../helpers/logs';
+import { baseRoutes } from '../routes/base.routes';
+import { mongoState } from './init-mongo';
 
 export const initExpress = () => {
 	const port = Number(config.PORT);
@@ -10,7 +11,7 @@ export const initExpress = () => {
 
 	const app = express();
 
-	app.use(cors())
+	app.use(cors());
 
 	app.get('/', (_req, res) => {
 		res.json({
@@ -18,9 +19,11 @@ export const initExpress = () => {
 			ok: true,
 			mode: config.MODE,
 			log: initLog,
-			mongo_state: isMongoConnected ? 'Connected' : 'Disconnected',
+			db_state: mongoState.getState(),
 		});
 	});
+
+	app.use('/api', baseRoutes.router);
 
 	app.listen(port, () => {
 		log(initLog, 'EXPRESS');
