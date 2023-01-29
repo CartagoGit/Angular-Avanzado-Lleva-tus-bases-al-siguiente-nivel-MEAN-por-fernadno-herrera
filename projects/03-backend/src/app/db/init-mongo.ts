@@ -16,8 +16,14 @@ export const initMongo = () => {
 			})
 		)
 		.subscribe({
-			next: (_resp) => {
-				log('Something changed in MongoDB', 'MONGO');
+			next: (resp) => {
+				log(
+					resp.operationType.charAt(0).toUpperCase() +
+						resp.operationType.slice(1).toLowerCase(),
+					'MONGO',
+					'Something changed in MongoDB'
+				);
+				// console.log((resp as any).fullDocument);
 			},
 			error: (error) => {
 				logError(error, 'MONGO', 'Mongo connection');
