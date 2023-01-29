@@ -11,36 +11,16 @@ export const validatorCheck = (
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
 		const status_code = 406;
-		const errorsArrayFormated = errors.array().map((error) => {
-			return new ErrorData({
-				status_code,
-				message: error.msg,
-				keyValue: { [error.param]: error.value },
-				reason: 'validation',
-			});
-		});
 
-		let finalError = {
+		const finalErrorData = new ErrorData({
 			status_code,
-			reason:
-				errorsArrayFormated.length > 1 ? ([] as string[]) : 'validation',
+			reason: 'validation',
 			message:
-				errorsArrayFormated.length > 1
+				errors.array().length > 1
 					? 'There are a lot of validation errors. Check them to fix the problems.'
-					: errorsArrayFormated[0].message,
-			keyValue: {},
-		};
-
-		errorsArrayFormated.forEach((errorData) => {
-			const [key, value] = Object.entries(errorData.keyValue)[0];
-			finalError.keyValue = {
-				...finalError.keyValue,
-				[key]: value || 'NOT DEFINED',
-			};
-			if (Array.isArray(finalError.reason))
-				finalError.reason.push(errorData.message);
+					: errors.array()[0].msg,
+			keyValue: errors.mapped(),
 		});
-		const finalErrorData = new ErrorData(finalError);
 
 		defaultErrorResponse(res, req, finalErrorData, 'MONGO', status_code);
 		return;

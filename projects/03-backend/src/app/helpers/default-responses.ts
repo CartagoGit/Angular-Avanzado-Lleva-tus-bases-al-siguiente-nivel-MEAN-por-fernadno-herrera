@@ -63,11 +63,17 @@ export const defaultErrorResponse = (
 export const getErrorUniqueParam = (param: {}): ErrorData => {
 	const [key, value] = Object.entries(param)[0];
 	return new ErrorData({
-		message: `Param '${key}' with value '${value}' exists in DB. That param must be unique`,
+		message: getStringErrorUniqueParam(param),
 		status_code: 409,
-		keyValue: param,
+		keyValue: { param: key, value },
 		reason: 'unique',
 	});
+};
+
+export const getStringErrorUniqueParam = (param: {}): string => {
+	console.log(param);
+	const [key, value] = Object.entries(param)[0];
+	return `Param '${key}' with value '${value}' exists in DB. That param must be unique`;
 };
 
 export const rootResponse = (title: string, res: Response) => {
