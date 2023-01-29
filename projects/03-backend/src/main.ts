@@ -1,3 +1,3 @@
-import { initExpress } from './app/init';
+import { initExpress } from './app/init-express';
 
 initExpress();
