@@ -5,6 +5,9 @@ import { logError } from './logs.helper';
 import { DefaultResponseProps } from '../interfaces/response.interface';
 import { getSectionFromUrl } from './get-section-from-url.helper';
 import { ErrorData } from '../models/error-data.model';
+import { getCapitalize } from './get-capitalize.helper';
+import { mongoState } from '../db/init-mongo';
+import { config } from '../../environments/config';
 
 export const defaultResponse = (
 	res: Response,
@@ -44,10 +47,12 @@ export const defaultErrorResponse = (
 	statusCode: number = 500
 ): string => {
 	res.status(statusCode).json({
-		message: `[ ${getSectionFromUrl(req)} - ERROR ]`.toUpperCase(),
+		message: `[ ${getSectionFromUrl(
+			req
+		)} - ERROR IN ${logType}]`.toUpperCase(),
 		ok: false,
-		status_code: error.status_code | statusCode,
-		error_message: error.message,
+		status_code: (error as ErrorData).status_code || statusCode,
+		error_message: error.message || 'Unknown Error',
 		// error_data: { keyValue: error.keyValue },
 		error_data: error,
 	} as DefaultResponseProps);
@@ -63,4 +68,15 @@ export const getErrorUniqueParam = (param: {}): ErrorData => {
 		keyValue: param,
 		reason: 'unique',
 	});
+};
+
+export const rootResponse = (title: string, res: Response) => {
+	const message = `${getCapitalize(title)} collection root path`;
+	return res.json({
+		message,
+		ok: true,
+		mode: config.MODE,
+		status_code: 200,
+		db_state: mongoState.getState(),
+	} as DefaultResponseProps);
 };

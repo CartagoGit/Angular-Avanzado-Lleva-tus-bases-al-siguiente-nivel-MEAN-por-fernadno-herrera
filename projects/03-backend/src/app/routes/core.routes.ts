@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
 import { coreController } from '../controllers/core.controller';
-import { rootResponse } from '../helpers/root-response';
+
 import { Routes } from '../models/routes.model';
 import { getSectionFromUrl } from '../helpers/get-section-from-url.helper';
+import { rootResponse } from '../helpers/default-responses';
 
 export const coreRoutes: Routes = new Routes({
 	base: {

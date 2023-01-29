@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { defaultResponse } from '../helpers/default-response';
+import { defaultResponse } from '../helpers/default-responses';
 import {
 	getModelSection,
 	getNewModelSection,

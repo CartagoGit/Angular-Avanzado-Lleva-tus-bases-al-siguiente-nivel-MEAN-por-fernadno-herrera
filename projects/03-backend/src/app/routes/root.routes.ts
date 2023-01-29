@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
+import { rootResponse } from '../helpers/default-responses';
 import { Routes } from '../models/routes.model';
 import { usersRoutes } from './users.routes';
-import { rootResponse } from '../helpers/root-response';
+
 
 /**
  * * /api/
