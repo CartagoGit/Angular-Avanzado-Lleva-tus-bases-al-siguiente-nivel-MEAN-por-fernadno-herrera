@@ -4,12 +4,15 @@ export const environment: Record<Mode, Config> = {
 	development: new Config({
 		PORT: 5000,
 		MODE: 'development',
-		URL_BASE: 'http://localhost:',
+		API_URL_BASE: 'http://localhost:',
 	}),
 
 	production: new Config({
 		PORT: Number(process.env['PORT']!),
 		MODE: 'production',
-		URL_BASE: process.env['URL_BASE']!,
+		API_URL_BASE: process.env['URL_BASE']!,
 	}),
 };
+
+export const config =
+	environment[!!process.env['PORT'] ? 'production' : 'development'];

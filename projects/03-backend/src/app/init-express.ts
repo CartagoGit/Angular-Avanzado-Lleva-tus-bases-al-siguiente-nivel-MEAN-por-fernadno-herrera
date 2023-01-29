@@ -1,12 +1,11 @@
 import express from 'express';
-import { environment } from '../environments/config';
-
-export const config =
-	environment[!!process.env['PORT'] ? 'production' : 'development'];
+import { config } from '../environments/config';
+import { initMongo, isMongoConnected } from './db/init-mongo';
+import { log } from './helpers/logs';
 
 export const initExpress = () => {
 	const port = Number(config.PORT);
-	const initLog = `[ready in ${config.MODE}] ${config.URL}`;
+	const initLog = `Ready in ${config.MODE}, access into ${config.API_URL}`;
 
 	const app = express();
 
@@ -16,11 +15,11 @@ export const initExpress = () => {
 			ok: true,
 			mode: config.MODE,
 			log: initLog,
+			mongo_state: isMongoConnected ? 'Connected' : 'Disconnected',
 		});
-		console.log(config.MONGO_URL);
 	});
 
 	app.listen(port, () => {
-		console.log(initLog);
+		log(initLog, 'EXPRESS');
 	});
 };

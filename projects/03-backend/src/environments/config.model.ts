@@ -24,23 +24,22 @@ export type Mode = 'production' | 'development';
 interface ConfigProps {
 	PORT: number;
 	MODE: Mode;
-	URL_BASE: string;
+	API_URL_BASE: string;
 }
 
 export class Config implements ConfigProps {
-
 	// ANCHOR : Variables
 	public PORT!: number;
 	public MODE!: Mode;
-	public URL_BASE!: string;
+	public API_URL_BASE!: string;
 	private _MONGO_PASSWORD: string = hide_environments.MONGO_PASSWORD;
 	private _MONGO_USERNAME: string = hide_environments.MONGO_USERNAME;
 	private _MONGO_CLUSTER: string = hide_environments.MONGO_CLUSTER;
 	private _MONGO_OPTIONS: {} = hide_environments.MONGO_OPTIONS || {};
 	private _MONGO_APP: string = hide_environments.MONGO_APP || '';
 
-	get URL() {
-		return this.URL_BASE + this.PORT;
+	get API_URL() {
+		return this.API_URL_BASE + this.PORT;
 	}
 
 	get MONGO_URL() {
@@ -51,19 +50,31 @@ export class Config implements ConfigProps {
 			this._MONGO_PASSWORD +
 			'@' +
 			this._MONGO_CLUSTER +
-			'.mongodb.net/' +
-			this._MONGO_APP +
-			this._getMongoOptionsParams()
+			'.mongodb.net/'
 		);
+	}
+	get MONGO_URL_APP() {
+		return this.MONGO_URL + this._MONGO_APP;
+	}
+
+	get MONGO_URL_COMPLETE() {
+		return this.MONGO_URL_APP + this._getMongoOptionsParams();
+	}
+
+	get MONGO_APP_NAME() {
+		return this._MONGO_APP;
+	}
+
+	get MONGO_OPTIONS() {
+		return this._MONGO_OPTIONS;
 	}
 
 	// ANCHOR : Constructor
 	constructor(data: ConfigProps) {
 		this.PORT = data.PORT;
 		this.MODE = data.MODE;
-		this.URL_BASE = data.URL_BASE;
+		this.API_URL_BASE = data.API_URL_BASE;
 	}
-
 
 	// ANCHOR : Methods
 	private _getMongoOptionsParams(): string {

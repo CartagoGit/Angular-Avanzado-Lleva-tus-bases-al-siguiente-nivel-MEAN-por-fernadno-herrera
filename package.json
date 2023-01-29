@@ -25,6 +25,7 @@
 		"@nrwl/angular": "^15.6.2",
 		"axios": "^1.0.0",
 		"chart.js": "^4.1.2",
+		"mongoose": "^6.9.0",
 		"ng2-charts": "^4.1.1",
 		"rxjs": "~7.8.0",
 		"tslib": "^2.3.0",
