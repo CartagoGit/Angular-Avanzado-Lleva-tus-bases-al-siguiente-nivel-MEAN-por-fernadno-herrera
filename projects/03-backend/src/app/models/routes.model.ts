@@ -5,7 +5,7 @@ import { CallbackMethod } from '../interfaces/response.interface';
 export interface RoutesProps {
 	route: string;
 	callback: CallbackMethod | Router;
-	// callback: (...args: any[]) => void;
+	middlewares?: ((...args: any[]) => void)[];
 	type?: 'get' | 'post' | 'patch' | 'put' | 'delete' | 'use';
 	router?: Router;
 }
@@ -27,11 +27,15 @@ export class Routes {
 
 	// ANCHOR : Methods
 	private _initRoutes(): void {
-		for (let [name, { route, callback, type }] of Object.entries(
-			this.routes
-		)) {
-			const typeRequest = type || 'use';
-			this.routes[name].router = this.router[typeRequest](route, callback);
+		for (let [
+			name,
+			{ route, callback, type = 'use', middlewares = [] },
+		] of Object.entries(this.routes)) {
+			this.routes[name].router = this.router[type](
+				route,
+				middlewares,
+				callback
+			);
 		}
 	}
 }

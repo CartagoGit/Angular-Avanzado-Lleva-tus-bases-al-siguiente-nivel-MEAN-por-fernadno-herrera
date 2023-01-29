@@ -7,6 +7,7 @@ import {
 	getErrorUniqueParam,
 } from '../helpers/default-response';
 import { CallbackMethod } from '../interfaces/response.interface';
+import { check } from 'express-validator';
 
 /**
  * * /api/users
@@ -31,5 +32,6 @@ export const usersRoutes: Routes = new Routes({
 			}
 			(coreRoutes.routes['post'].callback as CallbackMethod)(req, res);
 		},
+		middlewares: [check('nombre').not().isEmpty()],
 	},
 });
