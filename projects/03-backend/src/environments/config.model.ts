@@ -6,7 +6,7 @@ import { hide_environments } from 'global/hide_environments';
 // 	MONGO_PASSWORD: string;
 // 	MONGO_USERNAME: string;
 // 	MONGO_OPTIONS?: {};
-//    MONGO_APP?: string;
+//    MONGO_DB?: string;
 // }
 // export const hide_environments = {
 // 	MONGO_CLUSTER : 'backend-angular-avanzad.pei57e6',
@@ -16,7 +16,7 @@ import { hide_environments } from 'global/hide_environments';
 //		   retryWrites: true,
 //		   w: 'majority',
 //	   },
-//    MONGO_APP: 'hospitalApp'
+//    MONGO_DB: 'hospitalApp'
 // }
 
 export type Mode = 'production' | 'development';
@@ -36,7 +36,7 @@ export class Config implements ConfigProps {
 	private _MONGO_USERNAME: string = hide_environments.MONGO_USERNAME;
 	private _MONGO_CLUSTER: string = hide_environments.MONGO_CLUSTER;
 	private _MONGO_OPTIONS: {} = hide_environments.MONGO_OPTIONS || {};
-	private _MONGO_APP: string = hide_environments.MONGO_APP || '';
+	private _MONGO_DB: string = hide_environments.MONGO_DB || '';
 
 	get API_URL() {
 		return this.API_URL_BASE + this.PORT;
@@ -53,16 +53,16 @@ export class Config implements ConfigProps {
 			'.mongodb.net/'
 		);
 	}
-	get MONGO_URL_APP() {
-		return this.MONGO_URL + this._MONGO_APP;
+	get MONGO_URL_DB() {
+		return this.MONGO_URL + this._MONGO_DB;
 	}
 
 	get MONGO_URL_COMPLETE() {
-		return this.MONGO_URL_APP + this._getMongoOptionsParams();
+		return this.MONGO_URL_DB + this._getMongoOptionsParams();
 	}
 
-	get MONGO_APP_NAME() {
-		return this._MONGO_APP;
+	get MONGO_DB_NAME() {
+		return this._MONGO_DB;
 	}
 
 	get MONGO_OPTIONS() {

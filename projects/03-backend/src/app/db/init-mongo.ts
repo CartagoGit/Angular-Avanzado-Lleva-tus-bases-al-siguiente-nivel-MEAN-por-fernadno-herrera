@@ -1,6 +1,6 @@
-import mongoose, { Model } from 'mongoose';
+import mongoose from 'mongoose';
 import { config } from '../../environments/config';
-import { forkJoin, from, fromEvent, Observable, switchMap, tap } from 'rxjs';
+import { from, Observable, switchMap, tap } from 'rxjs';
 import { logError, log } from '../helpers/logs.helper';
 
 export const initMongo = () => {
@@ -8,7 +8,7 @@ export const initMongo = () => {
 
 	getObservableMongoose()
 		.pipe(
-			tap(() => log(config.MONGO_URL_APP, 'MONGO', 'URL')),
+			tap(() => log(config.MONGO_URL_DB, 'MONGO', 'URL')),
 			switchMap((_resp) => {
 				mongoState.isMongoConnected = true;
 				log('Connected succesfully', 'MONGO');
@@ -33,7 +33,7 @@ export const initMongo = () => {
 };
 
 export const getObservableMongoose = (): Observable<typeof mongoose> => {
-	return from(mongoose.connect(config.MONGO_URL_APP, config.MONGO_OPTIONS));
+	return from(mongoose.connect(config.MONGO_URL_DB, config.MONGO_OPTIONS));
 };
 
 export const getObservableMongooseChange = () => {

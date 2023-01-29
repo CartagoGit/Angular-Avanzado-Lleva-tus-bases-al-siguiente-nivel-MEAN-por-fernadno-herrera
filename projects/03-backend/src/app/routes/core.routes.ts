@@ -2,14 +2,13 @@ import { Request, Response } from 'express';
 import { coreController } from '../controllers/core.controller';
 import { rootResponse } from '../helpers/root-response';
 import { Routes } from '../models/routes.model';
+import { getSectionFromUrl } from '../helpers/get-section-from-url.helper';
 
 export const coreRoutes: Routes = new Routes({
 	base: {
 		route: '/',
 		callback: (req: Request, res: Response) => {
-			const baseUrlSections = req.baseUrl.split('/');
-			const section = baseUrlSections[baseUrlSections.length - 1];
-			rootResponse(section, res);
+			rootResponse(getSectionFromUrl(req), res);
 		},
 		type: 'get',
 	},

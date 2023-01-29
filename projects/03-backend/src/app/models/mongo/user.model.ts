@@ -1,4 +1,4 @@
-import { model,  Schema } from 'mongoose';
+import { model, Schema } from 'mongoose';
 
 export const UserSchema = new Schema({
 	name: {
@@ -24,6 +24,7 @@ export const UserSchema = new Schema({
 	},
 	google: {
 		type: Boolean,
+		default: false,
 	},
 });
 

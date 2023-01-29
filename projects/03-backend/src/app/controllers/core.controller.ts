@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { getModelSection } from '../helpers/get-model-section.helper';
 
 export const coreController = {
 	get: (_req: Request, res: Response) => {
@@ -13,9 +14,17 @@ export const coreController = {
 			ok: true,
 		});
 	},
-	post: (_req: Request, res: Response) =>
+	post: async (req: Request, res: Response) => {
+		const { name, password, email } = req.body;
+
+		const model = getModelSection(req);
+		await model.save();
+		console.log(model);
+
 		res.json({
 			message: 'post',
 			ok: true,
-		}),
+			data: model,
+		});
+	},
 };
