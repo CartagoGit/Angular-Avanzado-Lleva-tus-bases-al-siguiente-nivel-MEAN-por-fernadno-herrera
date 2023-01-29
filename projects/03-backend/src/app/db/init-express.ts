@@ -15,11 +15,11 @@ export const initExpress = () => {
 
 	app.get('/', (_req, res) => {
 		res.json({
-			message: 'Home Api Backend',
+			message: 'Home Api backend root',
 			ok: true,
 			mode: config.MODE,
-			log: initLog,
 			db_state: mongoState.getState(),
+			log: initLog,
 		});
 	});
 

@@ -3,10 +3,10 @@ import { mongoState } from '../db/init-mongo';
 
 export interface RoutesProps {
 	route: string;
-	middleware:
+	callback:
 		| ((req: Request, res: Response, next?: NextFunction) => void)
 		| Router;
-	// middleware: (...args: any[]) => void;
+	// callback: (...args: any[]) => void;
 	type?: 'get' | 'post' | 'patch' | 'put' | 'delete' | 'use';
 	router?: Router;
 }
@@ -28,11 +28,11 @@ export class Routes {
 
 	// ANCHOR : Methods
 	private _initRoutes(): void {
-		for (let [name, { route, middleware, type }] of Object.entries(
+		for (let [name, { route, callback, type }] of Object.entries(
 			this.routes
 		)) {
 			const typeRequest = type || 'use';
-			this.routes[name].router = this.router[typeRequest](route, middleware);
+			this.routes[name].router = this.router[typeRequest](route, callback);
 		}
 	}
 }

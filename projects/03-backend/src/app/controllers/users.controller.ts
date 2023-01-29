@@ -1,16 +1,21 @@
 import { Request, Response } from 'express';
 
 export const usersController = {
-	getUsers: (req: Request, res: Response) => {
+	getUsers: (_req: Request, res: Response) => {
 		res.json({
-			message: 'Pillo los usuario quillo',
+			message: 'getUsers',
 			ok: true,
 		});
 	},
-	getUserById: (req: Request, res: Response) => {
+	getUserById: (_req: Request, res: Response) => {
 		res.json({
-			message: 'asdasdo',
+			message: 'getUserById',
 			ok: true,
 		});
 	},
+	postUser: (_req: Request, res: Response) =>
+		res.json({
+			message: 'postUser',
+			ok: true,
+		}),
 };

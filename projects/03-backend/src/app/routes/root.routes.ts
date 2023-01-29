@@ -10,13 +10,14 @@ import { rootResponse } from '../helpers/root-response';
 export const rootRoutes: Routes = new Routes({
 	base: {
 		route: '/',
-		middleware: (_req: Request, res: Response) => {
+		callback: (_req: Request, res: Response) => {
 			rootResponse('home', res);
 		},
 		type: 'get',
 	},
 	users: {
 		route: '/users',
-		middleware: usersRoutes.router,
+		callback: usersRoutes.router,
+		type: 'use',
 	},
 });
