@@ -2,7 +2,10 @@ import { Request, Response } from 'express';
 import { Routes } from '../models/routes.model';
 import { coreRoutes } from './core.routes';
 import { UserModel } from '../models/mongo/user.model';
-import { defaultErrorResponse } from '../helpers/default-response';
+import {
+	defaultErrorResponse,
+	getErrorUniqueParam,
+} from '../helpers/default-response';
 import { CallbackMethod } from '../interfaces/response.interface';
 
 /**
@@ -20,7 +23,7 @@ export const usersRoutes: Routes = new Routes({
 				defaultErrorResponse(
 					res,
 					req,
-					new Error('Email exists in DB. That param must be unique'),
+					getErrorUniqueParam({email}),
 					'MONGO',
 					409
 				);

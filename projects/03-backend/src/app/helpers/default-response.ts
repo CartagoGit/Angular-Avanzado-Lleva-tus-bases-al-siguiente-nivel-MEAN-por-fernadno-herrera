@@ -4,6 +4,8 @@ import { LogType } from '../interfaces/logs.interfaces';
 import { logError } from './logs.helper';
 import { DefaultResponseProps } from '../interfaces/response.interface';
 import { getSectionFromUrl } from './get-section-from-url.helper';
+import { getCapitalize } from './get-capitalize.helper';
+import { ErrorData } from '../models/error-data.model';
 
 export const defaultResponse = (
 	res: Response,
@@ -30,7 +32,7 @@ export const defaultResponse = (
 			} as DefaultResponseProps);
 		},
 		error: (error) => {
-			defaultErrorResponse(res, req, error as Error, logType);
+			defaultErrorResponse(res, req, error as ErrorData, logType);
 		},
 	});
 };
@@ -38,17 +40,28 @@ export const defaultResponse = (
 export const defaultErrorResponse = (
 	res: Response,
 	req: Request,
-	error: Error,
+	error: ErrorData,
 	logType: LogType = 'LOG',
 	statusCode: number = 500
 ): string => {
+	console.log(error);
 	res.status(statusCode).json({
 		message: `[ ${getSectionFromUrl(req)} - ERROR ]`.toUpperCase(),
 		ok: false,
-		status_code: statusCode,
+		status_code: error.status_code | statusCode,
 		error_message: error.message,
 		error_data: error,
 	} as DefaultResponseProps);
 
 	return logError(error.message, logType, `[ Status  ${statusCode} ]`);
+};
+
+export const getErrorUniqueParam = (param: {}): ErrorData => {
+	const [key, value] = Object.entries(param)[0];
+	console.log(key, value);
+	return new ErrorData({
+		message: `Param '${key}' with value '${value}' exists in DB. That param must be unique`,
+		status_code: 409,
+		error_param: param,
+	});
 };
