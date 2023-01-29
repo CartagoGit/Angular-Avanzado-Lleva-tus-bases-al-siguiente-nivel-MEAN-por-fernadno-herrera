@@ -5,7 +5,7 @@ import { hide_environments } from 'global/hide_environments';
 // 	MONGO_CLUSTER: string;
 // 	MONGO_PASSWORD: string;
 // 	MONGO_USERNAME: string;
-// 	MONGO_OPTIONS?: {};
+// 	MONGO_OPTIONS?: {}  | string;
 //    MONGO_DB?: string;
 // }
 // export const hide_environments = {
@@ -32,11 +32,16 @@ export class Config implements ConfigProps {
 	public PORT!: number;
 	public MODE!: Mode;
 	public API_URL_BASE!: string;
-	private _MONGO_PASSWORD: string = hide_environments.MONGO_PASSWORD;
-	private _MONGO_USERNAME: string = hide_environments.MONGO_USERNAME;
-	private _MONGO_CLUSTER: string = hide_environments.MONGO_CLUSTER;
-	private _MONGO_OPTIONS: {} = hide_environments.MONGO_OPTIONS || {};
-	private _MONGO_DB: string = hide_environments.MONGO_DB || '';
+	private _MONGO_PASSWORD: string =
+		process.env['MONGO_PASSWORD'] || hide_environments.MONGO_PASSWORD;
+	private _MONGO_USERNAME: string =
+		process.env['MONGO_USERNAME'] || hide_environments.MONGO_USERNAME;
+	private _MONGO_CLUSTER: string =
+		process.env['MONGO_CLUSTER'] || hide_environments.MONGO_CLUSTER;
+	private _MONGO_OPTIONS: {} | string =
+		process.env['MONGO_OPTIONS'] || hide_environments.MONGO_OPTIONS || {};
+	private _MONGO_DB: string =
+		process.env['MONGO_DB'] || hide_environments.MONGO_DB || '';
 
 	get API_URL() {
 		return this.API_URL_BASE + this.PORT;
@@ -58,7 +63,7 @@ export class Config implements ConfigProps {
 	}
 
 	get MONGO_URL_COMPLETE() {
-		return this.MONGO_URL_DB + this._getMongoOptionsParams();
+		return this.MONGO_URL_DB + this._getParamsFromObject(this.MONGO_OPTIONS);
 	}
 
 	get MONGO_DB_NAME() {
@@ -66,6 +71,8 @@ export class Config implements ConfigProps {
 	}
 
 	get MONGO_OPTIONS() {
+		if (typeof this._MONGO_OPTIONS === 'string')
+			return this._getObjectFromParams(this._MONGO_OPTIONS);
 		return this._MONGO_OPTIONS;
 	}
 
@@ -77,13 +84,34 @@ export class Config implements ConfigProps {
 	}
 
 	// ANCHOR : Methods
-	private _getMongoOptionsParams(): string {
+	private _getParamsFromObject(objectToParse: object | string): string {
+		if (typeof objectToParse === 'string') return objectToParse;
 		let params: string = '';
-		for (let [key, value] of Object.entries(this._MONGO_OPTIONS)) {
+		for (let [key, value] of Object.entries(objectToParse)) {
 			if (params !== '') params += '&';
 			else params += '?';
 			params += key + '=' + value;
 		}
 		return params;
+	}
+
+	private _getObjectFromParams(params: string | object): object {
+		if (typeof params === 'object') return params;
+		// params = params.replace('?"\'', '');
+		const arrayParams = params
+			.split('')
+			.filter((value) => value !== '"' && value !== "'" && value !== '?')
+			.join('')
+			.split('&');
+
+		let objectWithParams = {};
+		for (let pair of arrayParams) {
+			const [key, value] = pair.split('=');
+			objectWithParams = {
+				...objectWithParams,
+				[key]: value,
+			};
+		}
+		return objectWithParams;
 	}
 }
