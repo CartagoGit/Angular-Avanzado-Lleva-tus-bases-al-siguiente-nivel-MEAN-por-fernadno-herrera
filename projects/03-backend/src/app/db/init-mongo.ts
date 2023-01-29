@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import { config } from '../../environments/config';
 import { from, Observable, switchMap, tap } from 'rxjs';
 import { logError, log } from '../helpers/logs.helper';
+import { getCapitalize } from '../helpers/get-capitalize.helper';
 
 export const initMongo = () => {
 	mongoose.set('strictQuery', false);
@@ -18,8 +19,7 @@ export const initMongo = () => {
 		.subscribe({
 			next: (resp) => {
 				log(
-					resp.operationType.charAt(0).toUpperCase() +
-						resp.operationType.slice(1).toLowerCase(),
+					getCapitalize(resp.operationType),
 					'MONGO',
 					'Something changed in MongoDB'
 				);
