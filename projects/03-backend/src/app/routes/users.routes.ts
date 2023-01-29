@@ -17,8 +17,8 @@ export const usersRoutes: Routes = new Routes({
 	post: {
 		...coreRoutes.routes['post'],
 		callback: async (req: Request, res: Response) => {
-			const { email } = req.body;
-			const existEmail = await UserModel.findOne({ email });
+			const email = req.body?.email;
+			const existEmail = !!email && (await UserModel.findOne({ email }));
 			if (!!existEmail) {
 				defaultErrorResponse(
 					res,

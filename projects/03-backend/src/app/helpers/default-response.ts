@@ -48,7 +48,8 @@ export const defaultErrorResponse = (
 		ok: false,
 		status_code: error.status_code | statusCode,
 		error_message: error.message,
-		error_data: { keyValue: error.keyValue },
+		// error_data: { keyValue: error.keyValue },
+		error_data: error,
 	} as DefaultResponseProps);
 
 	return logError(error.message, logType, `[ Status  ${statusCode} ]`);
@@ -60,5 +61,6 @@ export const getErrorUniqueParam = (param: {}): ErrorData => {
 		message: `Param '${key}' with value '${value}' exists in DB. That param must be unique`,
 		status_code: 409,
 		keyValue: param,
+		reason: 'unique',
 	});
 };
