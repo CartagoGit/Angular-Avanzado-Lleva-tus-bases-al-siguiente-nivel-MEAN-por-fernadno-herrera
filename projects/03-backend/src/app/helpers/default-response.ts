@@ -2,6 +2,7 @@ import { Response } from 'express';
 import { from, Subscription } from 'rxjs';
 import { LogType } from '../interfaces/logs.interfaces';
 import { logError } from './logs.helper';
+import { DefaultResponseProps } from '../interfaces/response.interface';
 
 export const defaultResponse = (
 	res: Response,
@@ -16,7 +17,7 @@ export const defaultResponse = (
 				ok: true,
 				status_code: statusCode,
 				data: value.model,
-			});
+			} as DefaultResponseProps);
 		},
 		error: (error) => {
 			defaultErrorResponse(res, error as Error, logType);
@@ -36,7 +37,7 @@ export const defaultErrorResponse = (
 		status_code: statusCode,
 		error_message: error.message,
 		error_data: error,
-	});
+	} as DefaultResponseProps);
 
 	return logError(error.message, logType);
 };
