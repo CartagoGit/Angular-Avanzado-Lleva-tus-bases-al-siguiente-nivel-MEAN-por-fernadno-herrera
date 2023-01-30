@@ -18,14 +18,18 @@ export const defaultResponse = (
 ): Subscription => {
 	return from(callback()).subscribe({
 		next: (value: any) => {
-			const { model, data, message, ...rest } = value;
+			const {
+				model = undefined,
+				data = undefined,
+				message = 'OK',
+				...rest
+			} = value;
+
 			if ((!data && !model) || model?.length === 0 || data?.length === 0)
 				statusCode = 404;
 
 			res.status(statusCode).json({
-				message: `[ ${getSectionFromUrl(req)} - ${
-					message || 'OK'
-				} ]`.toUpperCase(),
+				message: `[ ${getSectionFromUrl(req)} - ${message} ]`.toUpperCase(),
 				ok: true,
 				status_code: statusCode,
 				data,
@@ -113,5 +117,7 @@ export const getMessageErrorValidation = (
 	!!required && listRequisites.push('is required');
 	!!formated && listRequisites.push('must be formated');
 	!!unique && listRequisites.push('must be unique');
-	return `Param '${key}' ${new Intl.ListFormat('en-GB').format(listRequisites)}`;
+	return `Param '${key}' ${new Intl.ListFormat('en-GB').format(
+		listRequisites
+	)}`;
 };

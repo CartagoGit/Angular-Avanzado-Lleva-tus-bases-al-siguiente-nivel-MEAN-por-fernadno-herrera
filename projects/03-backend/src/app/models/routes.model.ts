@@ -1,13 +1,13 @@
 import { Router } from 'express';
 import { mongoState } from '../db/init-mongo';
-import { CallbackMethod } from '../interfaces/response.interface';
+import { CallbackMethod, TypeRequest } from '../interfaces/response.interface';
 import { validatorCheck } from '../middlewares/validator.middleware';
 
 export interface RoutesProps {
 	route: string;
 	callback: CallbackMethod | Router;
 	middlewares?: ((...args: any[]) => void)[];
-	type?: 'get' | 'post' | 'patch' | 'put' | 'delete' | 'use';
+	type?: TypeRequest;
 	router?: Router;
 }
 

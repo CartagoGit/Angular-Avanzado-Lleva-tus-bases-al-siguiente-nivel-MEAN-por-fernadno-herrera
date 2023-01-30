@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, Response } from 'express';
 
 export interface DefaultResponseProps {
 	ok: boolean;
@@ -15,3 +15,5 @@ export type CallbackMethod = (
 	res: Response,
 	next?: NextFunction
 ) => void;
+
+export type TypeRequest = 'get' | 'post' | 'patch' | 'put' | 'delete' | 'use';

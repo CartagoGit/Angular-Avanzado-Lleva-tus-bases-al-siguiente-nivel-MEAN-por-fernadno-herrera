@@ -19,7 +19,7 @@ export const coreRoutes: Routes = new Routes({
 		type: 'get',
 	},
 	getById: {
-		route: '/get-by-id',
+		route: '/get-by-id/:id',
 		callback: coreController.getById,
 		type: 'get',
 	},
@@ -28,4 +28,9 @@ export const coreRoutes: Routes = new Routes({
 		callback: coreController.post,
 		type: 'post',
 	},
+	put : {
+		route: '/put/:id',
+		callback: coreController.put,
+		type: 'put'
+	}
 });
