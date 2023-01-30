@@ -25,15 +25,28 @@ export const defaultResponse = (
 				...rest
 			} = value;
 
-			if ((!data && !model) || model?.length === 0 || data?.length === 0)
+			let ok = true;
+			let error_message: string | undefined = undefined;
+			if (value.error_message) {
 				statusCode = 404;
-
+				ok = false;
+				error_message = value.error_message;
+			} else if (
+				(!data && !model) ||
+				model?.length === 0 ||
+				data?.length === 0
+			) {
+				statusCode = 404;
+				ok = false;
+				error_message = 'Not found'.toUpperCase();
+			}
 			res.status(statusCode).json({
 				message: `[ ${getSectionFromUrl(req)} - ${message} ]`.toUpperCase(),
-				ok: true,
+				ok,
 				status_code: statusCode,
 				data,
 				model,
+				error_message,
 				...rest,
 			} as DefaultResponseProps);
 		},

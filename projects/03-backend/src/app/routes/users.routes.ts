@@ -16,4 +16,9 @@ export const usersRoutes: Routes = new Routes({
 		//* Añadimos middlewares especificos para los usuarios
 		middlewares: usersMiddlewares.post,
 	},
+	put: {
+		...coreRoutes.routes['put'],
+		callback: usersController.put,
+		middlewares: usersMiddlewares.put
+	}
 });
