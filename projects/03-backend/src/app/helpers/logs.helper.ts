@@ -7,7 +7,7 @@ export const logError = (
 ): string => {
 	const errorMessage = `[ ERROR - ${logType} ] :
 	Some error stopped the app. Contact with administrator.
-	${optionalMessage ? optionalMessage + ' - ' + error : error}`;
+	${optionalMessage ? optionalMessage + ' - ' + error : error}}`;
 	console.error(errorMessage);
 	return errorMessage;
 };

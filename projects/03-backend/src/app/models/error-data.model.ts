@@ -1,11 +1,11 @@
 export class ErrorData extends Error {
 	public status_code;
 	public keyValue;
-	public reason: string | string[];
+	public reason;
 	constructor(data: {
 		message: string;
 		status_code: number;
-		keyValue: {};
+		keyValue: {} | [];
 		reason: string | string[];
 	}) {
 		super(data.message);

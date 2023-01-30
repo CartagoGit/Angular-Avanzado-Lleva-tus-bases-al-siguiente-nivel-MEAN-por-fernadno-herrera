@@ -12,17 +12,19 @@ export const validatorCheck = (
 	if (!errors.isEmpty()) {
 		const status_code = 406;
 
-		const finalErrorData = new ErrorData({
+		
+		const errorData = new ErrorData({
 			status_code,
 			reason: 'validation',
 			message:
 				errors.array().length > 1
-					? 'There are a lot of validation errors. Check them to fix the problems.'
+					? `There are ${
+							errors.array().length
+					  } validation errors. Check them to fix the problems.`
 					: errors.array()[0].msg,
-			keyValue: errors.mapped(),
+			keyValue: errors.array(),
 		});
-
-		defaultErrorResponse(res, req, finalErrorData, 'MONGO', status_code);
+		defaultErrorResponse(res, req, errorData, 'MONGO', status_code);
 		return;
 	}
 	next();

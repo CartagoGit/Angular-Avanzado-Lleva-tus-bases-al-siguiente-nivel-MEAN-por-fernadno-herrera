@@ -71,9 +71,20 @@ export const getErrorUniqueParam = (param: {}): ErrorData => {
 };
 
 export const getStringErrorUniqueParam = (param: {}): string => {
-	console.log(param);
+	return `${getErrorValidationMessage(
+		param
+	)} exists in DB. That param must be unique`;
+};
+
+export const getStringErrorRequireParam = (param: string): string => {
+	return getErrorValidationMessage({ [param]: undefined });
+};
+
+export const getErrorValidationMessage = (param: {}): string => {
 	const [key, value] = Object.entries(param)[0];
-	return `Param '${key}' with value '${value}' exists in DB. That param must be unique`;
+	const required = !!value ? `with value '${value}'` : `is required.`;
+	console.log(`Param '${key}' ${required}`);
+	return `Param '${key}' ${required}`;
 };
 
 export const rootResponse = (title: string, res: Response) => {

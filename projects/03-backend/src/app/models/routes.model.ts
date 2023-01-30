@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { mongoState } from '../db/init-mongo';
 import { CallbackMethod } from '../interfaces/response.interface';
+import { validatorCheck } from '../middlewares/validator.middleware';
 
 export interface RoutesProps {
 	route: string;
@@ -34,6 +35,7 @@ export class Routes {
 			this.routes[name].router = this.router[type](
 				route,
 				middlewares,
+				validatorCheck,
 				callback
 			);
 		}
