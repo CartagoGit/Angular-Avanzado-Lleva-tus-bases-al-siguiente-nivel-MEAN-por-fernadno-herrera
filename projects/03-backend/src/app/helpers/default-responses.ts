@@ -60,6 +60,17 @@ export const defaultErrorResponse = (
 	return logError(error.message, logType, `[ Status  ${statusCode} ]`);
 };
 
+export const rootResponse = (title: string, res: Response) => {
+	const message = `${getCapitalize(title)} collection root path`;
+	return res.json({
+		message,
+		ok: true,
+		mode: config.MODE,
+		status_code: 200,
+		db_state: mongoState.getState(),
+	} as DefaultResponseProps);
+};
+
 export const getErrorUniqueParam = (param: {}): ErrorData => {
 	const [key, value] = Object.entries(param)[0];
 	return new ErrorData({
@@ -70,30 +81,37 @@ export const getErrorUniqueParam = (param: {}): ErrorData => {
 	});
 };
 
+export const getStringErrorInitParam = (param: {}) => {
+	const [key, value] = Object.entries(param)[0];
+	return `Param '${key}' with value '${value}'`;
+};
+
+export const getStringErrorRequiredParam = (param: string | {}): string => {
+	if (typeof param === 'string') param = { [param]: undefined };
+	const value = Object.values(param)[0];
+	const required = !!value ? `with value '${value}'` : `is required`;
+	return `${required}`;
+};
+
 export const getStringErrorUniqueParam = (param: {}): string => {
-	return `${getErrorValidationMessage(
+	return `${getStringErrorInitParam(
 		param
 	)} exists in DB. That param must be unique`;
 };
 
-export const getStringErrorRequireParam = (param: string): string => {
-	return getErrorValidationMessage({ [param]: undefined });
-};
-
-export const getErrorValidationMessage = (param: {}): string => {
-	const [key, value] = Object.entries(param)[0];
-	const required = !!value ? `with value '${value}'` : `is required.`;
-	console.log(`Param '${key}' ${required}`);
-	return `Param '${key}' ${required}`;
-};
-
-export const rootResponse = (title: string, res: Response) => {
-	const message = `${getCapitalize(title)} collection root path`;
-	return res.json({
-		message,
-		ok: true,
-		mode: config.MODE,
-		status_code: 200,
-		db_state: mongoState.getState(),
-	} as DefaultResponseProps);
+export const getMessageErrorValidation = (
+	key: string,
+	requisites: { unique?: boolean; required?: boolean; formated?: boolean } = {
+		unique: false,
+		required: false,
+		formated: false,
+	}
+): string => {
+	// const [key, value] = Object.entries(param)[0];
+	const { required, formated, unique } = requisites;
+	const listRequisites: string[] = [];
+	!!required && listRequisites.push('is required');
+	!!formated && listRequisites.push('must be formated');
+	!!unique && listRequisites.push('must be unique');
+	return `Param '${key}' ${new Intl.ListFormat('en-GB').format(listRequisites)}`;
 };

@@ -3,8 +3,8 @@ import { coreRoutes } from './core.routes';
 import { UserModel } from '../models/mongo/user.model';
 import { check } from 'express-validator';
 import {
-	getStringErrorRequireParam,
-	getStringErrorUniqueParam,
+	getErrorUniqueParam,
+	getMessageErrorValidation,
 } from '../helpers/default-responses';
 
 /**
@@ -15,29 +15,23 @@ export const usersRoutes: Routes = new Routes({
 	...coreRoutes.routes,
 	post: {
 		...coreRoutes.routes['post'],
-		// callback: async (req: Request, res: Response) => {
-		// 	const email = req.body?.email;
-		// 	const existEmail = !!email && (await UserModel.findOne({ email }));
-		// 	if (!!existEmail) {
-		// 		defaultErrorResponse(
-		// 			res,
-		// 			req,
-		// 			getErrorUniqueParam({ email }),
-		// 			'MONGO',
-		// 			409
-		// 		);
-		// 		return;
-		// 	}
-		// 	(coreRoutes.routes['post'].callback as CallbackMethod)(req, res);
-		// },
 		middlewares: [
-			check('name', getStringErrorRequireParam('name')).not().isEmpty(),
-			check('password', getStringErrorRequireParam('password'))
+			check('name', getMessageErrorValidation('name', { required: true }))
+				.not()
+				.isEmpty(),
+			check(
+				'password',
+				getMessageErrorValidation('password', { required: true })
+			)
 				.not()
 				.isEmpty(),
 			check(
 				'email',
-				'Email must be an email format, is required and must be unique'
+				getMessageErrorValidation('email', {
+					required: true,
+					unique: true,
+					formated: true,
+				})
 			)
 				.isEmail()
 				.not()
@@ -45,11 +39,9 @@ export const usersRoutes: Routes = new Routes({
 				.custom(async (email) => {
 					const existEmail = await UserModel.findOne({ email });
 					return (
-						!!existEmail &&
-						Promise.reject(getStringErrorUniqueParam({ email }))
+						!!existEmail && Promise.reject(getErrorUniqueParam({ email }))
 					);
 				}),
-			// validatorCheck,
 		],
 	},
 });
