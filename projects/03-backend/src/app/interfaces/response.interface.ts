@@ -13,7 +13,7 @@ export interface DefaultResponseProps {
 export type CallbackMethod = (
 	req: Request,
 	res: Response,
-	callback: () => Promise<void> | void,
+	callback: () => Promise<any> | void,
 	next?: NextFunction,
 ) => void | Promise<void>;
 

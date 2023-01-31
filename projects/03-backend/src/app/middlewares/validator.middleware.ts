@@ -12,7 +12,6 @@ export const validatorCheck = (
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
 		const status_code = 406;
-		console.log(req.method);
 		const errorData = new ErrorData({
 			status_code,
 			reason: 'validation',
@@ -24,7 +23,13 @@ export const validatorCheck = (
 					: errors.array()[0].msg,
 			keyValue: errors.mapped(),
 		});
-		defaultErrorResponse(res, req, errorData, req.method as LogType, status_code);
+		defaultErrorResponse(
+			res,
+			req,
+			errorData,
+			req.method as LogType,
+			status_code
+		);
 		return;
 	}
 	next();

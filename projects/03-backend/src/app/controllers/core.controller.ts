@@ -9,7 +9,7 @@ export const coreController = {
 	get: (
 		req: Request,
 		res: Response,
-		modelCallback: (res: Response, req: Request) => void | Promise<void>
+		modelCallback: (res: Response, req: Request) => void | Promise<any>
 	) => {
 		const callback = async () => {
 			await modelCallback(res, req);
@@ -21,7 +21,7 @@ export const coreController = {
 	getById: (
 		req: Request,
 		res: Response,
-		modelCallback: (res: Response, req: Request) => Promise<void> | void
+		modelCallback: (res: Response, req: Request) => Promise<any> | void
 	) => {
 		const callback = async () => {
 			await modelCallback(res, req);
@@ -33,7 +33,7 @@ export const coreController = {
 	post: (
 		req: Request,
 		res: Response,
-		modelCallback: (res: Response, req: Request) => Promise<void> | void
+		modelCallback: (res: Response, req: Request) => Promise<any> | void
 	) => {
 		const callback = async () => {
 			await modelCallback(res, req);
@@ -47,14 +47,15 @@ export const coreController = {
 	put: (
 		req: Request,
 		res: Response,
-		modelCallback: (res: Response, req: Request) => Promise<void> | void
+		modelCallback: (res: Response, req: Request) => Promise<any> | void
 	) => {
 		const callback = async () => {
 			await modelCallback(res, req);
 			const id = req.params['id'];
 			const data = await getModelSection(req).findByIdAndUpdate(
 				id,
-				req.body
+				req.body,
+				{ new: true }
 			);
 			return { data, message: 'PUT', id };
 		};

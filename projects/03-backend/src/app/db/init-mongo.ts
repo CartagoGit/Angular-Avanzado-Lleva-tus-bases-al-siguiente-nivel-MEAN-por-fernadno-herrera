@@ -19,7 +19,7 @@ export const initMongo = () => {
 		.subscribe({
 			next: (resp) => {
 				log(
-					getCapitalize(resp.operationType),
+					`[ ${resp.operationType.toUpperCase()} ]`,
 					'MONGO',
 					'Something changed in MongoDB'
 				);

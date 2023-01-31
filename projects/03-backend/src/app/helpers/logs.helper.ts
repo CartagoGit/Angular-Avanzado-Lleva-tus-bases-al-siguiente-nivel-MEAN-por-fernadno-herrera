@@ -6,11 +6,12 @@ export const logError = (
 	optionalMessage?: string,
 	collection?: string
 ): string => {
+	!error && (error = 'Unknown Error')
 	const errorMessage = `[ ERROR - ${logType.toUpperCase()} ${
 		!!collection ? ('in ' + collection + ' ').toUpperCase() : ''
 	}] :
 	Some error stopped the app. Contact with administrator.
-	${optionalMessage ? optionalMessage + ' - ' + error : error}}`;
+	${optionalMessage ? optionalMessage + ' - ' + error : error}`;
 	console.error(errorMessage);
 	return errorMessage;
 };

@@ -3,11 +3,11 @@ import { catchError, from, NEVER, of, retry, Subscription } from 'rxjs';
 import { LogType } from '../interfaces/logs.interfaces';
 import { logError } from './logs.helper';
 import { DefaultResponseProps } from '../interfaces/response.interface';
-import { getSectionFromUrl } from './get-section-from-url.helper';
 import { ErrorData } from '../models/error-data.model';
 import { getCapitalize } from './get-capitalize.helper';
 import { mongoState } from '../db/init-mongo';
 import { config } from '../../environments/config';
+import { getSectionFromUrl } from './get-model-section.helper';
 
 export const defaultResponse = (
 	res: Response,
@@ -19,7 +19,14 @@ export const defaultResponse = (
 	return from(callback())
 		.pipe(
 			catchError((error) => {
-				return of({ error });
+				let finalError: any = {};
+				if (!error.message) {
+					finalError = {
+						message: error,
+						data: {},
+					};
+				} else finalError = error;
+				return of({ error: finalError });
 			})
 		)
 		.subscribe({
