@@ -23,9 +23,7 @@ export const usersController = {
 	put: (req: Request, res: Response): void => {
 		const callback = async () => {
 			const userDB = await getModelSection(req).findById(req.params['id']);
-			console.log(userDB);
 
-			// TODO - el metodo se encuentra fuera del subscribe, y los errores no se controlan
 			// if (!userDB) req.body.error_message = 'There are not users with that id';
 			delete req.body.password;
 			delete req.body.google;

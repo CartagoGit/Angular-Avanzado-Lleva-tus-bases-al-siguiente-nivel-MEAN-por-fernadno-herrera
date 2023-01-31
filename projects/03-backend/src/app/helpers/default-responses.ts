@@ -86,9 +86,9 @@ export const defaultErrorResponse = (
 	statusCode: number = 500
 ) => {
 	res.status(statusCode).json({
-		message: `[ ${getSectionFromUrl(
+		message: `[ ERROR - ${logType.toUpperCase()} in ${getSectionFromUrl(
 			req
-		)} - ERROR IN ${logType}]`.toUpperCase(),
+		)} ]`.toUpperCase(),
 		ok: false,
 		status_code: (error as ErrorData).status_code || statusCode,
 		error_message: error.message || 'Unknown Error',
@@ -96,7 +96,12 @@ export const defaultErrorResponse = (
 		error_data: error,
 	} as DefaultResponseProps);
 
-	return logError(error.message, logType, `[ Status  ${statusCode} ]`);
+	return logError(
+		error.message,
+		logType,
+		`[ Status  ${statusCode} ]`,
+		getSectionFromUrl(req)
+	);
 };
 
 export const rootResponse = (title: string, res: Response) => {

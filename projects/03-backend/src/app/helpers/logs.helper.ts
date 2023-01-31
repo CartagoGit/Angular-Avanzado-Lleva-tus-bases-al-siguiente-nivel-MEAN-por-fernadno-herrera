@@ -3,9 +3,12 @@ import { LogType } from '../interfaces/logs.interfaces';
 export const logError = (
 	error: string,
 	logType: LogType = 'LOG',
-	optionalMessage?: string
+	optionalMessage?: string,
+	collection?: string
 ): string => {
-	const errorMessage = `[ ERROR - ${logType} ] :
+	const errorMessage = `[ ERROR - ${logType.toUpperCase()} ${
+		!!collection ? ('in ' + collection + ' ').toUpperCase() : ''
+	}] :
 	Some error stopped the app. Contact with administrator.
 	${optionalMessage ? optionalMessage + ' - ' + error : error}}`;
 	console.error(errorMessage);
