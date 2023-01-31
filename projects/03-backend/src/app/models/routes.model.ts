@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { RequestHandler, RequestParamHandler, Router } from 'express';
 import { mongoState } from '../db/init-mongo';
 import { CallbackMethod, TypeRequest } from '../interfaces/response.interface';
 import { validatorCheck } from '../middlewares/validator.middleware';

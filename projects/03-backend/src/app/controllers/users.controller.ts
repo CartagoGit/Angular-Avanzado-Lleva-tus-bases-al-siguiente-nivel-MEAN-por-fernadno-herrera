@@ -5,8 +5,8 @@ import { coreRoutes } from '../routes/core.routes';
 import { getModelSection } from '../helpers/get-model-section.helper';
 
 export const usersController = {
-	post: (req: Request, res: Response) => {
-		const callback = () => {
+	post: (req: Request, res: Response): void => {
+		const callback = async () => {
 			//* Encriptamos la contraseña
 			const { password } = req.body;
 			const salt = bcrypt.genSaltSync();
@@ -20,10 +20,10 @@ export const usersController = {
 			callback
 		);
 	},
-	put: (req: Request, res: Response) => {
+	put: (req: Request, res: Response): void => {
 		const callback = async () => {
 			const userDB = await getModelSection(req).findById(req.params['id']);
-			console.log(1);
+			console.log(userDB);
 
 			// TODO - el metodo se encuentra fuera del subscribe, y los errores no se controlan
 			// if (!userDB) req.body.error_message = 'There are not users with that id';

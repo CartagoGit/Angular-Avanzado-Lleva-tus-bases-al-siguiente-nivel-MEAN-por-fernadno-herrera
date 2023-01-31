@@ -9,10 +9,10 @@ export const coreController = {
 	get: (
 		req: Request,
 		res: Response,
-		modelCallback: (res: Response, req: Request) => void
+		modelCallback: (res: Response, req: Request) => void | Promise<void>
 	) => {
 		const callback = async () => {
-			modelCallback(res, req);
+			await modelCallback(res, req);
 			const data = await getModelSection(req).find();
 			return { data, message: 'GOT ALL' };
 		};
@@ -21,10 +21,10 @@ export const coreController = {
 	getById: (
 		req: Request,
 		res: Response,
-		modelCallback: (res: Response, req: Request) => void
+		modelCallback: (res: Response, req: Request) => Promise<void> | void
 	) => {
 		const callback = async () => {
-			modelCallback(res, req);
+			await modelCallback(res, req);
 			const data = await getModelSection(req).findById(req.params['id']);
 			return { data, message: 'GOT BY ID' };
 		};
@@ -33,10 +33,10 @@ export const coreController = {
 	post: (
 		req: Request,
 		res: Response,
-		modelCallback: (res: Response, req: Request) => void
+		modelCallback: (res: Response, req: Request) => Promise<void> | void
 	) => {
 		const callback = async () => {
-			modelCallback(res, req);
+			await modelCallback(res, req);
 			const model = getNewModelSection(req);
 			await model.save();
 			return { model, message: 'POSTED' };
@@ -47,10 +47,10 @@ export const coreController = {
 	put: (
 		req: Request,
 		res: Response,
-		modelCallback: (res: Response, req: Request) => void
+		modelCallback: (res: Response, req: Request) => Promise<void> | void
 	) => {
 		const callback = async () => {
-			modelCallback(res, req);
+			await modelCallback(res, req);
 			const id = req.params['id'];
 			const data = await getModelSection(req).findByIdAndUpdate(
 				id,
