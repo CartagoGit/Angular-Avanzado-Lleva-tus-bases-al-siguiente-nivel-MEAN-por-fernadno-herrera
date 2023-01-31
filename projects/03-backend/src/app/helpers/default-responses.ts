@@ -1,5 +1,5 @@
 import { Response, Request } from 'express';
-import { from, Subscription } from 'rxjs';
+import { catchError, from, NEVER, of, retry, Subscription } from 'rxjs';
 import { LogType } from '../interfaces/logs.interfaces';
 import { logError } from './logs.helper';
 import { DefaultResponseProps } from '../interfaces/response.interface';
@@ -16,44 +16,66 @@ export const defaultResponse = (
 	logType: LogType = 'LOG',
 	statusCode: number = 200
 ): Subscription => {
-	return from(callback()).subscribe({
-		next: (value: any) => {
-			const {
-				model = undefined,
-				data = undefined,
-				message = 'OK',
-				...rest
-			} = value;
+	return from(callback())
+		.pipe(
+			catchError((error) => {
+				return of({ error });
+			})
+		)
+		.subscribe({
+			next: (value: any) => {
+				if (!!value.error) {
+					defaultErrorResponse(
+						res,
+						req,
+						value.error as ErrorData,
+						logType
+					);
+					return;
+				}
+				const {
+					model = undefined,
+					data = undefined,
+					message = 'OK',
+					...rest
+				} = value;
 
-			let ok = true;
-			let error_message: string | undefined = undefined;
-			if (value.error_message) {
-				statusCode = 404;
-				ok = false;
-				error_message = value.error_message;
-			} else if (
-				(!data && !model) ||
-				model?.length === 0 ||
-				data?.length === 0
-			) {
-				statusCode = 404;
-				ok = false;
-				error_message = 'Not found'.toUpperCase();
-			}
-			res.status(statusCode).json({
-				message: `[ ${getSectionFromUrl(req)} - ${message} ]`.toUpperCase(),
-				ok,
-				status_code: statusCode,
-				data,
-				model,
-				error_message,
-				...rest,
-			} as DefaultResponseProps);
-		},
-		error: (error) => {
-			defaultErrorResponse(res, req, error as ErrorData, logType);
-		},
-	});
+				let ok = true;
+				let error_message: string | undefined = undefined;
+				if (value.error_message) {
+					statusCode = 404;
+					ok = false;
+					error_message = value.error_message;
+				} else if (
+					(!data && !model) ||
+					model?.length === 0 ||
+					data?.length === 0
+				) {
+					statusCode = 404;
+					ok = false;
+					error_message = 'Not found'.toUpperCase();
+				}
+				res.status(statusCode).json({
+					message: `[ ${getSectionFromUrl(
+						req
+					)} - ${message} ]`.toUpperCase(),
+					ok,
+					status_code: statusCode,
+					data,
+					model,
+					error_message,
+					...rest,
+				} as DefaultResponseProps);
+			},
+			error: (error) => {
+				defaultErrorResponse(
+					res,
+					req,
+					error as ErrorData,
+					'CRITICAL ERROR'
+				);
+			},
+		});
 };
 
 export const defaultErrorResponse = (
@@ -62,7 +84,7 @@ export const defaultErrorResponse = (
 	error: ErrorData,
 	logType: LogType = 'LOG',
 	statusCode: number = 500
-): string => {
+) => {
 	res.status(statusCode).json({
 		message: `[ ${getSectionFromUrl(
 			req

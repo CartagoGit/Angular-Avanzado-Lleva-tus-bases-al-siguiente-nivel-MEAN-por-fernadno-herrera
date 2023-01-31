@@ -58,6 +58,7 @@ export const coreController = {
 			);
 			return { data, message: 'PUT', id };
 		};
+
 		defaultResponse(res, req, callback, 'PUT');
 	},
 };
