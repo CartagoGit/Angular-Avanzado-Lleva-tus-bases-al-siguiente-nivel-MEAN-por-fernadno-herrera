@@ -1,19 +1,20 @@
-import { RequestHandler, RequestParamHandler, Router } from 'express';
+import { NextFunction, Request, Response, Router } from 'express';
 import { mongoState } from '../db/init-mongo';
 import { CallbackMethod, TypeRequest } from '../interfaces/response.interface';
 import { validatorCheck } from '../middlewares/validator.middleware';
 
 export interface RoutesProps {
 	route: string;
-	callback: CallbackMethod | Router;
+	controller: CallbackMethod | Router;
 	middlewares?: ((...args: any[]) => void)[];
 	type?: TypeRequest;
 	router?: Router;
+	modelController?: CallbackMethod;
 }
 
 export class Routes {
 	// ANCHOR : Variables
-	public router: Router = Router();
+	public router: Router = Router({ strict: true });
 	public routes: Record<string, RoutesProps>;
 
 	get dbState(): string {
@@ -30,13 +31,27 @@ export class Routes {
 	private _initRoutes(): void {
 		for (let [
 			name,
-			{ route, callback, type = 'use', middlewares = [] },
+			{
+				route,
+				controller,
+				type = 'use',
+				middlewares = [],
+				modelController = (
+					req: Request,
+					res: Response,
+					next: NextFunction
+				) => {
+					next();
+				},
+			},
 		] of Object.entries(this.routes)) {
+			
 			this.routes[name].router = this.router[type](
 				route,
 				middlewares,
+				modelController,
 				validatorCheck,
-				callback
+				controller
 			);
 		}
 	}

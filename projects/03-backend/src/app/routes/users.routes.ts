@@ -12,13 +12,13 @@ export const usersRoutes: Routes = new Routes({
 	post: {
 		...coreRoutes.routes['post'],
 		//* Llamamos al controllador de usuarios para este metodo ya que difiere del core
-		callback: usersController.post,
+		modelController: usersController.post,
 		//* Añadimos middlewares especificos para los usuarios
 		middlewares: usersMiddlewares.post,
 	},
 	put: {
 		...coreRoutes.routes['put'],
-		callback: usersController.put,
-		middlewares: usersMiddlewares.put
-	}
+		modelController: usersController.put,
+		middlewares: usersMiddlewares.put,
+	},
 });

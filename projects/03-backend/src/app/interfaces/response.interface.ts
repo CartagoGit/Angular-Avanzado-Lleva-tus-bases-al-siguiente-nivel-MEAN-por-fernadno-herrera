@@ -13,8 +13,8 @@ export interface DefaultResponseProps {
 export type CallbackMethod = (
 	req: Request,
 	res: Response,
-	callback: () => Promise<any> | void,
-	next?: NextFunction,
+	next: NextFunction
+	// callback: () => Promise<any> | void,
 ) => void | Promise<void>;
 
 export type TypeRequest = 'get' | 'post' | 'patch' | 'put' | 'delete' | 'use';
