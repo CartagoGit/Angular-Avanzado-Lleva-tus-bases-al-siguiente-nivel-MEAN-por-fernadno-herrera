@@ -6,7 +6,7 @@ import {
 } from '../helpers/get-model-section.helper';
 
 export const coreController = {
-	get: (
+	getAll: (
 		req: Request,
 		res: Response,
 		// modelCallback: (res: Response, req: Request) => void | Promise<any>

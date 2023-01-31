@@ -15,6 +15,7 @@ export interface RoutesProps {
 export class Routes {
 	// ANCHOR : Variables
 	public router: Router = Router({ strict: true });
+	// public router: Router = Router();
 	public routes: Record<string, RoutesProps>;
 
 	get dbState(): string {
@@ -37,21 +38,37 @@ export class Routes {
 				type = 'use',
 				middlewares = [],
 				modelController = (
-					req: Request,
-					res: Response,
+					_req: Request,
+					_res: Response,
 					next: NextFunction
 				) => {
 					next();
 				},
 			},
 		] of Object.entries(this.routes)) {
-			
+			const callback = async (
+				req: Request,
+				res: Response,
+				next: NextFunction
+			) => {
+				try {
+					console.log(req.originalUrl);
+					await modelController(req, res, next);
+					validatorCheck(req, res, next);
+					await controller(req, res, next);
+					console.log(req.originalUrl);
+					return res.json({json:'sjs'})
+				} catch (error) {
+					return res.json({json:'sjfdsfs'})
+
+				}
+			};
+
 			this.routes[name].router = this.router[type](
 				route,
 				middlewares,
-				modelController,
-				validatorCheck,
-				controller
+				type === 'use' ? controller : callback
+				// controller
 			);
 		}
 	}

@@ -5,6 +5,10 @@ import { Routes } from '../models/routes.model';
 import { rootResponse } from '../helpers/default-responses';
 import { getSectionFromUrl } from '../helpers/get-model-section.helper';
 
+/**
+ * $ Cualquier colleccion de datos
+ */
+
 export const coreRoutes: Routes = new Routes({
 	base: {
 		route: '/',
@@ -15,7 +19,7 @@ export const coreRoutes: Routes = new Routes({
 	},
 	getAll: {
 		route: '/get-all',
-		controller: coreController.get,
+		controller: coreController.getAll,
 		type: 'get',
 	},
 	getById: {

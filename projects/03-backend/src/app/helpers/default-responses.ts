@@ -62,7 +62,7 @@ export const defaultResponse = (
 					ok = false;
 					error_message = 'Not found'.toUpperCase();
 				}
-				res.status(statusCode).json({
+				return res.status(statusCode).json({
 					message: `[ ${getSectionFromUrl(
 						req
 					)} - ${message} ]`.toUpperCase(),
