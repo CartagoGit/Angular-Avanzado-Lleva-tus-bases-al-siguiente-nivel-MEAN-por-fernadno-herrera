@@ -55,7 +55,7 @@ export class Routes {
 					console.log(req.originalUrl);
 					await modelController(req, res, next);
 					validatorCheck(req, res, next);
-					await controller(req, res, next);
+					return await controller(req, res, next);
 					console.log(req.originalUrl);
 					return res.json({json:'sjs'})
 				} catch (error) {

@@ -32,13 +32,12 @@ export const defaultResponse = (
 		.subscribe({
 			next: (value: any) => {
 				if (!!value.error) {
-					defaultErrorResponse(
+					return defaultErrorResponse(
 						res,
 						req,
 						value.error as ErrorData,
 						logType
 					);
-					return;
 				}
 				const {
 					model = undefined,
@@ -75,7 +74,7 @@ export const defaultResponse = (
 				} as DefaultResponseProps);
 			},
 			error: (error) => {
-				defaultErrorResponse(
+				return defaultErrorResponse(
 					res,
 					req,
 					error as ErrorData,
@@ -92,7 +91,13 @@ export const defaultErrorResponse = (
 	logType: LogType = 'LOG',
 	statusCode: number = 500
 ) => {
-	res.status(statusCode).json({
+	logError(
+		error.message,
+		logType,
+		`[ Status  ${statusCode} ]`,
+		getSectionFromUrl(req)
+	);
+	return res.status(statusCode).json({
 		message: `[ ERROR - ${logType.toUpperCase()} in ${getSectionFromUrl(
 			req
 		)} ]`.toUpperCase(),
@@ -102,13 +107,6 @@ export const defaultErrorResponse = (
 		// error_data: { keyValue: error.keyValue },
 		error_data: error,
 	} as DefaultResponseProps);
-
-	return logError(
-		error.message,
-		logType,
-		`[ Status  ${statusCode} ]`,
-		getSectionFromUrl(req)
-	);
 };
 
 export const rootResponse = (title: string, res: Response) => {
