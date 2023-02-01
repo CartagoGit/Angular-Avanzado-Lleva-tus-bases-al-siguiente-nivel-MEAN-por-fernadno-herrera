@@ -1,5 +1,5 @@
 import { Response, Request } from 'express';
-import { catchError, from, NEVER, of, retry, Subscription } from 'rxjs';
+import { catchError, from, of, Subscription } from 'rxjs';
 import { LogType } from '../interfaces/logs.interfaces';
 import { logError } from './logs.helper';
 import { DefaultResponseProps } from '../interfaces/response.interface';
@@ -12,11 +12,11 @@ import { getSectionFromUrl } from './get-model-section.helper';
 export const defaultResponse = (
 	res: Response,
 	req: Request,
-	callback: () => Promise<any>,
+	callback: (req: Request, res: Response) => Promise<any>,
 	logType: LogType = 'LOG',
 	statusCode: number = 200
 ): Subscription => {
-	return from(callback())
+	return from(callback(req, res))
 		.pipe(
 			catchError((error) => {
 				let finalError: any = {};
@@ -31,50 +31,56 @@ export const defaultResponse = (
 		)
 		.subscribe({
 			next: (value: any) => {
-				if (!!value.error) {
-					return defaultErrorResponse(
-						res,
-						req,
-						value.error as ErrorData,
-						logType
-					);
-				}
+				// console.log(123123124);
+				// if (!!value.error) {
+				// 	defaultErrorResponse(
+				// 		res,
+				// 		req,
+				// 		value.error as ErrorData,
+				// 		logType
+				// 	);
+				// }
 				const {
-					model = undefined,
-					data = undefined,
-					message = 'OK',
+					// model = undefined,
+					// data = undefined,
+					// message = 'OK',
 					...rest
 				} = value;
 
-				let ok = true;
-				let error_message: string | undefined = undefined;
-				if (value.error_message) {
-					statusCode = 404;
-					ok = false;
-					error_message = value.error_message;
-				} else if (
-					(!data && !model) ||
-					model?.length === 0 ||
-					data?.length === 0
-				) {
-					statusCode = 404;
-					ok = false;
-					error_message = 'Not found'.toUpperCase();
-				}
-				return res.status(statusCode).json({
-					message: `[ ${getSectionFromUrl(
-						req
-					)} - ${message} ]`.toUpperCase(),
-					ok,
-					status_code: statusCode,
-					data,
-					model,
-					error_message,
-					...rest,
-				} as DefaultResponseProps);
+				// let ok = true;
+				// let error_message: string | undefined = undefined;
+				// if (value.error_message) {
+				// 	statusCode = 404;
+				// 	ok = false;
+				// 	error_message = value.error_message;
+				// } else if (
+				// 	(!data && !model) ||
+				// 	model?.length === 0 ||
+				// 	data?.length === 0
+				// ) {
+				// 	statusCode = 404;
+				// 	ok = false;
+				// 	error_message = 'Not found'.toUpperCase();
+				// }
+				// res.status(statusCode).json({hola:'jasdjasd'})
+				// res.status(statusCode).json({
+				// message: `[ ${getSectionFromUrl(
+				// 	req
+				// )} - ${message} ]`.toUpperCase(),
+				// ok,
+				// status_code: statusCode,
+				// data,
+				// model,
+				// error_message,
+				// ...rest,
+				// } as DefaultResponseProps);
+				// console.log(rest);
+				next();
+				return { ...rest };
 			},
 			error: (error) => {
-				return defaultErrorResponse(
+				// return
+				defaultErrorResponse(
 					res,
 					req,
 					error as ErrorData,

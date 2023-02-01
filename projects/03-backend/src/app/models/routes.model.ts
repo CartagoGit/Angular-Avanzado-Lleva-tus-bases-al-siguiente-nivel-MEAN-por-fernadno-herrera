@@ -52,15 +52,17 @@ export class Routes {
 				next: NextFunction
 			) => {
 				try {
-					console.log(req.originalUrl);
+					// console.log(req.originalUrl);
 					await modelController(req, res, next);
 					validatorCheck(req, res, next);
-					return await controller(req, res, next);
-					console.log(req.originalUrl);
-					return res.json({json:'sjs'})
+					const respuesta = await controller(req, res, next);
+					// return res.status(456).json(await controller(req, res, next))
+					// console.log(req.originalUrl);
+					// return res.status(600).json({json:'sjs'})
+					console.log(respuesta);
+					return;
 				} catch (error) {
-					return res.json({json:'sjfdsfs'})
-
+					// return res.json({ json: 'sjfdsfs' });
 				}
 			};
 
