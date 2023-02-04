@@ -75,7 +75,7 @@ export const defaultResponse = (
 				// ...rest,
 				// } as DefaultResponseProps);
 				// console.log(rest);
-				next();
+				// next();
 				return { ...rest };
 			},
 			error: (error) => {
@@ -115,15 +115,15 @@ export const defaultErrorResponse = (
 	} as DefaultResponseProps);
 };
 
-export const rootResponse = (title: string, res: Response) => {
+export const rootResponse = async (title: string, res: Response) => {
 	const message = `${getCapitalize(title)} collection root path`;
-	return res.json({
+	return {
 		message,
 		ok: true,
 		mode: config.MODE,
 		status_code: 200,
 		db_state: mongoState.getState(),
-	} as DefaultResponseProps);
+	} as DefaultResponseProps;
 };
 
 export const getErrorUniqueParam = (param: {}): ErrorData => {

@@ -12,6 +12,7 @@ export const getModelSection = (req: Request): Model<unknown> => {
 };
 
 export const getSectionFromUrl = (req: Request) => {
+//TODO CORREGIR
 	const baseUrlSections = req.originalUrl.split('/');
 	return baseUrlSections[baseUrlSections.length - 2];
 };

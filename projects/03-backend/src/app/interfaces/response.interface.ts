@@ -14,6 +14,6 @@ export type CallbackMethod = (
 	req: Request,
 	res: Response,
 	next: NextFunction
-) => void | Promise<void>;
+) => Promise<any>;
 
 export type TypeRequest = 'get' | 'post' | 'patch' | 'put' | 'delete' | 'use';

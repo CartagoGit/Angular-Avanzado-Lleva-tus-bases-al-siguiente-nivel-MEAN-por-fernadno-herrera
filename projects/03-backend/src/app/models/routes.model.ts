@@ -1,11 +1,17 @@
 import { NextFunction, Request, Response, Router } from 'express';
+import { catchError, concatMap, from, map, of } from 'rxjs';
 import { mongoState } from '../db/init-mongo';
 import { CallbackMethod, TypeRequest } from '../interfaces/response.interface';
 import { validatorCheck } from '../middlewares/validator.middleware';
+import { defaultErrorResponse } from '../helpers/default-responses';
+import { ErrorData } from './error-data.model';
+import { log } from '../helpers/logs.helper';
+import { LogType } from '../interfaces/logs.interfaces';
 
 export interface RoutesProps {
 	route: string;
-	controller: CallbackMethod | Router;
+	coreController?: CallbackMethod;
+	routeRouter?: Router;
 	middlewares?: ((...args: any[]) => void)[];
 	type?: TypeRequest;
 	router?: Router;
@@ -15,7 +21,6 @@ export interface RoutesProps {
 export class Routes {
 	// ANCHOR : Variables
 	public router: Router = Router({ strict: true });
-	// public router: Router = Router();
 	public routes: Record<string, RoutesProps>;
 
 	get dbState(): string {
@@ -30,48 +35,85 @@ export class Routes {
 
 	// ANCHOR : Methods
 	private _initRoutes(): void {
-		for (let [
-			name,
-			{
-				route,
-				controller,
-				type = 'use',
-				middlewares = [],
-				modelController = (
-					_req: Request,
-					_res: Response,
-					next: NextFunction
-				) => {
-					next();
-				},
-			},
-		] of Object.entries(this.routes)) {
-			const callback = async (
+		for (const [name, props] of Object.entries(this.routes)) {
+			const { route, routeRouter, type = 'use', middlewares = [] } = props;
+
+			const controllers = async (
 				req: Request,
 				res: Response,
 				next: NextFunction
 			) => {
-				try {
-					// console.log(req.originalUrl);
-					await modelController(req, res, next);
-					validatorCheck(req, res, next);
-					const respuesta = await controller(req, res, next);
-					// return res.status(456).json(await controller(req, res, next))
-					// console.log(req.originalUrl);
-					// return res.status(600).json({json:'sjs'})
-					console.log(respuesta);
-					return;
-				} catch (error) {
-					// return res.json({ json: 'sjfdsfs' });
-				}
+				this._createRequestSubscription(req, res, next, props);
 			};
 
 			this.routes[name].router = this.router[type](
 				route,
 				middlewares,
-				type === 'use' ? controller : callback
-				// controller
+				!!routeRouter ? routeRouter : controllers
 			);
 		}
+	}
+
+	private _createRequestSubscription(
+		req: Request,
+		res: Response,
+		next: NextFunction,
+		props: RoutesProps
+	): void {
+		const { modelController = async () => {}, coreController, type } = props;
+
+		//* Nos subscribimos al controlador especifico del modelo
+		from(modelController(req, res, next))
+			.pipe(
+				concatMap((respModel) => {
+					//* Pasamos las validaciones
+					const errors = validatorCheck(req, res, next);
+					console.log(errors);
+					if (!!errors) throw errors;
+					//* Si pasa el controlador y las validaciones,
+					//* nos subscribimos al controlador core para realizar los cambios pertinentes
+					return from(coreController!(req, res, next)).pipe(
+						map((respCore) => ({ ...respModel, ...respCore }))
+					);
+				}),
+				catchError((error) => {
+					//* Capturamos cualquier posible error
+					let finalError: any = {};
+					if (!error.message) {
+						finalError = {
+							message: error,
+							data: {},
+						};
+					} else finalError = error;
+					return of({ error: finalError });
+				})
+			)
+			.subscribe({
+				next: (resp) => {
+					const logType = type?.toUpperCase() as LogType;
+					if (!!resp.error) {
+						defaultErrorResponse(
+							res,
+							req,
+							resp.error as ErrorData,
+							logType
+						);
+						return;
+					}
+					res.json(resp);
+
+					log('Correct response', logType);
+				},
+
+				error: (error) => {
+					//* Si hay un error critico lo mostramos
+					defaultErrorResponse(
+						res,
+						req,
+						error as ErrorData,
+						'CRITICAL ERROR'
+					);
+				},
+			});
 	}
 }

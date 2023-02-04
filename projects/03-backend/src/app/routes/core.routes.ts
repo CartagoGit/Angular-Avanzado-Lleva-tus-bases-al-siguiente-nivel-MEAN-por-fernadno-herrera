@@ -12,29 +12,29 @@ import { getSectionFromUrl } from '../helpers/get-model-section.helper';
 export const coreRoutes: Routes = new Routes({
 	base: {
 		route: '/',
-		controller: (req: Request, res: Response) => {
-			rootResponse(getSectionFromUrl(req), res);
+		coreController: async (req: Request, res: Response) => {
+			return rootResponse(getSectionFromUrl(req), res);
 		},
 		type: 'get',
 	},
 	getAll: {
 		route: '/get-all',
-		controller: coreController.getAll,
+		coreController: coreController.getAll,
 		type: 'get',
 	},
 	getById: {
 		route: '/get-by-id/:id',
-		controller: coreController.getById,
+		coreController: coreController.getById,
 		type: 'get',
 	},
 	post: {
 		route: '/post',
-		controller: coreController.post,
+		coreController: coreController.post,
 		type: 'post',
 	},
 	put: {
 		route: '/put/:id',
-		controller: coreController.put,
+		coreController: coreController.put,
 		type: 'put',
 	},
 });

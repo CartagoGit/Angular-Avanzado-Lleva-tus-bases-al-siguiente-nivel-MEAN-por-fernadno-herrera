@@ -10,14 +10,14 @@ import { usersRoutes } from './users.routes';
 export const rootRoutes: Routes = new Routes({
 	root: {
 		route: '/',
-		controller: (_req: Request, res: Response) => {
-			rootResponse('home', res);
+		coreController: async (_req: Request, res: Response) => {
+			return rootResponse('home', res);
 		},
 		type: 'get',
 	},
 	users: {
 		route: '/users',
-		controller: usersRoutes.router,
+		routeRouter: usersRoutes.router,
 		type: 'use',
 	},
 });
