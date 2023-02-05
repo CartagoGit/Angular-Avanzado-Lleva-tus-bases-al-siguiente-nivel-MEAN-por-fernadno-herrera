@@ -5,7 +5,11 @@ import {
 } from '../../helpers/default-responses';
 import { UserModel } from '../../models/mongo/user.model';
 
-export const usersMiddlewares = {
+/**
+ * ? Middlewares especificos para el modelo de usuarios
+ * @type {{ post: any[]; put: any[] }}
+ */
+export const usersMiddlewares: { post: any[]; put: any[] } = {
 	post: [
 		check('name', getMessageErrorValidation('name', { required: true }))
 			.not()

@@ -2,6 +2,11 @@ import { Request } from 'express';
 import { validationResult } from 'express-validator';
 import { ErrorData } from '../models/error-data.model';
 
+/**
+ * ? Chequea las validaciones y si hay alguna validacion sin pasar, crea un error con las validaciones correspondientes
+ * @param {Request} req
+ * @returns {(ErrorData | undefined)}
+ */
 export const validatorCheck = (req: Request): ErrorData | undefined => {
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {

@@ -1,3 +1,10 @@
+/**
+ * ? Modelo de Error personalizado para la api
+ * @export
+ * @class ErrorData
+ * @typedef {ErrorData}
+ * @extends {Error}
+ */
 export class ErrorData extends Error {
 	public status_code;
 	public keyValue;

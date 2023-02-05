@@ -7,6 +7,10 @@ import { usersController } from '../controllers/users.controller';
  * * /api/users
  */
 
+/**
+ * ? Crea las rutas de usuarios y añade los middlewares y controladores especificos que difieren del general, con validaciones y comprobaciones
+ * @type {Routes}
+ */
 export const usersRoutes: Routes = new Routes({
 	...coreRoutes.routes,
 	post: {

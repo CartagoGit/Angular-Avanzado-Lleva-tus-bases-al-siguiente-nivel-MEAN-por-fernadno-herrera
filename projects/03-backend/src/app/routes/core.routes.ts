@@ -9,11 +9,15 @@ import { getSectionFromUrl } from '../helpers/get-model-section.helper';
  * $ Cualquier colleccion de datos
  */
 
+/**
+ * ? Las rutas generales para todas las peticiones
+ * @type {Routes}
+ */
 export const coreRoutes: Routes = new Routes({
 	base: {
 		route: '/',
-		coreController: async (req: Request, res: Response) => {
-			return rootResponse(getSectionFromUrl(req), res);
+		coreController: async (req: Request) => {
+			return rootResponse(getSectionFromUrl(req));
 		},
 		type: 'get',
 	},

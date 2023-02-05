@@ -3,14 +3,26 @@ import bcrypt from 'bcryptjs';
 import { UserModel } from '../models/mongo/user.model';
 import { removeParamAndSetInfo } from '../helpers/default-responses';
 
-export const usersController = {
-	post: async (req: Request): Promise<void> => {
+/**
+ * ? Controladores especificos de los metodos para el modelo de usuarios
+ * @type {{
+	post: (req: Request) => Promise<any>;
+	put: (req: Request) => Promise<any>;
+}}
+ */
+export const usersController: {
+	post: (req: Request) => Promise<any>;
+	put: (req: Request) => Promise<any>;
+} = {
+	post: async (req) => {
 		//* Encriptamos la contraseña
 		const { password } = req.body;
 		const salt = bcrypt.genSaltSync();
 		req.body.password = bcrypt.hashSync(password, salt);
+		return req.body;
 	},
-	put: async (req: Request): Promise<void> => {
+	put: async (req) => {
+		//* Condicionamos las respuestas a sus validadores y eliminamos las que no deban modificarse
 		const userDB = await UserModel.findById(req.params['id']);
 		if (!userDB) throw 'There are not user with that id';
 		if (userDB.email === req.body.email) delete req.body.email;

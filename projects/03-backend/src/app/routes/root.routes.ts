@@ -7,11 +7,16 @@ import { usersRoutes } from './users.routes';
  * * /api/
  */
 
+
+/**
+ * ? Crea las rutas desde la base de la api
+ * @type {Routes}
+ */
 export const rootRoutes: Routes = new Routes({
 	root: {
 		route: '/',
 		coreController: async (_req: Request, res: Response) => {
-			return rootResponse('home', res);
+			return rootResponse('home');
 		},
 		type: 'get',
 	},

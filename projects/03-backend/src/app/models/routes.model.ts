@@ -8,7 +8,6 @@ import {
 	defaultResponse,
 } from '../helpers/default-responses';
 import { ErrorData } from './error-data.model';
-import { log } from '../helpers/logs.helper';
 import { LogType } from '../interfaces/logs.interfaces';
 
 export interface RoutesProps {
@@ -21,6 +20,13 @@ export interface RoutesProps {
 	modelController?: CallbackMethod;
 }
 
+/**
+ * ? Modelo de rutas, donde se almacenaran los paths, controladores, rutas, middlewares, controladores,
+ * ? y la creacion y subscripcion de errores
+ * @export
+ * @class Routes
+ * @typedef {Routes}
+ */
 export class Routes {
 	// ANCHOR : Variables
 	public router: Router = Router({ strict: true });
@@ -37,6 +43,11 @@ export class Routes {
 	}
 
 	// ANCHOR : Methods
+
+	/**
+	 * ? Añade todos sus parametros para cada ruta
+	 * @private
+	 */
 	private _initRoutes(): void {
 		for (const [name, props] of Object.entries(this.routes)) {
 			const { route, routeRouter, type = 'use', middlewares = [] } = props;
@@ -57,6 +68,14 @@ export class Routes {
 		}
 	}
 
+	/**
+	 * ? Crea la subscripciones y los concatena segun controlador del modelo -> validaciones -> controladores para todas las rutas
+	 * @private
+	 * @param {Request} req
+	 * @param {Response} res
+	 * @param {NextFunction} next
+	 * @param {RoutesProps} props
+	 */
 	private _createRequestSubscription(
 		req: Request,
 		res: Response,
@@ -72,8 +91,6 @@ export class Routes {
 					//* Pasamos las validaciones
 					const errors = validatorCheck(respModel || req);
 					if (!!errors) throw errors;
-					console.log(errors);
-					console.log(respModel);
 					//* Si pasa el controlador y las validaciones,
 					//* nos subscribimos al controlador core para realizar los cambios pertinentes
 					return from(coreController!(req, res, next)).pipe(
@@ -98,7 +115,8 @@ export class Routes {
 			.subscribe({
 				next: (respController) => {
 					const logType = type?.toUpperCase() as LogType;
-					const hasData = !!respController.data;
+					const hasData = !!respController.data || !!respController.model;
+					//* Si la respuesta de los controlaodres, contiene ererores...
 					if (!!respController.error) {
 						defaultErrorResponse(
 							req,
@@ -107,7 +125,8 @@ export class Routes {
 							logType
 						);
 						return;
-					} else if (!hasData) {
+						//*  Si no existe data y la respuesta es de un get, devuelve un error de not found
+					} else if (!hasData && logType === 'GET') {
 						const msgError = 'Data NOT FOUND';
 						defaultErrorResponse(
 							req,
@@ -123,6 +142,7 @@ export class Routes {
 						);
 						return;
 					}
+					//* Para cualquier respuesta correcta, crea una respuesta con los datos
 					defaultResponse(
 						req,
 						res,

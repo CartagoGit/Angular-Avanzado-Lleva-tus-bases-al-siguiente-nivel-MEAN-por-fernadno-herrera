@@ -3,9 +3,14 @@ import { config } from '../../environments/config';
 import { from, Observable, switchMap, tap } from 'rxjs';
 import { logError, log } from '../helpers/logs.helper';
 
+/**
+ * ? Establece la conexion con MongoDB
+ */
 export const initMongo = () => {
+	//* Permite querys exactos y elimina el warning de deprecacion de versiones antiguas de Mongoose
 	mongoose.set('strictQuery', false);
 
+	//* Observable para la conexion de mongo y trigger para mostrar mensaje si hay algun cambio en la bd
 	getObservableMongoose()
 		.pipe(
 			tap(() => log(config.MONGO_URL_DB, 'MONGO', 'URL')),
@@ -22,7 +27,6 @@ export const initMongo = () => {
 					'MONGO',
 					'Something changed in MongoDB'
 				);
-				// console.log((resp as any).fullDocument);
 			},
 			error: (error) => {
 				logError(error, 'MONGO', 'Mongo connection');
@@ -31,15 +35,30 @@ export const initMongo = () => {
 		});
 };
 
+/**
+ * ? Recupera el observable para la conexion con Mongo
+ * @returns {Observable<typeof mongoose>}
+ */
 export const getObservableMongoose = (): Observable<typeof mongoose> => {
 	return from(mongoose.connect(config.MONGO_URL_DB, config.MONGO_OPTIONS));
 };
 
-export const getObservableMongooseChange = () => {
+/**
+ * ? Recupera un observable para capturar los cambios en la base de datos de MongoDB
+ * @returns {Observable<any>}
+ */
+export const getObservableMongooseChange = (): Observable<any> => {
 	return from(mongoose.connection.db.watch());
 };
 
-export const mongoState = {
+/**
+ * ? Recupera el estado de la conexión con MongoDB
+ * @type {({ isMongoConnected: boolean; getState: () => "Connected" | "Disconnected"; })}
+ */
+export const mongoState: {
+	isMongoConnected: boolean;
+	getState: () => 'Connected' | 'Disconnected';
+} = {
 	isMongoConnected: false,
 	getState: function () {
 		return !!this.isMongoConnected ? 'Connected' : 'Disconnected';
