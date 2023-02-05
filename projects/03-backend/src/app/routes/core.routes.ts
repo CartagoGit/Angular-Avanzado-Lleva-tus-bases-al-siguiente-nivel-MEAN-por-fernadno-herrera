@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Request } from 'express';
 import { coreController } from '../controllers/core.controller';
 
 import { Routes } from '../models/routes.model';
@@ -40,5 +40,10 @@ export const coreRoutes: Routes = new Routes({
 		route: '/put/:id',
 		coreController: coreController.put,
 		type: 'put',
+	},
+	delete: {
+		route: '/delete/:id',
+		coreController: coreController.delete,
+		type: 'delete',
 	},
 });

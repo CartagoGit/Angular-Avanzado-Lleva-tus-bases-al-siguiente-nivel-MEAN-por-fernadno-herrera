@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import { UserModel } from '../models/mongo/user.model';
 import { removeParamAndSetInfo } from '../helpers/default-responses';
 import { cleanValidatorField } from '../helpers/validator.helper';
+import { getNotFoundMessage } from '../helpers/get-model-section.helper';
 
 /**
  * ? Controladores especificos de los metodos para el modelo de usuarios
@@ -25,8 +26,7 @@ export const usersController: {
 	put: async (req) => {
 		//* Condicionamos las respuestas a sus validadores y eliminamos las que no deban modificarse
 		const userDB = await UserModel.findById(req.params['id']);
-		if (!userDB)
-			throw { message: 'There are not user with that id', status_code: 404 };
+		if (!userDB) throw { message: getNotFoundMessage(req), status_code: 404 };
 		if (userDB.email === req.body.email) {
 			cleanValidatorField(req, 'email');
 			delete req.body.email;

@@ -85,6 +85,7 @@ export const rootResponse = async (title: string): Promise<unknown> => {
 		ok: true,
 		mode: config.MODE,
 		status_code: 200,
+		data: 'Root Path',
 		db_state: mongoState.getState(),
 	} as DefaultResponseProps;
 };

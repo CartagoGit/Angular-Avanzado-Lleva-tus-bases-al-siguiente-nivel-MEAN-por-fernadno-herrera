@@ -7,7 +7,6 @@ import { usersRoutes } from './users.routes';
  * * /api/
  */
 
-
 /**
  * ? Crea las rutas desde la base de la api
  * @type {Routes}
@@ -15,7 +14,7 @@ import { usersRoutes } from './users.routes';
 export const rootRoutes: Routes = new Routes({
 	root: {
 		route: '/',
-		coreController: async (_req: Request, res: Response) => {
+		coreController: async (_req: Request) => {
 			return rootResponse('home');
 		},
 		type: 'get',

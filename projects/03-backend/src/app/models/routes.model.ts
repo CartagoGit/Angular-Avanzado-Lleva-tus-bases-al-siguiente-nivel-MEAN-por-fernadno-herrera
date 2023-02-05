@@ -9,6 +9,10 @@ import {
 } from '../helpers/default-responses';
 import { ErrorData } from './error-data.model';
 import { LogType } from '../interfaces/logs.interfaces';
+import {
+	getSectionFromUrl,
+	getNotFoundMessage,
+} from '../helpers/get-model-section.helper';
 
 export interface RoutesProps {
 	route: string;
@@ -132,8 +136,11 @@ export class Routes {
 						);
 						return;
 						//*  Si no existe data y la respuesta es de un get, devuelve un error de not found
-					} else if (!hasData && logType === 'GET') {
-						const msgError = 'Data NOT FOUND';
+					} else if (
+						!hasData &&
+						(logType === 'GET' || logType === 'DELETE')
+					) {
+						const msgError = getNotFoundMessage(req);
 						defaultErrorResponse(
 							req,
 							res,

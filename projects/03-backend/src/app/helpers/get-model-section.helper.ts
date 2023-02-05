@@ -3,7 +3,6 @@ import { Model, Document, Types } from 'mongoose';
 import { ApiModels } from '../models/mongo/all.models';
 import { getCapitalize } from './logs.helper';
 
-
 /**
  * ? Crea y recupera un nuevo modelo de Mongo segun la URL
  * @param {Request} req
@@ -43,4 +42,16 @@ export const getSectionFromUrl = (req: Request): string => {
  */
 export const getMethodFromUrl = (req: Request): string => {
 	return req.originalUrl.replace(req.baseUrl + '/', '').split('/')[0];
+};
+
+
+/**
+ * ? Devuelve el mensaje de dato no encontrado en la seccion correspondiente, y con la id en caso de requerirla la request
+ * @param {Request} req
+ * @returns {string}
+ */
+export const getNotFoundMessage = (req: Request): string => {
+	return `[ NOT FOUND ] There are not data in '${getSectionFromUrl(req)}'${
+		req.params['id'] ? " with id '" + req.params['id'] + "'" : ''
+	}`;
 };
