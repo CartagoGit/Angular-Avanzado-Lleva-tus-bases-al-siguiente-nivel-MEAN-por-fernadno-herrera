@@ -91,7 +91,7 @@ export class Routes {
 					//* Pasamos las validaciones
 					// const errors = validatorCheck(respModel || req);
 					const errors = validatorCheck(req);
-					
+
 					if (!!errors) throw errors;
 					//* Si pasa el controlador y las validaciones,
 					//* nos subscribimos al controlador core para realizar los cambios pertinentes
@@ -103,6 +103,7 @@ export class Routes {
 					);
 				}),
 				catchError((error) => {
+					console.log('error', error);
 					//* Capturamos cualquier posible error
 					let finalError: any = {};
 					if (!error.message) {
@@ -111,7 +112,10 @@ export class Routes {
 							data: {},
 						};
 					} else finalError = error;
-					return of({ error: finalError });
+					return of({
+						error: finalError,
+						status_code: finalError.status_code || 500,
+					});
 				})
 			)
 			.subscribe({

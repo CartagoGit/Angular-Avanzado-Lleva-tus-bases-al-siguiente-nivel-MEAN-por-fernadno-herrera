@@ -56,6 +56,7 @@ export const defaultErrorResponse = (
 	statusCode: number = 500
 ) => {
 	const method = getMethodFromUrl(req).toUpperCase();
+	statusCode = error.status_code || statusCode;
 	const message =
 		`[ ERROR -  Status  ${statusCode} - ${method} in ${getSectionFromUrl(
 			req
@@ -64,7 +65,7 @@ export const defaultErrorResponse = (
 	res.status(statusCode).json({
 		message,
 		ok: false,
-		status_code: (error as ErrorData).status_code || statusCode,
+		status_code: statusCode,
 		error_message: error.message || 'Unknown Error',
 		error_data: error,
 		db_state: mongoState.getState(),
@@ -77,9 +78,7 @@ export const defaultErrorResponse = (
  * @param {string} title
  * @returns {unknown}
  */
-export const rootResponse = async (
-	title: string,
-): Promise<unknown> => {
+export const rootResponse = async (title: string): Promise<unknown> => {
 	const message = `${getCapitalize(title)} collection root path`;
 	return {
 		message,
@@ -127,7 +126,6 @@ export const getStringErrorRequiredParam = (param: string | {}): string => {
 	return `${required}`;
 };
 
-
 /**
  * ? Devuelve el mensaje de error si un parametro es unico
  * @param {{}} param
@@ -138,7 +136,6 @@ export const getStringErrorUniqueParam = (param: {}): string => {
 		param
 	)} exists in DB. That param must be unique`;
 };
-
 
 /**
  * ? crea el mensaje de error a devolver segun el tipo de validaciones de los parametros
