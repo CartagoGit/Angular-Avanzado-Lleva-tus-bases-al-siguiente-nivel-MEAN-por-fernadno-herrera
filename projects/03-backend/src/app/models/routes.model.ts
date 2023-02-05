@@ -9,10 +9,7 @@ import {
 } from '../helpers/default-responses';
 import { ErrorData } from './error-data.model';
 import { LogType } from '../interfaces/logs.interfaces';
-import {
-	getSectionFromUrl,
-	getNotFoundMessage,
-} from '../helpers/get-model-section.helper';
+import { getNotFoundMessage } from '../helpers/get-model-section.helper';
 
 export interface RoutesProps {
 	route: string;
@@ -107,7 +104,6 @@ export class Routes {
 					);
 				}),
 				catchError((error) => {
-					console.log('error', error);
 					//* Capturamos cualquier posible error
 					let finalError: any = {};
 					if (!error.message) {

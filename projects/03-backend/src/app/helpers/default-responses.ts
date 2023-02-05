@@ -25,9 +25,9 @@ export const defaultResponse = (
 	logType: LogType = 'LOG',
 	statusCode: number = 200
 ): void => {
-	const method = getMethodFromUrl(req).toUpperCase();
+	const method = getMethodFromUrl(req).toUpperCase().split('-').join(' ');
 	const message =
-		`[ Status  ${statusCode} OK - ${method} in ${getSectionFromUrl(
+		`[ Status  ${statusCode} OK - '${method}' in ${getSectionFromUrl(
 			req
 		)} ]`.toUpperCase();
 	res.status(statusCode).json({
@@ -55,10 +55,10 @@ export const defaultErrorResponse = (
 	logType: LogType = 'LOG',
 	statusCode: number = 500
 ) => {
-	const method = getMethodFromUrl(req).toUpperCase();
+	const method = getMethodFromUrl(req).toUpperCase().split('-').join(' ');
 	statusCode = error.status_code || statusCode;
 	const message =
-		`[ ERROR -  Status  ${statusCode} - ${method} in ${getSectionFromUrl(
+		`[ ERROR -  Status  ${statusCode} - '${method}' in ${getSectionFromUrl(
 			req
 		)} ]`.toUpperCase();
 	logError(error.message, logType, message);
@@ -166,10 +166,20 @@ export const getMessageErrorValidation = (
 	)}`;
 };
 
+/**
+ * ? Devuelve mensaje informando que el parametro no puede ser modificado
+ * @param {string} key
+ * @returns {string}
+ */
 export const getMessageInfoNotModify = (key: string): string => {
 	return `The param '${key}' cannot be modify`;
 };
 
+/**
+ * ? Elimina la informacion del parametro y añade informacion notificando que el parametro no puede ser  modificado
+ * @param {Request} req
+ * @param {string} key
+ */
 export const removeParamAndSetInfo = (req: Request, key: string): void => {
 	delete req.body[key];
 	req.body.info = { ...req.body.info, [key]: getMessageInfoNotModify(key) };

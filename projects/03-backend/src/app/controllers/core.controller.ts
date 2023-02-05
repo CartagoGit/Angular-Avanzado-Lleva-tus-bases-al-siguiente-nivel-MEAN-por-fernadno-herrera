@@ -20,6 +20,7 @@ export const coreController: {
 	post: (req: Request) => Promise<any>;
 	put: (req: Request) => Promise<any>;
 	delete: (req: Request) => Promise<any>;
+	deleteCollection: (req: Request) => Promise<any>;
 } = {
 	getAll: async (req) => {
 		const data = await getModelSection(req).find();
@@ -56,6 +57,13 @@ export const coreController: {
 		return {
 			data,
 			id,
+			status_code: 200,
+		};
+	},
+	deleteCollection: async (req) => {
+		await getModelSection(req).collection.drop();
+		return {
+			data: 'Collection deleted',
 			status_code: 200,
 		};
 	},

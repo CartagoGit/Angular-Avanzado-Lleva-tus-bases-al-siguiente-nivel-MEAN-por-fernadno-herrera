@@ -7,6 +7,7 @@ import { getSectionFromUrl } from '../helpers/get-model-section.helper';
 
 /**
  * $ Cualquier colleccion de datos
+ * * Añadir a las rutas especificas
  */
 
 /**
@@ -46,4 +47,9 @@ export const coreRoutes: Routes = new Routes({
 		coreController: coreController.delete,
 		type: 'delete',
 	},
+	deleteCollection: {
+		route: '/delete-collection',
+		coreController: coreController.deleteCollection,
+		type: 'delete'
+	}
 });

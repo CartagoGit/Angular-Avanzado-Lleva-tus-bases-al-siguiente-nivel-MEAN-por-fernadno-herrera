@@ -26,3 +26,4 @@ export const usersRoutes: Routes = new Routes({
 		middlewares: usersMiddlewares.put,
 	},
 });
+
