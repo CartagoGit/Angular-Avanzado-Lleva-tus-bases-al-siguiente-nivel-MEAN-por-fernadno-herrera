@@ -89,7 +89,9 @@ export class Routes {
 			.pipe(
 				concatMap((respModel) => {
 					//* Pasamos las validaciones
-					const errors = validatorCheck(respModel || req);
+					// const errors = validatorCheck(respModel || req);
+					const errors = validatorCheck(req);
+					
 					if (!!errors) throw errors;
 					//* Si pasa el controlador y las validaciones,
 					//* nos subscribimos al controlador core para realizar los cambios pertinentes
