@@ -172,3 +172,12 @@ export const getMessageErrorValidation = (
 		listRequisites
 	)}`;
 };
+
+export const getMessageInfoNotModify = (key: string): string => {
+	return `The param '${key}' cannot be modify`;
+};
+
+export const removeParamAndSetInfo = (req: Request, key: string): void => {
+	delete req.body[key];
+	req.body.info = { ...req.body.info, [key]: getMessageInfoNotModify(key) };
+};
