@@ -1,17 +1,10 @@
-import { NextFunction, Request, Response } from 'express';
+import { Request } from 'express';
 import { validationResult } from 'express-validator';
-import { defaultErrorResponse } from '../helpers/default-responses';
 import { ErrorData } from '../models/error-data.model';
-import { LogType } from '../interfaces/logs.interfaces';
 
-export const validatorCheck = (
-	req: Request,
-	res: Response,
-	next: NextFunction
-) => {
+export const validatorCheck = (req: Request): ErrorData | undefined => {
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
-		console.log(1);
 		const status_code = 406;
 		const errorData = new ErrorData({
 			status_code,
@@ -24,16 +17,7 @@ export const validatorCheck = (
 					: errors.array()[0].msg,
 			keyValue: errors.mapped(),
 		});
-		// defaultErrorResponse(
-		// 	res,
-		// 	req,
-		// 	errorData,
-		// 	req.method as LogType,
-		// 	status_code
-		// );
-		// throw errorData;
 		return errorData;
 	}
-	// next();
 	return;
 };

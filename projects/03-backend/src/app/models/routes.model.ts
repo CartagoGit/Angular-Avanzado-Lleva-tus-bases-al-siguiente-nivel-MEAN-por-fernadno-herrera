@@ -3,7 +3,10 @@ import { catchError, concatMap, from, map, of } from 'rxjs';
 import { mongoState } from '../db/init-mongo';
 import { CallbackMethod, TypeRequest } from '../interfaces/response.interface';
 import { validatorCheck } from '../middlewares/validator.middleware';
-import { defaultErrorResponse } from '../helpers/default-responses';
+import {
+	defaultErrorResponse,
+	defaultResponse,
+} from '../helpers/default-responses';
 import { ErrorData } from './error-data.model';
 import { log } from '../helpers/logs.helper';
 import { LogType } from '../interfaces/logs.interfaces';
@@ -67,13 +70,17 @@ export class Routes {
 			.pipe(
 				concatMap((respModel) => {
 					//* Pasamos las validaciones
-					const errors = validatorCheck(req, res, next);
-					console.log(errors);
+					const errors = validatorCheck(respModel || req);
 					if (!!errors) throw errors;
+					console.log(errors);
+					console.log(respModel);
 					//* Si pasa el controlador y las validaciones,
 					//* nos subscribimos al controlador core para realizar los cambios pertinentes
 					return from(coreController!(req, res, next)).pipe(
-						map((respCore) => ({ ...respModel, ...respCore }))
+						map((respCore) => ({
+							info: respModel?.info || undefined,
+							...respCore,
+						}))
 					);
 				}),
 				catchError((error) => {
@@ -89,27 +96,47 @@ export class Routes {
 				})
 			)
 			.subscribe({
-				next: (resp) => {
+				next: (respController) => {
 					const logType = type?.toUpperCase() as LogType;
-					if (!!resp.error) {
+					const hasData = !!respController.data;
+					if (!!respController.error) {
 						defaultErrorResponse(
-							res,
 							req,
-							resp.error as ErrorData,
+							res,
+							respController.error as ErrorData,
 							logType
 						);
 						return;
+					} else if (!hasData) {
+						const msgError = 'Data NOT FOUND';
+						defaultErrorResponse(
+							req,
+							res,
+							new ErrorData({
+								message: msgError,
+								status_code: 404,
+								keyValue: {},
+								reason: msgError,
+							}),
+							logType,
+							404
+						);
+						return;
 					}
-					res.json(resp);
-
-					log('Correct response', logType);
+					defaultResponse(
+						req,
+						res,
+						respController,
+						logType,
+						respController.status_code
+					);
 				},
 
 				error: (error) => {
 					//* Si hay un error critico lo mostramos
 					defaultErrorResponse(
-						res,
 						req,
+						res,
 						error as ErrorData,
 						'CRITICAL ERROR'
 					);

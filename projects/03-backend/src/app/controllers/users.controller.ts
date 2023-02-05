@@ -3,7 +3,6 @@ import bcrypt from 'bcryptjs';
 import { UserModel } from '../models/mongo/user.model';
 import { removeParamAndSetInfo } from '../helpers/default-responses';
 
-
 export const usersController = {
 	post: async (req: Request): Promise<void> => {
 		//* Encriptamos la contraseña
@@ -16,9 +15,12 @@ export const usersController = {
 		if (!userDB) throw 'There are not user with that id';
 		if (userDB.email === req.body.email) delete req.body.email;
 
-
-		if (req.body.password) removeParamAndSetInfo(req, 'password');
+		if (req.body.role && userDB.role !== 'ADMIN_ROLE') {
+			removeParamAndSetInfo(req, 'role');
+			req.body.info.role += ' if you have not ADMIN_ROLE';
+		}
 		if (req.body.google) removeParamAndSetInfo(req, 'google');
 
+		return req.body;
 	},
 };
