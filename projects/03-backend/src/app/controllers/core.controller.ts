@@ -50,7 +50,17 @@ export const coreController: {
 		}
 		const data = await model
 			.find(objectQuery)
-			.limit(req.query['limit'] ? Number(req.query['limit']) : Infinity);
+			.skip(req.query['skip'] ? Number(req.query['skip']) : 0) // start
+			.limit(req.query['limit'] ? Number(req.query['limit']) : Infinity)
+			.sort(
+				req.query['sort']
+					? {
+							[req.query['sort'] as string]: req.query['order']
+								? (req.query['order'] as any)
+								: 'ascending', // criteria can be asc, desc, ascending, descending, 1, or -1
+					  }
+					: {}
+			); // finish
 
 		return {
 			queryParams,
