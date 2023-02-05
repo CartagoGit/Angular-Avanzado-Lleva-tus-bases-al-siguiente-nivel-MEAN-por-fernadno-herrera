@@ -32,6 +32,11 @@ export const coreRoutes: Routes = new Routes({
 		coreController: coreController.getById,
 		type: 'get',
 	},
+	getByQuery: {
+		route: '/get-by-query/',
+		coreController: coreController.getByQuery,
+		type: 'get',
+	},
 	post: {
 		route: '/post',
 		coreController: coreController.post,
@@ -50,6 +55,6 @@ export const coreRoutes: Routes = new Routes({
 	deleteCollection: {
 		route: '/delete-collection',
 		coreController: coreController.deleteCollection,
-		type: 'delete'
-	}
+		type: 'delete',
+	},
 });

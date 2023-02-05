@@ -1,8 +1,7 @@
-import { Request } from 'express';
+import { query, Request } from 'express';
 import {
 	getModelSection,
 	getNewModelSection,
-	getSectionFromUrl,
 } from '../helpers/get-model-section.helper';
 
 /**
@@ -17,6 +16,7 @@ import {
 export const coreController: {
 	getAll: (req: Request) => Promise<any>;
 	getById: (req: Request) => Promise<any>;
+	getByQuery: (req: Request) => Promise<any>;
 	post: (req: Request) => Promise<any>;
 	put: (req: Request) => Promise<any>;
 	delete: (req: Request) => Promise<any>;
@@ -30,6 +30,34 @@ export const coreController: {
 		const id = req.params['id'];
 		const data = await getModelSection(req).findById(id);
 		return { data, status_code: 200 };
+	},
+	getByQuery: async (req) => {
+		if (req.query['include'] === undefined) req.query['include'] = 'true';
+		const model = getModelSection(req);
+		const paramsInModel = Object.keys(model.schema.obj);
+		const wantInclude = req.query['include'] === 'true';
+		const queryParams = req.query;
+		const arrayQuery = Object.entries(queryParams)
+			.filter(([key]) => paramsInModel.includes(key))
+			.map(([key, value]) => {
+				return {
+					[key]: wantInclude ? RegExp(value as string, 'i') : value,
+				};
+			});
+		let objectQuery = {};
+		for (const keyValue of arrayQuery) {
+			objectQuery = { ...objectQuery, ...keyValue };
+		}
+		const data = await model
+			.find(objectQuery)
+			.limit(req.query['limit'] ? Number(req.query['limit']) : Infinity);
+
+		return {
+			queryParams,
+			include: wantInclude,
+			data,
+			status_code: 200,
+		};
 	},
 	post: async (req) => {
 		const model = getNewModelSection(req);
