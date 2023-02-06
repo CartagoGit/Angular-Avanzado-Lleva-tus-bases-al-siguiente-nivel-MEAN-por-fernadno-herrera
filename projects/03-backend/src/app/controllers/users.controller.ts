@@ -27,6 +27,7 @@ export const usersController: {
 		//* Condicionamos las respuestas a sus validadores y eliminamos las que no deban modificarse
 		const userDB = await UserModel.findById(req.params['id']);
 		if (!userDB) throw { message: getNotFoundMessage(req), status_code: 404 };
+		// req.body['model'] = userDB;
 		if (userDB.email === req.body.email) {
 			cleanValidatorField(req, 'email');
 			delete req.body.email;

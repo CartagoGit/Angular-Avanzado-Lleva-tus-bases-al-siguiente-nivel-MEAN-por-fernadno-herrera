@@ -9,8 +9,11 @@ import {
  * @type {{
 	getAll: (req: Request) => Promise<any>;
 	getById: (req: Request) => Promise<any>;
+	getByQuery: (req: Request) => Promise<any>;
 	post: (req: Request) => Promise<any>;
 	put: (req: Request) => Promise<any>;
+	delete: (req: Request) => Promise<any>;
+	deleteCollection: (req: Request) => Promise<any>;
 }}
  */
 export const coreController: {
@@ -57,7 +60,7 @@ export const coreController: {
 					? {
 							[req.query['sort'] as string]: req.query['order']
 								? (req.query['order'] as any)
-								: 'ascending', // criteria can be asc, desc, ascending, descending, 1, or -1
+								: 'ascending', // criterio de orden asc, desc, ascending, descending, 1, or -1
 					  }
 					: {}
 			);
@@ -76,10 +79,9 @@ export const coreController: {
 	},
 	put: async (req) => {
 		const id = req.params['id'];
-		const data_before = { ...req.body };
-		const data = await getModelSection(req).findByIdAndUpdate(id, req.body, {
-			new: true,
-		});
+		const model = getModelSection(req);
+		const data_before = await model.findById(id);
+		const data = await model.findByIdAndUpdate(id, req.body, { new: true });
 		return {
 			data_before,
 			data,
