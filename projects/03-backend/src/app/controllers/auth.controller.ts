@@ -25,8 +25,9 @@ export const authController: {
 		if (!validPassword) throw errorMsg;
 
 		// * Generamos el Json Web Token
-		createJWT(userDB.id);
+		const id = userDB.id;
+		const jwt = await createJWT({ id });
 
-		return { ok: true, status_code: 200 };
+		return { ok: jwt.ok, status_code: 200, token: jwt.token, id };
 	},
 };
