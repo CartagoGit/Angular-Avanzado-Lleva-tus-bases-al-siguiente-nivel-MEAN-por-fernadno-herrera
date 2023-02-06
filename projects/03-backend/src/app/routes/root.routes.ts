@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { rootResponse } from '../helpers/default-responses';
 import { Routes } from '../models/routes.model';
+import { authRoutes } from './auth.routes';
 import { usersRoutes } from './users.routes';
 
 /**
@@ -18,6 +19,11 @@ export const rootRoutes: Routes = new Routes({
 			return rootResponse('home');
 		},
 		type: 'get',
+	},
+	auth: {
+		route: '/auth',
+		routeRouter: authRoutes.router,
+		type: 'use'
 	},
 	users: {
 		route: '/users',

@@ -15,7 +15,7 @@ import { getSectionFromUrl } from '../helpers/get-model-section.helper';
  * @type {Routes}
  */
 export const coreRoutes: Routes = new Routes({
-	base: {
+	root: {
 		route: '/',
 		coreController: async (req: Request) => {
 			return rootResponse(getSectionFromUrl(req));
@@ -47,7 +47,7 @@ export const coreRoutes: Routes = new Routes({
 		coreController: coreController.put,
 		type: 'put',
 	},
-	
+
 	delete: {
 		route: '/delete/:id',
 		coreController: coreController.delete,

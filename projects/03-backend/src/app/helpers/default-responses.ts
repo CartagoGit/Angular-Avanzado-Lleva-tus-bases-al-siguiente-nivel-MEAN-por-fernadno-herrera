@@ -21,12 +21,15 @@ import {
 export const defaultResponse = (
 	req: Request,
 	res: Response,
-	respController: Response,
+	respController: any,
 	logType: LogType = 'LOG',
 	statusCode: number = 200
 ): void => {
-	const method = getMethodFromUrl(req).toUpperCase().split('-').join(' ');
+	console.log(respController);
+	const method =
+		getMethodFromUrl(req).toUpperCase().split('-').join(' ') || undefined;
 	const message =
+		respController.message ||
 		`[ Status  ${statusCode} OK - '${method}' in ${getSectionFromUrl(
 			req
 		)} ]`.toUpperCase();
