@@ -1,6 +1,6 @@
 import { Request } from 'express';
 import bcrypt from 'bcryptjs';
-import { UserModel } from '../models/mongo/user.model';
+import { UserModel } from '../models/mongo-models/user.model';
 import { removeParamAndSetInfo } from '../helpers/default-responses';
 import { cleanValidatorField } from '../helpers/validator.helper';
 import { getNotFoundMessage } from '../helpers/get-model-section.helper';

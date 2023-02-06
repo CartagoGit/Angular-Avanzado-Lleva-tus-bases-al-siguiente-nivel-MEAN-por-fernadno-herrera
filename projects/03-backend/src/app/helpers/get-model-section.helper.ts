@@ -1,6 +1,6 @@
 import { Request } from 'express';
 import { Model, Document, Types } from 'mongoose';
-import { ApiModels } from '../models/mongo/all.models';
+import { ApiModels } from '../models/mongo-models/all.models';
 import { getCapitalize } from './logs.helper';
 
 /**

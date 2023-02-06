@@ -3,7 +3,7 @@ import {
 	getMessageErrorValidation,
 	getErrorUniqueParam,
 } from '../../helpers/default-responses';
-import { UserModel } from '../../models/mongo/user.model';
+import { UserModel } from '../../models/mongo-models/user.model';
 
 /**
  * ? Middlewares especificos para el modelo de usuarios

@@ -25,7 +25,6 @@ export const defaultResponse = (
 	logType: LogType = 'LOG',
 	statusCode: number = 200
 ): void => {
-	console.log(respController);
 	const method =
 		getMethodFromUrl(req).toUpperCase().split('-').join(' ') || undefined;
 	const message =
