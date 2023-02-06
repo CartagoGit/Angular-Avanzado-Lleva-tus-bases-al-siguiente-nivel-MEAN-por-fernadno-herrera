@@ -4,6 +4,7 @@ import { UserModel } from '../models/mongo-models/user.model';
 import { removeParamAndSetInfo } from '../helpers/default-responses';
 import { cleanValidatorField } from '../helpers/validator.helper';
 import { getNotFoundMessage } from '../helpers/get-model-section.helper';
+import { getEncryptHash } from '../helpers/encrypt.helper';
 
 /**
  * ? Controladores especificos de los metodos para el modelo de usuarios
@@ -19,8 +20,7 @@ export const usersController: {
 	post: async (req) => {
 		//* Encriptamos la contraseña
 		const { password } = req.body;
-		const salt = bcrypt.genSaltSync();
-		req.body.password = bcrypt.hashSync(password, salt);
+		req.body.password = getEncryptHash(password);
 		return req.body;
 	},
 	put: async (req) => {

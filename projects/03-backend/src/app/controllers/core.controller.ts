@@ -38,7 +38,7 @@ export const coreController: {
 		if (req.query['include'] === undefined) req.query['include'] = 'true';
 		const model = getModelSection(req);
 		const paramsInModel = Object.keys(model.schema.obj);
-		const wantInclude = req.query['include'] === 'true';
+		const wantInclude = (req.query['include'] as string).toLowerCase() === 'true';
 		const queryParams = req.query;
 		const arrayQuery = Object.entries(queryParams)
 			.filter(([key]) => paramsInModel.includes(key))

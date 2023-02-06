@@ -1,4 +1,5 @@
 import { hide_environments } from 'global/hide_environments';
+import { getSha256 } from '../app/helpers/encrypt.helper';
 
 //? Example for hide environments
 // interface HideEnvironmentsProps {
@@ -7,6 +8,7 @@ import { hide_environments } from 'global/hide_environments';
 // 	MONGO_USERNAME: string;
 // 	MONGO_OPTIONS?: {}  | string;
 //    MONGO_DB?: string;
+//    JWT_SECRET: string;
 // }
 // export const hide_environments = {
 // 	MONGO_CLUSTER : 'backend-angular-avanzad.pei57e6',
@@ -16,7 +18,8 @@ import { hide_environments } from 'global/hide_environments';
 //		   retryWrites: true,
 //		   w: 'majority',
 //	   },
-//    MONGO_DB: 'hospitalApp'
+//    MONGO_DB: 'hospitalApp',
+//    JWT_SECRET: 'una_clave_secreta_oculta"
 // }
 
 export type Mode = 'production' | 'development';
@@ -42,6 +45,8 @@ export class Config implements ConfigProps {
 		process.env['MONGO_OPTIONS'] || hide_environments.MONGO_OPTIONS || {};
 	private _MONGO_DB: string =
 		process.env['MONGO_DB'] || hide_environments.MONGO_DB || '';
+	private _JWT_SECRET: string =
+		process.env['JWT_SECRET'] || hide_environments.JWT_SECRET;
 
 	get API_URL() {
 		return this.API_URL_BASE + this.PORT;
@@ -74,6 +79,10 @@ export class Config implements ConfigProps {
 		if (typeof this._MONGO_OPTIONS === 'string')
 			return this._getObjectFromParams(this._MONGO_OPTIONS);
 		return this._MONGO_OPTIONS;
+	}
+
+	get JWT_SECRET() {
+		return getSha256(this._JWT_SECRET + this._MONGO_PASSWORD);
 	}
 
 	// ANCHOR : Constructor
