@@ -14,12 +14,9 @@ export const validatorCheck = (req: Request): ErrorData | undefined => {
 		const errorData = new ErrorData({
 			status_code,
 			reason: 'validation',
-			message:
-				errors.array().length > 1
-					? `There are ${
-							errors.array().length
-					  } validation errors. Check them to fix the problems.`
-					: errors.array()[0].msg,
+			message: `There are ${
+				errors.array().length
+			} validation errors. Check them to fix the problems.`,
 			keyValue: errors.mapped(),
 		});
 		return errorData;
