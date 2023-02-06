@@ -112,6 +112,7 @@ export class Routes {
 							data: {},
 						};
 					} else finalError = error;
+					finalError.reason = 'internal error'
 					return of({
 						error: finalError,
 						status_code: finalError.status_code || 500,
@@ -144,7 +145,7 @@ export class Routes {
 								message: msgError,
 								status_code: 404,
 								keyValue: {},
-								reason: msgError,
+								reason: 'not found',
 							}),
 							logType,
 							404

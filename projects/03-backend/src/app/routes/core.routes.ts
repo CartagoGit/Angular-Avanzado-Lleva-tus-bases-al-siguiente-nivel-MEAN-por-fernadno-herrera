@@ -47,6 +47,7 @@ export const coreRoutes: Routes = new Routes({
 		coreController: coreController.put,
 		type: 'put',
 	},
+	
 	delete: {
 		route: '/delete/:id',
 		coreController: coreController.delete,
