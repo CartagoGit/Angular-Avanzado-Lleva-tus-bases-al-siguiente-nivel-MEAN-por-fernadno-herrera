@@ -3,6 +3,7 @@ import {
 	getModelSection,
 	getNewModelSection,
 } from '../helpers/get-model-section.helper';
+import { createJWT } from '../helpers/json-web-token.helper';
 
 /**
  * ? Controladores generales para los metodos que usan todos los modelos
@@ -38,7 +39,8 @@ export const coreController: {
 		if (req.query['include'] === undefined) req.query['include'] = 'true';
 		const model = getModelSection(req);
 		const paramsInModel = Object.keys(model.schema.obj);
-		const wantInclude = (req.query['include'] as string).toLowerCase() === 'true';
+		const wantInclude =
+			(req.query['include'] as string).toLowerCase() === 'true';
 		const queryParams = req.query;
 		const arrayQuery = Object.entries(queryParams)
 			.filter(([key]) => paramsInModel.includes(key))
@@ -75,7 +77,9 @@ export const coreController: {
 	post: async (req) => {
 		const model = getNewModelSection(req);
 		await model.save();
-		return { model, status_code: 201 };
+		const { token } = await createJWT({ id: model.id });
+
+		return { model, status_code: 201, token };
 	},
 	put: async (req) => {
 		const id = req.params['id'];

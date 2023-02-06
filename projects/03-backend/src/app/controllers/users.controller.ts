@@ -1,5 +1,4 @@
 import { Request } from 'express';
-import bcrypt from 'bcryptjs';
 import { UserModel } from '../models/mongo-models/user.model';
 import { removeParamAndSetInfo } from '../helpers/default-responses';
 import { cleanValidatorField } from '../helpers/validator.helper';
@@ -21,6 +20,7 @@ export const usersController: {
 		//* Encriptamos la contraseña
 		const { password } = req.body;
 		req.body.password = getEncryptHash(password);
+
 		return req.body;
 	},
 	put: async (req) => {
