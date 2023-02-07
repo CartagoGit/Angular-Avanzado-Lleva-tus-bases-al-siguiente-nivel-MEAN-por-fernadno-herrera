@@ -1,5 +1,7 @@
+import { Request } from 'express';
 import jwt from 'jsonwebtoken';
 import { config } from '../../environments/config';
+import { basicError } from '../models/error-data.model';
 
 /**
  * ? Crea un Json web Token de un payload
@@ -22,4 +24,38 @@ export const createJWT = (payload: {
 			}
 		);
 	});
+};
+
+/**
+ * ? Comprueba si el JSON Web Token es valido
+ * @param {Request} req
+ * @returns {boolean}
+ */
+export const validateJWT = (req: Request): { ok: boolean; id: string } => {
+	//* Leer el token
+	const token = req.header('jwt');
+	if (!token) throw getErrorJWT();
+	let isOk: boolean = false;
+	let id: string = '';
+	
+	//* Verificamos si el token es correcto segun la clave secreta
+	jwt.verify(token, config.JWT_SECRET, (error, payload) => {
+		if (error) return;
+		isOk = true;
+		id = (payload as { id: string }).id;
+	});
+	return { ok: isOk, id };
+};
+
+/**
+ * ? Retorna el error cuando el JSON Web Token es incorrecto
+ * @returns {basicError}
+ */
+export const getErrorJWT = (): basicError => {
+	return {
+		message:
+			'Incorrect JSON Web Token. Must be Authenticated to access. Relog in the app if the authenticated time expired',
+		status_code: 401,
+		reason: 'invalid jwt',
+	};
 };

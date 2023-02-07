@@ -2,20 +2,26 @@ import { NextFunction, Request, Response, Router } from 'express';
 import { catchError, concatMap, from, map, of } from 'rxjs';
 import { mongoState } from '../db/init-mongo';
 import { CallbackMethod, TypeRequest } from '../interfaces/response.interface';
-import { validatorCheck } from '../middlewares/validator.middleware';
 import {
 	defaultErrorResponse,
 	defaultResponse,
 } from '../helpers/default-responses';
-import { ErrorData } from './error-data.model';
+import { ErrorData, basicError } from './error-data.model';
 import { LogType } from '../interfaces/logs.interfaces';
 import { getNotFoundMessage } from '../helpers/get-model-section.helper';
+import {
+	checkValidatorFields,
+	validateAdmin,
+} from '../helpers/validator.helper';
+import { validateJWT, getErrorJWT } from '../helpers/json-web-token.helper';
 
 export interface RoutesProps {
 	route: string;
 	coreController?: CallbackMethod;
 	routeRouter?: Router;
 	middlewares?: ((...args: any[]) => void)[];
+	hasJwtValidator?: boolean;
+	hasAdminValidator?: boolean;
 	type?: TypeRequest;
 	router?: Router;
 	modelController?: CallbackMethod;
@@ -83,15 +89,44 @@ export class Routes {
 		next: NextFunction,
 		props: RoutesProps
 	): void {
-		const { modelController = async () => {}, coreController, type } = props;
-
-		//* Nos subscribimos al controlador especifico del modelo
-		from(modelController(req, res, next))
+		const {
+			modelController = async () => {},
+			coreController,
+			hasJwtValidator = true,
+			hasAdminValidator = true,
+			type,
+		} = props;
+		//* Subscribe para realizar todos los metodos antes de realizar la respuesta
+		from(
+			of(
+				//* Comprobamos si el JSON Web Token es valido
+				hasJwtValidator || hasAdminValidator
+					? validateJWT(req)
+					: { ok: true, id: undefined }
+			)
+		)
 			.pipe(
+				concatMap(({ id, ok: isJwtOk }) => {
+					console.log(isJwtOk);
+					if (!isJwtOk) throw getErrorJWT();
+					//* Si requiere ser Admin comprobamos si el usuario es Administrador
+					return hasAdminValidator ? from(validateAdmin(id!)) : of(true);
+				}),
+				concatMap((isAdminOk) => {
+					if (!isAdminOk)
+						throw {
+							message: 'Must be Admin to use this route',
+							status_code: 401,
+							reason: 'admin required',
+						} as basicError;
+					//* Nos subscribimos al controlador especifico del modelo
+					return from(modelController(req, res, next));
+				}),
+				// from(modelController(req, res, next))
+				// 	.pipe(
 				concatMap((respModel) => {
 					//* Pasamos las validaciones
-					// const errors = validatorCheck(respModel || req);
-					const errors = validatorCheck(req);
+					const errors = checkValidatorFields(req);
 
 					if (!!errors) throw errors;
 					//* Si pasa el controlador y las validaciones,
@@ -112,7 +147,7 @@ export class Routes {
 							data: {},
 						};
 					} else finalError = error;
-					finalError.reason = 'internal error'
+					finalError.reason = error.reason || 'internal error';
 					return of({
 						error: finalError,
 						status_code: finalError.status_code || 500,
