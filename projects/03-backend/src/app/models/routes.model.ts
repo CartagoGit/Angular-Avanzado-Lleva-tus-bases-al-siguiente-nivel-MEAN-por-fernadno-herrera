@@ -12,6 +12,7 @@ import { getNotFoundMessage } from '../helpers/get-model-section.helper';
 import {
 	checkValidatorFields,
 	validateAdmin,
+	validateSameUser,
 } from '../helpers/validator.helper';
 import { validateJWT, getErrorJWT } from '../helpers/json-web-token.helper';
 
@@ -93,30 +94,31 @@ export class Routes {
 		const {
 			modelController = async () => {},
 			coreController,
-			hasJwtValidator = true,
-			hasAdminValidator = true,
-			//TODO Checkear que el usuario intenta modificar o ver datos de si mismo y no de otros usuarios si no es administrador
-			hasSameUserValidator = true,
+			hasJwtValidator = false,
+			hasAdminValidator = false,
+			hasSameUserValidator = false,
 			type,
 		} = props;
 		//* Subscribe para realizar todos los metodos antes de realizar la respuesta
 		from(
-			of(
-				//* Comprobamos si el JSON Web Token es valido
-				hasJwtValidator || hasAdminValidator
-					? validateJWT(req)
-					: { ok: true, id: undefined }
-			)
+			//* Comprobamos si el JSON Web Token es valido
+			hasJwtValidator || hasAdminValidator
+				? from(validateJWT(req))
+				: of({ ok: true, id: undefined })
 		)
 			.pipe(
-				concatMap(({ id, ok: isJwtOk }) => {
-					console.log(isJwtOk);
+				concatMap((respValidatorJWT) => {
+					const { id, ok: isJwtOk } = respValidatorJWT;
 					if (!isJwtOk) throw getErrorJWT();
 					//* Si requiere ser Admin comprobamos si el usuario es Administrador
-					return hasAdminValidator ? from(validateAdmin(id!)) : of(true);
+					return hasSameUserValidator
+						? from(validateSameUser(req, id!))
+						: hasAdminValidator
+						? from(validateAdmin(id!))
+						: of(respValidatorJWT);
 				}),
-				concatMap((isAdminOk) => {
-					if (!isAdminOk)
+				concatMap(({ ok: isAdminOrSameUser }) => {
+					if (!isAdminOrSameUser)
 						throw {
 							message: 'Must be Admin to use this route',
 							status_code: 401,

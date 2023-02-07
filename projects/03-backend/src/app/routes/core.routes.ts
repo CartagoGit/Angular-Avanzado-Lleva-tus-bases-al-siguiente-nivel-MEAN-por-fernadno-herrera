@@ -25,6 +25,7 @@ export const coreRoutes: Routes = new Routes({
 	getAll: {
 		route: '/get-all',
 		hasJwtValidator: true,
+		hasAdminValidator: true,
 		coreController: coreController.getAll,
 		type: 'get',
 
@@ -32,24 +33,28 @@ export const coreRoutes: Routes = new Routes({
 	getById: {
 		route: '/get-by-id/:id',
 		hasJwtValidator: true,
+		hasSameUserValidator: true,
 		coreController: coreController.getById,
 		type: 'get',
 	},
 	getByQuery: {
 		route: '/get-by-query/',
 		hasJwtValidator: true,
+		hasAdminValidator: true,
 		coreController: coreController.getByQuery,
 		type: 'get',
 	},
 	post: {
 		route: '/post',
-		hasJwtValidator: false,
+		hasJwtValidator: true,
+		hasAdminValidator: true,
 		coreController: coreController.post,
 		type: 'post',
 	},
 	put: {
 		route: '/put/:id',
 		hasJwtValidator: true,
+		hasSameUserValidator: true,
 		coreController: coreController.put,
 		type: 'put',
 	},
@@ -57,7 +62,7 @@ export const coreRoutes: Routes = new Routes({
 	delete: {
 		route: '/delete/:id',
 		hasJwtValidator: true,
-		hasAdminValidator: true,
+		hasSameUserValidator: true,
 		coreController: coreController.delete,
 		type: 'delete',
 	},

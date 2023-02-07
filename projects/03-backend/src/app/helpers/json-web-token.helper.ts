@@ -31,15 +31,16 @@ export const createJWT = (payload: {
  * @param {Request} req
  * @returns {boolean}
  */
-export const validateJWT = (req: Request): { ok: boolean; id: string } => {
+export const validateJWT = async (
+	req: Request
+): Promise<{ ok: boolean; id: string }> => {
 	//* Leer el token
 	const token = req.header('jwt');
 	if (!token) throw getErrorJWT();
 	let isOk: boolean = false;
 	let id: string = '';
-	
 	//* Verificamos si el token es correcto segun la clave secreta
-	jwt.verify(token, config.JWT_SECRET, (error, payload) => {
+	jwt.verify(token!, config.JWT_SECRET, (error, payload) => {
 		if (error) return;
 		isOk = true;
 		id = (payload as { id: string }).id;
@@ -48,7 +49,7 @@ export const validateJWT = (req: Request): { ok: boolean; id: string } => {
 };
 
 /**
- * ? Retorna el error cuando el JSON Web Token es incorrecto
+ * ? Retorna el objeto con el error cuando el JSON Web Token es incorrecto
  * @returns {basicError}
  */
 export const getErrorJWT = (): basicError => {

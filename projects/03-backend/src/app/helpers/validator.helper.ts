@@ -1,6 +1,6 @@
 import { Request } from 'express';
 import { validationResult } from 'express-validator';
-import { ErrorData } from '../models/error-data.model';
+import { ErrorData, basicError } from '../models/error-data.model';
 import { UserModel } from '../models/mongo-models/user.model';
 
 /**
@@ -42,7 +42,30 @@ export const checkValidatorFields = (req: Request): ErrorData | undefined => {
  * @param {string} id
  * @returns {Promise<boolean>}
  */
-export const validateAdmin = async (id: string): Promise<boolean> => {
+export const validateAdmin = async (
+	id: string
+): Promise<{ ok: boolean; id: string }> => {
 	const userDB = await UserModel.findById(id);
-	return userDB.role === 'ADMIN_ROLE';
+	return { ok: userDB.role === 'ADMIN_ROLE', id };
+};
+
+/**
+ * ? Valida si el usuario intenta acceder a datos que no son suyos sin ser administrador
+ * @async
+ * @param {Request} req
+ * @param {string} id
+ * @returns {Promise<{ ok: boolean; id: string }>}
+ */
+export const validateSameUser = async (
+	req: Request,
+	id: string
+): Promise<{ ok: boolean; id: string }> => {
+	const { ok: isAdmin } = await validateAdmin(id);
+	if ((!req.params['id'] || req.params['id'] !== id) && !isAdmin)
+		throw {
+			message: 'User just can interactuate with his own data',
+			status_code: 401,
+			reason: 'not same user',
+		} as basicError;
+	return { ok: true, id };
 };
