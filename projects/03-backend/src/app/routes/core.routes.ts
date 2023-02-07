@@ -42,27 +42,29 @@ export const coreRoutes: Routes = new Routes({
 		type: 'get',
 	},
 	post: {
-		hasJwtValidator: false,
 		route: '/post',
+		hasJwtValidator: false,
 		coreController: coreController.post,
 		type: 'post',
 	},
 	put: {
-		hasJwtValidator: true,
 		route: '/put/:id',
+		hasJwtValidator: true,
 		coreController: coreController.put,
 		type: 'put',
 	},
 
 	delete: {
-		hasJwtValidator: true,
 		route: '/delete/:id',
+		hasJwtValidator: true,
+		hasAdminValidator: true,
 		coreController: coreController.delete,
 		type: 'delete',
 	},
 	deleteCollection: {
-		hasJwtValidator: true,
 		route: '/delete-collection',
+		hasJwtValidator: true,
+		hasAdminValidator: true,
 		coreController: coreController.deleteCollection,
 		type: 'delete',
 	},

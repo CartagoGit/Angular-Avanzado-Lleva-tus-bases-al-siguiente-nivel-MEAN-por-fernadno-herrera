@@ -22,6 +22,7 @@ export interface RoutesProps {
 	middlewares?: ((...args: any[]) => void)[];
 	hasJwtValidator?: boolean;
 	hasAdminValidator?: boolean;
+	hasSameUserValidator?: boolean;
 	type?: TypeRequest;
 	router?: Router;
 	modelController?: CallbackMethod;
@@ -94,6 +95,8 @@ export class Routes {
 			coreController,
 			hasJwtValidator = true,
 			hasAdminValidator = true,
+			//TODO Checkear que el usuario intenta modificar o ver datos de si mismo y no de otros usuarios si no es administrador
+			hasSameUserValidator = true,
 			type,
 		} = props;
 		//* Subscribe para realizar todos los metodos antes de realizar la respuesta
@@ -122,10 +125,8 @@ export class Routes {
 					//* Nos subscribimos al controlador especifico del modelo
 					return from(modelController(req, res, next));
 				}),
-				// from(modelController(req, res, next))
-				// 	.pipe(
 				concatMap((respModel) => {
-					//* Pasamos las validaciones
+					//* Pasamos las validaciones de los campos de los parametros
 					const errors = checkValidatorFields(req);
 
 					if (!!errors) throw errors;

@@ -15,6 +15,7 @@ import { getEncryptHash } from '../helpers/encrypt.helper';
 export const usersController: {
 	post: (req: Request) => Promise<any>;
 	put: (req: Request) => Promise<any>;
+	delete: (req: Request) => Promise<any>;
 } = {
 	post: async (req) => {
 		//* Encriptamos la contraseña
@@ -40,5 +41,8 @@ export const usersController: {
 		if (req.body.google) removeParamAndSetInfo(req, 'google');
 
 		return req.body;
+	},
+	delete: async (req) => {
+		// TODO Si el usuario no es admin o no es el mismo usuario que intenta eliminar, no debe poder elimianrlo
 	},
 };
