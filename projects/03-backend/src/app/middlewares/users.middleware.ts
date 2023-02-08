@@ -2,8 +2,8 @@ import { check } from 'express-validator';
 import {
 	getMessageErrorValidation,
 	getErrorUniqueParam,
-} from '../../helpers/default-responses.helper';
-import { UserModel } from '../../models/mongo-models/user.model';
+} from '../helpers/default-responses.helper';
+import { UserModel } from '../models/mongo-models/user.model';
 
 /**
  * ? Middlewares especificos para el modelo de usuarios

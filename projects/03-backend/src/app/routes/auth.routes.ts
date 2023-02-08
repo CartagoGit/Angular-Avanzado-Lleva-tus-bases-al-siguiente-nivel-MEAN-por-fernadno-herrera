@@ -2,7 +2,7 @@ import { Routes } from '../models/routes.model';
 import { coreController } from '../controllers/core.controller';
 import { coreRoutes } from './core.routes';
 import { authController } from '../controllers/auth.controller';
-import { authMiddlewares } from '../middlewares/models-middlewares/auth.middleware';
+import { authMiddlewares } from '../middlewares/auth.middleware';
 
 /**
  * * /api/auth

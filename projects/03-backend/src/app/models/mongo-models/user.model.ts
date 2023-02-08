@@ -41,6 +41,7 @@ UserSchema.method('toJSON', function () {
 	return { ...rest, id: _id };
 });
 
+
 /**
  * ? Exporta el modelo de Mongoose
  * @type {Model<any>}

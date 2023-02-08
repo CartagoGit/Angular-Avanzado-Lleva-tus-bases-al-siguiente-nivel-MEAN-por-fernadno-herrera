@@ -12,9 +12,10 @@ export const HospitalSchema: Schema<any> = new Schema({
 	image: {
 		type: String,
 	},
-	creator: {
+	user_creator: {
 		type: Schema.Types.ObjectId,
-		ref: 'User'
+		ref: 'User',
+		required: true
 	}
 }
 //* Si quisieramos cambiar "hospitals" por "hospitales" al crearse el modelo en mongoDb

@@ -78,9 +78,9 @@ export const coreController: {
 	post: async (req) => {
 		const model = getNewModelSection(req);
 		await model.save();
-		const { token } = await createJWT({ id: model.id });
+		// const { token } = await createJWT({ id: model.id });
 
-		return { model, status_code: 201, token };
+		return { model, status_code: 201 };
 	},
 	put: async (req) => {
 		const id = req.params['id'];

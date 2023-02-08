@@ -36,9 +36,7 @@ export const validateJWT = async (
 ): Promise<{ ok: boolean; id: string }> => {
 	//* Leer el token bearer
 	// const token = req.header('jwt');
-	const authorization = req.header('authorization');
-	if (!authorization) throw getErrorJWT();
-	const token = getTokenFromBearerHeader(authorization);
+	const token = getTokenFromAuthorization(req);
 
 	let isOk: boolean = false;
 	let id: string = '';
@@ -49,6 +47,29 @@ export const validateJWT = async (
 		id = (payload as { id: string }).id;
 	});
 	return { ok: isOk, id };
+};
+
+/**
+ * ? Retorna el payload del token JWT sin verificarlo
+ * @param {Request} req
+ * @returns {{ id: string }}
+ */
+export const getPayloadFromJwtWithoutVerifiy = (
+	req: Request
+): { id: string } => {
+	const token = getTokenFromAuthorization(req);
+	return jwt.decode(token) as { id: string };
+};
+
+/**
+ * ? Recupera el Token de la cabecera de autorizacion
+ * @param {Request} req
+ * @returns {string}
+ */
+export const getTokenFromAuthorization = (req: Request): string => {
+	const authorization = req.header('authorization');
+	if (!authorization) throw getErrorJWT();
+	return getTokenFromBearerHeader(authorization);
 };
 
 /**

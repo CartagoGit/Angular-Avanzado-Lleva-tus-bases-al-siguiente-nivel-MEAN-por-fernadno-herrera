@@ -1,5 +1,7 @@
 import { Routes } from '../models/routes.model';
 import { coreRoutes } from './core.routes';
+import { hospitalsMiddlewares } from './../middlewares/hospitals.middleware';
+import { hospitalsController } from '../controllers/hospitals.controller';
 
 /**
  * * /api/hospitals
@@ -11,4 +13,9 @@ import { coreRoutes } from './core.routes';
  */
 export const hospitalsRoutes: Routes = new Routes({
 	...coreRoutes.routes,
+	post: {
+		...coreRoutes.routes['post'],
+		middlewares: hospitalsMiddlewares.post,
+		modelController: hospitalsController.post,
+	},
 });

@@ -6,20 +6,17 @@ import { Model, model, Schema } from 'mongoose';
  */
 export const DoctorSchema: Schema<any> = new Schema(
 	{
-		name: {
-			type: String,
-			required: true,
-		},
 		image: {
 			type: String,
 		},
-		creator: {
+		user_creator: {
 			type: Schema.Types.ObjectId,
 			ref: 'User',
 		},
 		user: {
 			type: Schema.Types.ObjectId,
 			ref: 'User',
+			required: true,
 		},
 		hospital: {
 			type: Schema.Types.ObjectId,

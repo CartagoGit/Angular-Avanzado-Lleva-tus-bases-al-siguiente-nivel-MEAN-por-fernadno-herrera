@@ -1,7 +1,7 @@
 import { Routes } from '../models/routes.model';
 import { coreRoutes } from './core.routes';
-import { usersMiddlewares } from '../middlewares/models-middlewares/users.middleware';
 import { usersController } from '../controllers/users.controller';
+import { usersMiddlewares } from '../middlewares/users.middleware';
 
 /**
  * * /api/users
