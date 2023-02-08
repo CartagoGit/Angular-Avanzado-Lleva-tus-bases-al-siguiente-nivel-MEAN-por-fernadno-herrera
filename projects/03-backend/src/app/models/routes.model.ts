@@ -159,14 +159,9 @@ export class Routes {
 			)
 			.subscribe({
 				next: (respController) => {
-					console.log({
-						data: respController.data,
-						model: respController.model,
-					});
-					console.log(!!respController.data || !!respController.model);
 					const logType = type?.toUpperCase() as LogType;
 					const hasData = !!respController.data || !!respController.model;
-					//* Si la respuesta de los controlaodres, contiene ererores...
+					//* Si la respuesta de los controladores, contiene ererores...
 					if (!!respController.error) {
 						defaultErrorResponse(
 							req,
