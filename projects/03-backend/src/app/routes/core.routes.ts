@@ -2,7 +2,7 @@ import { Request } from 'express';
 import { coreController } from '../controllers/core.controller';
 
 import { Routes } from '../models/routes.model';
-import { rootResponse } from '../helpers/default-responses';
+import { rootResponse } from '../helpers/default-responses.helper';
 import { getSectionFromUrl } from '../helpers/get-model-section.helper';
 
 /**

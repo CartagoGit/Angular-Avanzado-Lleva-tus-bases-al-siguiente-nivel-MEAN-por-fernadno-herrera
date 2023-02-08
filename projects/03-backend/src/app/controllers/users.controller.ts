@@ -1,6 +1,6 @@
 import { Request } from 'express';
 import { UserModel } from '../models/mongo-models/user.model';
-import { removeParamAndSetInfo } from '../helpers/default-responses';
+import { removeParamAndSetInfo } from '../helpers/default-responses.helper';
 import { cleanValidatorField } from '../helpers/validator.helper';
 import { getNotFoundMessage } from '../helpers/get-model-section.helper';
 import { getEncryptHash } from '../helpers/encrypt.helper';

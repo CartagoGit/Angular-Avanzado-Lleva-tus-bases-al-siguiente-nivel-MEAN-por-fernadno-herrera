@@ -6,7 +6,7 @@ import { coreRoutes } from './core.routes';
  */
 
 /**
- * ? Crea las rutas de usuarios y añade los middlewares y controladores especificos que difieren del general, con validaciones y comprobaciones
+ * ? Crea las rutas de hospitales y añade los middlewares y controladores especificos que difieren del general, con validaciones y comprobaciones
  * @type {Routes}
  */
 export const hospitalsRoutes: Routes = new Routes({

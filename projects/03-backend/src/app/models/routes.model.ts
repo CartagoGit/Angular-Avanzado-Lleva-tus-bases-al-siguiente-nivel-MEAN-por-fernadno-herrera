@@ -5,7 +5,7 @@ import { CallbackMethod, TypeRequest } from '../interfaces/response.interface';
 import {
 	defaultErrorResponse,
 	defaultResponse,
-} from '../helpers/default-responses';
+} from '../helpers/default-responses.helper';
 import { ErrorData, basicError } from './error-data.model';
 import { LogType } from '../interfaces/logs.interfaces';
 import { getNotFoundMessage } from '../helpers/get-model-section.helper';

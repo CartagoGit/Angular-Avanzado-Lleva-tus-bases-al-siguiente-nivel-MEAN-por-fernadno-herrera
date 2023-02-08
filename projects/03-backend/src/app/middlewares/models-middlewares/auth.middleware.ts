@@ -1,5 +1,5 @@
 import { check } from 'express-validator';
-import { getMessageErrorValidation } from '../../helpers/default-responses';
+import { getMessageErrorValidation } from '../../helpers/default-responses.helper';
 
 /**
  * ? Middlewares especificos para el modelo de usuarios
