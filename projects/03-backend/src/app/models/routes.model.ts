@@ -159,6 +159,11 @@ export class Routes {
 			)
 			.subscribe({
 				next: (respController) => {
+					console.log({
+						data: respController.data,
+						model: respController.model,
+					});
+					console.log(!!respController.data || !!respController.model);
 					const logType = type?.toUpperCase() as LogType;
 					const hasData = !!respController.data || !!respController.model;
 					//* Si la respuesta de los controlaodres, contiene ererores...
@@ -173,7 +178,10 @@ export class Routes {
 						//*  Si no existe data y la respuesta es de un get, devuelve un error de not found
 					} else if (
 						!hasData &&
-						(logType === 'GET' || logType === 'DELETE')
+						(logType === 'GET' ||
+							logType === 'DELETE' ||
+							logType === 'PUT' ||
+							logType === 'PATCH')
 					) {
 						const msgError = getNotFoundMessage(req);
 						defaultErrorResponse(

@@ -4,6 +4,7 @@ import {
 	getNewModelSection,
 } from '../helpers/get-model-section.helper';
 import { createJWT } from '../helpers/json-web-token.helper';
+import { basicError } from '../models/error-data.model';
 
 /**
  * ? Controladores generales para los metodos que usan todos los modelos
