@@ -36,9 +36,9 @@ export const validateJWT = async (
 ): Promise<{ ok: boolean; id: string }> => {
 	//* Leer el token bearer
 	// const token = req.header('jwt');
-	const bearerHeader = req.header('authorization');
-	if (!bearerHeader) throw getErrorJWT();
-	const token = bearerHeader.split(' ')[1]
+	const authorization = req.header('authorization');
+	if (!authorization) throw getErrorJWT();
+	const token = getTokenFromBearerHeader(authorization);
 
 	let isOk: boolean = false;
 	let id: string = '';
@@ -50,6 +50,14 @@ export const validateJWT = async (
 	});
 	return { ok: isOk, id };
 };
+
+/**
+ * ? Recupera el token Bearer del Header y extrae el token
+ * @param {string} authorization
+ * @returns {string}
+ */
+export const getTokenFromBearerHeader = (authorization: string): string =>
+	authorization.split(' ')[1];
 
 /**
  * ? Retorna el objeto con el error cuando el JSON Web Token es incorrecto
