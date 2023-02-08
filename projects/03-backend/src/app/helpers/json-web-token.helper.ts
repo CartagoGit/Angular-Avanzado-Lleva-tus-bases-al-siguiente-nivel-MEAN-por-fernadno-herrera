@@ -34,9 +34,12 @@ export const createJWT = (payload: {
 export const validateJWT = async (
 	req: Request
 ): Promise<{ ok: boolean; id: string }> => {
-	//* Leer el token
-	const token = req.header('jwt');
-	if (!token) throw getErrorJWT();
+	//* Leer el token bearer
+	// const token = req.header('jwt');
+	const bearerHeader = req.header('authorization');
+	if (!bearerHeader) throw getErrorJWT();
+	const token = bearerHeader.split(' ')[1]
+
 	let isOk: boolean = false;
 	let id: string = '';
 	//* Verificamos si el token es correcto segun la clave secreta
