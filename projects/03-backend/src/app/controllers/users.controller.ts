@@ -10,6 +10,7 @@ import { getEncryptHash } from '../helpers/encrypt.helper';
  * @type {{
 	post: (req: Request) => Promise<any>;
 	put: (req: Request) => Promise<any>;
+	delete: (req: Request) => Promise<any>;
 }}
  */
 export const usersController: {

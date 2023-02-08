@@ -190,6 +190,15 @@ export class Routes {
 						);
 						return;
 					}
+					if (
+						(Array.isArray(respController.data) &&
+							respController.data.length === 0) ||
+						(Array.isArray(respController.model) &&
+							respController.model.length === 0)
+					) {
+						respController.info = 'NOT FOUND DATA';
+					}
+
 					//* Para cualquier respuesta correcta, crea una respuesta con los datos
 					defaultResponse(
 						req,

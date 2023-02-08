@@ -1,7 +1,8 @@
-import { Request, Response } from 'express';
+import { Request } from 'express';
 import { rootResponse } from '../helpers/default-responses';
 import { Routes } from '../models/routes.model';
 import { authRoutes } from './auth.routes';
+import { hospitalsRoutes } from './hospitals.routes';
 import { usersRoutes } from './users.routes';
 
 /**
@@ -23,11 +24,16 @@ export const rootRoutes: Routes = new Routes({
 	auth: {
 		route: '/auth',
 		routeRouter: authRoutes.router,
-		type: 'use'
+		type: 'use',
 	},
 	users: {
 		route: '/users',
 		routeRouter: usersRoutes.router,
+		type: 'use',
+	},
+	hospitals: {
+		route: '/hospitals',
+		routeRouter: hospitalsRoutes.router,
 		type: 'use',
 	},
 });

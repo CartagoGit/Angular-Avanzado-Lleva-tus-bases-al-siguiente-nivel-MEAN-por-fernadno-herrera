@@ -26,6 +26,7 @@ export const usersRoutes: Routes = new Routes({
 		...coreRoutes.routes['put'],
 		modelController: usersController.put,
 		middlewares: usersMiddlewares.put,
+		hasSameUserValidator: true,
 	},
 
 });

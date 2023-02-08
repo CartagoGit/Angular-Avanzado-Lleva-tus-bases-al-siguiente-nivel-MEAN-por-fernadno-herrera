@@ -1,5 +1,6 @@
 import { Model } from 'mongoose';
 import { UserModel } from './user.model';
+import { HospitalModel } from './hospital.model';
 
 /**
  * ? Objeto con la recopilacion de modelos de la api
@@ -7,4 +8,5 @@ import { UserModel } from './user.model';
  */
 export const ApiModels: Record<string, Model<any>> = {
 	Users: UserModel,
+	Hospitals: HospitalModel
 };
