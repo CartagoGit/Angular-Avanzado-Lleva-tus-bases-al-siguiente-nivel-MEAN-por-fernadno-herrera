@@ -19,11 +19,14 @@ export const usersRoutes: Routes = new Routes({
 		modelController: usersController.post,
 		//* Añadimos middlewares especificos para los usuarios
 		middlewares: usersMiddlewares.post,
+		hasAdminValidator: false,
+		hasJwtValidator: false
 	},
 	put: {
 		...coreRoutes.routes['put'],
 		modelController: usersController.put,
 		middlewares: usersMiddlewares.put,
 	},
+
 });
 
