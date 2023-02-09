@@ -20,6 +20,7 @@ export const HospitalSchema: Schema<any> = new Schema(
 			autopopulate: true,
 		},
 	}
+	,{ timestamps: true }
 	//* Si quisieramos cambiar "hospitals" por "hospitales" al crearse el modelo en mongoDb
 	// , { collection :'hospitales'}
 );

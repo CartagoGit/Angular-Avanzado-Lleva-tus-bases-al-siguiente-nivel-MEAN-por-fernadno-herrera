@@ -15,6 +15,10 @@ export const initMongo = () => {
 	//* Permite querys exactos y elimina el warning de deprecacion de versiones antiguas de Mongoose
 	mongoose.set('strictQuery', false);
 
+	//* Añadimos creacion y modificacion de fechas en los esquemas
+	mongoose.set('timestamps.createdAt.immutable', true)
+	// mongoose.set('')
+
 	//* Modificamos la llamada a los metodos para que no devuelva la version y la '_id' la devuelva como 'id'
 	mongoose.set('toJSON', {
 		transform: function (_doc, modelObject) {
