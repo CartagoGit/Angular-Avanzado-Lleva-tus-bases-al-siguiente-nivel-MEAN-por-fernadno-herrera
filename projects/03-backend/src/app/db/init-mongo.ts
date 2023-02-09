@@ -10,6 +10,21 @@ export const initMongo = () => {
 	//* Permite querys exactos y elimina el warning de deprecacion de versiones antiguas de Mongoose
 	mongoose.set('strictQuery', false);
 
+	//* Modificamos la llamada a los metodos para que no devuelva la version y la '_id' la devuelva como 'id'
+	mongoose.set('toJSON', {
+		transform: function (_doc, modelObject) {
+			const { __v, _id, password, ...rest } = modelObject;
+			return { ...rest, id: _id };
+		},
+	});
+	mongoose.set('toObject', {
+		transform: function (_doc, modelObject) {
+			const { __v, _id, password, ...rest } = modelObject;
+			return { ...rest, id: _id };
+		},
+	});
+
+
 	//* Observable para la conexion de mongo y trigger para mostrar mensaje si hay algun cambio en la bd
 	getObservableMongoose()
 		.pipe(

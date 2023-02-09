@@ -12,6 +12,7 @@ export const DoctorSchema: Schema<any> = new Schema(
 		user_creator: {
 			type: Schema.Types.ObjectId,
 			ref: 'User',
+			required: true
 		},
 		user: {
 			type: Schema.Types.ObjectId,
@@ -21,21 +22,16 @@ export const DoctorSchema: Schema<any> = new Schema(
 		hospital: {
 			type: Schema.Types.ObjectId,
 			ref: 'Hospital',
+			required: true,
 		},
+
 		//TODO Añadir usuarios que tienen este medico
+
 	}
 	//* Si quisieramos cambiar "doctors" por "doctores" al crearse el modelo en mongoDb
 	// , { collection :'doctores'}
 );
 
-/**
- * ? Reasigna los parametros a mostrar en las respuestas del modelo (no modifica los datos de la base de datos, solo la respuesta)
- */
-DoctorSchema.method('toJSON', function () {
-	const { __v, _id, ...rest } = this.toObject();
-
-	return { ...rest, id: _id };
-});
 
 /**
  * ? Exporta el modelo de Mongoose

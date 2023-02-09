@@ -32,14 +32,13 @@ export const UserSchema: Schema<any> = new Schema({
 	},
 });
 
-/**
- * ? Reasigna los parametros a mostrar en las respuestas del modelo (no modifica los datos de la base de datos, solo la respuesta)
- */
-UserSchema.method('toJSON', function () {
-	const { __v, _id, password, ...rest } = this.toObject();
-
-	return { ...rest, id: _id };
-});
+// /**
+//  * ? Reasigna los parametros a mostrar en las respuestas del modelo (no modifica los datos de la base de datos, solo la respuesta)
+//  */
+// UserSchema.method('toJSON', function () {
+// 	const { __v, _id, password, ...rest } = this.toObject();
+// 	return { ...rest, id: _id };
+// });
 
 
 /**
