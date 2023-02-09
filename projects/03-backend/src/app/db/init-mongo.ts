@@ -2,10 +2,15 @@ import mongoose from 'mongoose';
 import { config } from '../../environments/config';
 import { from, Observable, switchMap, tap } from 'rxjs';
 import { logError, log } from '../helpers/logs.helper';
+import autopopulate from 'mongoose-autopopulate';
+
+//* Aplicamos autopopulate a todo mongoose
+mongoose.plugin(autopopulate, { maxDepth: 5 });
+
 
 /**
  * ? Establece la conexion con MongoDB
- */
+*/
 export const initMongo = () => {
 	//* Permite querys exactos y elimina el warning de deprecacion de versiones antiguas de Mongoose
 	mongoose.set('strictQuery', false);
@@ -23,7 +28,6 @@ export const initMongo = () => {
 			return { ...rest, id: _id };
 		},
 	});
-
 
 	//* Observable para la conexion de mongo y trigger para mostrar mensaje si hay algun cambio en la bd
 	getObservableMongoose()
