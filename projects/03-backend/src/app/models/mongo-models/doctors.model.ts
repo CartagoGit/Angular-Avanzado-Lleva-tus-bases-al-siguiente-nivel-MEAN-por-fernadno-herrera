@@ -14,8 +14,9 @@ export const DoctorSchema: Schema<any> = new Schema(
 			ref: 'User',
 			required: true,
 		},
-		name: {
+		user: {
 			type: Schema.Types.ObjectId,
+			unique: true,
 			ref: 'User',
 			required: true,
 		},

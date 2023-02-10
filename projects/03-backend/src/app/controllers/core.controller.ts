@@ -94,7 +94,6 @@ export const coreController: {
 		const id = req.params['id'];
 		const model = getModelSection(req);
 		const data_before = await model.findById(id);
-		console.log({ ...data_before?.toJSON(), ...req.body });
 		const data = await model.findByIdAndUpdate(
 			id,
 			{ ...data_before?.toJSON(), ...req.body },
