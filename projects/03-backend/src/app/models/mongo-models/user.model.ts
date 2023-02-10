@@ -1,4 +1,5 @@
 import { Model, model, Schema } from 'mongoose';
+import autopopulate from 'mongoose-autopopulate';
 
 /**
  * ? Crea el esquema del modelo de Usuarios en MongoDb
@@ -31,6 +32,15 @@ export const UserSchema: Schema<any> = new Schema(
 			type: Boolean,
 			default: false,
 		},
+		doctors: [
+			{
+				type: Schema.Types.ObjectId,
+				ref: 'Doctor',
+				unique: true,
+				default: [],
+				autopopulate: true,
+			},
+		],
 	},
 	{ timestamps: true } //* Añade createdAt y updatedAt
 );

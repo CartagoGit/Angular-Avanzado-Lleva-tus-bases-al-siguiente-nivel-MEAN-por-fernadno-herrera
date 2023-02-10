@@ -1,10 +1,15 @@
 import { query, Request } from 'express';
+import { Schema } from 'mongoose';
 import {
 	getModelSection,
 	getNewModelSection,
 } from '../helpers/get-model-section.helper';
-import { createJWT } from '../helpers/json-web-token.helper';
+import {
+	createJWT,
+	getPayloadFromJwtWithoutVerifiy,
+} from '../helpers/json-web-token.helper';
 import { basicError } from '../models/error-data.model';
+import { UserModel } from '../models/mongo-models/user.model';
 
 /**
  * ? Controladores generales para los metodos que usan todos los modelos
@@ -76,6 +81,9 @@ export const coreController: {
 		};
 	},
 	post: async (req) => {
+		const { id } = getPayloadFromJwtWithoutVerifiy(req);
+		const creator: typeof UserModel | null = await UserModel.findById(id);
+		req.body['user_creator'] = creator;
 		const model = getNewModelSection(req);
 		await model.save();
 		// const { token } = await createJWT({ id: model.id });
@@ -86,7 +94,12 @@ export const coreController: {
 		const id = req.params['id'];
 		const model = getModelSection(req);
 		const data_before = await model.findById(id);
-		const data = await model.findByIdAndUpdate(id, req.body, { new: true });
+		console.log({ ...data_before?.toJSON(), ...req.body });
+		const data = await model.findByIdAndUpdate(
+			id,
+			{ ...data_before?.toJSON(), ...req.body },
+			{ new: true }
+		);
 		return {
 			data_before,
 			data,

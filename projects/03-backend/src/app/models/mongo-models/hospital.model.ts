@@ -1,4 +1,4 @@
-import  { Model, model, Schema } from 'mongoose';
+import { Model, model, Schema } from 'mongoose';
 
 /**
  * ? Crea el esquema del modelo de Hospitales en MongoDb
@@ -17,10 +17,17 @@ export const HospitalSchema: Schema<any> = new Schema(
 			type: Schema.Types.ObjectId,
 			ref: 'User',
 			required: true,
-			autopopulate: true,
 		},
-	}
-	,{ timestamps: true }
+		doctors: [
+			{
+				type: Schema.Types.ObjectId,
+				ref: 'Doctor',
+				autopopulate: true,
+				unique: true,
+			},
+		],
+	},
+	{ timestamps: true }
 	//* Si quisieramos cambiar "hospitals" por "hospitales" al crearse el modelo en mongoDb
 	// , { collection :'hospitales'}
 );

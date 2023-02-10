@@ -28,7 +28,6 @@ export const coreRoutes: Routes = new Routes({
 		hasAdminValidator: true,
 		coreController: coreController.getAll,
 		type: 'get',
-
 	},
 	getById: {
 		route: '/get-by-id/:id',

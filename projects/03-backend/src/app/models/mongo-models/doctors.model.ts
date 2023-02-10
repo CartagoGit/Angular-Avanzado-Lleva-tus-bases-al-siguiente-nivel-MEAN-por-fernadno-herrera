@@ -14,18 +14,26 @@ export const DoctorSchema: Schema<any> = new Schema(
 			ref: 'User',
 			required: true,
 		},
-		user: {
+		name: {
 			type: Schema.Types.ObjectId,
 			ref: 'User',
 			required: true,
 		},
-		hospital: {
-			type: Schema.Types.ObjectId,
-			ref: 'Hospital',
-			required: true,
-		},
-
-		//TODO Añadir usuarios que tienen este medico
+		hospitals: [
+			{
+				type: Schema.Types.ObjectId,
+				ref: 'Hospital',
+				required: true,
+				unique: true,
+			},
+		],
+		patients: [
+			{
+				type: Schema.Types.ObjectId,
+				ref: 'User',
+				unique: true,
+			},
+		],
 	},
 	{ timestamps: true }
 	//* Si quisieramos cambiar "doctors" por "doctores" al crearse el modelo en mongoDb
