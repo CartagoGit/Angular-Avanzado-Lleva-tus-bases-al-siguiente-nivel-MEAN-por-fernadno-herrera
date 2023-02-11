@@ -19,6 +19,7 @@ export const DoctorSchema: Schema<any> = new Schema(
 			unique: true,
 			ref: 'User',
 			required: true,
+			autopopulate: true,
 		},
 		hospitals: [
 			{
@@ -26,6 +27,7 @@ export const DoctorSchema: Schema<any> = new Schema(
 				ref: 'Hospital',
 				required: true,
 				unique: true,
+				autopopulate: true
 			},
 		],
 		patients: [
@@ -33,6 +35,7 @@ export const DoctorSchema: Schema<any> = new Schema(
 				type: Schema.Types.ObjectId,
 				ref: 'User',
 				unique: true,
+				autopopulate: true
 			},
 		],
 	},
