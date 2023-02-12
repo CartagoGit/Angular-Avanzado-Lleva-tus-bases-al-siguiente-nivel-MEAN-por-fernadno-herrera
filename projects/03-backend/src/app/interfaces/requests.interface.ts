@@ -4,7 +4,7 @@
  * @interface requestModifierArrays
  * @typedef {requestModifierArrays}
  */
-export type requestModifierArrays = {
+export type RequestFieldModifierArrays = {
 	[field in string]: {
 		values: any[];
 		options?: {
@@ -19,6 +19,6 @@ export type requestModifierArrays = {
  * @interface fieldValues
  * @typedef {fieldValues}
  */
-export type fieldValues = {
+export type RequestFieldValues = {
 	[field in string]: any[];
 };

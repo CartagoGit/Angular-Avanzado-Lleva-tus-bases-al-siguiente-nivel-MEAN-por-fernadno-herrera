@@ -11,9 +11,7 @@ import { Role } from '../interfaces/roles.interface';
 import { getPayloadFromJwtWithoutVerifiy } from '../helpers/json-web-token.helper';
 import {
 	DoctorModel,
-	DoctorSchema,
 } from '../models/mongo-models/doctors.model';
-import { Document } from 'mongoose';
 
 /**
  * ? Controladores especificos de los metodos para el modelo de usuarios
@@ -82,7 +80,6 @@ export const usersController: {
 		const hospitalsFromUser: any[] = [];
 		for (let doctor of doctorsBD) {
 			for (let hospital of doctor.hospitals) {
-				console.log(hospital);
 				const isHospitalAdded = hospitalsFromUser.some(
 					(hospitalFromUser) => hospitalFromUser.id === hospital.id
 				);

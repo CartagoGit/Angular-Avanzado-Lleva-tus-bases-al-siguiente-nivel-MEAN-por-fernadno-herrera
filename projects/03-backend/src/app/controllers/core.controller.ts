@@ -7,11 +7,12 @@ import { getPayloadFromJwtWithoutVerifiy } from '../helpers/json-web-token.helpe
 import { UserModel } from '../models/mongo-models/user.model';
 import { getSectionFromUrl } from '../helpers/get-model-section.helper';
 import { checkIdInParams } from '../helpers/validator.helper';
-import {
-	requestModifierArrays,
-	fieldValues,
-} from '../interfaces/requests.interface';
 import { basicError } from '../models/error-data.model';
+import { getErrorNotFields } from '../helpers/default-responses.helper';
+import {
+	RequestFieldModifierArrays,
+	RequestFieldValues,
+} from '../interfaces/requests.interface';
 
 /**
  * ? Controladores generales para los metodos que usan todos los modelos
@@ -165,11 +166,14 @@ export const coreController: {
 		 *    }
 		 * }
 		 */
-		const fields: requestModifierArrays = req.body;
-		let fieldsUniques: fieldValues = {};
-		let fieldsNotUniques: fieldValues = {};
+		const fields: RequestFieldModifierArrays = req.body;
+		if (!fields || Object.keys(fields).length === 0)
+			throw getErrorNotFields('add');
+
+		let fieldsUniques: RequestFieldValues = {};
+		let fieldsNotUniques: RequestFieldValues = {};
 		for (let [field, { values, options }] of Object.entries(fields)) {
-			const fieldValues: fieldValues = { [field]: values };
+			const fieldValues: RequestFieldValues = { [field]: values };
 			if (!options || options?.is_unique)
 				fieldsUniques = { ...fieldsUniques, ...fieldValues };
 			else fieldsNotUniques = { ...fieldsNotUniques, ...fieldValues };
@@ -186,23 +190,29 @@ export const coreController: {
 		return {
 			data_before,
 			data,
-			model,
-			info: 'Items added from list ',
+			info: 'Items added into list',
 			status_code: 201,
 		};
 	},
 	removeFromList: async (req) => {
-		// TODO
 		checkIdInParams(req);
-		const fields: string[] = req.body.fields;
-		const values: any[] = req.body.values;
-		const id = req.params['id'];
+		const fields: RequestFieldValues = req.body;
+		if (!fields || Object.keys(fields).length === 0)
+			throw getErrorNotFields('remove');
 
-		const model = await getModelSection(req).findById(id);
+		const id = req.params['id'];
+		const model = getModelSection(req);
+		const data_before = await model.findById(id);
+		const data = await model.findByIdAndUpdate(
+			id,
+			{ $pullAll: fields },
+			{ new: true }
+		);
 
 		return {
-			data: 'algo',
-			info: 'Items removed from list ',
+			data_before,
+			data,
+			info: 'Items removed from list',
 			status_code: 201,
 		};
 	},

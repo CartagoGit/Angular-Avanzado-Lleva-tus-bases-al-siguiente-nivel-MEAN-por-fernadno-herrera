@@ -168,17 +168,32 @@ export const getMessageErrorValidation = (
 	)}`;
 };
 
-
 /**
  * ? Devuelve el error si se necesario ser admin
  * @returns {basicError}
  */
-export const getErrorNotAdmin = () : basicError => {
+export const getErrorNotAdmin = (): basicError => {
 	return {
 		message: 'Must be Admin to use this route',
 		status_code: 401,
 		reason: 'admin required',
 	} as basicError;
+};
+
+
+/**
+ * ? Devuelve el mensaje de error cuando no existen campos en el body
+ * @param {('modify' | 'add' | 'remove')} [typeModifyFields='modify']
+ * @returns {basicError}
+ */
+export const getErrorNotFields = (
+	typeModifyFields: 'modify' | 'add' | 'remove' = 'modify'
+): basicError => {
+	return {
+		message: `There are not fields to ${typeModifyFields} in body request`,
+		status_code: 400,
+		reason: 'no fields in body',
+	};
 };
 
 /**
