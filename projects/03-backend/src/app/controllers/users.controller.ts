@@ -17,12 +17,16 @@ import { DoctorModel } from '../models/mongo-models/doctors.model';
 	post: (req: Request) => Promise<any>;
 	put: (req: Request) => Promise<any>;
 	isDoctor: (req: Request) => Promise<any>;
+	getDoctors: (req: Request) => Promise<any>;
+	getHospitals: (req: Request) => Promise<any>;
 }}
  */
 export const usersController: {
 	post: (req: Request) => Promise<any>;
 	put: (req: Request) => Promise<any>;
 	isDoctor: (req: Request) => Promise<any>;
+	getDoctors: (req: Request) => Promise<any>;
+	getHospitals: (req: Request) => Promise<any>;
 } = {
 	post: async (req) => {
 		//* Encriptamos la contraseña
@@ -54,6 +58,8 @@ export const usersController: {
 
 		return req.body;
 	},
+
+	//* Especificos de esta BD de usuarios
 	isDoctor: async (req) => {
 		checkIdInParams(req);
 		const doctorBD = await DoctorModel.find({ user: req.params['id'] });
@@ -61,4 +67,6 @@ export const usersController: {
 			!!doctorBD && Array.isArray(doctorBD) && doctorBD.length !== 0;
 		return { data: { is_doctor: isDoctor }, status_code: 200 };
 	},
+	getDoctors: async (req) => {},
+	getHospitals: async (req) => {},
 };

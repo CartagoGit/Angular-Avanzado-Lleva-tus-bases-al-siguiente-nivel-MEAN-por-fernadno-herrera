@@ -21,6 +21,7 @@ export const usersRoutes: Routes = new Routes({
 		middlewares: usersMiddlewares.post,
 		hasAdminValidator: false,
 		hasJwtValidator: false,
+		hasSameUserValidator: true,
 	},
 	put: {
 		...coreRoutes.routes['put'],
@@ -34,10 +35,23 @@ export const usersRoutes: Routes = new Routes({
 		hasAdminValidator: false,
 		hasSameUserValidator: true,
 	},
+	//* Especificos de esta BD
 	isDoctor: {
 		route: '/is-doctor/:id',
 		type: 'get',
 		modelController: usersController.isDoctor,
+		hasAdminValidator: false,
+	},
+	getDoctors: {
+		route: '/get-doctors/:id',
+		type: 'get',
+		modelController: usersController.getDoctors,
+		hasAdminValidator: false,
+	},
+	getHospitals: {
+		route: '/get-hospitals/:id',
+		type: 'get',
+		modelController: usersController.getHospitals,
 		hasAdminValidator: false,
 	},
 });

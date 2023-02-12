@@ -19,5 +19,8 @@ export const authRoutes: Routes = new Routes({
 		middlewares: authMiddlewares.login,
 		coreController: authController.login,
 		type: 'post',
+		hasAdminValidator: false,
+		hasSameUserValidator: false,
+		hasJwtValidator: false,
 	},
 });
