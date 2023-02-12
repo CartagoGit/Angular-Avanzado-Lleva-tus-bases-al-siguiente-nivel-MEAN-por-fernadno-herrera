@@ -7,7 +7,10 @@ import { getPayloadFromJwtWithoutVerifiy } from '../helpers/json-web-token.helpe
 import { UserModel } from '../models/mongo-models/user.model';
 import { getSectionFromUrl } from '../helpers/get-model-section.helper';
 import { checkIdInParams } from '../helpers/validator.helper';
-import { requestModifierArrays } from '../interfaces/requests.interface';
+import {
+	requestModifierArrays,
+	fieldValues,
+} from '../interfaces/requests.interface';
 import { basicError } from '../models/error-data.model';
 
 /**
@@ -141,25 +144,48 @@ export const coreController: {
 	},
 	addInList: async (req) => {
 		checkIdInParams(req);
-		const fields: requestModifierArrays[] = req.body;
-		console.log(fields);
-		if (!fields || !Array.isArray(fields) || fields.length === 0) {
-			throw {
-				status_code: 304,
-				reason: 'not valid body',
-				message: 'The request Body is not exist or is not an Array',
-			} as basicError;
+		/**
+		 * * Ejemplo de request:
+		 * {
+		 *   "patients": {
+		 *       "values": [
+		 *           "63e8ddd633084649421d18ce"
+		 *       ],"options": {
+		 *           "is_unique": false
+		 * * <---- Por defecto es true si no existe 'options.is_unique' evitando que se repitan parametros que sean unicos en el array
+		 *       }
+		 *   },
+		 *   "hospitals": {
+		 *       "values": [
+		 *           "63e919fdb0ddb137c04deb67"
+		 *        ],
+		 *        "options": {
+		 *           "is_unique": false
+		 *         }
+		 *    }
+		 * }
+		 */
+		const fields: requestModifierArrays = req.body;
+		let fieldsUniques: fieldValues = {};
+		let fieldsNotUniques: fieldValues = {};
+		for (let [field, { values, options }] of Object.entries(fields)) {
+			const fieldValues: fieldValues = { [field]: values };
+			if (!options || options?.is_unique)
+				fieldsUniques = { ...fieldsUniques, ...fieldValues };
+			else fieldsNotUniques = { ...fieldsNotUniques, ...fieldValues };
 		}
-		// if()
 		const id = req.params['id'];
-		const model = await getModelSection(req).findByIdAndUpdate(
+		const model = getModelSection(req);
+		const data_before = await model.findById(id);
+
+		const data = await model.findByIdAndUpdate(
 			id,
-			{ $push: fields },
+			{ $push: fieldsNotUniques, $addToSet: fieldsUniques },
 			{ new: true }
 		);
-		console.log(model, fields);
 		return {
-			data: 'algo',
+			data_before,
+			data,
 			model,
 			info: 'Items added from list ',
 			status_code: 201,
@@ -171,6 +197,7 @@ export const coreController: {
 		const fields: string[] = req.body.fields;
 		const values: any[] = req.body.values;
 		const id = req.params['id'];
+
 		const model = await getModelSection(req).findById(id);
 
 		return {
