@@ -7,7 +7,6 @@ import { getPayloadFromJwtWithoutVerifiy } from '../helpers/json-web-token.helpe
 import { UserModel } from '../models/mongo-models/user.model';
 import { getSectionFromUrl } from '../helpers/get-model-section.helper';
 import { checkIdInParams } from '../helpers/validator.helper';
-import { basicError } from '../models/error-data.model';
 import { getErrorNotFields } from '../helpers/default-responses.helper';
 import {
 	RequestFieldModifierArrays,
