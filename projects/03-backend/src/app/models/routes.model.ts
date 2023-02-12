@@ -95,9 +95,9 @@ export class Routes {
 		const {
 			modelController = async () => {},
 			coreController,
-			hasJwtValidator = false,
-			hasAdminValidator = false,
-			hasSameUserValidator = false,
+			hasJwtValidator = true,
+			hasAdminValidator = true,
+			hasSameUserValidator = true,
 			type,
 		} = props;
 		//* Subscribe para realizar todos los metodos antes de realizar la respuesta

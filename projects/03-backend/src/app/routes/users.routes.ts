@@ -26,16 +26,18 @@ export const usersRoutes: Routes = new Routes({
 		...coreRoutes.routes['put'],
 		modelController: usersController.put,
 		middlewares: usersMiddlewares.put,
+		hasAdminValidator: false,
 		hasSameUserValidator: true,
 	},
 	delete: {
 		...coreRoutes.routes['delete'],
+		hasAdminValidator: false,
 		hasSameUserValidator: true,
 	},
 	isDoctor: {
-		route: '/is-doctor',
-		hasSameUserValidator: true,
+		route: '/is-doctor/:id',
 		type: 'get',
-		modelController: usersController.isDoctor,
+		coreController: usersController.isDoctor,
+		hasAdminValidator: false,
 	},
 });

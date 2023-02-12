@@ -50,7 +50,7 @@ export const validateAdmin = async (
 ): Promise<{ ok: boolean; id: string }> => {
 	const userDB = await UserModel.findById(id);
 	if (checkErrorAdmin && (!userDB || !userDB.role)) throw getErrorNotAdmin();
-	return { ok: userDB.role === 'ADMIN_ROLE', id };
+	return { ok: userDB?.role === 'ADMIN_ROLE' || false, id };
 };
 
 /**
