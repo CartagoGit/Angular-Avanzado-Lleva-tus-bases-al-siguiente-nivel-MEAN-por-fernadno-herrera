@@ -5,6 +5,7 @@ import { cleanValidatorField } from '../helpers/validator.helper';
 import { getNotFoundMessage } from '../helpers/get-model-section.helper';
 import { getEncryptHash } from '../helpers/encrypt.helper';
 import { Role } from '../interfaces/roles.interface';
+import { getPayloadFromJwtWithoutVerifiy } from '../helpers/json-web-token.helper';
 
 /**
  * ? Controladores especificos de los metodos para el modelo de usuarios
@@ -23,7 +24,7 @@ export const usersController: {
 		//* Encriptamos la contraseña
 		const { password } = req.body;
 		req.body.password = getEncryptHash(password);
-		req.body.role  = 'ADMIN_ROLE' as Role;
+		req.body.role = 'ADMIN_ROLE' as Role;
 
 		return req.body;
 	},
@@ -36,8 +37,12 @@ export const usersController: {
 			cleanValidatorField(req, 'email');
 			delete req.body.email;
 		}
+		if (!!req.body.password)
+			req.body.password = getEncryptHash(req.body.password);
 
-		if (req.body.role && (userDB.role as Role) !== 'ADMIN_ROLE') {
+		const { id: idModifier } = getPayloadFromJwtWithoutVerifiy(req);
+		const userModifierDB = await UserModel.findById(idModifier);
+		if (req.body.role && (userModifierDB.role as Role) !== 'ADMIN_ROLE') {
 			removeParamAndSetInfo(req, 'role');
 			req.body.info.role += ' if you have not ADMIN_ROLE';
 		}

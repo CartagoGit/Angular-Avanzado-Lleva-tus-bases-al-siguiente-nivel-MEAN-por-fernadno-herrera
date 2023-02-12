@@ -22,13 +22,13 @@ export const initMongo = () => {
 	//* Modificamos la llamada a los metodos para que no devuelva la version y la '_id' la devuelva como 'id'
 	mongoose.set('toJSON', {
 		transform: function (_doc, modelObject) {
-			const { __v, _id, password, ...rest } = modelObject;
+			const { __v, _id,...rest } = modelObject;
 			return { ...rest, id: _id };
 		},
 	});
 	mongoose.set('toObject', {
 		transform: function (_doc, modelObject) {
-			const { __v, _id, password, ...rest } = modelObject;
+			const { __v, _id,  ...rest } = modelObject;
 			return { ...rest, id: _id };
 		},
 	});
