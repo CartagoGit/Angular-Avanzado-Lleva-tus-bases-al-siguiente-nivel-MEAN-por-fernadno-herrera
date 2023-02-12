@@ -152,17 +152,24 @@ export const getStringErrorUniqueParam = (param: {}): string => {
  */
 export const getMessageErrorValidation = (
 	key: string,
-	requisites: { unique?: boolean; required?: boolean; formated?: boolean } = {
+	requisites: {
+		unique?: boolean;
+		required?: boolean;
+		formated?: boolean;
+		mongoId?: boolean;
+	} = {
 		unique: false,
 		required: false,
 		formated: false,
+		mongoId: false,
 	}
 ): string => {
-	const { required, formated, unique } = requisites;
+	const { required, formated, unique, mongoId } = requisites;
 	const listRequisites: string[] = [];
 	!!required && listRequisites.push('is required');
 	!!formated && listRequisites.push('must be formated');
 	!!unique && listRequisites.push('must be unique');
+	!!mongoId && listRequisites.push('must be a valid Mongo Object Id');
 	return `Param '${key}' ${new Intl.ListFormat('en-GB').format(
 		listRequisites
 	)}`;
@@ -179,7 +186,6 @@ export const getErrorNotAdmin = (): basicError => {
 		reason: 'admin required',
 	} as basicError;
 };
-
 
 /**
  * ? Devuelve el mensaje de error cuando no existen campos en el body

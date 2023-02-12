@@ -7,9 +7,13 @@ import { getMessageErrorValidation } from '../helpers/default-responses.helper';
  */
 export const doctorsMiddlewares: { post: any[] } = {
 	post: [
-		check('user', getMessageErrorValidation('user', { required: true }))
+		check(
+			'user',
+			getMessageErrorValidation('user', { required: true, mongoId: true })
+		)
+			.isMongoId()
 			.not()
 			.isEmpty(),
-
+			
 	],
 };
