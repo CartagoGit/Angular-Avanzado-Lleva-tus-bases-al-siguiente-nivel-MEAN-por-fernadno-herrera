@@ -16,4 +16,8 @@ export const doctorsRoutes: Routes = new Routes({
 		...coreRoutes.routes['post'],
 		middlewares: doctorsMiddlewares.post,
 	},
+	addInList: {
+		...coreRoutes.routes['addInList'],
+		middlewares: doctorsMiddlewares.addInList,
+	},
 });

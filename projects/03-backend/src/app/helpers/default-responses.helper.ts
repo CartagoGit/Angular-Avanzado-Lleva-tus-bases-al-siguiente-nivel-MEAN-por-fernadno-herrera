@@ -157,19 +157,22 @@ export const getMessageErrorValidation = (
 		required?: boolean;
 		formated?: boolean;
 		mongoId?: boolean;
+		array?: boolean;
 	} = {
 		unique: false,
 		required: false,
 		formated: false,
 		mongoId: false,
+		array: false,
 	}
 ): string => {
-	const { required, formated, unique, mongoId } = requisites;
+	const { required, formated, unique, mongoId, array } = requisites;
 	const listRequisites: string[] = [];
 	!!required && listRequisites.push('is required');
 	!!formated && listRequisites.push('must be formated');
 	!!unique && listRequisites.push('must be unique');
 	!!mongoId && listRequisites.push('must be a valid Mongo Object Id');
+	!!array && listRequisites.push('must be an Array');
 	return `Param '${key}' ${new Intl.ListFormat('en-GB').format(
 		listRequisites
 	)}`;

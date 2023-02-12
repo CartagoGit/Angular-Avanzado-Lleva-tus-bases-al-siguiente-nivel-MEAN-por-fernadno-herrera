@@ -5,7 +5,7 @@ import { getMessageErrorValidation } from '../helpers/default-responses.helper';
  * ? Middlewares especificos para el modelo de usuarios
  * @type {{ post: any[]}}
  */
-export const doctorsMiddlewares: { post: any[] } = {
+export const doctorsMiddlewares: { post: any[]; addInList: any[] } = {
 	post: [
 		check(
 			'user',
@@ -14,6 +14,23 @@ export const doctorsMiddlewares: { post: any[] } = {
 			.isMongoId()
 			.not()
 			.isEmpty(),
-			
+	],
+	addInList: [
+		check(
+			'patients.values',
+			getMessageErrorValidation('patients', { array: true })
+		).isArray(),
+		check(
+			'hospitals.values',
+			getMessageErrorValidation('hospitals', { array: true })
+		).isArray(),
+		check(
+			'patients.values.*',
+			getMessageErrorValidation('patients', { mongoId: true })
+		).isMongoId(),
+		check(
+			'hospitals.values.*',
+			getMessageErrorValidation('patients', { mongoId: true })
+		).isMongoId(),
 	],
 };
