@@ -1,5 +1,6 @@
 import { Model, model, Schema } from 'mongoose';
 import autopopulate from 'mongoose-autopopulate';
+import { Role } from '../../interfaces/roles.interface';
 
 /**
  * ? Crea el esquema del modelo de Usuarios en MongoDb
@@ -26,21 +27,12 @@ export const UserSchema: Schema<any> = new Schema(
 		role: {
 			type: String,
 			required: true,
-			default: 'USER_ROLE',
+			default : 'USER_ROLE' as Role,
 		},
 		google: {
 			type: Boolean,
 			default: false,
 		},
-		doctors: [
-			{
-				type: Schema.Types.ObjectId,
-				ref: 'Doctor',
-				unique: true,
-				default: [],
-				autopopulate: true,
-			},
-		],
 	},
 	{ timestamps: true } //* Añade createdAt y updatedAt
 );

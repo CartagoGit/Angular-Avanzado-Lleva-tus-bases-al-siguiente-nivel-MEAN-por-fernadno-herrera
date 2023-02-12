@@ -18,14 +18,6 @@ export const HospitalSchema: Schema<any> = new Schema(
 			ref: 'User',
 			required: true,
 		},
-		doctors: [
-			{
-				type: Schema.Types.ObjectId,
-				ref: 'Doctor',
-				autopopulate: true,
-				unique: true,
-			},
-		],
 	},
 	{ timestamps: true }
 	//* Si quisieramos cambiar "hospitals" por "hospitales" al crearse el modelo en mongoDb

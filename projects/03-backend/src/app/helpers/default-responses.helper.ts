@@ -2,7 +2,7 @@ import { Response, Request } from 'express';
 import { LogType } from '../interfaces/logs.interfaces';
 import { getCapitalize, log, logError } from './logs.helper';
 import { DefaultResponseProps } from '../interfaces/response.interface';
-import { ErrorData } from '../models/error-data.model';
+import { basicError, ErrorData } from '../models/error-data.model';
 import { mongoState } from '../db/init-mongo';
 import { config } from '../../environments/config';
 import {
@@ -166,6 +166,19 @@ export const getMessageErrorValidation = (
 	return `Param '${key}' ${new Intl.ListFormat('en-GB').format(
 		listRequisites
 	)}`;
+};
+
+
+/**
+ * ? Devuelve el error si se necesario ser admin
+ * @returns {basicError}
+ */
+export const getErrorNotAdmin = () : basicError => {
+	return {
+		message: 'Must be Admin to use this route',
+		status_code: 401,
+		reason: 'admin required',
+	} as basicError;
 };
 
 /**

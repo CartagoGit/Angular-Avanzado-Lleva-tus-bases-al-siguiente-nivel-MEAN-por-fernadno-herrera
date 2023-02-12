@@ -2,6 +2,7 @@ import { Request } from 'express';
 import { validationResult } from 'express-validator';
 import { ErrorData, basicError } from '../models/error-data.model';
 import { UserModel } from '../models/mongo-models/user.model';
+import { getErrorNotAdmin } from './default-responses.helper';
 
 /**
  * ? Elimina el campo del chekeo de validacion de errores haciendo que pase la validación
@@ -46,6 +47,7 @@ export const validateAdmin = async (
 	id: string
 ): Promise<{ ok: boolean; id: string }> => {
 	const userDB = await UserModel.findById(id);
+	if(!userDB || !userDB.role) throw getErrorNotAdmin();
 	return { ok: userDB.role === 'ADMIN_ROLE', id };
 };
 

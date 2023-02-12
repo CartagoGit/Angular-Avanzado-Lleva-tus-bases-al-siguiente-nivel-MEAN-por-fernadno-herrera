@@ -10,6 +10,7 @@ import {
 } from '../helpers/json-web-token.helper';
 import { basicError } from '../models/error-data.model';
 import { UserModel } from '../models/mongo-models/user.model';
+import { getSectionFromUrl } from '../helpers/get-model-section.helper';
 
 /**
  * ? Controladores generales para los metodos que usan todos los modelos
@@ -81,9 +82,12 @@ export const coreController: {
 		};
 	},
 	post: async (req) => {
-		const { id } = getPayloadFromJwtWithoutVerifiy(req);
-		const creator: typeof UserModel | null = await UserModel.findById(id);
-		req.body['user_creator'] = creator;
+		const section = getSectionFromUrl(req);
+		if (section !== 'users') {
+			const { id } = getPayloadFromJwtWithoutVerifiy(req);
+			const creator: typeof UserModel | null = await UserModel.findById(id);
+			req.body['user_creator'] = creator;
+		}
 		const model = getNewModelSection(req);
 		await model.save();
 		// const { token } = await createJWT({ id: model.id });

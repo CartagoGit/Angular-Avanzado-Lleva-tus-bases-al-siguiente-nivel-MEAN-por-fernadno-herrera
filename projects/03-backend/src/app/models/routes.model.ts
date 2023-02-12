@@ -15,6 +15,7 @@ import {
 	validateSameUser,
 } from '../helpers/validator.helper';
 import { validateJWT, getErrorJWT } from '../helpers/json-web-token.helper';
+import { getErrorNotAdmin } from '../helpers/default-responses.helper';
 
 export interface RoutesProps {
 	route: string;
@@ -119,18 +120,13 @@ export class Routes {
 				}),
 				concatMap(({ ok: isAdminOrSameUser }) => {
 					if (!isAdminOrSameUser)
-						throw {
-							message: 'Must be Admin to use this route',
-							status_code: 401,
-							reason: 'admin required',
-						} as basicError;
+						throw getErrorNotAdmin();
 					//* Nos subscribimos al controlador especifico del modelo
 					return from(modelController(req, res, next));
 				}),
 				concatMap((respModel) => {
 					//* Pasamos las validaciones de los campos de los parametros
 					const errors = checkValidatorFields(req);
-
 					if (!!errors) throw errors;
 					//* Si pasa el controlador y las validaciones,
 					//* nos subscribimos al controlador core para realizar los cambios pertinentes
