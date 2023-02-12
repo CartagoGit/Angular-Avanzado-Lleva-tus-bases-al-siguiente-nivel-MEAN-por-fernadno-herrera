@@ -1,7 +1,10 @@
 import { Request } from 'express';
 import { UserModel } from '../models/mongo-models/user.model';
 import { removeParamAndSetInfo } from '../helpers/default-responses.helper';
-import { cleanValidatorField } from '../helpers/validator.helper';
+import {
+	cleanValidatorField,
+	checkIdInParams,
+} from '../helpers/validator.helper';
 import { getNotFoundMessage } from '../helpers/get-model-section.helper';
 import { getEncryptHash } from '../helpers/encrypt.helper';
 import { Role } from '../interfaces/roles.interface';
@@ -52,9 +55,10 @@ export const usersController: {
 		return req.body;
 	},
 	isDoctor: async (req) => {
-		// TODO Si el usuario no es admin o no es el mismo usuario que intenta eliminar, no debe poder elimianrlo
-		const isDoctor = !!(await DoctorModel.find({ user: req.body.id }));
-		console.log(isDoctor);
+		checkIdInParams(req);
+		const doctorBD = await DoctorModel.find({ user: req.params['id'] });
+		const isDoctor =
+			!!doctorBD && Array.isArray(doctorBD) && doctorBD.length !== 0;
 		return { data: { is_doctor: isDoctor }, status_code: 200 };
 	},
 };
