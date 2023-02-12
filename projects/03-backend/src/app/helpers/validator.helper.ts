@@ -64,7 +64,6 @@ export const validateSameUser = async (
 	req: Request,
 	id: string
 ): Promise<{ ok: boolean; id: string }> => {
-	checkIdInParams(req);
 	const { ok: isAdmin } = await validateAdmin(id, false);
 	if ((!req.params['id'] || req.params['id'] !== id) && !isAdmin)
 		throw {

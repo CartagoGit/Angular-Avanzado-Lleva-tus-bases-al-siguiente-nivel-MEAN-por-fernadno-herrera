@@ -40,6 +40,13 @@ export const coreController: {
 		return { data, status_code: 200 };
 	},
 	getByQuery: async (req) => {
+		/**
+		 * * include : boolean -> buscar exacto o que incluya el texto
+		 * * skip : number -> paginando desde ...
+		 * * limit : number -> paginando hasta...
+		 * * sort : string -> parametro a ordenar
+		 * * order : string | number -> // criterio de orden asc, desc, ascending, descending, 1, or -1
+		 */
 		if (req.query['include'] === undefined) req.query['include'] = 'true';
 		const model = getModelSection(req);
 		const paramsInModel = Object.keys(model.schema.obj);

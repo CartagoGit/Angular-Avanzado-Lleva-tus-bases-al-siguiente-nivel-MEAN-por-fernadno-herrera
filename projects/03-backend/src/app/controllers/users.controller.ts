@@ -6,6 +6,7 @@ import { getNotFoundMessage } from '../helpers/get-model-section.helper';
 import { getEncryptHash } from '../helpers/encrypt.helper';
 import { Role } from '../interfaces/roles.interface';
 import { getPayloadFromJwtWithoutVerifiy } from '../helpers/json-web-token.helper';
+import { DoctorModel } from '../models/mongo-models/doctors.model';
 
 /**
  * ? Controladores especificos de los metodos para el modelo de usuarios
@@ -52,6 +53,8 @@ export const usersController: {
 	},
 	isDoctor: async (req) => {
 		// TODO Si el usuario no es admin o no es el mismo usuario que intenta eliminar, no debe poder elimianrlo
-		return req.body
+		const isDoctor = !!(await DoctorModel.find({ user: req.body.id }));
+		console.log(isDoctor);
+		return { data: { is_doctor: isDoctor }, status_code: 200 };
 	},
 };

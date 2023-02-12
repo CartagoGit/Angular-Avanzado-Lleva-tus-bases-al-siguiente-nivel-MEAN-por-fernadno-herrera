@@ -119,8 +119,7 @@ export class Routes {
 						: of(respValidatorJWT);
 				}),
 				concatMap(({ ok: isAdminOrSameUser }) => {
-					if (!isAdminOrSameUser)
-						throw getErrorNotAdmin();
+					if (!isAdminOrSameUser) throw getErrorNotAdmin();
 					//* Nos subscribimos al controlador especifico del modelo
 					return from(modelController(req, res, next));
 				}),
@@ -130,12 +129,14 @@ export class Routes {
 					if (!!errors) throw errors;
 					//* Si pasa el controlador y las validaciones,
 					//* nos subscribimos al controlador core para realizar los cambios pertinentes
-					return from(coreController!(req, res, next)).pipe(
-						map((respCore) => ({
-							info: respModel?.info || undefined,
-							...respCore,
-						}))
-					);
+					return !!coreController
+						? from(coreController!(req, res, next)).pipe(
+								map((respCore) => ({
+									info: respModel?.info || undefined,
+									...respCore,
+								}))
+						  )
+						: of(respModel);
 				}),
 				catchError((error) => {
 					//* Capturamos cualquier posible error
@@ -156,9 +157,13 @@ export class Routes {
 			.subscribe({
 				next: (respController) => {
 					const logType = type?.toUpperCase() as LogType;
-					const hasData = !!respController.data || !!respController.model;
+					const hasData =
+						typeof respController?.data === 'boolean' ||
+						!!respController?.data ||
+						typeof respController?.model === 'boolean' ||
+						!!respController?.model;
 					//* Si la respuesta de los controladores, contiene ererores...
-					if (!!respController.error) {
+					if (!!respController?.error) {
 						defaultErrorResponse(
 							req,
 							res,
@@ -190,9 +195,9 @@ export class Routes {
 						return;
 					}
 					if (
-						(Array.isArray(respController.data) &&
+						(Array.isArray(respController?.data) &&
 							respController.data.length === 0) ||
-						(Array.isArray(respController.model) &&
+						(Array.isArray(respController?.model) &&
 							respController.model.length === 0)
 					) {
 						respController.info = 'NOT FOUND DATA';

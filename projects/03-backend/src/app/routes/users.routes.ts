@@ -37,7 +37,7 @@ export const usersRoutes: Routes = new Routes({
 	isDoctor: {
 		route: '/is-doctor/:id',
 		type: 'get',
-		coreController: usersController.isDoctor,
+		modelController: usersController.isDoctor,
 		hasAdminValidator: false,
 	},
 });
