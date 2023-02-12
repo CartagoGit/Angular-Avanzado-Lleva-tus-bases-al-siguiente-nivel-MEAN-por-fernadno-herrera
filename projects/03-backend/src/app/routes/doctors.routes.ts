@@ -20,4 +20,8 @@ export const doctorsRoutes: Routes = new Routes({
 		...coreRoutes.routes['addInList'],
 		middlewares: doctorsMiddlewares.addInList,
 	},
+	removeFromList: {
+		...coreRoutes.routes['removeFromList'],
+		middlewares: doctorsMiddlewares.removeFromList
+	}
 });
