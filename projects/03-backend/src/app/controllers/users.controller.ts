@@ -12,13 +12,13 @@ import { getPayloadFromJwtWithoutVerifiy } from '../helpers/json-web-token.helpe
  * @type {{
 	post: (req: Request) => Promise<any>;
 	put: (req: Request) => Promise<any>;
-	delete: (req: Request) => Promise<any>;
+	isDoctor: (req: Request) => Promise<any>;
 }}
  */
 export const usersController: {
 	post: (req: Request) => Promise<any>;
 	put: (req: Request) => Promise<any>;
-	delete: (req: Request) => Promise<any>;
+	isDoctor: (req: Request) => Promise<any>;
 } = {
 	post: async (req) => {
 		//* Encriptamos la contraseña
@@ -50,7 +50,8 @@ export const usersController: {
 
 		return req.body;
 	},
-	delete: async (req) => {
+	isDoctor: async (req) => {
 		// TODO Si el usuario no es admin o no es el mismo usuario que intenta eliminar, no debe poder elimianrlo
+		return req.body
 	},
 };

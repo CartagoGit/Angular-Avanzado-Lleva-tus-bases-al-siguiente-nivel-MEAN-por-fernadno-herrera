@@ -20,7 +20,7 @@ export const usersRoutes: Routes = new Routes({
 		//* Añadimos middlewares especificos para los usuarios
 		middlewares: usersMiddlewares.post,
 		hasAdminValidator: false,
-		hasJwtValidator: false
+		hasJwtValidator: false,
 	},
 	put: {
 		...coreRoutes.routes['put'],
@@ -28,6 +28,14 @@ export const usersRoutes: Routes = new Routes({
 		middlewares: usersMiddlewares.put,
 		hasSameUserValidator: true,
 	},
-
+	delete: {
+		...coreRoutes.routes['delete'],
+		hasSameUserValidator: true,
+	},
+	isDoctor: {
+		route: '/is-doctor',
+		hasSameUserValidator: true,
+		type: 'get',
+		modelController: usersController.isDoctor,
+	},
 });
-

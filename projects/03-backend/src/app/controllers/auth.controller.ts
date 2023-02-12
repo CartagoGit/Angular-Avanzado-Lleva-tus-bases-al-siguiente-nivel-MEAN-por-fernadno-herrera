@@ -19,11 +19,9 @@ export const authController: {
 		const userDB = await UserModel.findOne({ email });
 		const errorMsg = { message: getNotFoundMessage(req), status_code: 404 };
 		if (!userDB) throw errorMsg;
-console.log(password, userDB.password);
 		//* Verificamos si el password es el del usuario de dicho email
 		const validPassword = bcrypt.compareSync(password, userDB.password);
 		if (!validPassword) throw errorMsg;
-		console.log(userDB);
 
 		// * Generamos el Json Web Token
 		const id = userDB.id;
