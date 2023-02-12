@@ -10,6 +10,7 @@ import { getErrorNotAdmin } from './default-responses.helper';
  * @param {string} field
  */
 export const cleanValidatorField = (req: Request, field: string) => {
+	if (!(req as any)['express-validator#contexts']) return;
 	(req as any)['express-validator#contexts'] = (
 		(req as any)['express-validator#contexts'] as any[]
 	).filter((value) => value.fields[0] !== field);
@@ -47,7 +48,7 @@ export const validateAdmin = async (
 	id: string
 ): Promise<{ ok: boolean; id: string }> => {
 	const userDB = await UserModel.findById(id);
-	if(!userDB || !userDB.role) throw getErrorNotAdmin();
+	if (!userDB || !userDB.role) throw getErrorNotAdmin();
 	return { ok: userDB.role === 'ADMIN_ROLE', id };
 };
 
