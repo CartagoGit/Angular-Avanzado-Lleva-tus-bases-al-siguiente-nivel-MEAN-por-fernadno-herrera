@@ -7,28 +7,27 @@ import autopopulate from 'mongoose-autopopulate';
 //* Aplicamos autopopulate a todo mongoose
 mongoose.plugin(autopopulate, { maxDepth: 5 });
 
-
 /**
  * ? Establece la conexion con MongoDB
-*/
+ */
 export const initMongo = () => {
 	//* Permite querys exactos y elimina el warning de deprecacion de versiones antiguas de Mongoose
 	mongoose.set('strictQuery', false);
 
 	//* Añadimos creacion y modificacion de fechas en los esquemas
-	mongoose.set('timestamps.createdAt.immutable', true)
+	mongoose.set('timestamps.createdAt.immutable', true);
 	// mongoose.set('')
 
 	//* Modificamos la llamada a los metodos para que no devuelva la version y la '_id' la devuelva como 'id'
 	mongoose.set('toJSON', {
 		transform: function (_doc, modelObject) {
-			const { __v, _id,...rest } = modelObject;
+			const { __v, _id, pasword, ...rest } = modelObject;
 			return { ...rest, id: _id };
 		},
 	});
 	mongoose.set('toObject', {
 		transform: function (_doc, modelObject) {
-			const { __v, _id,  ...rest } = modelObject;
+			const { __v, _id, password, ...rest } = modelObject;
 			return { ...rest, id: _id };
 		},
 	});

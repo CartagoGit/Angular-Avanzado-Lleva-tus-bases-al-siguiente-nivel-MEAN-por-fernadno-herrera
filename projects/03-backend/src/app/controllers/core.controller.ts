@@ -7,6 +7,8 @@ import { getPayloadFromJwtWithoutVerifiy } from '../helpers/json-web-token.helpe
 import { UserModel } from '../models/mongo-models/user.model';
 import { getSectionFromUrl } from '../helpers/get-model-section.helper';
 import { checkIdInParams } from '../helpers/validator.helper';
+import { requestModifierArrays } from '../interfaces/requests.interface';
+import { basicError } from '../models/error-data.model';
 
 /**
  * ? Controladores generales para los metodos que usan todos los modelos
@@ -98,7 +100,6 @@ export const coreController: {
 		}
 		const model = getNewModelSection(req);
 		await model.save();
-		// const { token } = await createJWT({ id: model.id });
 
 		return { model, status_code: 201 };
 	},
@@ -140,27 +141,38 @@ export const coreController: {
 	},
 	addInList: async (req) => {
 		checkIdInParams(req);
-		const fields: string[] = req.body.fields;
-		const values: any[] = req.body.values;
-		if(fields.length === 0 || values.length ===0 ){
-			
+		const fields: requestModifierArrays[] = req.body;
+		console.log(fields);
+		if (!fields || !Array.isArray(fields) || fields.length === 0) {
+			throw {
+				status_code: 304,
+				reason: 'not valid body',
+				message: 'The request Body is not exist or is not an Array',
+			} as basicError;
 		}
+		// if()
 		const id = req.params['id'];
-		const model = await getModelSection(req).findById(id)
-		console.log(fields, values);
+		const model = await getModelSection(req).findByIdAndUpdate(
+			id,
+			{ $push: fields },
+			{ new: true }
+		);
+		console.log(model, fields);
 		return {
 			data: 'algo',
+			model,
 			info: 'Items added from list ',
 			status_code: 201,
 		};
 	},
 	removeFromList: async (req) => {
+		// TODO
 		checkIdInParams(req);
 		const fields: string[] = req.body.fields;
 		const values: any[] = req.body.values;
 		const id = req.params['id'];
-		const model = await getModelSection(req).findById(id)
-		console.log(fields, values);
+		const model = await getModelSection(req).findById(id);
+
 		return {
 			data: 'algo',
 			info: 'Items removed from list ',

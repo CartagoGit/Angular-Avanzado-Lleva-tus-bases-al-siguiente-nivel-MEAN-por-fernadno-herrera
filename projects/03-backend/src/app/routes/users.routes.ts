@@ -21,7 +21,7 @@ export const usersRoutes: Routes = new Routes({
 		middlewares: usersMiddlewares.post,
 		hasAdminValidator: false,
 		hasJwtValidator: false,
-		hasSameUserValidator: true,
+		hasSameUserValidator: false,
 	},
 	put: {
 		...coreRoutes.routes['put'],

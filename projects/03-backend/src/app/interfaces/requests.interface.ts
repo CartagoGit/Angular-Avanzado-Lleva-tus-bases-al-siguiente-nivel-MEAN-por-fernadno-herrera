@@ -1,7 +1,11 @@
-import { Schema } from 'mongoose';
 
+
+/**
+ * ? Valores a enviar en la request del body al añadir datos en parametros que sean Arrays
+ * @export
+ * @interface requestModifierArrays
+ * @typedef {requestModifierArrays}
+ */
 export interface requestModifierArrays {
-	field: string;
-	value?: any; // O Se envia el valor
-	id?: Schema.Types.ObjectId; // O se envia la id
+	field: any[];
 }
