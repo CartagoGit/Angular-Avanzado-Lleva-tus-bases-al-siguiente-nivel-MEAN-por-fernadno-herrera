@@ -1,16 +1,12 @@
-import { query, Request } from 'express';
-import { Schema } from 'mongoose';
+import { Request } from 'express';
 import {
 	getModelSection,
 	getNewModelSection,
 } from '../helpers/get-model-section.helper';
-import {
-	createJWT,
-	getPayloadFromJwtWithoutVerifiy,
-} from '../helpers/json-web-token.helper';
-import { basicError } from '../models/error-data.model';
+import { getPayloadFromJwtWithoutVerifiy } from '../helpers/json-web-token.helper';
 import { UserModel } from '../models/mongo-models/user.model';
 import { getSectionFromUrl } from '../helpers/get-model-section.helper';
+import { checkIdInParams } from '../helpers/validator.helper';
 
 /**
  * ? Controladores generales para los metodos que usan todos los modelos
@@ -38,6 +34,7 @@ export const coreController: {
 		return { data, status_code: 200 };
 	},
 	getById: async (req) => {
+		checkIdInParams(req);
 		const id = req.params['id'];
 		const data = await getModelSection(req).findById(id);
 		return { data, status_code: 200 };
@@ -95,6 +92,7 @@ export const coreController: {
 		return { model, status_code: 201 };
 	},
 	put: async (req) => {
+		checkIdInParams(req);
 		const id = req.params['id'];
 		const model = getModelSection(req);
 		const data_before = await model.findById(id);
@@ -111,6 +109,7 @@ export const coreController: {
 		};
 	},
 	delete: async (req) => {
+		checkIdInParams(req);
 		const id = req.params['id'];
 		const data = await getModelSection(req).findByIdAndDelete(id, {
 			new: true,

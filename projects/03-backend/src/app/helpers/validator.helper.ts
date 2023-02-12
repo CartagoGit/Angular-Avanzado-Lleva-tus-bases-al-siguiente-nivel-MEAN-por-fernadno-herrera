@@ -45,10 +45,11 @@ export const checkValidatorFields = (req: Request): ErrorData | undefined => {
  * @returns {Promise<boolean>}
  */
 export const validateAdmin = async (
-	id: string
+	id: string,
+	checkErrorAdmin: boolean = true
 ): Promise<{ ok: boolean; id: string }> => {
 	const userDB = await UserModel.findById(id);
-	if (!userDB || !userDB.role) throw getErrorNotAdmin();
+	if (checkErrorAdmin && (!userDB || !userDB.role)) throw getErrorNotAdmin();
 	return { ok: userDB.role === 'ADMIN_ROLE', id };
 };
 
@@ -63,7 +64,8 @@ export const validateSameUser = async (
 	req: Request,
 	id: string
 ): Promise<{ ok: boolean; id: string }> => {
-	const { ok: isAdmin } = await validateAdmin(id);
+	checkIdInParams(req);
+	const { ok: isAdmin } = await validateAdmin(id, false);
 	if ((!req.params['id'] || req.params['id'] !== id) && !isAdmin)
 		throw {
 			message: 'User just can interactuate with his own data',
@@ -71,4 +73,19 @@ export const validateSameUser = async (
 			reason: 'not same user',
 		} as basicError;
 	return { ok: true, id };
+};
+
+
+/**
+ * ? Throwea un error si no se ha pasado un id como parametro
+ * @param {Request} req
+ */
+export const checkIdInParams = (req: Request): void => {
+	if (!req.params['id']) {
+		throw {
+			message: "There are not any 'id' in params route",
+			status_code: 404,
+			reason: 'not same user',
+		} as basicError;
+	}
 };
