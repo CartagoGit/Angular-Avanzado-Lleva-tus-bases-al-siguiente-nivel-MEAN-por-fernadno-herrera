@@ -9,7 +9,11 @@ import { getNotFoundMessage } from '../helpers/get-model-section.helper';
 import { getEncryptHash } from '../helpers/encrypt.helper';
 import { Role } from '../interfaces/roles.interface';
 import { getPayloadFromJwtWithoutVerifiy } from '../helpers/json-web-token.helper';
-import { DoctorModel } from '../models/mongo-models/doctors.model';
+import {
+	DoctorModel,
+	DoctorSchema,
+} from '../models/mongo-models/doctors.model';
+import { Document } from 'mongoose';
 
 /**
  * ? Controladores especificos de los metodos para el modelo de usuarios
@@ -32,7 +36,7 @@ export const usersController: {
 		//* Encriptamos la contraseña
 		const { password } = req.body;
 		req.body.password = getEncryptHash(password);
-		req.body.role = 'ADMIN_ROLE' as Role;
+		req.body.role = 'USER_ROLE' as Role;
 
 		return req.body;
 	},
@@ -67,6 +71,24 @@ export const usersController: {
 			!!doctorBD && Array.isArray(doctorBD) && doctorBD.length !== 0;
 		return { data: { is_doctor: isDoctor }, status_code: 200 };
 	},
-	getDoctors: async (req) => {},
-	getHospitals: async (req) => {},
+	getDoctors: async (req) => {
+		const doctorsBD = await DoctorModel.find({ patients: req.params['id'] });
+		return { data: doctorsBD, status_code: 200 };
+	},
+	getHospitals: async (req) => {
+		const doctorsBD = await DoctorModel.find({
+			patients: req.params['id'],
+		});
+		const hospitalsFromUser: any[] = [];
+		for (let doctor of doctorsBD) {
+			for (let hospital of doctor.hospitals) {
+				console.log(hospital);
+				const isHospitalAdded = hospitalsFromUser.some(
+					(hospitalFromUser) => hospitalFromUser.id === hospital.id
+				);
+				if (!isHospitalAdded) hospitalsFromUser.push(hospital);
+			}
+		}
+		return { data: hospitalsFromUser, status_code: 200 };
+	},
 };

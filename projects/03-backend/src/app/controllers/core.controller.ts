@@ -18,6 +18,8 @@ import { checkIdInParams } from '../helpers/validator.helper';
 	put: (req: Request) => Promise<any>;
 	delete: (req: Request) => Promise<any>;
 	deleteCollection: (req: Request) => Promise<any>;
+	addInList: (req: Request) => Promise<any>;
+	removeFromList: (req: Request) => Promise<any>;
 }}
  */
 export const coreController: {
@@ -28,6 +30,8 @@ export const coreController: {
 	put: (req: Request) => Promise<any>;
 	delete: (req: Request) => Promise<any>;
 	deleteCollection: (req: Request) => Promise<any>;
+	addInList: (req: Request) => Promise<any>;
+	removeFromList: (req: Request) => Promise<any>;
 } = {
 	getAll: async (req) => {
 		const data = await getModelSection(req).find();
@@ -132,6 +136,35 @@ export const coreController: {
 		return {
 			data: 'Collection deleted',
 			status_code: 200,
+		};
+	},
+	addInList: async (req) => {
+		checkIdInParams(req);
+		const fields: string[] = req.body.fields;
+		const values: any[] = req.body.values;
+		if(fields.length === 0 || values.length ===0 ){
+			
+		}
+		const id = req.params['id'];
+		const model = await getModelSection(req).findById(id)
+		console.log(fields, values);
+		return {
+			data: 'algo',
+			info: 'Items added from list ',
+			status_code: 201,
+		};
+	},
+	removeFromList: async (req) => {
+		checkIdInParams(req);
+		const fields: string[] = req.body.fields;
+		const values: any[] = req.body.values;
+		const id = req.params['id'];
+		const model = await getModelSection(req).findById(id)
+		console.log(fields, values);
+		return {
+			data: 'algo',
+			info: 'Items removed from list ',
+			status_code: 201,
 		};
 	},
 };

@@ -72,4 +72,18 @@ export const coreRoutes: Routes = new Routes({
 		coreController: coreController.deleteCollection,
 		type: 'delete',
 	},
+	addInList: {
+		route: '/add-in-list/:id',
+		hasJwtValidator: true,
+		hasAdminValidator: true,
+		coreController: coreController.addInList,
+		type: 'patch',
+	},
+	removeFromList: {
+		route: '/remove-from-list/:id',
+		hasJwtValidator: true,
+		hasAdminValidator: true,
+		coreController: coreController.removeFromList,
+		type: 'patch',
+	},
 });

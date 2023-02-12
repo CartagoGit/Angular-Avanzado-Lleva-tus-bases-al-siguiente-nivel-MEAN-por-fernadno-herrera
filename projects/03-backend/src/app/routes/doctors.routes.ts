@@ -11,5 +11,4 @@ import { coreRoutes } from './core.routes';
  */
 export const doctorsRoutes: Routes = new Routes({
 	...coreRoutes.routes,
-	
 });
