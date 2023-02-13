@@ -8,6 +8,7 @@ import { UserModel } from '../models/mongo-models/user.model';
 import { getSectionFromUrl } from '../helpers/get-model-section.helper';
 import { checkIdInParams } from '../helpers/validator.helper';
 import { getErrorNotFields } from '../helpers/default-responses.helper';
+
 import {
 	RequestFieldModifierArrays,
 	RequestFieldValues,
@@ -39,8 +40,13 @@ export const coreController: {
 	removeFromList: (req: Request) => Promise<any>;
 } = {
 	getAll: async (req) => {
-		const data = await getModelSection(req).find();
-		return { data, status_code: 200 };
+		const model = getModelSection(req);
+		const pagination = await (model as any).paginate();
+		const data = await model.find();
+		console.log(typeof data);
+
+		// const pagination = await (model as any).pagination()
+		return { data, status_code: 200, pagination };
 	},
 	getById: async (req) => {
 		checkIdInParams(req);

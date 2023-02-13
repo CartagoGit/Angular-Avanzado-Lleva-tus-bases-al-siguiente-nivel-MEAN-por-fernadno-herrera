@@ -1,5 +1,4 @@
 import { Model, model, Schema } from 'mongoose';
-
 /**
  * ? Crea el esquema del modelo de Doctores en MongoDb
  * @type {Schema<any>}
@@ -49,3 +48,5 @@ export const DoctorSchema: Schema<any> = new Schema(
  * @type {Model<any>}
  */
 export const DoctorModel: Model<any> = model('Doctor', DoctorSchema);
+
+

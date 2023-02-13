@@ -1,11 +1,16 @@
-import mongoose from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 import { config } from '../../environments/config';
 import { from, Observable, switchMap, tap } from 'rxjs';
 import { logError, log } from '../helpers/logs.helper';
 import autopopulate from 'mongoose-autopopulate';
+import pagination from 'mongoose-paginate-v2';
 
 //* Aplicamos autopopulate a todo mongoose
 mongoose.plugin(autopopulate, { maxDepth: 5 });
+
+//* Aplicamos el plugin de paginacion
+// pagination.paginate.options = { limit: 3 };
+mongoose.plugin(pagination);
 
 /**
  * ? Establece la conexion con MongoDB
@@ -14,23 +19,20 @@ export const initMongo = () => {
 	//* Permite querys exactos y elimina el warning de deprecacion de versiones antiguas de Mongoose
 	mongoose.set('strictQuery', false);
 
-	//* Añadimos creacion y modificacion de fechas en los esquemas
+	//* Indicamos que no queremos que el valor de fechas de creacion se pueda modificar
 	mongoose.set('timestamps.createdAt.immutable', true);
-	// mongoose.set('')
 
 	//* Modificamos la llamada a los metodos para que no devuelva la version y la '_id' la devuelva como 'id'
-	mongoose.set('toJSON', {
-		transform: function (_doc, modelObject) {
-			const { __v, _id, password, ...rest } = modelObject;
-			return { ...rest, id: _id };
-		},
-	});
-	mongoose.set('toObject', {
-		transform: function (_doc, modelObject) {
-			const { __v, _id, password, ...rest } = modelObject;
-			return { ...rest, id: _id };
-		},
-	});
+	const transform = function (
+		_document: Document, // document
+		modelObject: any, // representation
+		_options: any // options
+	): void {
+		const { __v, _id, password, ...rest } = modelObject;
+		return { ...rest, id: _id };
+	};
+	mongoose.set('toJSON', { transform });
+	mongoose.set('toObject', { transform });
 
 	//* Observable para la conexion de mongo y trigger para mostrar mensaje si hay algun cambio en la bd
 	getObservableMongoose()
