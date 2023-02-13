@@ -3,14 +3,17 @@ import { config } from '../../environments/config';
 import { from, Observable, switchMap, tap } from 'rxjs';
 import { logError, log } from '../helpers/logs.helper';
 import autopopulate from 'mongoose-autopopulate';
-import pagination from 'mongoose-paginate-v2';
+import mongoosePaginate from 'mongoose-paginate-v2';
 
 //* Aplicamos autopopulate a todo mongoose
-mongoose.plugin(autopopulate, { maxDepth: 5 });
+mongoose.plugin(autopopulate, { maxDepth: 3 });
 
 //* Aplicamos el plugin de paginacion
-// pagination.paginate.options = { limit: 3 };
-mongoose.plugin(pagination);
+mongoosePaginate.paginate.options = {
+	limit: 50,
+	customLabels: { meta: 'pagination', docs: 'data' },
+};
+mongoose.plugin(mongoosePaginate);
 
 /**
  * ? Establece la conexion con MongoDB

@@ -8,11 +8,12 @@ import { UserModel } from '../models/mongo-models/user.model';
 import { getSectionFromUrl } from '../helpers/get-model-section.helper';
 import { checkIdInParams } from '../helpers/validator.helper';
 import { getErrorNotFields } from '../helpers/default-responses.helper';
-
+import { PaginationParameters } from 'mongoose-paginate-v2';
 import {
 	RequestFieldModifierArrays,
 	RequestFieldValues,
 } from '../interfaces/requests.interface';
+import { Model } from 'mongoose';
 
 /**
  * ? Controladores generales para los metodos que usan todos los modelos
@@ -41,12 +42,12 @@ export const coreController: {
 } = {
 	getAll: async (req) => {
 		const model = getModelSection(req);
-		const pagination = await (model as any).paginate();
-		const data = await model.find();
-		console.log(typeof data);
+		const data = await (model as any).paginate(
+			...new PaginationParameters(req).get()
+		);
 
 		// const pagination = await (model as any).pagination()
-		return { data, status_code: 200, pagination };
+		return { ...data, status_code: 200 };
 	},
 	getById: async (req) => {
 		checkIdInParams(req);
