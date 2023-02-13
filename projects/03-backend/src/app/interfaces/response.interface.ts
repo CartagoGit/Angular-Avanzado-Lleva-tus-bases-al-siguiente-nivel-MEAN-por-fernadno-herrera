@@ -34,3 +34,19 @@ export type CallbackMethod = (
  * @typedef {TypeRequest}
  */
 export type TypeRequest = 'get' | 'post' | 'patch' | 'put' | 'delete' | 'use';
+
+/**
+ * ? Datos basicos a devolver en la response
+ * @export
+ * @typedef {ReturnDataResponse}
+ */
+export type ResponseReturnData = {
+	status_code: number;
+	data?: any;
+	data_before?: any;
+	model?: any;
+	queryParams?: any;
+	modelParams?: any;
+	include?: boolean;
+	id?: string;
+} & { [key in string]: any };

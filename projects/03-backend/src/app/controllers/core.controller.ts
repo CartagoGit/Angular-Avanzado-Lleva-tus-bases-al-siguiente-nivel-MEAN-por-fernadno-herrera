@@ -13,6 +13,7 @@ import {
 	RequestFieldModifierArrays,
 	RequestFieldValues,
 } from '../interfaces/requests.interface';
+import { ResponseReturnData } from '../interfaces/response.interface';
 
 /**
  * ? Controladores generales para los metodos que usan todos los modelos
@@ -29,15 +30,15 @@ import {
 }}
  */
 export const coreController: {
-	getAll: (req: Request) => Promise<any>;
-	getById: (req: Request) => Promise<any>;
-	getByQuery: (req: Request) => Promise<any>;
-	post: (req: Request) => Promise<any>;
-	put: (req: Request) => Promise<any>;
-	delete: (req: Request) => Promise<any>;
-	deleteCollection: (req: Request) => Promise<any>;
-	addInList: (req: Request) => Promise<any>;
-	removeFromList: (req: Request) => Promise<any>;
+	getAll: (req: Request) => Promise<ResponseReturnData>;
+	getById: (req: Request) => Promise<ResponseReturnData>;
+	getByQuery: (req: Request) => Promise<ResponseReturnData>;
+	post: (req: Request) => Promise<ResponseReturnData>;
+	put: (req: Request) => Promise<ResponseReturnData>;
+	delete: (req: Request) => Promise<ResponseReturnData>;
+	deleteCollection: (req: Request) => Promise<ResponseReturnData>;
+	addInList: (req: Request) => Promise<ResponseReturnData>;
+	removeFromList: (req: Request) => Promise<ResponseReturnData>;
 } = {
 	getAll: async (req) => {
 		const model = getModelSection(req);
