@@ -13,7 +13,6 @@ import {
 	RequestFieldModifierArrays,
 	RequestFieldValues,
 } from '../interfaces/requests.interface';
-import { Model } from 'mongoose';
 
 /**
  * ? Controladores generales para los metodos que usan todos los modelos
@@ -45,8 +44,6 @@ export const coreController: {
 		const data = await (model as any).paginate(
 			...new PaginationParameters(req).get()
 		);
-
-		// const pagination = await (model as any).pagination()
 		return { ...data, status_code: 200 };
 	},
 	getById: async (req) => {
@@ -56,19 +53,12 @@ export const coreController: {
 		return { data, status_code: 200 };
 	},
 	getByQuery: async (req) => {
-		/**
-		 * * include : boolean -> buscar exacto o que incluya el texto
-		 * * skip : number -> paginando desde ...
-		 * * limit : number -> paginando hasta...
-		 * * sort : string -> parametro a ordenar
-		 * * order : string | number -> // criterio de orden asc, desc, ascending, descending, 1, or -1
-		 */
 		if (req.query['include'] === undefined) req.query['include'] = 'true';
 		const model = getModelSection(req);
-		const paramsInModel = Object.keys(model.schema.obj);
 		const wantInclude =
 			(req.query['include'] as string).toLowerCase() === 'true';
 		const queryParams = req.query;
+		const paramsInModel = Object.keys(model.schema.obj);
 		const arrayQuery = Object.entries(queryParams)
 			.filter(([key]) => paramsInModel.includes(key))
 			.map(([key, value]) => {
@@ -76,28 +66,20 @@ export const coreController: {
 					[key]: wantInclude ? RegExp(value as string, 'i') : value,
 				};
 			});
+
 		let objectQuery = {};
 		for (const keyValue of arrayQuery) {
 			objectQuery = { ...objectQuery, ...keyValue };
 		}
-		const data = await model
-			.find(objectQuery)
-			.skip(req.query['skip'] ? Number(req.query['skip']) : 0) // start
-			.limit(req.query['limit'] ? Number(req.query['limit']) : Infinity) // finish
-			.sort(
-				req.query['sort']
-					? {
-							[req.query['sort'] as string]: req.query['order']
-								? (req.query['order'] as any)
-								: 'ascending', // criterio de orden asc, desc, ascending, descending, 1, or -1
-					  }
-					: {}
-			);
+
+		const optionsPaginate = new PaginationParameters(req).get()[1];
+		const data = await (model as any).paginate(objectQuery, optionsPaginate);
 
 		return {
 			queryParams,
+			modelParams: objectQuery,
 			include: wantInclude,
-			data,
+			...data,
 			status_code: 200,
 		};
 	},
