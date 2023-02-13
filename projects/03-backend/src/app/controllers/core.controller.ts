@@ -60,27 +60,43 @@ export const coreController: {
 			(req.query['include'] as string).toLowerCase() === 'true';
 		const queryParams = req.query;
 		const paramsInModel = Object.keys(model.schema.obj);
+		
+		//* En caso de incluir "include" en el query, hacemos que los string sean inclusivos
 		const arrayQuery = Object.entries(queryParams)
 			.filter(([key]) => paramsInModel.includes(key))
 			.map(([key, value]) => {
 				return {
-					[key]: wantInclude ? RegExp(value as string, 'i') : value,
+					[key]:
+						wantInclude && typeof value === 'string'
+							? RegExp(value as string, 'i')
+							: value,
 				};
 			});
 
+		//* Asignamos el objeto que se buscara con los RegExp en caso de incluirlos en el paginate
 		let objectQuery = {};
 		for (const keyValue of arrayQuery) {
 			objectQuery = { ...objectQuery, ...keyValue };
 		}
 
+		//* Extraemos los parametros recibidos que se encuentran en el modelo para mostrarlos en la response
+		let modelParams = {};
+		for (const key of Object.keys(objectQuery)) {
+			modelParams = { ...modelParams, [key]: queryParams[key] };
+		}
+
 		const optionsPaginate = new PaginationParameters(req).get()[1];
-		const data = await (model as any).paginate(objectQuery, optionsPaginate);
+		const { data, pagination } = await (model as any).paginate(
+			objectQuery,
+			optionsPaginate
+		);
 
 		return {
 			queryParams,
-			modelParams: objectQuery,
+			modelParams,
 			include: wantInclude,
-			...data,
+			data,
+			pagination,
 			status_code: 200,
 		};
 	},
