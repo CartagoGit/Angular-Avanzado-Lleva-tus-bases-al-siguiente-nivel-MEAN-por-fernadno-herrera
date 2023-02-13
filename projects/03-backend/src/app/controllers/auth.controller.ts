@@ -3,6 +3,7 @@ import { getNotFoundMessage } from '../helpers/get-model-section.helper';
 import { UserModel } from '../models/mongo-models/user.model';
 import bcrypt from 'bcryptjs';
 import { createJWT } from '../helpers/json-web-token.helper';
+import { ResponseReturnData } from '../interfaces/response.interface';
 
 /**
  * ? Controladores especificos de los metodos para el modelo de usuarios
@@ -11,7 +12,11 @@ import { createJWT } from '../helpers/json-web-token.helper';
 }}
  */
 export const authController: {
-	login: (req: Request) => Promise<any>;
+	login: (
+		req: Request
+	) => Promise<
+		ResponseReturnData & { token: string; ok: boolean; id: string }
+	>;
 } = {
 	login: async (req) => {
 		const { password, email } = req.body;
@@ -25,8 +30,8 @@ export const authController: {
 
 		// * Generamos el Json Web Token
 		const id = userDB.id;
-		const jwt = await createJWT({ id });
+		const { ok, token = '' } = await createJWT({ id });
 
-		return { ok: jwt.ok, status_code: 200, token: jwt.token, id };
+		return { ok, status_code: 200, token, id };
 	},
 };

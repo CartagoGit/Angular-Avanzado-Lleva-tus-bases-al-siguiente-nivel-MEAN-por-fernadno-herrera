@@ -35,6 +35,18 @@ export type CallbackMethod = (
  */
 export type TypeRequest = 'get' | 'post' | 'patch' | 'put' | 'delete' | 'use';
 
+export interface ResponsePagination {
+	totalDocs: number;
+	limit: number;
+	totalPages: number;
+	page: number;
+	pagingCounter: number;
+	hasPrevPage: true;
+	hasNextPage: true;
+	prevPage: number | null;
+	nextPage: number | null;
+}
+
 /**
  * ? Datos basicos a devolver en la response
  * @export
@@ -49,4 +61,5 @@ export type ResponseReturnData = {
 	modelParams?: any;
 	include?: boolean;
 	id?: string;
+	pagination?: ResponsePagination;
 } & { [key in string]: any };

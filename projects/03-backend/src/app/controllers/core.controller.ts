@@ -42,10 +42,10 @@ export const coreController: {
 } = {
 	getAll: async (req) => {
 		const model = getModelSection(req);
-		const data = await (model as any).paginate(
+		const {pagination, data }= await (model as any).paginate(
 			...new PaginationParameters(req).get()
 		);
-		return { ...data, status_code: 200 };
+		return { data, status_code: 200, pagination };
 	},
 	getById: async (req) => {
 		checkIdInParams(req);
@@ -60,7 +60,7 @@ export const coreController: {
 			(req.query['include'] as string).toLowerCase() === 'true';
 		const queryParams = req.query;
 		const paramsInModel = Object.keys(model.schema.obj);
-		
+
 		//* En caso de incluir "include" en el query, hacemos que los string sean inclusivos
 		const arrayQuery = Object.entries(queryParams)
 			.filter(([key]) => paramsInModel.includes(key))
@@ -116,6 +116,7 @@ export const coreController: {
 		checkIdInParams(req);
 		const id = req.params['id'];
 		const model = getModelSection(req);
+		
 		const data_before = await model.findById(id);
 		const data = await model.findByIdAndUpdate(
 			id,

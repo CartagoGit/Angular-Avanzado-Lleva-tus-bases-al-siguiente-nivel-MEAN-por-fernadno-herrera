@@ -61,7 +61,6 @@ export class Routes {
 	private _initRoutes(): void {
 		for (const [name, props] of Object.entries(this.routes)) {
 			const { route, routeRouter, type = 'use', middlewares = [] } = props;
-
 			const controllers = async (
 				req: Request,
 				res: Response,

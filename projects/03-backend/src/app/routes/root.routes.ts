@@ -3,6 +3,7 @@ import { rootResponse } from '../helpers/default-responses.helper';
 import { Routes } from '../models/routes.model';
 import { authRoutes } from './auth.routes';
 import { doctorsRoutes } from './doctors.routes';
+import { everywhereRoutes } from './everywhere.routes';
 import { hospitalsRoutes } from './hospitals.routes';
 import { usersRoutes } from './users.routes';
 
@@ -21,6 +22,11 @@ export const rootRoutes: Routes = new Routes({
 			return rootResponse('home');
 		},
 		type: 'get',
+	},
+	everywhere: {
+		route: '/everywhere',
+		routeRouter: everywhereRoutes.router,
+		type: 'use',
 	},
 	auth: {
 		route: '/auth',
