@@ -201,7 +201,21 @@ export const getErrorNotFields = (
 	return {
 		message: `There are not fields to ${typeModifyFields} in body request`,
 		status_code: 400,
-		reason: 'no fields in body',
+		reason: 'not fields in body',
+	};
+};
+
+
+/**
+ * ? Devuelve el mensaje de error cuando no existe el parametro en la ruta del url
+ * @param {string} nameParam
+ * @returns {basicError}
+ */
+export const getErrorNotParam = (nameParam: string): basicError => {
+	return {
+		message: `There are not param '${nameParam} in the url request'`,
+		status_code: 400,
+		reason: 'not params in url',
 	};
 };
 
