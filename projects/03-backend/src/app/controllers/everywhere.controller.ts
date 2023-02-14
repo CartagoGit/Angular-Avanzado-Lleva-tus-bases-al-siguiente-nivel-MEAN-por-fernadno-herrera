@@ -6,16 +6,19 @@ import { ApiModels } from '../models/mongo.models';
 /**
  * ? Controladores especificos para las busquedas en todos los modelos
  * @type {{
-	getFromEverywhere: (req: Request) => Promise<ResponseReturnData>;
+	getFrom: (req: Request) => Promise<ResponseReturnData>;
 }}
  */
 export const everywhereController: {
-	getFromEverywhere: (req: Request) => Promise<ResponseReturnData>;
+	getFrom: (req: Request) => Promise<ResponseReturnData>;
 } = {
-	getFromEverywhere: async (req) => {
+	//* Busca cualquier modelo con name igual al parametro search incluyendolos
+	getFrom: async (req) => {
 		if (!req.params['search']) throw getErrorNotParam('search');
+		if (!req.params['field']) throw getErrorNotParam('field');
 		// const searching = RegExp(req.params['search'], 'i');
 		const searching = req.params['search'];
+		const field = req.params['field']
 
 		const nameModels: string[] = [];
 		const datas = await Promise.all(
@@ -26,7 +29,7 @@ export const everywhereController: {
 				return model.find({
 					$or: [
 						{
-							name: {
+							[field]: {
 								$regex: searching,
 								$options: 'i',
 							},

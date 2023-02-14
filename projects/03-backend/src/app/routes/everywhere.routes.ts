@@ -14,8 +14,8 @@ import { everywhereController } from '../controllers/everywhere.controller';
 export const everywhereRoutes: Routes = new Routes({
 	root: coreRoutes.routes['root'],
 	getFromEverywhere: {
-		route: '/get-from-everywhere/:search',
+		route: '/get-from/:field/:search',
 		type: 'get',
-		modelController: everywhereController.getFromEverywhere
+		modelController: everywhereController.getFrom
 	},
 });
