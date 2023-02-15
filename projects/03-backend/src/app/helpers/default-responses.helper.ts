@@ -10,7 +10,7 @@ import {
 	getSectionFromUrl,
 } from './get-model-section.helper';
 import { ApiModels } from '../models/mongo.models';
-import { Model } from 'mongoose';
+import { isValidObjectId, Model } from 'mongoose';
 import { isValidTypeFile, typesFile } from './files.helpers';
 
 /**
@@ -243,6 +243,22 @@ export const removeParamAndSetInfo = (req: Request, key: string): void => {
 };
 
 /**
+ * ? Comprueba si el nombre de modelo, el tipo de archivo, y el id provenientes de la request, son validos. En caso positivo devuelve el modelo, el id y el tipo de archivo. En caso contrario throwea el error correspondiente
+ * @param {Request} req
+ * @returns {{ model: Model<any>; typeFile: string; id: string }}
+ */
+export const checkValidParamsForFilesAndGetModel = (
+	req: Request
+): { model: Model<any>; typeFile: string; id: string } => {
+	checkParamsForFiles(req);
+	const { typeFile, nameModel, id } = req.params;
+	checkValidTypeFile(typeFile);
+	checkValidIdMongo(id);
+	const model = checkExistsAndGetModel(nameModel);
+	return { model, id, typeFile };
+};
+
+/**
  * ? Comprueba que los 3 parametros para manipular archivos se encuentran en la ruta, en caso contrario devuelve un error
  * @param {Request} req
  */
@@ -277,7 +293,7 @@ export const checkExistsAndGetModel = (nameModel: string): Model<any> => {
 };
 
 /**
- * ? Comprueba si el tipo es un tipo de archivo permitido
+ * ? Comprueba si el tipo es un tipo de archivo permitido en caso contrario throwea un error
  * @param {string} typeFile
  * @returns {boolean}
  */
@@ -291,5 +307,21 @@ export const checkValidTypeFile = (typeFile: string): boolean => {
 			status_code: 400,
 			reason: 'invalid type file',
 		} as basicError;
+	return true;
+};
+
+/**
+ * ? Comprueba si el id recibido es un objecto id valido para mongooDb wn caso contrario throwea un error
+ * @param {string} id
+ * @returns {boolean}
+ */
+export const checkValidIdMongo = (id: string): boolean => {
+	if (!isValidObjectId(id)) {
+		throw {
+			message: `Param '${id}' is not a valid Object Id for MongoDB`,
+			reason: 'not valid id',
+			status_code: 400,
+		} as basicError;
+	}
 	return true;
 };
