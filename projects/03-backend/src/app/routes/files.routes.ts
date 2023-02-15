@@ -15,7 +15,7 @@ import { filesController } from '../controllers/files.controller';
 export const filesRoutes: Routes = new Routes({
 	root: coreRoutes.routes['root'],
 	upload: {
-		route: '/upload/:model/:typeFile/:id',
+		route: '/upload/:nameModel/:typeFile/:id',
 		type: 'put',
 		modelController: filesController.upload,
 		hasAdminValidator: false

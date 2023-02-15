@@ -9,6 +9,8 @@ import {
 	getMethodFromUrl,
 	getSectionFromUrl,
 } from './get-model-section.helper';
+import { ApiModels } from '../models/mongo.models';
+import { Model } from 'mongoose';
 
 /**
  * ? Crea una response predefinida y un log para mostrar los mensajes correctos
@@ -78,9 +80,11 @@ export const defaultErrorResponse = (
  * ? Crea una respuesta a la peticion a las rutas base de las colecciones
  * @async
  * @param {string} title
- * @returns {unknown}
+ * @returns {Promise<DefaultResponseProps>}
  */
-export const rootResponse = async (title: string): Promise<unknown> => {
+export const rootResponse = async (
+	title: string
+): Promise<DefaultResponseProps> => {
 	const message = `${getCapitalize(title)} collection root path`;
 	return {
 		message,
@@ -205,7 +209,6 @@ export const getErrorNotFields = (
 	};
 };
 
-
 /**
  * ? Devuelve el mensaje de error cuando no existe el parametro en la ruta del url
  * @param {string} nameParam
@@ -213,7 +216,7 @@ export const getErrorNotFields = (
  */
 export const getErrorNotParam = (nameParam: string): basicError => {
 	return {
-		message: `There are not param '${nameParam} in the url request'`,
+		message: `There are not param '${nameParam}' in the url request'`,
 		status_code: 400,
 		reason: 'not params in url',
 	};
@@ -236,4 +239,38 @@ export const getMessageInfoNotModify = (key: string): string => {
 export const removeParamAndSetInfo = (req: Request, key: string): void => {
 	delete req.body[key];
 	req.body.info = { ...req.body.info, [key]: getMessageInfoNotModify(key) };
+};
+
+/**
+ * ? Comprueba que los 3 parametros para manipular archivos se encuentran en la ruta, en caso contrario devuelve un error
+ * @param {Request} req
+ */
+export const checkParamsForFiles = (req: Request) => {
+	if (!req.params['typeFile']) throw getErrorNotParam('typeFile');
+	if (!req.params['nameModel']) throw getErrorNotParam('nameModel');
+	if (!req.params['id']) throw getErrorNotParam('id');
+};
+
+/**
+ * ? Comprueba si un modelo existe con un nombre en especifico y recupera el modelo en caso de existir, sino throwea un error
+ * @param {string} nameModel
+ * @returns {Model<any>}
+ */
+export const checkExistsAndGetModel = (nameModel: string): Model<any> => {
+	const existModel = Object.keys(ApiModels)
+		.map((apiModel) => apiModel.toLowerCase())
+		.includes(nameModel.toLowerCase());
+	if (!existModel)
+		throw {
+			message: `Param '${getCapitalize(
+				nameModel
+			)}' not found, check if the model name is spelled correctly`,
+			status_code: 400,
+			reason: 'model not found',
+		} as basicError;
+	const model = Object.keys(ApiModels).find(
+		(apiModel) => apiModel.toLowerCase() === nameModel.toLowerCase()
+	)!;
+
+	return ApiModels[model];
 };
