@@ -1,11 +1,12 @@
+import { RequestHandler } from 'express';
 import { check } from 'express-validator';
 import { getMessageErrorValidation } from '../helpers/default-responses.helper';
 
 /**
  * ? Middlewares especificos para el modelo de usuarios
- * @type {{ post: any[]; put: any[] }}
+ * @type {{ post: RequestHandler[]; put: RequestHandler[] }}
  */
-export const authMiddlewares: { login: any[] } = {
+export const authMiddlewares: { login: RequestHandler[] } = {
 	login: [
 		check(
 			'email',

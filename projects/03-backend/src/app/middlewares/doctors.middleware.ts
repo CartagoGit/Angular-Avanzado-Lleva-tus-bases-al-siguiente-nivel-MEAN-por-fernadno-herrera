@@ -1,14 +1,15 @@
+import { RequestHandler } from 'express';
 import { body, check } from 'express-validator';
 import { getMessageErrorValidation } from '../helpers/default-responses.helper';
 
 /**
  * ? Middlewares especificos para el modelo de usuarios
- * @type {{ post: any[]; addInList: any[] }}
+ * @type {{ post: RequestHandler[]; addInList: RequestHandler[] }}
  */
 export const doctorsMiddlewares: {
-	post: any[];
-	addInList: any[];
-	removeFromList: any[];
+	post: RequestHandler[];
+	addInList: RequestHandler[];
+	removeFromList: RequestHandler[];
 } = {
 	post: [
 		check(

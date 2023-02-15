@@ -1,3 +1,4 @@
+import { RequestHandler } from 'express';
 import { check } from 'express-validator';
 import {
 	getMessageErrorValidation,
@@ -7,9 +8,9 @@ import { UserModel } from '../models/mongo-models/user.model';
 
 /**
  * ? Middlewares especificos para el modelo de usuarios
- * @type {{ post: any[]; put: any[] }}
+ * @type {{ post: RequestHandler[]; put: RequestHandler[] }}
  */
-export const usersMiddlewares: { post: any[]; put: any[] } = {
+export const usersMiddlewares: { post: RequestHandler[]; put: RequestHandler[] } = {
 	post: [
 		check('name', getMessageErrorValidation('name', { required: true }))
 			.not()

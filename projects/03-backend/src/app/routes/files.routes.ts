@@ -1,11 +1,11 @@
-import { Routes } from "../models/routes.model";
-import { coreRoutes } from "./core.routes";
+import { Routes } from '../models/routes.model';
+import { coreRoutes } from './core.routes';
 import { filesController } from '../controllers/files.controller';
+import { filesMiddlewares } from '../middlewares/files.middleware';
 
 /**
  * * /api/files
  */
-
 
 /**
  * ? Crea las para busquedas generales en cualquier modelo
@@ -18,6 +18,8 @@ export const filesRoutes: Routes = new Routes({
 		route: '/upload/:nameModel/:typeFile/:id',
 		type: 'put',
 		modelController: filesController.upload,
-		hasAdminValidator: false
+		middlewares: filesMiddlewares.basic,
+		hasAdminValidator: false,
+		hasSameUserValidator: true,
 	},
 });
