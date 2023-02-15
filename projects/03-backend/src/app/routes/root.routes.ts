@@ -4,6 +4,7 @@ import { Routes } from '../models/routes.model';
 import { authRoutes } from './auth.routes';
 import { doctorsRoutes } from './doctors.routes';
 import { everywhereRoutes } from './everywhere.routes';
+import { filesRoutes } from './files.routes';
 import { hospitalsRoutes } from './hospitals.routes';
 import { usersRoutes } from './users.routes';
 
@@ -26,6 +27,11 @@ export const rootRoutes: Routes = new Routes({
 	everywhere: {
 		route: '/everywhere',
 		routeRouter: everywhereRoutes.router,
+		type: 'use',
+	},
+	filde: {
+		route: '/files',
+		routeRouter: filesRoutes.router,
 		type: 'use',
 	},
 	auth: {

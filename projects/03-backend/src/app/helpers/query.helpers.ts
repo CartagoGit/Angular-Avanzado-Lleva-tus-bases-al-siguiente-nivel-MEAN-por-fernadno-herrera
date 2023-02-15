@@ -1,5 +1,4 @@
 import { Request } from 'express';
-import { Model } from 'mongoose';
 import { PaginationParameters } from 'mongoose-paginate-v2';
 import { getModelSection } from './get-model-section.helper';
 import { ReturnedQuery } from '../interfaces/query.interface';
