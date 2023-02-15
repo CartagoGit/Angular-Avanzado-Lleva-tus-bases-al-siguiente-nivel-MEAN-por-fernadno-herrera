@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { checkParamsForFiles, checkExistsAndGetModel } from '../helpers/default-responses.helper';
+import { checkParamsForFiles, checkExistsAndGetModel, checkValidTypeFile } from '../helpers/default-responses.helper';
 import { ResponseReturnData } from '../interfaces/response.interface';
 
 
@@ -19,7 +19,7 @@ export const filesController: {
 	upload: async (req: Request) => {
 		checkParamsForFiles(req);
 		const { typeFile, nameModel, id } = req.params;
-
+		checkValidTypeFile(typeFile);
 		const model = checkExistsAndGetModel(nameModel)
 		console.log(model);
 

@@ -11,6 +11,7 @@ import {
 } from './get-model-section.helper';
 import { ApiModels } from '../models/mongo.models';
 import { Model } from 'mongoose';
+import { isValidTypeFile, typesFile } from './files.helpers';
 
 /**
  * ? Crea una response predefinida y un log para mostrar los mensajes correctos
@@ -273,4 +274,22 @@ export const checkExistsAndGetModel = (nameModel: string): Model<any> => {
 	)!;
 
 	return ApiModels[model];
+};
+
+/**
+ * ? Comprueba si el tipo es un tipo de archivo permitido
+ * @param {string} typeFile
+ * @returns {boolean}
+ */
+export const checkValidTypeFile = (typeFile: string): boolean => {
+	if (!isValidTypeFile(typeFile))
+		throw {
+			message: `Param '${typeFile}' is not a valid type file. It must be ${new Intl.ListFormat(
+				'en-GB',
+				{ type: 'disjunction' }
+			).format(typesFile)}`,
+			status_code: 400,
+			reason: 'invalid type file',
+		} as basicError;
+	return true;
 };
