@@ -14,6 +14,7 @@ import {
 	RequestFieldValues,
 } from '../interfaces/requests.interface';
 import { ResponseReturnData } from '../interfaces/response.interface';
+import { getQueryIncludeAndPaginate } from '../helpers/query.helpers';
 
 /**
  * ? Controladores generales para los metodos que usan todos los modelos
@@ -42,7 +43,7 @@ export const coreController: {
 } = {
 	getAll: async (req) => {
 		const model = getModelSection(req);
-		const {pagination, data }= await (model as any).paginate(
+		const { pagination, data } = await (model as any).paginate(
 			...new PaginationParameters(req).get()
 		);
 		return { data, status_code: 200, pagination };
@@ -54,38 +55,15 @@ export const coreController: {
 		return { data, status_code: 200 };
 	},
 	getByQuery: async (req) => {
-		if (req.query['include'] === undefined) req.query['include'] = 'true';
-		const model = getModelSection(req);
-		const wantInclude =
-			(req.query['include'] as string).toLowerCase() === 'true';
-		const queryParams = req.query;
-		const paramsInModel = Object.keys(model.schema.obj);
+		const {
+			optionsPaginate,
+			queryParams,
+			wantInclude,
+			objectQuery,
+			model,
+			modelParamsInQuery,
+		} = getQueryIncludeAndPaginate(req, { returnQueryModels: true });
 
-		//* En caso de incluir "include" en el query, hacemos que los string sean inclusivos
-		const arrayQuery = Object.entries(queryParams)
-			.filter(([key]) => paramsInModel.includes(key))
-			.map(([key, value]) => {
-				return {
-					[key]:
-						wantInclude && typeof value === 'string'
-							? RegExp(value as string, 'i')
-							: value,
-				};
-			});
-
-		//* Asignamos el objeto que se buscara con los RegExp en caso de incluirlos en el paginate
-		let objectQuery = {};
-		for (const keyValue of arrayQuery) {
-			objectQuery = { ...objectQuery, ...keyValue };
-		}
-
-		//* Extraemos los parametros recibidos que se encuentran en el modelo para mostrarlos en la response
-		let modelParams = {};
-		for (const key of Object.keys(objectQuery)) {
-			modelParams = { ...modelParams, [key]: queryParams[key] };
-		}
-
-		const optionsPaginate = new PaginationParameters(req).get()[1];
 		const { data, pagination } = await (model as any).paginate(
 			objectQuery,
 			optionsPaginate
@@ -93,7 +71,7 @@ export const coreController: {
 
 		return {
 			queryParams,
-			modelParams,
+			modelParamsInQuery,
 			include: wantInclude,
 			data,
 			pagination,
@@ -116,7 +94,7 @@ export const coreController: {
 		checkIdInParams(req);
 		const id = req.params['id'];
 		const model = getModelSection(req);
-		
+
 		const data_before = await model.findById(id);
 		const data = await model.findByIdAndUpdate(
 			id,

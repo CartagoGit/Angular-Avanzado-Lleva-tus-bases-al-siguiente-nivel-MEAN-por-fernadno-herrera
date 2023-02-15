@@ -2,6 +2,7 @@ import { Request } from 'express';
 import { ResponseReturnData } from '../interfaces/response.interface';
 import { getErrorNotParam } from '../helpers/default-responses.helper';
 import { ApiModels } from '../models/mongo.models';
+import { getQueryIncludeAndPaginate } from '../helpers/query.helpers';
 
 /**
  * ? Controladores especificos para las busquedas en todos los modelos
@@ -18,7 +19,9 @@ export const everywhereController: {
 		if (!req.params['field']) throw getErrorNotParam('field');
 		// const searching = RegExp(req.params['search'], 'i');
 		const searching = req.params['search'];
-		const field = req.params['field']
+		const field = req.params['field'];
+
+		const { wantInclude, optionsPaginate } = getQueryIncludeAndPaginate(req);
 
 		const nameModels: string[] = [];
 		const datas = await Promise.all(
@@ -26,16 +29,14 @@ export const everywhereController: {
 				// await model.collection.createIndex({ '$**': 'text' });
 				// return model.find({ $text: { $search: searching, $caseSensitive: false } });
 				nameModels.push(modelName);
-				return model.find({
-					$or: [
-						{
-							[field]: {
-								$regex: searching,
-								$options: 'i',
-							},
-						},
-					],
-				});
+				return (model as any).paginate(
+					{
+						[field]: wantInclude
+							? { $regex: searching, $options: 'i' }
+							: searching,
+					},
+					optionsPaginate
+				);
 			})
 		);
 		let objData = {};
