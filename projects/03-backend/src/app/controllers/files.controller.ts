@@ -1,5 +1,8 @@
 import { Request } from 'express';
-import { checkValidParamsForFilesAndGetModel } from '../helpers/default-responses.helper';
+import {
+	checkValidParamsForFilesAndGetModel,
+	checkExistAndGetFilesRequest,
+} from '../helpers/files.helpers';
 import { ResponseReturnData } from '../interfaces/response.interface';
 
 /**
@@ -13,7 +16,8 @@ export const filesController: {
 } = {
 	upload: async (req: Request) => {
 		const { id, model, typeFile } = checkValidParamsForFilesAndGetModel(req);
-
+		const files = checkExistAndGetFilesRequest(req);
+		console.log(files);
 		return { status_code: 200, data: 'archivitos' };
 	},
 };

@@ -11,7 +11,7 @@ import {
 } from './get-model-section.helper';
 import { ApiModels } from '../models/mongo.models';
 import { isValidObjectId, Model } from 'mongoose';
-import { isValidTypeFile, typesFile } from './files.helpers';
+
 
 /**
  * ? Crea una response predefinida y un log para mostrar los mensajes correctos
@@ -242,31 +242,7 @@ export const removeParamAndSetInfo = (req: Request, key: string): void => {
 	req.body.info = { ...req.body.info, [key]: getMessageInfoNotModify(key) };
 };
 
-/**
- * ? Comprueba si el nombre de modelo, el tipo de archivo, y el id provenientes de la request, son validos. En caso positivo devuelve el modelo, el id y el tipo de archivo. En caso contrario throwea el error correspondiente
- * @param {Request} req
- * @returns {{ model: Model<any>; typeFile: string; id: string }}
- */
-export const checkValidParamsForFilesAndGetModel = (
-	req: Request
-): { model: Model<any>; typeFile: string; id: string } => {
-	checkParamsForFiles(req);
-	const { typeFile, nameModel, id } = req.params;
-	checkValidTypeFile(typeFile);
-	checkValidIdMongo(id);
-	const model = checkExistsAndGetModel(nameModel);
-	return { model, id, typeFile };
-};
 
-/**
- * ? Comprueba que los 3 parametros para manipular archivos se encuentran en la ruta, en caso contrario devuelve un error
- * @param {Request} req
- */
-export const checkParamsForFiles = (req: Request) => {
-	if (!req.params['typeFile']) throw getErrorNotParam('typeFile');
-	if (!req.params['nameModel']) throw getErrorNotParam('nameModel');
-	if (!req.params['id']) throw getErrorNotParam('id');
-};
 
 /**
  * ? Comprueba si un modelo existe con un nombre en especifico y recupera el modelo en caso de existir, sino throwea un error
@@ -292,23 +268,7 @@ export const checkExistsAndGetModel = (nameModel: string): Model<any> => {
 	return ApiModels[model];
 };
 
-/**
- * ? Comprueba si el tipo es un tipo de archivo permitido en caso contrario throwea un error
- * @param {string} typeFile
- * @returns {boolean}
- */
-export const checkValidTypeFile = (typeFile: string): boolean => {
-	if (!isValidTypeFile(typeFile))
-		throw {
-			message: `Param '${typeFile}' is not a valid type file. It must be ${new Intl.ListFormat(
-				'en-GB',
-				{ type: 'disjunction' }
-			).format(typesFile)}`,
-			status_code: 400,
-			reason: 'invalid type file',
-		} as basicError;
-	return true;
-};
+
 
 /**
  * ? Comprueba si el id recibido es un objecto id valido para mongooDb wn caso contrario throwea un error
@@ -325,3 +285,5 @@ export const checkValidIdMongo = (id: string): boolean => {
 	}
 	return true;
 };
+
+
