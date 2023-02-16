@@ -18,7 +18,7 @@ export const filesRoutes: Routes = new Routes({
 		route: '/upload/:nameModel/:typeFile/:id',
 		type: 'put',
 		modelController: filesController.upload,
-		middlewares: filesMiddlewares.basic,
+		middlewares: [filesMiddlewares.basic].flat(),
 		hasAdminValidator: false,
 		hasSameUserValidator: true,
 	},

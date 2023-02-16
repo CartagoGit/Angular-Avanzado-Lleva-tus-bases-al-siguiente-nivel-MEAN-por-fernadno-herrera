@@ -28,14 +28,15 @@ export const isValidTypeFile = (typeFile: TypesFile): typeFile is TypesFile =>
  * @param {Request} req
  * @returns {{ model: Model<any>; typeFile: string; id: string }}
  */
-export const checkValidParamsForFilesAndGetModel = (
+export const checkValidParamsForFilesAndGetModel = async (
 	req: Request
-): { model: Model<any>; typeFile: string; id: string } => {
+): Promise<{ model: Model<any>; typeFile: string; id: string }> => {
 	checkParamsForFiles(req);
 	const { typeFile, nameModel, id } = req.params;
 	checkValidTypeFile(typeFile);
 	checkValidIdMongo(id);
 	const model = checkExistsAndGetModel(nameModel);
+	await checkIdFromModel(id,model);
 	return { model, id, typeFile };
 };
 
@@ -82,3 +83,14 @@ export const checkExistAndGetFilesRequest = (req: Request): FileArray => {
 	}
 	return req.files!;
 };
+
+export const checkIdFromModel = async (id: string, model: Model<any>) => {
+	const modelId = await model.findById(id)
+	if(!modelId) {
+		throw {
+			message: `There are not any id '${id}' in model '${model.modelName}'`
+		} as basicError
+	}
+	return modelId
+
+}
