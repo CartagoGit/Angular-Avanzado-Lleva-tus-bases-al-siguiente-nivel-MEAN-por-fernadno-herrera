@@ -2,10 +2,10 @@ import { Request } from 'express';
 import {
 	checkValidParamsForFilesAndGetModel,
 	checkExistAndGetFilesRequest,
-	checkValidExtensions,
+	checkAndGetExtensions,
 } from '../helpers/files.helpers';
 import { ResponseReturnData } from '../interfaces/response.interface';
-import { getExtensionsArray } from '../helpers/files.helpers';
+import { getFilesNames } from '../helpers/files.helpers';
 
 /**
  * ? Controladores especificos para manipulacion de archivos
@@ -21,7 +21,13 @@ export const filesController: {
 			req
 		);
 		const files = checkExistAndGetFilesRequest(req);
-		checkValidExtensions(files, typeFile);
+		const extensionsArray = checkAndGetExtensions(files, typeFile);
+		const filesNames = getFilesNames(extensionsArray, {
+			id,
+			typeFile,
+			nameModel: model.modelName,
+		});
+		console.log(filesNames);
 
 		return { status_code: 200, data: 'archivitos' };
 	},

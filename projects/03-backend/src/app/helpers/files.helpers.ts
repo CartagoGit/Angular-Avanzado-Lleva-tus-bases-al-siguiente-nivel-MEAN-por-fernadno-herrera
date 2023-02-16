@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { FileArray, UploadedFile } from 'express-fileupload';
+import { UploadedFile } from 'express-fileupload';
 import { Model } from 'mongoose';
 import { basicError } from '../models/error-data.model';
 import { getNotFoundMessageWithIdAndModel } from './get-model-section.helper';
@@ -9,6 +9,7 @@ import {
 	getErrorNotParam,
 	getListOf,
 } from './default-responses.helper';
+import { v4 as uuidv4 } from 'uuid';
 
 //* Tipos de archivos
 export const typesFile = ['image', 'text', 'pdf', 'video', 'audio', 'icon'];
@@ -22,7 +23,7 @@ export type TypesImage = (typeof typesImage)[number];
 
 /**
  * ? Tipos de Archivos y sus extensiones posibles
- * @type {{ files: {}; images: {}; }}
+ * @type {Record<string, string[]>}
  */
 export const typesExtension: Record<string, string[]> = {
 	files: typesFile,
@@ -144,15 +145,14 @@ export const getExtensionsArray = (files: UploadedFile[]): string[] =>
  * @param {TypesFile} typeFile
  * @returns {boolean}
  */
-export const checkValidExtensions = (
+export const checkAndGetExtensions = (
 	files: UploadedFile[],
 	typeFile: TypesFile
-): boolean => {
+): string[] => {
 	const extensionsArray = getExtensionsArray(files);
 	const isOk = extensionsArray.every((extension) =>
 		typesExtension[typeFile].includes(extension)
 	);
-	console.log(extensionsArray, typesExtension[typeFile]);
 	if (!isOk) {
 		throw {
 			message: `Every file extension must be ${typeFile} format, as ${getListOf(
@@ -162,5 +162,33 @@ export const checkValidExtensions = (
 			reason: 'bad format extension',
 		} as basicError;
 	}
-	return isOk;
+	return extensionsArray;
+};
+
+/**
+ * ? Genera y recupera un nombre para cada archivo del array añadiendole su extension
+ * * Si se pasa el id, el tipo y el nombre del modelo se añaden en el nombre del archivo seguido de un id aleatorio, en caso contrario se añade un id aleatorio como nombre
+ * @param {string[]} extensionsArray
+ * @param {?{ id: string; typeFile: string; nameModel: string }} [data]
+ * @returns {string[]}
+ */
+export const getFilesNames = (
+	extensionsArray: string[],
+	data?: { id: string; typeFile: string; nameModel: string }
+): string[] => {
+	const { id, typeFile, nameModel } = data || {};
+	return extensionsArray.map(
+		(extension) =>
+			`${
+				data
+					? nameModel?.toLowerCase() +
+					  '_' +
+					  typeFile +
+					  '_' +
+					  id +
+					  '_' +
+					  uuidv4()
+					: uuidv4()
+			}.${extension}`
+	);
 };
