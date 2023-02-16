@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { FileArray } from 'express-fileupload';
+import { FileArray, UploadedFile } from 'express-fileupload';
 import { Model } from 'mongoose';
 import { basicError } from '../models/error-data.model';
 import { getNotFoundMessageWithIdAndModel } from './get-model-section.helper';
@@ -7,12 +7,27 @@ import {
 	checkExistsAndGetModel,
 	checkValidIdMongo,
 	getErrorNotParam,
+	getListOf,
 } from './default-responses.helper';
 
 //* Tipos de archivos
 export const typesFile = ['image', 'text', 'pdf', 'video', 'audio', 'icon'];
 //* Tipado de los posibles archivos
 export type TypesFile = (typeof typesFile)[number];
+
+//* Tipos de imagenes
+export const typesImage = ['jpeg', 'jpg', 'bmp', 'gif', 'png'];
+//* Tipado de posibles times de imagenes
+export type TypesImage = (typeof typesImage)[number];
+
+/**
+ * ? Tipos de Archivos y sus extensiones posibles
+ * @type {{ files: {}; images: {}; }}
+ */
+export const typesExtension: Record<string, string[]> = {
+	files: typesFile,
+	images: typesImage,
+};
 
 /**
  * ? Comprueba si un tipo de ruta es de archivo
@@ -23,6 +38,15 @@ export const isValidTypeFile = (typeFile: TypesFile): typeFile is TypesFile =>
 	typesFile
 		.map((typeFileSingular) => typeFileSingular + 's')
 		.includes(typeFile);
+
+/**
+ * ? Comprueba si una extension de imagen es permitida
+ * @param {TypesImage} typeImage
+ * @returns {typeImage is TypesImage}
+ */
+export const isValidTypeImage = (
+	typeImage: TypesImage
+): typeImage is TypesImage => typesImage.includes(typeImage);
 
 /**
  * ? Comprueba si el nombre de modelo, el tipo de archivo, y el id provenientes de la request, son validos. En caso positivo devuelve el modelo, el id y el tipo de archivo. En caso contrario throwea el error correspondiente
@@ -59,10 +83,9 @@ export const checkParamsForFiles = (req: Request) => {
 export const checkValidTypeFile = (typeFile: string): boolean => {
 	if (!isValidTypeFile(typeFile))
 		throw {
-			message: `Param '${typeFile}' is not a valid type file. It must be ${new Intl.ListFormat(
-				'en-GB',
-				{ type: 'disjunction' }
-			).format(typesFile)}`,
+			message: `Param '${typeFile}' is not a valid type file. It must be ${getListOf(
+				{ list: typesFile, type: 'disjunction' }
+			)}`,
 			status_code: 400,
 			reason: 'invalid type file',
 		} as basicError;
@@ -74,7 +97,7 @@ export const checkValidTypeFile = (typeFile: string): boolean => {
  * @param {Request} req
  * @returns {FileArray}
  */
-export const checkExistAndGetFilesRequest = (req: Request): FileArray => {
+export const checkExistAndGetFilesRequest = (req: Request): UploadedFile[] => {
 	if (!req.files || Object.keys(req.files).length === 0) {
 		throw {
 			message: `There are not any file. Check your form-data or your request`,
@@ -82,7 +105,7 @@ export const checkExistAndGetFilesRequest = (req: Request): FileArray => {
 			reason: 'not found file',
 		} as basicError;
 	}
-	return req.files!;
+	return [req.files['filesArray']].flat()!;
 };
 
 /**
@@ -105,4 +128,39 @@ export const checkIdFromModel = async (
 		} as basicError;
 	}
 	return modelDB;
+};
+
+/**
+ * ? Pasando un array de archivos, recupera un array con sus extensiones
+ * @param {UploadedFile[]} files
+ * @returns {string[]}
+ */
+export const getExtensionsArray = (files: UploadedFile[]): string[] =>
+	files.map((file) => file.name.split('.').pop()!);
+
+/**
+ * ? Comprueba si todas las extensiones de los archivos son válidas. Si son correctas devuelve true, sino trhowea un error
+ * @param {UploadedFile[]} files
+ * @param {TypesFile} typeFile
+ * @returns {boolean}
+ */
+export const checkValidExtensions = (
+	files: UploadedFile[],
+	typeFile: TypesFile
+): boolean => {
+	const extensionsArray = getExtensionsArray(files);
+	const isOk = extensionsArray.every((extension) =>
+		typesExtension[typeFile].includes(extension)
+	);
+	console.log(extensionsArray, typesExtension[typeFile]);
+	if (!isOk) {
+		throw {
+			message: `Every file extension must be ${typeFile} format, as ${getListOf(
+				{ list: typesExtension[typeFile], type: 'disjunction' }
+			)}`,
+			status_code: 400,
+			reason: 'bad format extension',
+		} as basicError;
+	}
+	return isOk;
 };

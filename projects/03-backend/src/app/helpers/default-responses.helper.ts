@@ -12,7 +12,6 @@ import {
 import { ApiModels } from '../models/mongo.models';
 import { isValidObjectId, Model } from 'mongoose';
 
-
 /**
  * ? Crea una response predefinida y un log para mostrar los mensajes correctos
  * @param {Request} req
@@ -242,8 +241,6 @@ export const removeParamAndSetInfo = (req: Request, key: string): void => {
 	req.body.info = { ...req.body.info, [key]: getMessageInfoNotModify(key) };
 };
 
-
-
 /**
  * ? Comprueba si un modelo existe con un nombre en especifico y recupera el modelo en caso de existir, sino throwea un error
  * @param {string} nameModel
@@ -268,8 +265,6 @@ export const checkExistsAndGetModel = (nameModel: string): Model<any> => {
 	return ApiModels[model];
 };
 
-
-
 /**
  * ? Comprueba si el id recibido es un objecto id valido para mongooDb wn caso contrario throwea un error
  * @param {string} id
@@ -286,4 +281,10 @@ export const checkValidIdMongo = (id: string): boolean => {
 	return true;
 };
 
-
+export const getListOf = (data: {
+	list: string[];
+	type?: Intl.ListFormatType;
+}): string => {
+	const { list, type = 'conjunction' } = data;
+	return new Intl.ListFormat('en-GB', { type }).format(list);
+};
