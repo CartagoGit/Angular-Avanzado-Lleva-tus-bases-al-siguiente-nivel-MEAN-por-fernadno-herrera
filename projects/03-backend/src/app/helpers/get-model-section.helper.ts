@@ -44,14 +44,29 @@ export const getMethodFromUrl = (req: Request): string => {
 	return req.originalUrl.replace(req.baseUrl + '/', '').split('/')[0];
 };
 
-
 /**
  * ? Devuelve el mensaje de dato no encontrado en la seccion correspondiente, y con la id en caso de requerirla la request
  * @param {Request} req
  * @returns {string}
  */
 export const getNotFoundMessage = (req: Request): string => {
-	return `[ NOT FOUND ] There are not data in '${getSectionFromUrl(req)}'${
-		req.params['id'] ? " with id '" + req.params['id'] + "'" : ''
+	const { id = undefined } = req.params;
+	const nameModel = getSectionFromUrl(req);
+	return getNotFoundMessageWithIdAndModel(id, nameModel);
+};
+
+
+/**
+ * ? Devuelve el mensaje de "not found" data en el modelo respecto a su id
+ * @param {(string | undefined)} id
+ * @param {string} nameModel
+ * @returns {string}
+ */
+export const getNotFoundMessageWithIdAndModel = (
+	id: string | undefined,
+	nameModel: string
+): string => {
+	return `[ NOT FOUND ] There are not data in '${nameModel}'${
+		id ? " with id '" + id + "'" : ''
 	}`;
 };

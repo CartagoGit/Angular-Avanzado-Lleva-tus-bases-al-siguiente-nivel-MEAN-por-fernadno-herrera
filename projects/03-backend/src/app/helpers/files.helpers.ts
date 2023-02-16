@@ -2,6 +2,7 @@ import { Request } from 'express';
 import { FileArray } from 'express-fileupload';
 import { Model } from 'mongoose';
 import { basicError } from '../models/error-data.model';
+import { getNotFoundMessageWithIdAndModel } from './get-model-section.helper';
 import {
 	checkExistsAndGetModel,
 	checkValidIdMongo,
@@ -36,7 +37,7 @@ export const checkValidParamsForFilesAndGetModel = async (
 	checkValidTypeFile(typeFile);
 	checkValidIdMongo(id);
 	const model = checkExistsAndGetModel(nameModel);
-	await checkIdFromModel(id,model);
+	await checkIdFromModel(id, model);
 	return { model, id, typeFile };
 };
 
@@ -84,13 +85,24 @@ export const checkExistAndGetFilesRequest = (req: Request): FileArray => {
 	return req.files!;
 };
 
-export const checkIdFromModel = async (id: string, model: Model<any>) => {
-	const modelId = await model.findById(id)
-	if(!modelId) {
+/**
+ * ? Comprueba si existe un elemento con un id en un modelo. Si lo encuentra lo devuelve, si no lo encuentra throwea un error
+ * @async
+ * @param {string} id
+ * @param {Model<any>} model
+ * @returns {Promise<unknown>}
+ */
+export const checkIdFromModel = async (
+	id: string,
+	model: Model<any>
+): Promise<unknown> => {
+	const modelDB = await model.findById(id);
+	if (!modelDB) {
 		throw {
-			message: `There are not any id '${id}' in model '${model.modelName}'`
-		} as basicError
+			message: getNotFoundMessageWithIdAndModel(id, model.modelName!),
+			reason: 'not found id in model',
+			status_code: 404,
+		} as basicError;
 	}
-	return modelId
-
-}
+	return modelDB;
+};
