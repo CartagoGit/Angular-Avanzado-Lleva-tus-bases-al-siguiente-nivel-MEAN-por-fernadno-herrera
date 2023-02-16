@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import { catchError, concatMap, from, map, Observable, of } from 'rxjs';
 import { mongoState } from '../db/init-mongo';
-import { CallbackMethod, TypeRequest } from '../interfaces/response.interface';
 import {
 	defaultErrorResponse,
 	defaultResponse,
@@ -16,19 +15,9 @@ import {
 } from '../helpers/validator.helper';
 import { validateJWT, getErrorJWT } from '../helpers/json-web-token.helper';
 import { getErrorNotAdmin } from '../helpers/default-responses.helper';
+import { RoutesProps } from '../interfaces/routes-model-props';
 
-export interface RoutesProps {
-	route: string;
-	coreController?: CallbackMethod;
-	routeRouter?: Router;
-	middlewares?: ((...args: any[]) => void)[];
-	hasJwtValidator?: boolean;
-	hasAdminValidator?: boolean;
-	hasSameUserValidator?: boolean;
-	type?: TypeRequest;
-	router?: Router;
-	modelController?: CallbackMethod;
-}
+
 
 /**
  * ? Modelo de rutas, donde se almacenaran los paths, controladores, rutas, middlewares, controladores,
@@ -47,8 +36,8 @@ export class Routes {
 	}
 
 	// ANCHOR : Constructor
-	constructor(routes: Record<string, RoutesProps>) {
-		this.routes = routes;
+	constructor(private _routes: Record<string, RoutesProps>) {
+		this.routes = this._routes;
 		this._initRoutes();
 	}
 
