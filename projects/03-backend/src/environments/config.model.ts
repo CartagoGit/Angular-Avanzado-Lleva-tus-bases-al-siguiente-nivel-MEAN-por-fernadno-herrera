@@ -22,19 +22,35 @@ import { getSha256 } from '../app/helpers/encrypt.helper';
 //    JWT_SECRET: 'una_clave_secreta_oculta"
 // }
 
+//* Posibles modos o estado de la aplicacion
 export type Mode = 'production' | 'development';
 
+
+/**
+ * ? Interfaz de las propiedades de los enviornments al crear la configuracion de la app
+ * @interface ConfigProps
+ * @typedef {ConfigProps}
+ */
 interface ConfigProps {
 	PORT: number;
 	MODE: Mode;
 	API_URL_BASE: string;
 }
 
+
+/**
+ * ? Archivo de configuracion inicial del servidor express y mongoDb
+ * @export
+ * @class Config
+ * @typedef {Config}
+ * @implements {ConfigProps}
+ */
 export class Config implements ConfigProps {
 	// ANCHOR : Variables
 	public PORT!: number;
 	public MODE!: Mode;
 	public API_URL_BASE!: string;
+	public UPLOAD_FOLDER: string = 'uploads'
 	private _MONGO_PASSWORD: string =
 		process.env['MONGO_PASSWORD'] || hide_environments.MONGO_PASSWORD;
 	private _MONGO_USERNAME: string =

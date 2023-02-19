@@ -11,6 +11,8 @@ import {
 } from './default-responses.helper';
 import { v4 as uuidv4 } from 'uuid';
 import { FilesData } from '../interfaces/files.interfaces';
+import { config } from '../../environments/config';
+import fs from 'fs';
 
 //* Tipos de archivos
 export const typesFile = [
@@ -108,7 +110,7 @@ export const checkValidParamsForFilesAndGetModel = async (
 	checkValidIdMongo(id);
 	const model = checkExistsAndGetModel(nameModel);
 	await checkIdFromModel(id, model);
-	return { model, id, typeFile: typeFile as TypesFile};
+	return { model, id, typeFile: typeFile as TypesFile };
 };
 
 /**
@@ -283,6 +285,21 @@ export const getFilePath = (data: {
 	nameModel: string;
 }): string => {
 	const { nameFile, nameModel, typeFile } = data;
-	const nameFolder = 'uploads';
-	return `./${nameFolder}/${nameModel}/${typeFile}/${nameFile}`;
+	const path = `${__dirname}/${config.UPLOAD_FOLDER}/${nameModel}/${typeFile}/${nameFile}`;
+	console.log(path);
+	return path;
+};
+
+export const checkAndCreateFolder = (data: {
+	nameModel: string;
+	typeFile: string;
+}) => {
+	const { nameModel, typeFile } = data;
+	const uploadFolder = `${__dirname}/${config.UPLOAD_FOLDER}`;
+	const modelFolder = `${uploadFolder}/${nameModel}`;
+	const typeFileFolder = `${modelFolder}/${typeFile}`;
+	console.log(uploadFolder);
+	if (!fs.existsSync(uploadFolder)) fs.mkdirSync(uploadFolder);
+	if (!fs.existsSync(modelFolder)) fs.mkdirSync(modelFolder);
+	if (!fs.existsSync(typeFileFolder)) fs.mkdirSync(typeFileFolder);
 };
