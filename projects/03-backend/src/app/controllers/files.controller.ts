@@ -24,7 +24,7 @@ export const filesController: {
 		);
 
 		return {
-			status_code: 200,
+			status_code: 201,
 			data: 'Files uploaded successfully',
 			files,
 			typeFile,
