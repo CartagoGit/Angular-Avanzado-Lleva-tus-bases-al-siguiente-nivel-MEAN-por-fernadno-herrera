@@ -192,3 +192,36 @@ export const getFilesNames = (
 			}.${extension}`
 	);
 };
+
+/**
+ * ? Recupera el path de un archivo, o de un array de archivos
+ * @param {({filesName : string | string [], typeFile : string, nameModel: string})} data
+ * @returns {(string | string [])}
+ */
+export const getFilesPath = (data: {
+	filesName: string | string[];
+	typeFile: string;
+	nameModel: string;
+}): string | string[] => {
+	const { filesName, nameModel, typeFile } = data;
+	if (Array.isArray(filesName)) {
+		return filesName.map((nameFile) =>
+			getFilePath({ nameFile, nameModel, typeFile })
+		);
+	} else return getFilePath({ nameFile: filesName, nameModel, typeFile });
+};
+
+/**
+ * ? Recupera el path de un archivo
+ * @param {({nameFile : string | string [], typeFile : string, nameModel: string})} data
+ * @returns {string}
+ */
+export const getFilePath = (data: {
+	nameFile: string | string[];
+	typeFile: string;
+	nameModel: string;
+}): string => {
+	const { nameFile, nameModel, typeFile } = data;
+	const nameFolder = 'uploads';
+	return `./${nameFolder}/${nameModel}/${typeFile}/${nameFile}`;
+};

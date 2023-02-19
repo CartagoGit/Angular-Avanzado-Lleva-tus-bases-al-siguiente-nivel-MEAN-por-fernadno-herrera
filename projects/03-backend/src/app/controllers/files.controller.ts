@@ -3,6 +3,7 @@ import {
 	checkValidParamsForFilesAndGetModel,
 	checkExistAndGetFilesRequest,
 	checkAndGetExtensions,
+	getFilesPath,
 } from '../helpers/files.helpers';
 import { ResponseReturnData } from '../interfaces/response.interface';
 import { getFilesNames } from '../helpers/files.helpers';
@@ -22,12 +23,13 @@ export const filesController: {
 		);
 		const files = checkExistAndGetFilesRequest(req);
 		const extensionsArray = checkAndGetExtensions(files, typeFile);
-		const filesNames = getFilesNames(extensionsArray, {
+		const filesName = getFilesNames(extensionsArray, {
 			id,
 			typeFile,
 			nameModel: model.modelName,
 		});
-		console.log(filesNames);
+		const filesPath = getFilesPath({typeFile, filesName, nameModel : model.modelName});
+		console.log(filesPath);
 
 		return { status_code: 200, data: 'archivitos' };
 	},
