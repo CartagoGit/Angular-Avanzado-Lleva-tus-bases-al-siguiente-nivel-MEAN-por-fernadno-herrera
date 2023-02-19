@@ -4,9 +4,11 @@ import {
 	checkExistAndGetFilesRequest,
 	checkAndGetExtensions,
 	getFilesPath,
+	checkAndGetFilesArgs,
 } from '../helpers/files.helpers';
 import { ResponseReturnData } from '../interfaces/response.interface';
 import { getFilesNames } from '../helpers/files.helpers';
+import { UploadedFile } from 'express-fileupload';
 
 /**
  * ? Controladores especificos para manipulacion de archivos
@@ -18,18 +20,8 @@ export const filesController: {
 	upload: (req: Request) => Promise<ResponseReturnData>;
 } = {
 	upload: async (req: Request) => {
-		const { id, model, typeFile } = await checkValidParamsForFilesAndGetModel(
-			req
-		);
-		const files = checkExistAndGetFilesRequest(req);
-		const extensionsArray = checkAndGetExtensions(files, typeFile);
-		const filesName = getFilesNames(extensionsArray, {
-			id,
-			typeFile,
-			nameModel: model.modelName,
-		});
-		const filesPath = getFilesPath({typeFile, filesName, nameModel : model.modelName});
-		console.log(filesPath);
+		const { files, filesPath } = await checkAndGetFilesArgs(req);
+		files.forEach(async (file, index) => await file.mv(filesPath[index]));
 
 		return { status_code: 200, data: 'archivitos' };
 	},

@@ -10,22 +10,39 @@ import {
 	getListOf,
 } from './default-responses.helper';
 import { v4 as uuidv4 } from 'uuid';
+import { FilesData } from '../interfaces/files.interfaces';
 
 //* Tipos de archivos
-export const typesFile = ['image', 'text', 'pdf', 'video', 'audio', 'icon'];
+export const typesFile = [
+	'image',
+	'text',
+	'pdf',
+	'video',
+	'audio',
+	'icon',
+] as const;
 //* Tipado de los posibles archivos
 export type TypesFile = (typeof typesFile)[number];
 
 //* Tipos de imagenes
-export const typesImage = ['jpeg', 'jpg', 'bmp', 'gif', 'png'];
+export const typesImage = ['jpeg', 'jpg', 'bmp', 'gif', 'png'] as const;
 //* Tipado de posibles times de imagenes
+// export type TypesImage = (typeof typesImage)[number];
 export type TypesImage = (typeof typesImage)[number];
+
+//* Tipado de las posibles extensiones combinadas
+export type TypesExtensionsCombined = TypesImage;
+
+//* Tipado de posibles typos de... combinados
+export type TypesOfExtensionsCombined = typeof typesImage;
 
 /**
  * ? Tipos de Archivos y sus extensiones posibles
  * @type {Record<string, string[]>}
  */
-export const typesExtension: Record<string, string[]> = {
+export const typesExtension: Readonly<
+	Record<string, typeof typesFile | TypesOfExtensionsCombined>
+> = {
 	files: typesFile,
 	images: typesImage,
 };
@@ -50,20 +67,48 @@ export const isValidTypeImage = (
 ): typeImage is TypesImage => typesImage.includes(typeImage);
 
 /**
+ * ? Comprueba
+ * @async
+ * @param {Request} req
+ * @returns {unknown}
+ */
+export const checkAndGetFilesArgs = async (
+	req: Request
+): Promise<FilesData> => {
+	const { id, model, typeFile } = await checkValidParamsForFilesAndGetModel(
+		req
+	);
+	const files = checkExistAndGetFilesRequest(req);
+	const extensionsArray = checkAndGetExtensions(files, typeFile);
+	const filesName = getFilesNames(extensionsArray, {
+		id,
+		typeFile,
+		nameModel: model.modelName,
+	});
+	const filesPath = getFilesPath({
+		typeFile,
+		filesName,
+		nameModel: model.modelName,
+	});
+
+	return { id, model, typeFile, files, extensionsArray, filesName, filesPath };
+};
+
+/**
  * ? Comprueba si el nombre de modelo, el tipo de archivo, y el id provenientes de la request, son validos. En caso positivo devuelve el modelo, el id y el tipo de archivo. En caso contrario throwea el error correspondiente
  * @param {Request} req
  * @returns {{ model: Model<any>; typeFile: string; id: string }}
  */
 export const checkValidParamsForFilesAndGetModel = async (
 	req: Request
-): Promise<{ model: Model<any>; typeFile: string; id: string }> => {
+): Promise<{ model: Model<any>; typeFile: TypesFile; id: string }> => {
 	checkParamsForFiles(req);
 	const { typeFile, nameModel, id } = req.params;
-	checkValidTypeFile(typeFile);
+	checkValidTypeFile(typeFile as TypesFile);
 	checkValidIdMongo(id);
 	const model = checkExistsAndGetModel(nameModel);
 	await checkIdFromModel(id, model);
-	return { model, id, typeFile };
+	return { model, id, typeFile: typeFile as TypesFile};
 };
 
 /**
@@ -81,11 +126,14 @@ export const checkParamsForFiles = (req: Request) => {
  * @param {string} typeFile
  * @returns {boolean}
  */
-export const checkValidTypeFile = (typeFile: string): boolean => {
+export const checkValidTypeFile = (typeFile: TypesFile): boolean => {
 	if (!isValidTypeFile(typeFile))
 		throw {
 			message: `Param '${typeFile}' is not a valid type file. It must be ${getListOf(
-				{ list: typesFile, type: 'disjunction' }
+				{
+					list: typesFile.map((fileType) => fileType.toString()),
+					type: 'disjunction',
+				}
 			)}`,
 			status_code: 400,
 			reason: 'invalid type file',
@@ -134,29 +182,38 @@ export const checkIdFromModel = async (
 /**
  * ? Pasando un array de archivos, recupera un array con sus extensiones
  * @param {UploadedFile[]} files
- * @returns {string[]}
+ * @returns {TypesExtensionsCombined[]}
  */
-export const getExtensionsArray = (files: UploadedFile[]): string[] =>
-	files.map((file) => file.name.split('.').pop()!);
+export const getExtensionsArray = (
+	files: UploadedFile[]
+): TypesExtensionsCombined[] =>
+	files.map((file) => file.name.split('.').pop()! as TypesExtensionsCombined);
 
 /**
  * ? Comprueba si todas las extensiones de los archivos son válidas. Si son correctas devuelve true, sino trhowea un error
  * @param {UploadedFile[]} files
  * @param {TypesFile} typeFile
- * @returns {boolean}
+ * @returns {TypesExtensionsCombined[]}
  */
 export const checkAndGetExtensions = (
 	files: UploadedFile[],
 	typeFile: TypesFile
-): string[] => {
+): TypesExtensionsCombined[] => {
 	const extensionsArray = getExtensionsArray(files);
 	const isOk = extensionsArray.every((extension) =>
-		typesExtension[typeFile].includes(extension)
+		(typesExtension[typeFile] as TypesOfExtensionsCombined).includes(
+			extension
+		)
 	);
 	if (!isOk) {
 		throw {
 			message: `Every file extension must be ${typeFile} format, as ${getListOf(
-				{ list: typesExtension[typeFile], type: 'disjunction' }
+				{
+					list: typesExtension[typeFile].map((extension) =>
+						extension.toString()
+					),
+					type: 'disjunction',
+				}
 			)}`,
 			status_code: 400,
 			reason: 'bad format extension',
@@ -194,21 +251,25 @@ export const getFilesNames = (
 };
 
 /**
- * ? Recupera el path de un archivo, o de un array de archivos
- * @param {({filesName : string | string [], typeFile : string, nameModel: string})} data
- * @returns {(string | string [])}
+ * ? Recupera el path de un array de archivos, y retorna un array con la lista de paths
+ * @param {({
+	filesName: string | string[];
+	typeFile: string;
+	nameModel: string;
+})} data
+ * @returns {string[]}
  */
 export const getFilesPath = (data: {
 	filesName: string | string[];
 	typeFile: string;
 	nameModel: string;
-}): string | string[] => {
+}): string[] => {
 	const { filesName, nameModel, typeFile } = data;
 	if (Array.isArray(filesName)) {
 		return filesName.map((nameFile) =>
 			getFilePath({ nameFile, nameModel, typeFile })
 		);
-	} else return getFilePath({ nameFile: filesName, nameModel, typeFile });
+	} else return [getFilePath({ nameFile: filesName, nameModel, typeFile })];
 };
 
 /**

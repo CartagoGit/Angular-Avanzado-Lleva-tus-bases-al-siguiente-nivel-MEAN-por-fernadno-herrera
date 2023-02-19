@@ -281,6 +281,15 @@ export const checkValidIdMongo = (id: string): boolean => {
 	return true;
 };
 
+
+/**
+ * ? Recupera una lista ordenada pasandole un array y el tipo opcionalmente de conjuncion o disyuncion
+ * @param {{
+	list: string[];
+	type?: Intl.ListFormatType;
+}} data
+ * @returns {string}
+ */
 export const getListOf = (data: {
 	list: string[];
 	type?: Intl.ListFormatType;

@@ -6,5 +6,5 @@ import expressFileupload from 'express-fileupload';
  * @type {{ basic: RequestHandler[]}}
  */
 export const filesMiddlewares: { basic: RequestHandler[] } = {
-	basic: [expressFileupload()],
+	basic: [expressFileupload({ useTempFiles: true, tempFileDir: '/tmp/' })],
 };
