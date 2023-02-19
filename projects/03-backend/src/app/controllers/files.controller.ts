@@ -4,6 +4,7 @@ import {
 	checkAndCreateFolder,
 } from '../helpers/files.helpers';
 import { ResponseReturnData } from '../interfaces/response.interface';
+import { throwErrorUploadFiles, getFilesNames } from '../helpers/files.helpers';
 
 /**
  * ? Controladores especificos para manipulacion de archivos
@@ -15,12 +16,21 @@ export const filesController: {
 	upload: (req: Request) => Promise<ResponseReturnData>;
 } = {
 	upload: async (req: Request) => {
-		const { files, filesPath, typeFile, model } = await checkAndGetFilesArgs(
-			req
-		);
+		const { files, filesPath, typeFile, model, filesName } =
+			await checkAndGetFilesArgs(req);
 		checkAndCreateFolder({ nameModel: model.modelName, typeFile });
-		files.forEach(async (file, index) => await file.mv(filesPath[index]));
+		files.forEach((file, index) =>
+			file.mv(filesPath[index], throwErrorUploadFiles)
+		);
 
-		return { status_code: 200, data: 'archivitos' };
+		return {
+			status_code: 200,
+			data: 'Files uploaded successfully',
+			files,
+			typeFile,
+			nameModel: model.modelName,
+			getFilesNames,
+			filesName,
+		};
 	},
 };

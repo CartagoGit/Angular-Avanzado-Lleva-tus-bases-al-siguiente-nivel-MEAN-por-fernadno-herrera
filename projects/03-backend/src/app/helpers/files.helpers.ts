@@ -290,6 +290,13 @@ export const getFilePath = (data: {
 	return path;
 };
 
+/**
+ * ? Comprueba que existan las rutas para subir los archivos, y en caso de no existir, crea las carpetas necesarias
+ * @param {{
+	nameModel: string;
+	typeFile: string;
+}} data
+ */
 export const checkAndCreateFolder = (data: {
 	nameModel: string;
 	typeFile: string;
@@ -302,4 +309,19 @@ export const checkAndCreateFolder = (data: {
 	if (!fs.existsSync(uploadFolder)) fs.mkdirSync(uploadFolder);
 	if (!fs.existsSync(modelFolder)) fs.mkdirSync(modelFolder);
 	if (!fs.existsSync(typeFileFolder)) fs.mkdirSync(typeFileFolder);
+};
+
+/**
+ * ? Throwea un error en caso de que ocurra algun problema al subir archivos al servidor
+ * @returns {never}
+ */
+export const throwErrorUploadFiles = (error: any): void => {
+	if (!!error) {
+		throw {
+			error_data: error,
+			message: 'Cannot upload files. Contact with your server administrator',
+			reason: 'cannot upload files',
+			status_code: 500,
+		} as basicError;
+	}
 };
