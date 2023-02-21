@@ -28,7 +28,14 @@ export const filesRoutes: Routes = new Routes({
 		modelController: filesController.download,
 		middlewares: [filesMiddlewares.basic].flat(),
 		hasAdminValidator: false,
-		hasSameUserValidator: false, //FIXME
-		hasJwtValidator: false // FIXME
+		hasSameUserValidator: true,
+	},
+	downloadFirst: {
+		route: '/download/:nameModel/:typeFile/:id',
+		type: 'get',
+		modelController: filesController.download,
+		middlewares: [filesMiddlewares.basic].flat(),
+		hasAdminValidator: false,
+		hasSameUserValidator: true
 	},
 });

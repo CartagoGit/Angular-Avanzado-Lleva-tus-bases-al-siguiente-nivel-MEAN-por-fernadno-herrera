@@ -16,16 +16,17 @@ import fs from 'fs';
 import glob from 'glob';
 
 //* Tipos de archivos
-export const typesFile = [
-	'image',
-	'text',
-	'pdf',
-	'video',
-	'audio',
-	'icon',
+export const typesFiles = [
+	'images',
+	'texts',
+	'pdfs',
+	'videos',
+	'audios',
+	'icons',
 ] as const;
+
 //* Tipado de los posibles archivos
-export type TypesFile = (typeof typesFile)[number];
+export type TypesFiles = (typeof typesFiles)[number];
 
 //* Tipos de imagenes
 export const typesImage = ['jpeg', 'jpg', 'bmp', 'gif', 'png'] as const;
@@ -44,9 +45,9 @@ export type TypesOfExtensionsCombined = typeof typesImage;
  * @type {Record<string, string[]>}
  */
 export const typesExtension: Readonly<
-	Record<string, typeof typesFile | TypesOfExtensionsCombined>
+	Record<string, typeof typesFiles | TypesOfExtensionsCombined>
 > = {
-	files: typesFile,
+	files: typesFiles,
 	images: typesImage,
 };
 
@@ -55,10 +56,8 @@ export const typesExtension: Readonly<
  * @param {TypesFile} typeFile
  * @returns {typeFile is TypesFile}
  */
-export const isValidTypeFile = (typeFile: TypesFile): typeFile is TypesFile =>
-	typesFile
-		.map((typeFileSingular) => typeFileSingular + 's')
-		.includes(typeFile);
+export const isValidTypeFile = (typeFile: TypesFiles): typeFile is TypesFiles =>
+	typesFiles.includes(typeFile);
 
 /**
  * ? Comprueba si una extension de imagen es permitida
@@ -114,16 +113,16 @@ export const checkValidParamsForFilesAndGetModel = async (
 	req: Request
 ): Promise<{
 	model: Model<any>;
-	typeFile: TypesFile;
+	typeFile: TypesFiles;
 	id: string;
 	document: Document;
 }> => {
 	const { typeFile, nameModel, id } = checkParamsForFiles(req);
-	checkValidTypeFile(typeFile as TypesFile);
+	checkValidTypeFile(typeFile as TypesFiles);
 	checkValidIdMongo(id);
 	const model = checkExistsAndGetModel(nameModel);
 	const document = await checkIdFromModel(id, model);
-	return { model, id, typeFile: typeFile as TypesFile, document };
+	return { model, id, typeFile: typeFile as TypesFiles, document };
 };
 
 /**
@@ -131,14 +130,15 @@ export const checkValidParamsForFilesAndGetModel = async (
  * @param {Request} req
  * @returns {{typeFile:string , nameModel:string , id:string }}
  */
-export const checkParamsForFiles = (req: Request): {typeFile:string , nameModel:string , id:string } => {
+export const checkParamsForFiles = (
+	req: Request
+): { typeFile: string; nameModel: string; id: string } => {
 	if (!req.params['typeFile']) throw getErrorNotParam('typeFile');
 	if (!req.params['nameModel']) throw getErrorNotParam('nameModel');
 	if (!req.params['id']) throw getErrorNotParam('id');
 	const { typeFile, nameModel, id } = req.params;
-	return {typeFile, nameModel, id}
+	return { typeFile, nameModel, id };
 };
-
 
 /**
  * ? Comprueba que exista nombre del archivo en los parametros
@@ -147,20 +147,20 @@ export const checkParamsForFiles = (req: Request): {typeFile:string , nameModel:
  */
 export const checkParamFileName = (req: Request): string => {
 	if (!req.params['fileName']) throw getErrorNotParam('fileName');
-	return req.params['fileName']
-}
+	return req.params['fileName'];
+};
 
 /**
  * ? Comprueba si el tipo es un tipo de archivo permitido en caso contrario throwea un error
  * @param {string} typeFile
  * @returns {boolean}
  */
-export const checkValidTypeFile = (typeFile: TypesFile): boolean => {
+export const checkValidTypeFile = (typeFile: TypesFiles): boolean => {
 	if (!isValidTypeFile(typeFile))
 		throw {
 			message: `Param '${typeFile}' is not a valid type file. It must be ${getListOf(
 				{
-					list: typesFile.map((fileType) => fileType.toString()),
+					list: typesFiles.map((fileType) => fileType.toString()),
 					type: 'disjunction',
 				}
 			)}`,
@@ -226,7 +226,7 @@ export const getExtensionsArray = (
  */
 export const checkAndGetExtensions = (
 	files: UploadedFile[],
-	typeFile: TypesFile
+	typeFile: TypesFiles
 ): TypesExtensionsCombined[] => {
 	const extensionsArray = getExtensionsArray(files);
 	const isOk = extensionsArray.every((extension) =>
@@ -369,6 +369,17 @@ export const throwErrorDeleteFiles = (error: any): void => {
 	}
 };
 
+/**
+ * Throwea un error si no se encuentra el archivo en la DB
+ * @returns {never}
+ */
+export const throwErrorFileNotFound = (): never => {
+	throw {
+		status_code: 404,
+		message: 'File not found in DataBase',
+		reason: 'file not found',
+	} as basicError;
+};
 
 /**
  * ? Elimina los archivos que esten en la ruta que contengan la id, o elimina los archivos que se encuentren en el tipo de archivo del documento
@@ -388,7 +399,7 @@ export const deleteFilesFromTypeFile = (
 			typeFileFolder: string;
 			id: string;
 		};
-		const path =`${typeFileFolder}/*${id}*`.replace(/\\/g, '/');
+		const path = `${typeFileFolder}/*${id}*`.replace(/\\/g, '/');
 		const filesToDelete = glob.sync(path);
 		filesToDelete.forEach((file) => {
 			fs.unlink(file, throwErrorDeleteFiles); //elimina cada archivo

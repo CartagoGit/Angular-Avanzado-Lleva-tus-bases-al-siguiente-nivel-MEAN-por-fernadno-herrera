@@ -1,7 +1,6 @@
 import { UploadedFile } from 'express-fileupload';
 import { Document, Model } from 'mongoose';
-import { TypesFile, TypesExtensionsCombined } from '../helpers/files.helpers';
-
+import { TypesExtensionsCombined, TypesFiles } from '../helpers/files.helpers';
 
 /**
  * ? Interfaz de datos de archivo a usar en los controlladores
@@ -12,10 +11,10 @@ import { TypesFile, TypesExtensionsCombined } from '../helpers/files.helpers';
 export interface FilesData {
 	id: string;
 	model: Model<any>;
-	typeFile: TypesFile;
+	typeFile: TypesFiles;
 	files: UploadedFile[];
 	extensionsArray: TypesExtensionsCombined[];
 	filesName: string[];
 	filesPath: string[];
-	document: Document
+	document: Document;
 }

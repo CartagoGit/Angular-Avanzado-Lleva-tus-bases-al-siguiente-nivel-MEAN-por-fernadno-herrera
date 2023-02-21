@@ -14,6 +14,8 @@ import {
 import path from 'path';
 import fs from 'fs';
 import { basicError } from '../models/error-data.model';
+import { isValidObjectId } from 'mongoose';
+import { throwErrorFileNotFound } from '../helpers/files.helpers';
 
 /**
  * ? Controladores especificos para manipulacion de archivos
@@ -62,21 +64,21 @@ export const filesController: {
 		};
 	},
 	download: async (req: Request) => {
-		const nameFile = checkParamFileName(req);
-		const { model, typeFile } = await checkValidParamsForFilesAndGetModel(
-			req
-		);
+		//* Si se recibe fileName, se busca el archivo entre los del modelo, en caso contrario se coge el primer archiuvo
+		const { model, typeFile, document } =
+			await checkValidParamsForFilesAndGetModel(req);
+		const isFirst = isValidObjectId(req.originalUrl.split('/').slice(-1)[0]);
+		const existFile =
+			document.get(typeFile)[0].split('/').slice(-1)[0] || undefined;
+		if (!existFile) throwErrorFileNotFound();
+		const nameFile = isFirst
+			? document.get(typeFile)[0].split('/').slice(-1)[0]
+			: checkParamFileName(req);
 		const pathFile = path.join(
 			__dirname,
 			`uploads/${model.modelName}/${typeFile}/${nameFile}`
 		);
-		if (!fs.existsSync(pathFile)) {
-			throw {
-				status_code: 404,
-				message: 'File not found in DataBase',
-				reason: 'file not found',
-			} as basicError;
-		}
+		if (!fs.existsSync(pathFile)) throwErrorFileNotFound();
 
 		return {
 			status_code: 200,
