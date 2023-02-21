@@ -10,9 +10,9 @@ export const HospitalSchema: Schema<any> = new Schema(
 			type: String,
 			required: true,
 		},
-		image: {
+		images: [{
 			type: String,
-		},
+		}],
 		user_creator: {
 			type: Schema.Types.ObjectId,
 			ref: 'User',

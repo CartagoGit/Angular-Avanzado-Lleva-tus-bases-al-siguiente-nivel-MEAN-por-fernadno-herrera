@@ -5,9 +5,9 @@ import { Model, model, Schema } from 'mongoose';
  */
 export const DoctorSchema: Schema<any> = new Schema(
 	{
-		image: {
+		images: [{
 			type: String,
-		},
+		}],
 		user_creator: {
 			type: Schema.Types.ObjectId,
 			ref: 'User',

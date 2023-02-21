@@ -1,6 +1,6 @@
 import { Request } from 'express';
 import { UploadedFile } from 'express-fileupload';
-import { Model } from 'mongoose';
+import { Document, Model } from 'mongoose';
 import { basicError } from '../models/error-data.model';
 import { getNotFoundMessageWithIdAndModel } from './get-model-section.helper';
 import {
@@ -77,7 +77,7 @@ export const isValidTypeImage = (
 export const checkAndGetFilesArgs = async (
 	req: Request
 ): Promise<FilesData> => {
-	const { id, model, typeFile } = await checkValidParamsForFilesAndGetModel(
+	const { id, model, typeFile, document } = await checkValidParamsForFilesAndGetModel(
 		req
 	);
 	const files = checkExistAndGetFilesRequest(req);
@@ -93,7 +93,7 @@ export const checkAndGetFilesArgs = async (
 		nameModel: model.modelName,
 	});
 
-	return { id, model, typeFile, files, extensionsArray, filesName, filesPath };
+	return { id, model, typeFile, files, extensionsArray, filesName, filesPath, document };
 };
 
 /**
@@ -103,14 +103,14 @@ export const checkAndGetFilesArgs = async (
  */
 export const checkValidParamsForFilesAndGetModel = async (
 	req: Request
-): Promise<{ model: Model<any>; typeFile: TypesFile; id: string }> => {
+): Promise<{ model: Model<any>; typeFile: TypesFile; id: string, document: Document }> => {
 	checkParamsForFiles(req);
 	const { typeFile, nameModel, id } = req.params;
 	checkValidTypeFile(typeFile as TypesFile);
 	checkValidIdMongo(id);
 	const model = checkExistsAndGetModel(nameModel);
-	await checkIdFromModel(id, model);
-	return { model, id, typeFile: typeFile as TypesFile };
+	const document = await checkIdFromModel(id, model);
+	return { model, id, typeFile: typeFile as TypesFile, document  };
 };
 
 /**
@@ -169,7 +169,7 @@ export const checkExistAndGetFilesRequest = (req: Request): UploadedFile[] => {
 export const checkIdFromModel = async (
 	id: string,
 	model: Model<any>
-): Promise<unknown> => {
+): Promise<Document> => {
 	const modelDB = await model.findById(id);
 	if (!modelDB) {
 		throw {
@@ -178,7 +178,7 @@ export const checkIdFromModel = async (
 			status_code: 404,
 		} as basicError;
 	}
-	return modelDB;
+	return modelDB as Document;
 };
 
 /**
@@ -285,8 +285,7 @@ export const getFilePath = (data: {
 	nameModel: string;
 }): string => {
 	const { nameFile, nameModel, typeFile } = data;
-	const path = `${__dirname}/${config.UPLOAD_FOLDER}/${nameModel}/${typeFile}/${nameFile}`;
-	console.log(path);
+	const path = `./${config.UPLOAD_FOLDER}/${nameModel}/${typeFile}/${nameFile}`;
 	return path;
 };
 
@@ -302,10 +301,9 @@ export const checkAndCreateFolder = (data: {
 	typeFile: string;
 }) => {
 	const { nameModel, typeFile } = data;
-	const uploadFolder = `${__dirname}/${config.UPLOAD_FOLDER}`;
+	const uploadFolder = `./${config.UPLOAD_FOLDER}`;
 	const modelFolder = `${uploadFolder}/${nameModel}`;
 	const typeFileFolder = `${modelFolder}/${typeFile}`;
-	console.log(uploadFolder);
 	if (!fs.existsSync(uploadFolder)) fs.mkdirSync(uploadFolder);
 	if (!fs.existsSync(modelFolder)) fs.mkdirSync(modelFolder);
 	if (!fs.existsSync(typeFileFolder)) fs.mkdirSync(typeFileFolder);
@@ -325,3 +323,19 @@ export const throwErrorUploadFiles = (error: any): void => {
 		} as basicError;
 	}
 };
+
+
+/**
+ * ? Throwea un error en caso de que ocurra algun problema al eliminar archivos del servidor
+ * @param {*} error
+ */
+export const throwErrorDeleteFiles = (error: any): void => {
+	if(!!error){
+		throw {
+			error_data : error,
+			message: 'Cannot delete files from the model. Contact with your server administrator',
+			reason: 'cannot dedlete files',
+			status_code: 500
+		} as basicError
+	}
+}

@@ -1,5 +1,5 @@
 import { UploadedFile } from 'express-fileupload';
-import { Model } from 'mongoose';
+import { Document, Model } from 'mongoose';
 import { TypesFile, TypesExtensionsCombined } from '../helpers/files.helpers';
 
 
@@ -17,4 +17,5 @@ export interface FilesData {
 	extensionsArray: TypesExtensionsCombined[];
 	filesName: string[];
 	filesPath: string[];
+	document: Document
 }

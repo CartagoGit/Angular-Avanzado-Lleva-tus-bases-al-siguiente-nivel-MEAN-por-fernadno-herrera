@@ -20,9 +20,9 @@ export const UserSchema: Schema = new Schema(
 			type: String,
 			required: true,
 		},
-		image: {
+		images: [{
 			type: String,
-		},
+		}],
 		role: {
 			type: String,
 			required: true,
