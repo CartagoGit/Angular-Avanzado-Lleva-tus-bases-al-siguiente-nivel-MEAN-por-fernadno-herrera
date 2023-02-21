@@ -208,6 +208,7 @@ export class Routes {
 	}): void {
 		const { req, res, respController, props } = data;
 		const { type } = props;
+		
 		const logType = type?.toUpperCase() as LogType;
 		const hasData =
 			typeof respController?.data === 'boolean' ||

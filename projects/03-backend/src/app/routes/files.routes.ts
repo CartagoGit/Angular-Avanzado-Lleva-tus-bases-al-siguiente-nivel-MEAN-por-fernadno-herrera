@@ -22,4 +22,13 @@ export const filesRoutes: Routes = new Routes({
 		hasAdminValidator: false,
 		hasSameUserValidator: true,
 	},
+	download: {
+		route: '/download/:nameModel/:typeFile/:id/:fileName',
+		type: 'get',
+		modelController: filesController.download,
+		middlewares: [filesMiddlewares.basic].flat(),
+		hasAdminValidator: false,
+		hasSameUserValidator: false, //FIXME
+		hasJwtValidator: false // FIXME
+	},
 });

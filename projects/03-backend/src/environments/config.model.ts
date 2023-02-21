@@ -50,7 +50,7 @@ export class Config implements ConfigProps {
 	public PORT!: number;
 	public MODE!: Mode;
 	public API_URL_BASE!: string;
-	public UPLOAD_FOLDER: string = 'uploads'
+	public UPLOAD_FOLDER: string = `${__dirname}/uploads`;
 	private _MONGO_PASSWORD: string =
 		process.env['MONGO_PASSWORD'] || hide_environments.MONGO_PASSWORD;
 	private _MONGO_USERNAME: string =

@@ -118,8 +118,7 @@ export const checkValidParamsForFilesAndGetModel = async (
 	id: string;
 	document: Document;
 }> => {
-	checkParamsForFiles(req);
-	const { typeFile, nameModel, id } = req.params;
+	const { typeFile, nameModel, id } = checkParamsForFiles(req);
 	checkValidTypeFile(typeFile as TypesFile);
 	checkValidIdMongo(id);
 	const model = checkExistsAndGetModel(nameModel);
@@ -130,12 +129,26 @@ export const checkValidParamsForFilesAndGetModel = async (
 /**
  * ? Comprueba que los 3 parametros para manipular archivos se encuentran en la ruta, en caso contrario devuelve un error
  * @param {Request} req
+ * @returns {{typeFile:string , nameModel:string , id:string }}
  */
-export const checkParamsForFiles = (req: Request) => {
+export const checkParamsForFiles = (req: Request): {typeFile:string , nameModel:string , id:string } => {
 	if (!req.params['typeFile']) throw getErrorNotParam('typeFile');
 	if (!req.params['nameModel']) throw getErrorNotParam('nameModel');
 	if (!req.params['id']) throw getErrorNotParam('id');
+	const { typeFile, nameModel, id } = req.params;
+	return {typeFile, nameModel, id}
 };
+
+
+/**
+ * ? Comprueba que exista nombre del archivo en los parametros
+ * @param {Request} req
+ * @returns {string}
+ */
+export const checkParamFileName = (req: Request): string => {
+	if (!req.params['fileName']) throw getErrorNotParam('fileName');
+	return req.params['fileName']
+}
 
 /**
  * ? Comprueba si el tipo es un tipo de archivo permitido en caso contrario throwea un error
@@ -299,7 +312,7 @@ export const getFilePath = (data: {
 	nameModel: string;
 }): string => {
 	const { nameFile, nameModel, typeFile } = data;
-	const path = `./${config.UPLOAD_FOLDER}/${nameModel}/${typeFile}/${nameFile}`;
+	const path = `${config.UPLOAD_FOLDER}/${nameModel}/${typeFile}/${nameFile}`;
 	return path;
 };
 
@@ -316,7 +329,7 @@ export const checkAndCreateFolder = (data: {
 	typeFile: string;
 }): { uploadFolder: string; modelFolder: string; typeFileFolder: string } => {
 	const { nameModel, typeFile } = data;
-	const uploadFolder = `./${config.UPLOAD_FOLDER}`;
+	const uploadFolder = `${config.UPLOAD_FOLDER}`;
 	const modelFolder = `${uploadFolder}/${nameModel}`;
 	const typeFileFolder = `${modelFolder}/${typeFile}`;
 	if (!fs.existsSync(uploadFolder)) fs.mkdirSync(uploadFolder);
@@ -356,6 +369,13 @@ export const throwErrorDeleteFiles = (error: any): void => {
 	}
 };
 
+
+/**
+ * ? Elimina los archivos que esten en la ruta que contengan la id, o elimina los archivos que se encuentren en el tipo de archivo del documento
+ * @param {(| { typeFileFolder: string; id: string }
+		| { document: Document; typeFile: string })} data
+ * @param {boolean} [replaceEveryPath=false]
+ */
 export const deleteFilesFromTypeFile = (
 	data:
 		| { typeFileFolder: string; id: string }
@@ -368,7 +388,8 @@ export const deleteFilesFromTypeFile = (
 			typeFileFolder: string;
 			id: string;
 		};
-		const filesToDelete = glob.sync(`${typeFileFolder}/*${id}*`);
+		const path =`${typeFileFolder}/*${id}*`.replace(/\\/g, '/');
+		const filesToDelete = glob.sync(path);
 		filesToDelete.forEach((file) => {
 			fs.unlink(file, throwErrorDeleteFiles); //elimina cada archivo
 		});

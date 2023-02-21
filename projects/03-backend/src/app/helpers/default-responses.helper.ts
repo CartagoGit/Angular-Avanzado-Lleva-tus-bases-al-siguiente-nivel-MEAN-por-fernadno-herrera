@@ -34,13 +34,22 @@ export const defaultResponse = (
 		`[ Status  ${statusCode} OK - '${method}' in ${getSectionFromUrl(
 			req
 		)} ]`.toUpperCase();
-	res.status(statusCode).json({
-		...respController,
-		ok: true,
-		message,
-		method,
-		db_state: mongoState.getState(),
-	});
+	//* Si es del tipo archivo la respuesta debe ser un archivo
+	const isSendFile = !!respController?.sendFile;
+	if (!!isSendFile) {
+		delete respController.sendFile;
+		res.status(statusCode).sendFile(respController.data)
+	}
+	//* Si no se devuelve un archivo una respuesta correcta simple
+	else {
+		res.status(statusCode).json({
+			...respController,
+			ok: true,
+			message,
+			method,
+			db_state: mongoState.getState(),
+		});
+	}
 	log('Correct response', logType, message);
 };
 
@@ -280,7 +289,6 @@ export const checkValidIdMongo = (id: string): boolean => {
 	}
 	return true;
 };
-
 
 /**
  * ? Recupera una lista ordenada pasandole un array y el tipo opcionalmente de conjuncion o disyuncion
