@@ -13,6 +13,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { FilesData } from '../interfaces/files.interfaces';
 import { config } from '../../environments/config';
 import fs from 'fs';
+import glob from 'glob';
 
 //* Tipos de archivos
 export const typesFile = [
@@ -77,9 +78,8 @@ export const isValidTypeImage = (
 export const checkAndGetFilesArgs = async (
 	req: Request
 ): Promise<FilesData> => {
-	const { id, model, typeFile, document } = await checkValidParamsForFilesAndGetModel(
-		req
-	);
+	const { id, model, typeFile, document } =
+		await checkValidParamsForFilesAndGetModel(req);
 	const files = checkExistAndGetFilesRequest(req);
 	const extensionsArray = checkAndGetExtensions(files, typeFile);
 	const filesName = getFilesNames(extensionsArray, {
@@ -93,7 +93,16 @@ export const checkAndGetFilesArgs = async (
 		nameModel: model.modelName,
 	});
 
-	return { id, model, typeFile, files, extensionsArray, filesName, filesPath, document };
+	return {
+		id,
+		model,
+		typeFile,
+		files,
+		extensionsArray,
+		filesName,
+		filesPath,
+		document,
+	};
 };
 
 /**
@@ -103,14 +112,19 @@ export const checkAndGetFilesArgs = async (
  */
 export const checkValidParamsForFilesAndGetModel = async (
 	req: Request
-): Promise<{ model: Model<any>; typeFile: TypesFile; id: string, document: Document }> => {
+): Promise<{
+	model: Model<any>;
+	typeFile: TypesFile;
+	id: string;
+	document: Document;
+}> => {
 	checkParamsForFiles(req);
 	const { typeFile, nameModel, id } = req.params;
 	checkValidTypeFile(typeFile as TypesFile);
 	checkValidIdMongo(id);
 	const model = checkExistsAndGetModel(nameModel);
 	const document = await checkIdFromModel(id, model);
-	return { model, id, typeFile: typeFile as TypesFile, document  };
+	return { model, id, typeFile: typeFile as TypesFile, document };
 };
 
 /**
@@ -291,6 +305,7 @@ export const getFilePath = (data: {
 
 /**
  * ? Comprueba que existan las rutas para subir los archivos, y en caso de no existir, crea las carpetas necesarias
+ * * retorna el path de la carpeta de uplod, del modelo, y del tipo de archivo
  * @param {{
 	nameModel: string;
 	typeFile: string;
@@ -299,7 +314,7 @@ export const getFilePath = (data: {
 export const checkAndCreateFolder = (data: {
 	nameModel: string;
 	typeFile: string;
-}) => {
+}): { uploadFolder: string; modelFolder: string; typeFileFolder: string } => {
 	const { nameModel, typeFile } = data;
 	const uploadFolder = `./${config.UPLOAD_FOLDER}`;
 	const modelFolder = `${uploadFolder}/${nameModel}`;
@@ -307,6 +322,7 @@ export const checkAndCreateFolder = (data: {
 	if (!fs.existsSync(uploadFolder)) fs.mkdirSync(uploadFolder);
 	if (!fs.existsSync(modelFolder)) fs.mkdirSync(modelFolder);
 	if (!fs.existsSync(typeFileFolder)) fs.mkdirSync(typeFileFolder);
+	return { uploadFolder, modelFolder, typeFileFolder };
 };
 
 /**
@@ -324,18 +340,46 @@ export const throwErrorUploadFiles = (error: any): void => {
 	}
 };
 
-
 /**
  * ? Throwea un error en caso de que ocurra algun problema al eliminar archivos del servidor
  * @param {*} error
  */
 export const throwErrorDeleteFiles = (error: any): void => {
-	if(!!error){
+	if (!!error) {
 		throw {
-			error_data : error,
-			message: 'Cannot delete files from the model. Contact with your server administrator',
+			error_data: error,
+			message:
+				'Cannot delete files from the model. Contact with your server administrator',
 			reason: 'cannot dedlete files',
-			status_code: 500
-		} as basicError
+			status_code: 500,
+		} as basicError;
 	}
-}
+};
+
+export const deleteFilesFromTypeFile = (
+	data:
+		| { typeFileFolder: string; id: string }
+		| { document: Document; typeFile: string },
+	replaceEveryPath: boolean = false
+) => {
+	if (!!replaceEveryPath) {
+		//* Elimina todos los archivos en la ruta que contengan dicha id
+		const { typeFileFolder, id } = data as {
+			typeFileFolder: string;
+			id: string;
+		};
+		const filesToDelete = glob.sync(`${typeFileFolder}/*${id}*`);
+		filesToDelete.forEach((file) => {
+			fs.unlink(file, throwErrorDeleteFiles); //elimina cada archivo
+		});
+	} else {
+		//* Elimina unicamente los archivos que esten guardados como ruta en el documento del modelo
+		const { document, typeFile } = data as {
+			document: Document;
+			typeFile: string;
+		};
+		(document.get(typeFile) as string[]).forEach((path) => {
+			if (!!fs.existsSync(path)) fs.unlink(path, throwErrorDeleteFiles);
+		});
+	}
+};
