@@ -7,9 +7,14 @@ import { ResponseReturnData } from '../interfaces/response.interface';
 
 /**
  * ? Controladores especificos de los metodos para el modelo de usuarios
- * @type {{
-	login: (req: Request) => Promise<any>;
-}}
+ * @type {({
+	login: (
+		req: Request
+	) => Promise<
+		ResponseReturnData & { token: string; ok: boolean; id: string }
+	>;
+	googleLogin: (req: Request) => Promise<ResponseReturnData>;
+})}
  */
 export const authController: {
 	login: (
@@ -17,6 +22,7 @@ export const authController: {
 	) => Promise<
 		ResponseReturnData & { token: string; ok: boolean; id: string }
 	>;
+	googleLogin: (req: Request) => Promise<ResponseReturnData>;
 } = {
 	login: async (req) => {
 		const { password, email } = req.body;
@@ -33,5 +39,8 @@ export const authController: {
 		const { ok, token = '' } = await createJWT({ id });
 
 		return { ok, status_code: 200, token, id };
+	},
+	googleLogin: async (req) => {
+		return { status_code: 200, data: req.body };
 	},
 };

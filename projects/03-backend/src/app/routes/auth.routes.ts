@@ -22,4 +22,13 @@ export const authRoutes: Routes = new Routes({
 		hasSameUserValidator: false,
 		hasJwtValidator: false,
 	},
+	googleLogin: {
+		route: '/google-login',
+		type: 'post',
+		middlewares: authMiddlewares.googleLogin,
+		modelController: authController.googleLogin,
+		hasAdminValidator: false,
+		hasSameUserValidator: false,
+		hasJwtValidator: false,
+	},
 });

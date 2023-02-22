@@ -4,9 +4,15 @@ import { getMessageErrorValidation } from '../helpers/default-responses.helper';
 
 /**
  * ? Middlewares especificos para el modelo de usuarios
- * @type {{ post: RequestHandler[]; put: RequestHandler[] }}
+ * @type {{
+	login: RequestHandler[];
+	googleLogin: RequestHandler[];
+}}
  */
-export const authMiddlewares: { login: RequestHandler[] } = {
+export const authMiddlewares: {
+	login: RequestHandler[];
+	googleLogin: RequestHandler[];
+} = {
 	login: [
 		check(
 			'email',
@@ -21,5 +27,11 @@ export const authMiddlewares: { login: RequestHandler[] } = {
 		)
 			.not()
 			.isEmpty(),
+	],
+	googleLogin: [
+		check(
+			'token',
+			getMessageErrorValidation('token', { required: true })
+		).notEmpty(),
 	],
 };

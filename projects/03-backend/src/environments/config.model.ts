@@ -108,6 +108,10 @@ export class Config implements ConfigProps {
 		return getSha256(this._JWT_SECRET + this._MONGO_PASSWORD);
 	}
 
+	get GOOGLE_SECRET() {
+		return this._GOOGLE_SECRET;
+	}
+
 	// ANCHOR : Constructor
 	constructor(data: ConfigProps) {
 		this.PORT = data.PORT;
