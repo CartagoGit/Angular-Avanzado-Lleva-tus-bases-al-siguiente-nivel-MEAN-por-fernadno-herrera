@@ -4,6 +4,7 @@ import { UserModel } from '../models/mongo-models/user.model';
 import { createJWT } from '../helpers/json-web-token.helper';
 import { ResponseReturnData } from '../interfaces/response.interface';
 import { checkGoogleLoginAndGetData } from '../helpers/google-login.helper';
+import { Document } from 'mongoose';
 import bcrypt from 'bcryptjs';
 
 /**
@@ -54,16 +55,42 @@ export const authController: {
 		// const domain = payload['hd'];
 
 		//* Creamos el usuario con los datos recibidos de google
-		const userDB = await UserModel.find({ email });
+		const userDB: Document | null = await UserModel.findOne({ email });
+		let user: Document;
+		let isNewUser = false;
+		if (!userDB) {
+			user = new UserModel({
+				name: given_name,
+				email,
+				password: '@@@',
+				images: [image],
+				google: true,
+			});
+			isNewUser = true;
+		} else {
+			user = userDB;
+			(user as any).google = true;
+		}
+		await user.save();
+
+		// * Generamos el Json Web Token
+		const id = user.id;
+		const { ok, token = '' } = await createJWT({ id });
 
 		return {
+			ok,
+			jwt: token,
 			status_code: 200,
-			data: req.body,
-			userId,
-			email,
-			name: `${given_name} ${family_name}`,
-			image,
-			googleUser: payload,
+			model: user,
+			google: {
+				token: req.body.token,
+				userId,
+				data: payload,
+				completeName: `${given_name} ${family_name}`,
+				email,
+				image,
+			},
+			isNewUser,
 		};
 	},
 };

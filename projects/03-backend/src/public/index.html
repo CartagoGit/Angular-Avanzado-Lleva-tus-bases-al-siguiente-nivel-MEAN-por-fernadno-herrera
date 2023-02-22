@@ -14,23 +14,31 @@
 			<h1>Welcome to Cartago's api</h1>
 		</header>
 		<div id="buttonGoogle"></div>
+
+		<!--? ------- SCRIPTS DE GOOGLE ---------->
 		<script src="https://accounts.google.com/gsi/client" async defer></script>
 		<script>
 			//* Se usa var por tema de compatabilidades al ser un script en navegador
-			var url = 'http://localhost:5000/api/auth/google-login';
+			// REVIEW - El url no deberia enfocar a local si se pasa a produccion
+			var urlDev = 'http://localhost:5000/api/auth/google-login';
 			function handleCredentialResponse(response) {
 				// console.log('Encoded JWT ID token: ' + response.credential);
-				fetch(url, {
+				fetch(urlDev, {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json' },
 					body: JSON.stringify({ token: response.credential }),
 				})
 					.then((resp) => resp.json())
-					.then((data) => console.log('ServerData', data))
+					.then(
+						(data) => data
+						// console.log('ServerData', data)
+					)
 					.catch((error) => console.error(error));
 			}
 			window.onload = function () {
 				google.accounts.id.initialize({
+					// Se hardcodea ya que desde el html statico no podemos acceder a la config de la app en principio
+					// REVIEW comprobar en un futuro si se puede realizar en produccion programaticamente
 					client_id:
 						'274390438175-u22bgdfgk1j50kt401l2kbrdedoca290.apps.googleusercontent.com',
 					callback: handleCredentialResponse,
@@ -42,6 +50,8 @@
 				google.accounts.id.prompt(); // also display the One Tap dialog
 			};
 		</script>
+
+		<!--? EFECTOS PARA CSS DE FONDO -->
 		<div class="area">
 			<ul class="circles">
 				<li></li>
