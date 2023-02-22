@@ -1,12 +1,10 @@
 import { Request } from 'express';
 import { getNotFoundMessage } from '../helpers/get-model-section.helper';
 import { UserModel } from '../models/mongo-models/user.model';
-import bcrypt from 'bcryptjs';
 import { createJWT } from '../helpers/json-web-token.helper';
 import { ResponseReturnData } from '../interfaces/response.interface';
-
-import { config } from '../../environments/config';
-import { basicError } from '../models/error-data.model';
+import { checkGoogleLoginAndGetData } from '../helpers/google-login.helper';
+import bcrypt from 'bcryptjs';
 
 /**
  * ? Controladores especificos de los metodos para el modelo de usuarios
@@ -44,23 +42,7 @@ export const authController: {
 		return { ok, status_code: 200, token, id };
 	},
 	googleLogin: async (req) => {
-		const { GOOGLE_CLIENT, GOOGLE_ID } = config.GOOGLE_CLIENT;
-		const ticket = await GOOGLE_CLIENT.verifyIdToken({
-			idToken: req.body.token,
-			audience: GOOGLE_ID, // Specify the CLIENT_ID of the app that accesses the backend
-			// Or, if multiple clients access the backend:
-			//[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
-		});
-		const payload = !!ticket ? ticket.getPayload() : undefined;
-		if (!payload || !ticket) {
-			const badToken = !ticket ? 'ticket' : 'payload';
-			throw {
-				status_code: 401,
-				reason: `bad ${badToken} token`,
-				message: `The Google Auth Token has a bad ${badToken}`,
-			} as basicError;
-		}
-
+		const payload = await checkGoogleLoginAndGetData(req);
 		const {
 			sub: userId,
 			email,
@@ -70,6 +52,9 @@ export const authController: {
 		} = payload;
 		// If request specified a G Suite domain:
 		// const domain = payload['hd'];
+
+		//* Creamos el usuario con los datos recibidos de google
+		const userDB = await UserModel.find({ email });
 
 		return {
 			status_code: 200,
