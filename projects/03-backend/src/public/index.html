@@ -16,8 +16,18 @@
 		<div id="buttonGoogle"></div>
 		<script src="https://accounts.google.com/gsi/client" async defer></script>
 		<script>
+			//* Se usa var por tema de compatabilidades al ser un script en navegador
+			var url = 'http://localhost:5000/api/auth/google-login';
 			function handleCredentialResponse(response) {
-				console.log('Encoded JWT ID token: ' + response.credential);
+				// console.log('Encoded JWT ID token: ' + response.credential);
+				fetch(url, {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ token: response.credential }),
+				})
+					.then((resp) => resp.json())
+					.then((data) => console.log('ServerData', data))
+					.catch((error) => console.error(error));
 			}
 			window.onload = function () {
 				google.accounts.id.initialize({
