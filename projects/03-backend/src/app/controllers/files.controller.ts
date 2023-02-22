@@ -13,7 +13,6 @@ import {
 } from '../helpers/files.helpers';
 import path from 'path';
 import fs from 'fs';
-import { basicError } from '../models/error-data.model';
 import { isValidObjectId } from 'mongoose';
 import { throwErrorFileNotFound } from '../helpers/files.helpers';
 
@@ -21,6 +20,7 @@ import { throwErrorFileNotFound } from '../helpers/files.helpers';
  * ? Controladores especificos para manipulacion de archivos
  * @type {{
 	upload: (req: Request) => Promise<ResponseReturnData>;
+	download: (req: Request) => Promise<ResponseReturnData>;
 }}
  */
 export const filesController: {

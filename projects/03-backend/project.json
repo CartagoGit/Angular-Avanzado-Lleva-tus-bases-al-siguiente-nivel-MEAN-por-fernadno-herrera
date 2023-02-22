@@ -5,14 +5,27 @@
 	"projectType": "application",
 	"targets": {
 		"build": {
-			"executor": "@nrwl/esbuild:esbuild",
+			"executor": "@nrwl/node:webpack",
 			"outputs": ["{options.outputPath}"],
+
 			"options": {
 				"outputPath": "dist/projects/03-backend",
 				"format": ["cjs"],
 				"main": "projects/03-backend/src/main.ts",
 				"tsConfig": "projects/03-backend/tsconfig.app.json",
-				"assets": ["projects/03-backend/src/assets"]
+				"assets": [
+					"projects/03-backend/src/assets",
+					{
+						"input": "projects/03-backend/src/assets",
+						"output": "assets",
+						"glob": "**/*"
+					},
+					{
+						"input": "projects/03-backend/src/public",
+						"output": "public",
+						"glob": "**/*"
+					}
+				]
 			}
 		},
 		"serve": {

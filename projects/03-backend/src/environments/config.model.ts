@@ -9,6 +9,7 @@ import { getSha256 } from '../app/helpers/encrypt.helper';
 // 	MONGO_OPTIONS?: {}  | string;
 //    MONGO_DB?: string;
 //    JWT_SECRET: string;
+//		GOOGLE_SECRET: string;
 // }
 // export const hide_environments = {
 // 	MONGO_CLUSTER : 'backend-angular-avanzad.pei57e6',
@@ -20,11 +21,11 @@ import { getSha256 } from '../app/helpers/encrypt.helper';
 //	   },
 //    MONGO_DB: 'hospitalApp',
 //    JWT_SECRET: 'una_clave_secreta_oculta"
+// 	GOOGLE_SECRET: 'la_clave_secreta_de_google'
 // }
 
 //* Posibles modos o estado de la aplicacion
 export type Mode = 'production' | 'development';
-
 
 /**
  * ? Interfaz de las propiedades de los enviornments al crear la configuracion de la app
@@ -35,8 +36,8 @@ interface ConfigProps {
 	PORT: number;
 	MODE: Mode;
 	API_URL_BASE: string;
+	GOOGLE_ID?: string;
 }
-
 
 /**
  * ? Archivo de configuracion inicial del servidor express y mongoDb
@@ -47,9 +48,13 @@ interface ConfigProps {
  */
 export class Config implements ConfigProps {
 	// ANCHOR : Variables
+	//* ConfigPropps
 	public PORT!: number;
 	public MODE!: Mode;
 	public API_URL_BASE!: string;
+	public GOOGLE_ID: string | undefined;
+
+	//* Otras props
 	public UPLOAD_FOLDER: string = `${__dirname}/uploads`;
 	private _MONGO_PASSWORD: string =
 		process.env['MONGO_PASSWORD'] || hide_environments.MONGO_PASSWORD;
@@ -62,6 +67,8 @@ export class Config implements ConfigProps {
 	private _MONGO_DB: string =
 		process.env['MONGO_DB'] || hide_environments.MONGO_DB || '';
 	private _JWT_SECRET: string =
+		process.env['JWT_SECRET'] || hide_environments.JWT_SECRET;
+	private _GOOGLE_SECRET: string =
 		process.env['JWT_SECRET'] || hide_environments.JWT_SECRET;
 
 	get API_URL() {

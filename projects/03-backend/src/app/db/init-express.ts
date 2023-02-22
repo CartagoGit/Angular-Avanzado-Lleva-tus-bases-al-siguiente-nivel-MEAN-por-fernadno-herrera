@@ -5,7 +5,6 @@ import { log } from '../helpers/logs.helper';
 import { rootRoutes } from '../routes/root.routes';
 import { mongoState } from './init-mongo';
 
-
 /**
  * ? Inicia el servidor de Express
  */
@@ -17,6 +16,10 @@ export const initExpress = () => {
 
 	//* Añade los cors al servidor
 	app.use(cors());
+
+	//* Añadimos una carpeta pública
+	console.log(__dirname + '/public');
+	app.use(express.static(__dirname + '/public'));
 
 	//* Permite a express trabajar con archivos json
 	app.use(express.json());
