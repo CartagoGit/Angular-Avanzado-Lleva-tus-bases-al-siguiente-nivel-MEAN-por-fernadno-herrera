@@ -32,6 +32,7 @@
 		"crypto-js": "^4.1.1",
 		"express-fileupload": "^1.4.0",
 		"express-validator": "^6.15.0",
+		"google-auth-library": "^8.7.0",
 		"jsonwebtoken": "^9.0.0",
 		"mongoose": "^6.9.3",
 		"mongoose-autopopulate": "^0.17.1",

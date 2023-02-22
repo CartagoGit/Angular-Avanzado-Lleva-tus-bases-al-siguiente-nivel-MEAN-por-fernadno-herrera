@@ -1,5 +1,6 @@
 import { hide_environments } from 'global/hide_environments';
 import { getSha256 } from '../app/helpers/encrypt.helper';
+import { OAuth2Client } from 'google-auth-library';
 
 //? Example for hide environments
 // interface HideEnvironmentsProps {
@@ -36,7 +37,7 @@ interface ConfigProps {
 	PORT: number;
 	MODE: Mode;
 	API_URL_BASE: string;
-	GOOGLE_ID?: string;
+	GOOGLE_ID: string;
 }
 
 /**
@@ -52,10 +53,11 @@ export class Config implements ConfigProps {
 	public PORT!: number;
 	public MODE!: Mode;
 	public API_URL_BASE!: string;
-	public GOOGLE_ID: string | undefined;
+	public GOOGLE_ID!: string;
 
 	//* Otras props
 	public UPLOAD_FOLDER: string = `${__dirname}/uploads`;
+	public GOOGLE_CLIENT!: { GOOGLE_ID: string; GOOGLE_CLIENT: OAuth2Client };
 	private _MONGO_PASSWORD: string =
 		process.env['MONGO_PASSWORD'] || hide_environments.MONGO_PASSWORD;
 	private _MONGO_USERNAME: string =
@@ -69,7 +71,7 @@ export class Config implements ConfigProps {
 	private _JWT_SECRET: string =
 		process.env['JWT_SECRET'] || hide_environments.JWT_SECRET;
 	private _GOOGLE_SECRET: string =
-		process.env['JWT_SECRET'] || hide_environments.JWT_SECRET;
+		process.env['GOOGLE_SECRET'] || hide_environments.JWT_SECRET;
 
 	get API_URL() {
 		return this.API_URL_BASE + this.PORT;
@@ -108,15 +110,16 @@ export class Config implements ConfigProps {
 		return getSha256(this._JWT_SECRET + this._MONGO_PASSWORD);
 	}
 
-	get GOOGLE_SECRET() {
-		return this._GOOGLE_SECRET;
-	}
-
 	// ANCHOR : Constructor
 	constructor(data: ConfigProps) {
 		this.PORT = data.PORT;
 		this.MODE = data.MODE;
 		this.API_URL_BASE = data.API_URL_BASE;
+		this.GOOGLE_ID = data.GOOGLE_ID;
+		this.GOOGLE_CLIENT = {
+			GOOGLE_ID: this.GOOGLE_ID,
+			GOOGLE_CLIENT: new OAuth2Client(this._GOOGLE_SECRET),
+		};
 	}
 
 	// ANCHOR : Methods
