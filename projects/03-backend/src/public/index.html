@@ -19,11 +19,31 @@
 		<script src="https://accounts.google.com/gsi/client" async defer></script>
 		<script>
 			//* Se usa var por tema de compatabilidades al ser un script en navegador
-			// REVIEW - El url no deberia enfocar a local si se pasa a produccion
-			var urlDev = 'http://localhost:5000/api/auth/google-login';
+			var address = window.location.href;
+			var google_client_id = '';
+
+			//* Recupera el id de cliente de google desde la api, necesario para la autenticacion con google
+			async function getGoogleClientId() {
+				var urlGoogleClientId = address + 'api/auth/google-client-id';
+				var googleClientId = '';
+				await fetch(urlGoogleClientId, {
+					method: 'GET',
+					headers: { 'Content-Type': 'application/json' },
+				})
+					.then((resp) => resp.json())
+					.then(({ data, ok }) => {
+						if (!ok) throw 'Not get the client id for Google Auth';
+						googleClientId = data;
+						// console.log('GoogleClientId', data)
+					})
+					.catch(console.error);
+				return googleClientId;
+			}
+
 			function handleCredentialResponse(response) {
+				var urlGoogleLogin = address + 'api/auth/google-login';
 				// console.log('Encoded JWT ID token: ' + response.credential);
-				fetch(urlDev, {
+				fetch(urlGoogleLogin, {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json' },
 					body: JSON.stringify({ token: response.credential }),
@@ -33,14 +53,17 @@
 						(data) => data
 						// console.log('ServerData', data)
 					)
-					.catch((error) => console.error(error));
+					.catch(console.error);
 			}
-			window.onload = function () {
+			window.onload = async function () {
+				const clientGoogleId = await getGoogleClientId();
+
 				google.accounts.id.initialize({
 					// Se hardcodea ya que desde el html statico no podemos acceder a la config de la app en principio
-					// REVIEW comprobar en un futuro si se puede realizar en produccion programaticamente
-					client_id:
-						'274390438175-u22bgdfgk1j50kt401l2kbrdedoca290.apps.googleusercontent.com',
+					//* Recupera el id del cliente de google desde la api
+					client_id: clientGoogleId,
+					// '274390438175-u22bgdfgk1j50kt401l2kbrdedoca290.apps.googleusercontent.com',
+
 					callback: handleCredentialResponse,
 				});
 				google.accounts.id.renderButton(

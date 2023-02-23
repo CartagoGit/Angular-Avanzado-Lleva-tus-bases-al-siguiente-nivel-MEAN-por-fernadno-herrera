@@ -6,6 +6,7 @@ import { ResponseReturnData } from '../interfaces/response.interface';
 import { checkGoogleLoginAndGetData } from '../helpers/google-login.helper';
 import { Document } from 'mongoose';
 import bcrypt from 'bcryptjs';
+import { config } from '../../environments/config';
 
 /**
  * ? Controladores especificos de los metodos para el modelo de usuarios
@@ -25,6 +26,7 @@ export const authController: {
 		ResponseReturnData & { token: string; ok: boolean; id: string }
 	>;
 	googleLogin: (req: Request) => Promise<ResponseReturnData>;
+	googleClientId: (req: Request) => Promise<ResponseReturnData>;
 } = {
 	login: async (req) => {
 		const { password, email } = req.body;
@@ -91,6 +93,13 @@ export const authController: {
 				image,
 			},
 			isNewUser,
+		};
+	},
+	googleClientId: async (req) => {
+		const googleClientId = config.GOOGLE_ID;
+		return {
+			status_code: 200,
+			data: googleClientId,
 		};
 	},
 };

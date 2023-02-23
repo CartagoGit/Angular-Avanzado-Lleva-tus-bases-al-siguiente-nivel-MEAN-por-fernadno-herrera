@@ -5,7 +5,8 @@ export const environment: Record<Mode, Config> = {
 		PORT: 5000,
 		MODE: 'development',
 		API_URL_BASE: 'http://localhost:',
-		GOOGLE_ID: '274390438175-u22bgdfgk1j50kt401l2kbrdedoca290.apps.googleusercontent.com'
+		GOOGLE_ID: '274390438175-u22bgdfgk1j50kt401l2kbrdedoca290.apps.googleusercontent.com',
+		// GOOGLE_URL : ''
 	}),
 
 	production: new Config({

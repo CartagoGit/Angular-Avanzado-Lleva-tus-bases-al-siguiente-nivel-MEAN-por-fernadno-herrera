@@ -31,4 +31,12 @@ export const authRoutes: Routes = new Routes({
 		hasSameUserValidator: false,
 		hasJwtValidator: false,
 	},
+	googleClientId: {
+		route: '/google-client-id',
+		type: 'get',
+		modelController: authController.googleClientId,
+		hasAdminValidator: false,
+		hasSameUserValidator: false,
+		hasJwtValidator: false,
+	},
 });
