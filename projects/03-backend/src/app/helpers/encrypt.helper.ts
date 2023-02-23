@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs';
 import { SHA256 } from 'crypto-js';
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  * ? Encrypta un string y devuelve el hash
@@ -38,3 +39,13 @@ export const getStringFromBase64 = (toDecode: string): string => {
 export const getSha256 = (toEncrypt: string): string => {
 	return SHA256(toEncrypt).toString();
 };
+
+
+/**
+ * ? Crea y recupera una encriptación aleatoria
+ * @returns {string}
+ */
+export const getRandomEncrypt = (): string => {
+	return getSha256(getEncryptHash(uuidv4()))
+
+}

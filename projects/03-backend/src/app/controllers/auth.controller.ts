@@ -1,17 +1,14 @@
 import { Request } from 'express';
 import { getNotFoundMessage } from '../helpers/get-model-section.helper';
 import { UserModel } from '../models/mongo-models/user.model';
-import {
-	createJWT,
-	getTokenFromBearerHeader,
-	validateJWT,
-} from '../helpers/json-web-token.helper';
+import { createJWT, validateJWT } from '../helpers/json-web-token.helper';
 import { ResponseReturnData } from '../interfaces/response.interface';
 import { checkGoogleLoginAndGetData } from '../helpers/google-login.helper';
 import { Document } from 'mongoose';
 import bcrypt from 'bcryptjs';
 import { config } from '../../environments/config';
 import { ResponseReturnJwt } from '../interfaces/json-web-token.interface';
+import { getRandomEncrypt } from '../helpers/encrypt.helper';
 
 /**
  * ? Controladores especificos de los metodos para el modelo de usuarios
@@ -89,7 +86,7 @@ export const authController: {
 			user = new UserModel({
 				name: given_name,
 				email,
-				password: '@@@',
+				password: getRandomEncrypt(),
 				images: [image],
 				google: true,
 			});
