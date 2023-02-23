@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 /**
  * ? Encrypta un string y devuelve el hash
  * @param {string} toEncrypt
- * @returns {*}
+ * @returns {string}
  */
 export const getEncryptHash = (toEncrypt: string): string => {
 	const salt = bcrypt.genSaltSync();
@@ -30,7 +30,6 @@ export const getStringFromBase64 = (toDecode: string): string => {
 	return Buffer.from(toDecode, 'base64').toString('ascii');
 };
 
-
 /**
  * ? Recupera un string con el sha256 de un string
  * @param {string} toEncrypt
@@ -39,7 +38,6 @@ export const getStringFromBase64 = (toDecode: string): string => {
 export const getSha256 = (toEncrypt: string): string => {
 	return SHA256(toEncrypt).toString();
 };
-
 
 /**
  * ? Crea y recupera una encriptación aleatoria

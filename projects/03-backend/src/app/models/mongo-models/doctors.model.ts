@@ -1,18 +1,21 @@
 import { Model, model, Schema } from 'mongoose';
+import { BaseModel } from './base.model';
 /**
  * ? Crea el esquema del modelo de Doctores en MongoDb
  * @type {Schema<any>}
  */
 export const DoctorSchema: Schema<any> = new Schema(
 	{
-		images: [{
-			type: String,
-		}],
-		user_creator: {
-			type: Schema.Types.ObjectId,
-			ref: 'User',
-			required: true,
-		},
+		images: [
+			{
+				type: String,
+			},
+		],
+		// user_creator: {
+		// 	type: Schema.Types.ObjectId,
+		// 	ref: 'User',
+		// 	required: true,
+		// },
 		user: {
 			type: Schema.Types.ObjectId,
 			unique: true,
@@ -26,7 +29,7 @@ export const DoctorSchema: Schema<any> = new Schema(
 				ref: 'Hospital',
 				required: true,
 				unique: true,
-				autopopulate: true
+				autopopulate: true,
 			},
 		],
 		patients: [
@@ -34,11 +37,11 @@ export const DoctorSchema: Schema<any> = new Schema(
 				type: Schema.Types.ObjectId,
 				ref: 'User',
 				unique: true,
-				autopopulate: true
+				autopopulate: true,
 			},
 		],
-	},
-	{ timestamps: true }
+	}
+	// { timestamps: true }
 	//* Si quisieramos cambiar "doctors" por "doctores" al crearse el modelo en mongoDb
 	// , { collection :'doctores'}
 );
@@ -47,6 +50,9 @@ export const DoctorSchema: Schema<any> = new Schema(
  * ? Exporta el modelo de Mongoose
  * @type {Model<any>}
  */
-export const DoctorModel: Model<any> = model('Doctor', DoctorSchema);
-
-
+export const DoctorModel: Model<any> = model(
+	'Doctor',
+	new Schema(Object.assign({}, BaseModel.schema.obj, DoctorSchema.obj), {
+		timestamps: true,
+	})
+);

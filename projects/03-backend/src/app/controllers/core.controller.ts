@@ -15,6 +15,7 @@ import {
 } from '../interfaces/requests.interface';
 import { ResponseReturnData } from '../interfaces/response.interface';
 import { getQueryIncludeAndPaginate } from '../helpers/query.helpers';
+import { Document } from 'mongoose';
 
 /**
  * ? Controladores generales para los metodos que usan todos los modelos
@@ -80,12 +81,19 @@ export const coreController: {
 	},
 	post: async (req) => {
 		const section = getSectionFromUrl(req);
+let model : Document ;
 		if (section !== 'users') {
 			const { id } = getPayloadFromJwtWithoutVerifiy(req);
 			const creator: typeof UserModel | null = await UserModel.findById(id);
 			req.body['user_creator'] = creator;
+			req.body['user_modifier'] = creator;
+			model = getNewModelSection(req);
+		}else {
+			model = getNewModelSection(req);
+			(model as any).user_creator = model;
+			(model as any).user_modifier = model;
+
 		}
-		const model = getNewModelSection(req);
 		await model.save();
 
 		return { model, status_code: 201 };
@@ -94,6 +102,7 @@ export const coreController: {
 		checkIdInParams(req);
 		const id = req.params['id'];
 		const model = getModelSection(req);
+		req.body['user_modifier'] = getPayloadFromJwtWithoutVerifiy(req).id;
 
 		const data_before = await model.findById(id);
 		const data = await model.findByIdAndUpdate(

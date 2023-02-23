@@ -1,4 +1,5 @@
 import { Model, model, Schema } from 'mongoose';
+import { BaseModel } from './base.model';
 
 /**
  * ? Crea el esquema del modelo de Hospitales en MongoDb
@@ -10,16 +11,18 @@ export const HospitalSchema: Schema<any> = new Schema(
 			type: String,
 			required: true,
 		},
-		images: [{
-			type: String,
-		}],
+		images: [
+			{
+				type: String,
+			},
+		],
 		user_creator: {
 			type: Schema.Types.ObjectId,
 			ref: 'User',
 			required: true,
 		},
 	},
-	{ timestamps: true }
+	// { timestamps: true }
 	//* Si quisieramos cambiar "hospitals" por "hospitales" al crearse el modelo en mongoDb
 	// , { collection :'hospitales'}
 );
@@ -28,4 +31,10 @@ export const HospitalSchema: Schema<any> = new Schema(
  * ? Exporta el modelo de Mongoose
  * @type {Model<any>}
  */
-export const HospitalModel: Model<any> = model('Hospital', HospitalSchema);
+// export const HospitalModel: Model<any> = model('Hospital', HospitalSchema);
+export const HospitalModel: Model<any> = model(
+	'Hospital',
+	new Schema(Object.assign({}, BaseModel.schema.obj, HospitalSchema.obj), {
+		timestamps: true,
+	})
+);
