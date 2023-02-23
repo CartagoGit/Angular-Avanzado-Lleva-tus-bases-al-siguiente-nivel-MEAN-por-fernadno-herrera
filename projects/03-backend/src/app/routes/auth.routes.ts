@@ -22,6 +22,14 @@ export const authRoutes: Routes = new Routes({
 		hasSameUserValidator: false,
 		hasJwtValidator: false,
 	},
+	renewToken: {
+		route: '/renew-token',
+		modelController: authController.renewToken,
+		type: 'get',
+		hasAdminValidator: false,
+		hasSameUserValidator: false,
+		hasJwtValidator: true,
+	},
 	googleLogin: {
 		route: '/google-login',
 		type: 'post',

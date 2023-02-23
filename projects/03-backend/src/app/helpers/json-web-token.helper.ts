@@ -33,7 +33,7 @@ export const createJWT = (payload: {
  */
 export const validateJWT = async (
 	req: Request
-): Promise<{ ok: boolean; id: string }> => {
+): Promise<{ ok: boolean; id: string, token: string }> => {
 	//* Leer el token bearer
 	// const token = req.header('jwt');
 	const token = getTokenFromAuthorization(req);
@@ -46,7 +46,7 @@ export const validateJWT = async (
 		isOk = true;
 		id = (payload as { id: string }).id;
 	});
-	return { ok: isOk, id };
+	return { ok: isOk, id, token };
 };
 
 /**

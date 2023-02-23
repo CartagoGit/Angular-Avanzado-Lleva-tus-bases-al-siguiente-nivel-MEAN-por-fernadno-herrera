@@ -1,12 +1,17 @@
 import { Request } from 'express';
 import { getNotFoundMessage } from '../helpers/get-model-section.helper';
 import { UserModel } from '../models/mongo-models/user.model';
-import { createJWT } from '../helpers/json-web-token.helper';
+import {
+	createJWT,
+	getTokenFromBearerHeader,
+	validateJWT,
+} from '../helpers/json-web-token.helper';
 import { ResponseReturnData } from '../interfaces/response.interface';
 import { checkGoogleLoginAndGetData } from '../helpers/google-login.helper';
 import { Document } from 'mongoose';
 import bcrypt from 'bcryptjs';
 import { config } from '../../environments/config';
+import { ResponseReturnJwt } from '../interfaces/json-web-token.interface';
 
 /**
  * ? Controladores especificos de los metodos para el modelo de usuarios
@@ -16,17 +21,24 @@ import { config } from '../../environments/config';
 	) => Promise<
 		ResponseReturnData & { token: string; ok: boolean; id: string }
 	>;
+	renewToken: (req: Request) => Promise<
+		ResponseReturnData & {
+			token: string;
+			ok: boolean;
+			id: string;
+		}
+	>;
 	googleLogin: (req: Request) => Promise<ResponseReturnData>;
+	googleClientId: () => Promise<ResponseReturnData>;
 })}
  */
 export const authController: {
-	login: (
+	login: (req: Request) => Promise<ResponseReturnData & ResponseReturnJwt>;
+	renewToken: (
 		req: Request
-	) => Promise<
-		ResponseReturnData & { token: string; ok: boolean; id: string }
-	>;
+	) => Promise<ResponseReturnData & ResponseReturnJwt>;
 	googleLogin: (req: Request) => Promise<ResponseReturnData>;
-	googleClientId: (req: Request) => Promise<ResponseReturnData>;
+	googleClientId: () => Promise<ResponseReturnData>;
 } = {
 	login: async (req) => {
 		const { password, email } = req.body;
@@ -42,7 +54,20 @@ export const authController: {
 		const id = userDB.id;
 		const { ok, token = '' } = await createJWT({ id });
 
-		return { ok, status_code: 200, token, id };
+		return { ok, status_code: 200, token, id, role: userDB.role };
+	},
+	renewToken: async (req) => {
+		const { token: lastToken, id } = await validateJWT(req);
+		const userDB = await UserModel.findById(id);
+		const { ok, token = '' } = await createJWT({ id });
+		return {
+			status_code: 200,
+			ok,
+			id,
+			token,
+			role: userDB.role,
+			data: { new_token: token, last_token: lastToken },
+		};
 	},
 	googleLogin: async (req) => {
 		const payload = await checkGoogleLoginAndGetData(req);
@@ -95,7 +120,7 @@ export const authController: {
 			isNewUser,
 		};
 	},
-	googleClientId: async (req) => {
+	googleClientId: async () => {
 		const googleClientId = config.GOOGLE_ID;
 		return {
 			status_code: 200,
