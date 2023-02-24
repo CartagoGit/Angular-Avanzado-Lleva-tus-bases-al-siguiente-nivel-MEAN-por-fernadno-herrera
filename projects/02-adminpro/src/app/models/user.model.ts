@@ -1,5 +1,12 @@
 import { Roles } from '../interfaces/roles.interface';
 
+
+/**
+ * ? Propiedades que recibe el Modelo de usuarios a recibir desde el back
+ * @export
+ * @interface UserProps
+ * @typedef {UserProps}
+ */
 export interface UserProps {
 	images: string[];
 	name: string;
@@ -13,6 +20,14 @@ export interface UserProps {
 	user_modifier: string;
 }
 
+
+/**
+ * ? Modelo de Usuario a recibir desde el back
+ * @export
+ * @class User
+ * @typedef {User}
+ * @implements {UserProps}
+ */
 export class User implements UserProps {
 	public images!: string[];
 	public createdAt!: Date;
