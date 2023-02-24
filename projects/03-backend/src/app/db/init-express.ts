@@ -18,7 +18,6 @@ export const initExpress = () => {
 	app.use(cors());
 
 	//* Añadimos una carpeta pública
-	console.log(__dirname + '/public');
 	app.use(express.static(__dirname + '/public'));
 
 	//* Permite a express trabajar con archivos json
