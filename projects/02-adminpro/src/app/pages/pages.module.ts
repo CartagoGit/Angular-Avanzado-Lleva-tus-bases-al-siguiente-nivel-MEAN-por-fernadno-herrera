@@ -5,7 +5,8 @@ import { FormsModule } from '@angular/forms';
 
 // Modulos
 import { SharedModule } from '../shared/shared.module';
-import { ComponentsModule } from '../components/components.module';
+import { ComponentsModule } from '../shared/components/components.module';
+
 
 // Componentes
 import { Graphic01Component } from './graphic01/graphic01.component';

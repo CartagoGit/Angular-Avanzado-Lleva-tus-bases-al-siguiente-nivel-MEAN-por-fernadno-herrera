@@ -9,6 +9,7 @@ import {
 import { BaseChartDirective } from 'ng2-charts';
 import { GraphicProps } from '../../interfaces/graphic-props';
 
+
 @Component({
   selector: 'app-dona',
   templateUrl: './dona.component.html',

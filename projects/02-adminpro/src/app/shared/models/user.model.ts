@@ -28,7 +28,7 @@ export class User implements UserProps {
 	public user_modifier!: string;
 	public createdAt!: Date;
 	public updatedAt!: Date;
-	
+
 	public name!: string;
 	public images!: string[];
 	public email!: string;

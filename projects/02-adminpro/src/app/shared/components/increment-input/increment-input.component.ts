@@ -3,6 +3,7 @@ import { getPercent } from '../../helpers/get-percent';
 import { ColorBootstrap } from '../../interfaces/color.interface';
 import { TypeNumber } from '../../interfaces/type-numbers';
 
+
 @Component({
   selector: 'app-increment-input',
   templateUrl: './increment-input.component.html',

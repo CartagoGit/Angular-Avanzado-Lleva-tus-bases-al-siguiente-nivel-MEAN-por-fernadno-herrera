@@ -9,11 +9,12 @@ import { Router } from '@angular/router';
 export class LoginComponent {
 
 	public needRecover = false;
-
+	
 	constructor(private _router: Router) {}
 
 	public login() {
 		console.log('submit');
-		this._router.navigate(['/']);
+		// this._router.navigate(['/']);
+
 	}
 }

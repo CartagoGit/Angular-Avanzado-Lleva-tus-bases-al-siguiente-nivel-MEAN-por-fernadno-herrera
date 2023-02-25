@@ -8,17 +8,25 @@ import { FormBuilder, Validators } from '@angular/forms';
 })
 export class RegisterComponent {
 
+	public formSubmitted = false;
+	
+
 	public registerForm = this._fb.group({
-		name: ['nombreee', [Validators.required]],
-		email: ['test100@gmail.com', [Validators.required, Validators.email]],
-		password : ['123456', [Validators.required, Validators.minLength(6)]],
-		password2 : ['123456', [Validators.required, Validators.minLength(6)]],
+		name: ['', [Validators.required]],
+		email: ['', [Validators.required, Validators.email]],
+		password : ['', [Validators.required, Validators.minLength(6)]],
+		password2 : ['', [Validators.required, Validators.minLength(6)]],
 		terms : [false, Validators.required]
 	});
 
 	constructor(private _fb: FormBuilder){}
 
-	createUser() {
+	public createUser() {
+		this.formSubmitted = true;
 		console.log(this.registerForm.value);
 	}
+
+	// public isValidFields() : boolean {
+
+	// }
 }

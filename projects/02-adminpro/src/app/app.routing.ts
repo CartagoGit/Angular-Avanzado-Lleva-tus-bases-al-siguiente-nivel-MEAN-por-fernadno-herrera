@@ -2,9 +2,10 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { PagesRoutingModule } from './pages/pages.routing';
-import { AuthRoutingModule } from './auth/auth.routing';
 
-import { NopagefoundComponent } from './nopagefound/nopagefound.component';
+
+import { NoPageFoundComponent } from './core/pages/nopagefound/nopagefound.component';
+import { AuthRoutingModule } from './core/pages/auth/auth.routing';
 
 const routes: Routes = [
   //* Hay que estar logueado
@@ -13,7 +14,7 @@ const routes: Routes = [
   //* Publicas
   {
     path: '**',
-    component: NopagefoundComponent,
+    component: NoPageFoundComponent,
   },
 ];
 
