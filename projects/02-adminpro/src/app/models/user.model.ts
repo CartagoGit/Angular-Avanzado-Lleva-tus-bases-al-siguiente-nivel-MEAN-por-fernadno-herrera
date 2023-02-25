@@ -1,5 +1,5 @@
 import { Roles } from '../interfaces/roles.interface';
-
+import { BaseModelsProps } from '../interfaces/base-model.interface';
 
 /**
  * ? Propiedades que recibe el Modelo de usuarios a recibir desde el back
@@ -7,19 +7,13 @@ import { Roles } from '../interfaces/roles.interface';
  * @interface UserProps
  * @typedef {UserProps}
  */
-export interface UserProps {
+export interface UserProps extends BaseModelsProps {
 	images: string[];
 	name: string;
 	email: string;
 	role: Roles;
 	google: boolean;
-	createdAt: Date;
-	updatedAt: Date;
-	id: string;
-	user_creator: string;
-	user_modifier: string;
 }
-
 
 /**
  * ? Modelo de Usuario a recibir desde el back
