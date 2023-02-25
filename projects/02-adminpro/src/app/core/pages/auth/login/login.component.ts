@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 export class LoginComponent {
 
 	public needRecover = false;
+	public showPassword = false;
 
 	constructor(private _router: Router) {}
 

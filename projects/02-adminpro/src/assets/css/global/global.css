@@ -8,6 +8,11 @@
 	background-size: 100% 2px, 100% 1px !important;
 }
 
+.invalid-checkbox::before {
+	border: 1px solid #f73939 !important;
+	transition: border 0ms ease;
+}
+
 .form-input {
 	position: relative;
 }
@@ -25,6 +30,10 @@
 	user-select: none; /* Standard */
 }
 
-.text-password{
+.text-password {
 	-webkit-text-security: disc;
+}
+
+.underline{
+	text-decoration: underline;
 }

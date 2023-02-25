@@ -107,11 +107,6 @@
 						class="icon-show-password pointer"
 						(click)="showPassword = !showPassword"
 					>
-						<!-- [src]="
-						'./assets/images/icon/' + !!showPassword
-							? 'lock-solid.svg'
-							: 'unlock-solid.svg'
-					" -->
 						<img
 							class="img-show-password"
 							width="20px"
@@ -155,15 +150,31 @@
 				</div>
 				<div class="form-group row">
 					<div class="col-md-12">
-						<div class="checkbox checkbox-primary p-t-0">
+						<div class="checkbox checkbox-primary p-t-0 form-input">
 							<input
 								id="checkbox-signup"
 								type="checkbox"
 								formControlName="terms"
 							/>
-							<label for="checkbox-signup">
-								I agree to all <a>Terms</a></label
+							<label
+								for="checkbox-signup"
+								[ngClass]="{
+									'invalid-checkbox':
+										[registerForm.get('terms')!.valid, formSubmitted]
+										| isValidField
+								}"
 							>
+								I agree to all <a class="underline">Terms</a></label
+							>
+							<div
+								class="required-field"
+								*ngIf="
+									[registerForm.get('terms')!.valid, formSubmitted]
+										| isValidField
+								"
+							>
+								Required field
+							</div>
 						</div>
 					</div>
 				</div>

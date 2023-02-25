@@ -15,7 +15,7 @@ export class RegisterComponent {
 		email: ['', [Validators.required, Validators.email]],
 		password: ['', [Validators.required, Validators.minLength(6)]],
 		password2: ['', [Validators.required, Validators.minLength(6)]],
-		terms: [false, Validators.required],
+		terms: [false, Validators.requiredTrue],
 	});
 
 	constructor(private _fb: FormBuilder) {}
