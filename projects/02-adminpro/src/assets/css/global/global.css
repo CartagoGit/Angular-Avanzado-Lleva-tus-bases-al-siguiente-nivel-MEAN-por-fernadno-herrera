@@ -1,4 +1,27 @@
-
-.pointer{
+.pointer {
 	cursor: pointer;
 }
+
+.invalid-field {
+	background-image: linear-gradient(#f73939, #f76c39),
+		linear-gradient(#f2e9e9, #f2ece9) !important;
+	background-size: 100% 2px, 100% 1px !important;
+}
+
+.form-input {
+	position: relative;
+}
+
+.required-field {
+	font-size: 10px;
+	font-weight: 600;
+	color: #f73939;
+	position: absolute;
+	bottom: 1px;
+	right: 0px;
+	-webkit-user-select: none; /* Safari */
+	-moz-user-select: none; /* Firefox */
+	-ms-user-select: none; /* IE10+/Edge */
+	user-select: none; /* Standard */
+}
+

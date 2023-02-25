@@ -1,0 +1,84 @@
+/*
+Template Name: Admin pro Admin
+Author: Wrappixel
+Email: niravjoshi87@gmail.com
+File: scss
+*/
+/*
+Template Name: Admin Pro Admin
+Author: Wrappixel
+Email: niravjoshi87@gmail.com
+File: scss
+*/
+/*Theme Colors*/
+/*bootstrap Color*/
+/*Light colors*/
+/*Normal Color*/
+/*Extra Variable*/
+/*******************
+Login register and recover password Page
+******************/
+.login-register {
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center center;
+	height: 100%;
+	width: 100%;
+	padding: 10% 0;
+	position: fixed;
+}
+
+.login-box {
+	width: 400px;
+	margin: 0 auto;
+}
+.login-box .footer {
+	width: 100%;
+	left: 0px;
+	right: 0px;
+}
+.login-box .social {
+	display: block;
+	margin-bottom: 30px;
+}
+
+/* #recoverform {
+  display: none; } */
+
+.login-sidebar {
+	padding: 0px;
+	margin-top: 0px;
+}
+.login-sidebar .login-box {
+	right: 0px;
+	position: absolute;
+	height: 100%;
+}
+
+/* Change the white to any color */
+/* input:-webkit-autofill, */
+/* input:-webkit-autofill:hover, */
+/* input:-webkit-autofill:focus, */
+/* input:-webkit-autofill:active{ */
+    /* -webkit-box-shadow: 0 0 0 30px white inset !important; */
+/* } */
+
+/*Change text in autofill textbox*/
+/* input:-webkit-autofill{
+	-webkit-text-fill-color: yellow !important;
+} */
+
+/* input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  border: none;
+  -webkit-text-fill-color: inherit;
+  -webkit-box-shadow: 0 0 0px 1000px rgba(0, 0, 0, 0) inset;
+  transition: background-color 5000s ease-in-out 0s;
+} */
