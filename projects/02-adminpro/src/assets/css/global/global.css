@@ -25,3 +25,6 @@
 	user-select: none; /* Standard */
 }
 
+.text-password{
+	-webkit-text-security: disc;
+}

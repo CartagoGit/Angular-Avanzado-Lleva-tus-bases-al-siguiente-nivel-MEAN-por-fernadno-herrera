@@ -17,10 +17,8 @@
 				autocomplete="chrome-off"
 			>
 				<a href="javascript:void(0)" class="text-center db"
-					><img
-						src="../assets/images/logo-icon.png"
-						alt="Home" /><br /><img
-						src="../assets/images/logo-text.png"
+					><img src="assets/images/logo-icon.png" alt="Home" /><br /><img
+						src="assets/images/logo-text.png"
 						alt="Home"
 				/></a>
 				<h3 class="box-title m-t-40 m-b-0">Register Now</h3>
@@ -76,54 +74,82 @@
 						</div>
 					</div>
 				</div>
-				<div class="form-group">
-					<div class="col-xs-12 form-input">
-						<input
-							class="form-control"
-							type="text"
-							placeholder="Password"
-							formControlName="password"
-							autocomplete="chrome-off"
-							[ngClass]="{
-								'invalid-field':
+				<div class="password-fields">
+					<div class="form-group">
+						<div class="col-xs-12 form-input">
+							<input
+								class="form-control"
+								type="text"
+								placeholder="Password"
+								formControlName="password"
+								autocomplete="chrome-off"
+								[ngClass]="{
+									'invalid-field':
+										[
+											registerForm.get('password')!.valid,
+											formSubmitted
+										] | isValidField,
+									'text-password': !showPassword
+								}"
+							/>
+							<div
+								class="required-field"
+								*ngIf="
 									[registerForm.get('password')!.valid, formSubmitted]
-									| isValidField
-							}"
-						/>
-						<div
-							class="required-field"
-							*ngIf="
-								[registerForm.get('password')!.valid, formSubmitted]
-									| isValidField
-							"
-						>
-							Required field
+										| isValidField
+								"
+							>
+								Required field
+							</div>
 						</div>
 					</div>
-				</div>
-				<div class="form-group">
-					<div class="col-xs-12 form-input">
-						<input
-						(input)="changeValue($event)"
-							class="form-control"
-							type="text"
-							placeholder="Confirm Password"
-							formControlName="password2"
-							autocomplete="chrome-off"
-							[ngClass]="{
-								'invalid-field':
-									[registerForm.get('password2')!.valid, formSubmitted]
-									| isValidField
-							}"
-						/>
-						<div
-							class="required-field"
-							*ngIf="
-								[registerForm.get('password2')!.valid, formSubmitted]
-									| isValidField
+					<div
+						class="icon-show-password pointer"
+						(click)="showPassword = !showPassword"
+					>
+						<!-- [src]="
+						'./assets/images/icon/' + !!showPassword
+							? 'lock-solid.svg'
+							: 'unlock-solid.svg'
+					" -->
+						<img
+							class="img-show-password"
+							width="20px"
+							height="20px"
+							[src]="
+								!!showPassword
+									? 'assets/images/icon/unlock-solid.svg'
+									: 'assets/images/icon/lock-solid.svg'
 							"
-						>
-							Required field
+							alt="show/hide password"
+						/>
+					</div>
+					<div class="form-group">
+						<div class="col-xs-12 form-input">
+							<input
+								class="form-control"
+								type="text"
+								placeholder="Confirm Password"
+								formControlName="password2"
+								autocomplete="chrome-off"
+								[ngClass]="{
+									'invalid-field':
+										[
+											registerForm.get('password2')!.valid,
+											formSubmitted
+										] | isValidField,
+									'text-password': !showPassword
+								}"
+							/>
+							<div
+								class="required-field"
+								*ngIf="
+									[registerForm.get('password2')!.valid, formSubmitted]
+										| isValidField
+								"
+							>
+								Required field
+							</div>
 						</div>
 					</div>
 				</div>

@@ -8,6 +8,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 })
 export class RegisterComponent {
 	public formSubmitted = false;
+	public showPassword = false;
 
 	public registerForm = this._fb.group({
 		name: ['', [Validators.required]],
@@ -22,10 +23,5 @@ export class RegisterComponent {
 	public createUser() {
 		this.formSubmitted = true;
 		console.log(this.registerForm.value);
-	}
-
-	public changeValue(event: Event) {
-		const inputEvent = event as InputEvent;
-		
 	}
 }
