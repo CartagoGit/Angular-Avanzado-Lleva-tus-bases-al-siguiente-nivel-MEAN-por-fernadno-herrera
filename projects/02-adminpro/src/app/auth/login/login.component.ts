@@ -2,11 +2,14 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
-	selector: 'app-login',
+	selector: 'auth-login',
 	templateUrl: './login.component.html',
 	styleUrls: ['../../../assets/css/auth/auth.css'],
 })
 export class LoginComponent {
+
+	public needRecover = false;
+
 	constructor(private _router: Router) {}
 
 	public login() {
