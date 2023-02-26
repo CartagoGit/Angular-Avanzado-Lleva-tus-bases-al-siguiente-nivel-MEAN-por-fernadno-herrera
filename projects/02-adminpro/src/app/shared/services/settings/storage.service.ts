@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 //* Tipos a guardar en el storage
-const localFields = { token: 'token-jwt' };
+const localFields = { token: 'token-jwt', theme: 'theme' };
 const sessionFields = {};
 
 //* Tipado de campos del localstorage
@@ -57,9 +57,26 @@ class BasicStorage<T> {
 	 * @param {Fields} field
 	 * @returns {unknown}
 	 */
-	public get(field: FieldsKeys<T>): unknown {
+	public get(
+		field: FieldsKeys<T>,
+		type: 'string' | 'array' | 'object' | 'number' | 'boolean' = 'string'
+	): unknown {
 		const stringValue = localStorage.getItem(this.fields[field] as string);
-		return stringValue ? JSON.parse(stringValue) : undefined;
+		if (
+			stringValue === '' ||
+			stringValue === null ||
+			stringValue === undefined
+		) {
+			return undefined;
+		}
+		let value: any = stringValue;
+		if (type === 'array' || type === 'object')
+			value = JSON.parse(stringValue);
+		else if (type === 'boolean')
+			value = stringValue === 'true' ? true : false;
+		else if (type === 'number') value = Number(stringValue);
+
+		return value;
 	}
 
 	/**
@@ -68,8 +85,9 @@ class BasicStorage<T> {
 	 * @param value
 	 */
 	public set(field: FieldsKeys<T>, value: unknown): void {
-		const stringify = JSON.stringify(value);
-		localStorage.setItem(this.fields[field] as string, stringify);
+		if (typeof value === 'object') value = JSON.stringify(value);
+		value = String(value);
+		localStorage.setItem(this.fields[field] as string, value as string);
 	}
 
 	/**

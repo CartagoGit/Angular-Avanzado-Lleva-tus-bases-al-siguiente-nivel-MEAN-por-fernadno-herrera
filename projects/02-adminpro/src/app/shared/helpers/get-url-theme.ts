@@ -5,6 +5,6 @@
  * @returns {string}
  */
 export const getUrlTheme = (theme?: string): string => {
-  if (!theme) return document.querySelector('#theme')?.getAttribute('href')!;
-  return `./assets/css/colors/${theme}.css`;
+	if (!theme) return document.querySelector('#theme')?.getAttribute('href')!;
+	return `./assets/css/colors/${theme}.css`;
 };

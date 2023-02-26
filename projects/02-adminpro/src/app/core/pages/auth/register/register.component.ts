@@ -9,6 +9,7 @@ import {
 	Validators,
 } from '@angular/forms';
 import { AuthService } from '../../../../shared/services/http/auth.service';
+import { StorageService } from '../../../../shared/services/settings/storage.service';
 
 @Component({
 	selector: 'auth-register',
@@ -36,24 +37,34 @@ export class RegisterComponent {
 		} as AbstractControlOptions
 	);
 
+	private _storage;
+
 	// ANCHOR : Constructor
-	constructor(private _fb: FormBuilder, private _authSvc: AuthService) {}
+	constructor(
+		private _fb: FormBuilder,
+		private _authSvc: AuthService,
+		private _storageSvc: StorageService
+	) {
+		this._storage = this._storageSvc.local;
+	}
 
 	// ANCHOR : Métodos
 	public createUser(): void {
 		this.formSubmitted = true;
 
 		if (this.registerForm.invalid) return;
-		console.log(this.registerForm);
 
 		this._authSvc
 			.getLogin({
 				password: '123456',
 				email: 'admin@gmail.com',
 			})
-			.subscribe({ next: (resp) => {
-				console.log(resp);
-			} });
+			.subscribe({
+				next: (resp) => {
+					console.log(resp);
+					this._storage.set('token', resp.token);
+				},
+			});
 	}
 
 	private _areSamePasswords(

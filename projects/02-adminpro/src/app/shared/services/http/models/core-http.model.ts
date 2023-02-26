@@ -13,7 +13,7 @@ export class CoreHttp<T> {
 	// ANCHOR : Variables
 	public apiUrl = config.API_ENDPOINT;
 	public endpoints;
-	public routes!: { [key in keyof typeof this.endpoints]: string };
+	public routes!: Record<keyof typeof this.endpoints, string>;
 	public _modelRouteEndpoint: string;
 
 	public get middleRoute() {
