@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+
 import {
 	AbstractControl,
 	AbstractControlOptions,
@@ -7,6 +8,7 @@ import {
 	ValidationErrors,
 	Validators,
 } from '@angular/forms';
+import { UsersService } from 'projects/02-adminpro/src/app/shared/services/http/users.service';
 
 @Component({
 	selector: 'auth-register',
@@ -14,6 +16,7 @@ import {
 	styleUrls: ['../auth.css'],
 })
 export class RegisterComponent {
+	// ANCHOR : Variables
 	public formSubmitted = false;
 	public showPassword = false;
 
@@ -33,10 +36,17 @@ export class RegisterComponent {
 		} as AbstractControlOptions
 	);
 
-	constructor(private _fb: FormBuilder) {}
+	// ANCHOR : Constructor
+	constructor(private _fb: FormBuilder, private _usersSvc: UsersService) {}
 
+	// ANCHOR : Métodos
 	public createUser(): void {
 		this.formSubmitted = true;
+
+		this._usersSvc.gola();
+		console.log('❗createUser  ➽ _userSvc ➽ ⏩', this._usersSvc);
+
+		if (this.registerForm.invalid) return;
 		console.log(this.registerForm);
 	}
 

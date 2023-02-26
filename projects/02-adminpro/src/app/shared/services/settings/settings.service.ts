@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { getUrlTheme } from '../helpers/get-url-theme';
+import { getUrlTheme } from '../../helpers/get-url-theme';
 
 @Injectable({
   providedIn: 'root',

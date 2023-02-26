@@ -1,89 +1,95 @@
 {
-  "name": "02-adminpro",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "projectType": "application",
-  "generators": {
-    "@schematics/angular:component": {
-      "style": "css"
-    }
-  },
-  "sourceRoot": "projects/02-adminpro/src",
-  "prefix": "app",
-  "targets": {
-    "build": {
-      "executor": "@angular-devkit/build-angular:browser",
-      "options": {
-        "outputPath": "dist/02-adminpro",
-        "index": "projects/02-adminpro/src/index.html",
-        "main": "projects/02-adminpro/src/main.ts",
-        "polyfills": ["zone.js"],
-        "tsConfig": "projects/02-adminpro/tsconfig.app.json",
-        "inlineStyleLanguage": "css",
-        "assets": [
-          "projects/02-adminpro/src/favicon.ico",
-          "projects/02-adminpro/src/assets"
-        ],
-        "styles": ["projects/02-adminpro/src/styles.css"],
-        "scripts": []
-      },
-      "configurations": {
-        "production": {
-          "budgets": [
-            {
-              "type": "initial",
-              "maximumWarning": "500kb",
-              "maximumError": "1mb"
-            },
-            {
-              "type": "anyComponentStyle",
-              "maximumWarning": "2kb",
-              "maximumError": "4kb"
-            }
-          ],
-          "outputHashing": "all"
-        },
-        "development": {
-          "buildOptimizer": false,
-          "optimization": false,
-          "vendorChunk": true,
-          "extractLicenses": false,
-          "sourceMap": true,
-          "namedChunks": true
-        }
-      },
-      "defaultConfiguration": "production"
-    },
-    "serve": {
-      "executor": "@angular-devkit/build-angular:dev-server",
-      "configurations": {
-        "production": {
-          "browserTarget": "02-adminpro:build:production"
-        },
-        "development": {
-          "browserTarget": "02-adminpro:build:development"
-        }
-      },
-      "defaultConfiguration": "development"
-    },
-    "extract-i18n": {
-      "executor": "@angular-devkit/build-angular:extract-i18n",
-      "options": {
-        "browserTarget": "02-adminpro:build"
-      }
-    },
-    "test": {
-      "executor": "@angular-devkit/build-angular:karma",
-      "options": {
-        "polyfills": ["zone.js", "zone.js/testing"],
-        "tsConfig": "projects/02-adminpro/tsconfig.spec.json",
-        "inlineStyleLanguage": "css",
-        "assets": [
-          "projects/02-adminpro/src/favicon.ico",
-          "projects/02-adminpro/src/assets"
-        ],
-        "styles": ["projects/02-adminpro/src/styles.css"],
-        "scripts": []
-      }
-    }
-  }
+	"name": "02-adminpro",
+	"$schema": "../../node_modules/nx/schemas/project-schema.json",
+	"projectType": "application",
+	"generators": {
+		"@schematics/angular:component": {
+			"style": "css"
+		}
+	},
+	"sourceRoot": "projects/02-adminpro/src",
+	"prefix": "app",
+	"targets": {
+		"build": {
+			"executor": "@angular-devkit/build-angular:browser",
+			"options": {
+				"outputPath": "dist/02-adminpro",
+				"index": "projects/02-adminpro/src/index.html",
+				"main": "projects/02-adminpro/src/main.ts",
+				"polyfills": ["zone.js"],
+				"tsConfig": "projects/02-adminpro/tsconfig.app.json",
+				"inlineStyleLanguage": "css",
+				"assets": [
+					"projects/02-adminpro/src/favicon.ico",
+					"projects/02-adminpro/src/assets"
+				],
+				"styles": ["projects/02-adminpro/src/styles.css"],
+				"scripts": []
+			},
+			"configurations": {
+				"production": {
+					"fileReplacements": [
+						{
+							"replace": "src/environments/environment.ts",
+							"with": "src/environments/environment.production.ts"
+						}
+					],
+					"budgets": [
+						{
+							"type": "initial",
+							"maximumWarning": "500kb",
+							"maximumError": "1mb"
+						},
+						{
+							"type": "anyComponentStyle",
+							"maximumWarning": "2kb",
+							"maximumError": "4kb"
+						}
+					],
+					"outputHashing": "all"
+				},
+				"development": {
+					"buildOptimizer": false,
+					"optimization": false,
+					"vendorChunk": true,
+					"extractLicenses": false,
+					"sourceMap": true,
+					"namedChunks": true
+				}
+			},
+			"defaultConfiguration": "production"
+		},
+		"serve": {
+			"executor": "@angular-devkit/build-angular:dev-server",
+			"configurations": {
+				"production": {
+					"browserTarget": "02-adminpro:build:production"
+				},
+				"development": {
+					"browserTarget": "02-adminpro:build:development"
+				}
+			},
+			"defaultConfiguration": "development"
+		},
+		"extract-i18n": {
+			"executor": "@angular-devkit/build-angular:extract-i18n",
+			"options": {
+				"browserTarget": "02-adminpro:build"
+			}
+		},
+		"test": {
+			"executor": "@angular-devkit/build-angular:karma",
+			"options": {
+				"polyfills": ["zone.js", "zone.js/testing"],
+				"tsConfig": "projects/02-adminpro/tsconfig.spec.json",
+				"inlineStyleLanguage": "css",
+				"assets": [
+					"projects/02-adminpro/src/favicon.ico",
+					"projects/02-adminpro/src/assets"
+				],
+				"styles": ["projects/02-adminpro/src/styles.css"],
+				"scripts": []
+			}
+		}
+	}
 }
