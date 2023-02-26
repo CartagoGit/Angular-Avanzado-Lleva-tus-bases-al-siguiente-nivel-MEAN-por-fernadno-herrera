@@ -1,35 +1,40 @@
 import { Injectable } from '@angular/core';
 import { BasicHttp } from './models/basic-http.model';
 
-const modelEndpoints = {
+/**
+ * ? Rutas popias del modelo de Usuarios
+ * @type {{ isDoctor: string; getDoctors: string; getHospitals: string; }}
+ */
+const modelEndpoints: {
+	isDoctor: string;
+	getDoctors: string;
+	getHospitals: string;
+} = {
 	isDoctor: '/is-doctor/',
 	getDoctors: '/get-doctors/',
 	getHospitals: '/get-hospitals/',
 };
+//* Tipado de los endpoints
+type Endpoints = typeof modelEndpoints;
 
+//* Ruta del modelo
 const modelRouteEndpoint = '/users';
 
+/**
+ * ? Servicio para realizar peticiones http a las rutas del backend
+ * @export
+ * @class UsersService
+ * @typedef {UsersService}
+ * @extends {BasicHttp<Endpoints>}
+ */
 @Injectable({
 	providedIn: 'root',
 })
-export class UsersService extends BasicHttp {
-	// ANCHOR : Variable
-
+export class UsersService extends BasicHttp<Endpoints> {
 	// ANCHOR : Constructor
 	constructor() {
 		super({ modelEndpoints, modelRouteEndpoint });
-		console.log(this.endpoints);
 	}
 
-	public gola() {
-		console.log(this);
-		// this._http.
-		// this._http.get('http://localhost:5000').subscribe({
-		// 	next: (data) => {
-
-		// 		console.log(data);
-		// 	},
-		// });
-		window.open('http://localhost:5000');
-	}
+	// ANCHOR : Métodos
 }

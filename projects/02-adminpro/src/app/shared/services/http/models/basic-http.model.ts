@@ -21,24 +21,28 @@ const basicEndpoints: {
 	delete: '/delete/',
 	deleteCollection: '/delete-collection',
 };
+//* Tipado de las rutas basicas para los modelos
+type Endpoints = typeof basicEndpoints;
 
 /**
- * ? Clase que extenderan los modelos basicos de monboDB
+ * ? Clase que extienden los modelos basicos de monboDB
  * @export
  * @class BasicHttp
  * @typedef {BasicHttp}
- * @extends {CoreHttp}
+ * @template T
+ * @extends {CoreHttp<typeof basicEndpoints & T>}
  */
-export class BasicHttp extends CoreHttp {
+export class BasicHttp<T> extends CoreHttp<Endpoints & T> {
+	
 	// ANCHOR : Constructor
 	constructor(_data: {
-		modelEndpoints: Record<string, string>;
+		modelEndpoints: T;
 		middleRoutes?: string[];
 		modelRouteEndpoint: string;
 	}) {
 		const { modelEndpoints, ...rest } = _data;
 		super({
-			modelEndpoints: { ...modelEndpoints, ...basicEndpoints },
+			modelEndpoints: { ...basicEndpoints, ...modelEndpoints },
 			...rest,
 		});
 	}

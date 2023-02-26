@@ -9,7 +9,7 @@ import { DefaultResponse } from '../interfaces/response.interfaces';
  * @class CoreHttp
  * @typedef {CoreHttp}
  */
-export class CoreHttp {
+export class CoreHttp<T> {
 	// ANCHOR : Variables
 	public apiUrl = config.API_ENDPOINT;
 	public endpoints;
@@ -34,7 +34,7 @@ export class CoreHttp {
 	// ANCHOR : Constructor
 	constructor(
 		private _data: {
-			modelEndpoints?: Record<string, string>;
+			modelEndpoints?: T;
 			modelRouteEndpoint: string;
 			middleRoutes?: string[];
 		}
@@ -49,7 +49,7 @@ export class CoreHttp {
 		this._middleRoutes =
 			middleRoutes.length === 0 ? '' : middleRoutes.join('');
 
-		this.endpoints = { ...this._coreEndpoints, ...modelEndpoints };
+		this.endpoints = { ...this._coreEndpoints, ...modelEndpoints as T};
 		Object.keys(this.endpoints).forEach((key) => {
 			this.routes = {
 				...this.routes,
