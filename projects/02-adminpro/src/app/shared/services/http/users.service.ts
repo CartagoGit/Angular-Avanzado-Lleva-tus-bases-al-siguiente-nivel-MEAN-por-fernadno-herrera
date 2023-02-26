@@ -18,7 +18,7 @@ export class UsersService extends BasicHttp {
 	// ANCHOR : Constructor
 	constructor() {
 		super({ modelEndpoints, modelRouteEndpoint });
-		console.log(this._endpoints);
+		console.log(this.endpoints);
 	}
 
 	public gola() {

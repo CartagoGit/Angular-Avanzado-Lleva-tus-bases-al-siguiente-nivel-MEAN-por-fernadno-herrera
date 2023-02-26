@@ -1,6 +1,7 @@
 import { config } from 'projects/02-adminpro/src/environments/environment';
 import { HttpClient, HttpXhrBackend } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { DefaultResponse } from '../interfaces/response.interfaces';
 
 /**
  * ? Core que deben extender todas los servicios http
@@ -10,9 +11,19 @@ import { Observable } from 'rxjs';
  */
 export class CoreHttp {
 	// ANCHOR : Variables
-	protected _apiUrl = config.API_ENDPOINT;
-	protected _endpoints;
-	protected _modelRouteEndpoint: string;
+	public apiUrl = config.API_ENDPOINT;
+	public endpoints;
+	public routes!: { [key in keyof typeof this.endpoints]: string };
+	public _modelRouteEndpoint: string;
+
+	public get middleRoute() {
+		return this.apiUrl + this._middleRoutes;
+	}
+
+	public get modelRoute() {
+		return this.middleRoute + this._modelRouteEndpoint;
+	}
+
 	protected _http: HttpClient;
 	protected _middleRoutes: string;
 
@@ -34,10 +45,17 @@ export class CoreHttp {
 			middleRoutes = [],
 		} = this._data;
 
-		this._endpoints = { ...this._coreEndpoints, ...modelEndpoints };
 		this._modelRouteEndpoint = modelRouteEndpoint;
 		this._middleRoutes =
 			middleRoutes.length === 0 ? '' : middleRoutes.join('');
+
+		this.endpoints = { ...this._coreEndpoints, ...modelEndpoints };
+		Object.keys(this.endpoints).forEach((key) => {
+			this.routes = {
+				...this.routes,
+				[key]: this.getUrlEndpoint(key as keyof typeof this.endpoints),
+			};
+		});
 
 		this._http = new HttpClient(
 			new HttpXhrBackend({
@@ -45,22 +63,28 @@ export class CoreHttp {
 			})
 		);
 
-		console.log(_data);
+		console.log(this);
 	}
 
 	// ANCHOR : Métodos
-	protected _endpoint(endpoint: keyof typeof this._endpoints) {
-		if (!this._endpoints[endpoint]) throw new Error('Invalid endpoint');
-		return (
-			this._apiUrl +
-			this._middleRoutes +
-			this._modelRouteEndpoint +
-			this._endpoints[endpoint]
-		);
+
+	/**
+	 * ? Recupera el url segun el endpoint
+	 * @public
+	 * @param {keyof typeof this.endpoints} endpoint
+	 * @returns {string}
+	 */
+	public getUrlEndpoint(endpoint: keyof typeof this.endpoints): string {
+		if (!this.endpoints[endpoint]) throw new Error('Invalid endpoint');
+		return this.modelRoute + this.endpoints[endpoint];
 	}
 
-	public getRoot(): Observable<any> {
-		console.log(this._endpoint('root'));
-		return this._http.get(this._endpoint('root'));
+	/**
+	 * ? Observable a la request al root
+	 * @public
+	 * @returns {Observable<DefaultResponse>}
+	 */
+	public getRoot(): Observable<DefaultResponse> {
+		return this._http.get<DefaultResponse>(this.routes.root);
 	}
 }

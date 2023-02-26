@@ -17,8 +17,6 @@ import { validateJWT, getErrorJWT } from '../helpers/json-web-token.helper';
 import { getErrorNotAdmin } from '../helpers/default-responses.helper';
 import { RoutesProps } from '../interfaces/routes-model-props';
 
-
-
 /**
  * ? Modelo de rutas, donde se almacenaran los paths, controladores, rutas, middlewares, controladores,
  * ? y la creacion y subscripcion de errores
@@ -119,7 +117,7 @@ export class Routes {
 			hasAdminValidator = true,
 			hasSameUserValidator = true,
 		} = props;
-		console.log(hasJwtValidator);
+
 		return from(
 			//* Comprobamos si el JSON Web Token es valido
 			hasJwtValidator || hasAdminValidator

@@ -27,8 +27,8 @@ export class RegisterComponent {
 				'email@hardcodeado.com',
 				[Validators.required, Validators.email],
 			],
-			password: ['', [Validators.required, Validators.minLength(6)]],
-			password2: ['', [Validators.required, Validators.minLength(6)]],
+			password: ['123456', [Validators.required, Validators.minLength(6)]],
+			password2: ['123456', [Validators.required, Validators.minLength(6)]],
 			terms: [true, Validators.requiredTrue],
 		},
 		{
@@ -43,10 +43,11 @@ export class RegisterComponent {
 	public createUser(): void {
 		this.formSubmitted = true;
 
-		this._usersSvc.getRoot().subscribe({ next: (data) => {
-			console.log(data);
-		} });
-		console.log('❗createUser  ➽ _userSvc ➽ ⏩', this._usersSvc);
+		this._usersSvc.getRoot().subscribe({
+			next: (data) => {
+				console.log(data);
+			},
+		});
 
 		if (this.registerForm.invalid) return;
 		console.log(this.registerForm);
