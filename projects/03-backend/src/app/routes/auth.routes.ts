@@ -2,6 +2,8 @@ import { Routes } from '../models/routes.model';
 import { coreRoutes } from './core.routes';
 import { authController } from '../controllers/auth.controller';
 import { authMiddlewares } from '../middlewares/auth.middleware';
+import { usersMiddlewares } from '../middlewares/users.middleware';
+import { usersController } from '../controllers/users.controller';
 
 /**
  * * /api/auth
@@ -17,6 +19,15 @@ export const authRoutes: Routes = new Routes({
 		route: '/login',
 		middlewares: authMiddlewares.login,
 		modelController: authController.login,
+		type: 'post',
+		hasAdminValidator: false,
+		hasSameUserValidator: false,
+		hasJwtValidator: false,
+	},
+	register: {
+		route: '/register',
+		middlewares: usersMiddlewares.post,
+		modelController: usersController.post,
 		type: 'post',
 		hasAdminValidator: false,
 		hasSameUserValidator: false,
