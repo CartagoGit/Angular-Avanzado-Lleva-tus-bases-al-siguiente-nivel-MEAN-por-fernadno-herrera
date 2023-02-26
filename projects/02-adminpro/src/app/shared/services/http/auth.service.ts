@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CoreHttp } from './models/core-http.model';
+import { Observable } from 'rxjs';
+import { DefaultResponse } from './interfaces/response.interfaces';
 
 /**
  * ? Endpoints del modelo
@@ -35,9 +37,21 @@ export class AuthService extends CoreHttp<Endpoints> {
 
 	// ANCHOR : Métodos
 
-	public getRenewToken() {
-		
+	/**
+* ? Observable para realizar el login en la BD
+	 * @public
+	 * @param {{
+			password: string;
+			email: string;
+		}} body
+	 * @returns {Observable<DefaultResponse>}
+	 */
+	public getLogin(body: {
+		password: string;
+		email: string;
+	}): Observable<DefaultResponse> {
+		return this._http.post<DefaultResponse>(this.routes.login, body);
 	}
 
-
+	public getRenewToken() {}
 }

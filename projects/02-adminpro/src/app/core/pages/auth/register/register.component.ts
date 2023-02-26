@@ -8,7 +8,7 @@ import {
 	ValidationErrors,
 	Validators,
 } from '@angular/forms';
-import { UsersService } from 'projects/02-adminpro/src/app/shared/services/http/users.service';
+import { AuthService } from '../../../../shared/services/http/auth.service';
 
 @Component({
 	selector: 'auth-register',
@@ -37,20 +37,23 @@ export class RegisterComponent {
 	);
 
 	// ANCHOR : Constructor
-	constructor(private _fb: FormBuilder, private _usersSvc: UsersService) {}
+	constructor(private _fb: FormBuilder, private _authSvc: AuthService) {}
 
 	// ANCHOR : Métodos
 	public createUser(): void {
 		this.formSubmitted = true;
 
-		this._usersSvc.getRoot().subscribe({
-			next: (data) => {
-				console.log(data);
-			},
-		});
-
 		if (this.registerForm.invalid) return;
 		console.log(this.registerForm);
+
+		this._authSvc
+			.getLogin({
+				password: '123456',
+				email: 'admin@gmail.com',
+			})
+			.subscribe({ next: (resp) => {
+				console.log(resp);
+			} });
 	}
 
 	private _areSamePasswords(

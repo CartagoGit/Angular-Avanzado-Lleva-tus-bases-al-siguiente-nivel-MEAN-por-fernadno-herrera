@@ -49,7 +49,7 @@ export class CoreHttp<T> {
 		this._middleRoutes =
 			middleRoutes.length === 0 ? '' : middleRoutes.join('');
 
-		this.endpoints = { ...this._coreEndpoints, ...modelEndpoints as T};
+		this.endpoints = { ...this._coreEndpoints, ...(modelEndpoints as T) };
 		Object.keys(this.endpoints).forEach((key) => {
 			this.routes = {
 				...this.routes,
@@ -62,8 +62,6 @@ export class CoreHttp<T> {
 				build: () => new XMLHttpRequest(),
 			})
 		);
-
-		console.log(this);
 	}
 
 	// ANCHOR : Métodos
