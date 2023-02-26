@@ -43,7 +43,9 @@ export class RegisterComponent {
 	public createUser(): void {
 		this.formSubmitted = true;
 
-		this._usersSvc.gola();
+		this._usersSvc.getRoot().subscribe({ next: (data) => {
+			console.log(data);
+		} });
 		console.log('❗createUser  ➽ _userSvc ➽ ⏩', this._usersSvc);
 
 		if (this.registerForm.invalid) return;

@@ -119,6 +119,7 @@ export class Routes {
 			hasAdminValidator = true,
 			hasSameUserValidator = true,
 		} = props;
+		console.log(hasJwtValidator);
 		return from(
 			//* Comprobamos si el JSON Web Token es valido
 			hasJwtValidator || hasAdminValidator
@@ -208,7 +209,7 @@ export class Routes {
 	}): void {
 		const { req, res, respController, props } = data;
 		const { type } = props;
-		
+
 		const logType = type?.toUpperCase() as LogType;
 		const hasData =
 			typeof respController?.data === 'boolean' ||

@@ -23,6 +23,9 @@ export const rootRoutes: Routes = new Routes({
 			return rootResponse('home');
 		},
 		type: 'get',
+		hasJwtValidator: false,
+		hasSameUserValidator: false,
+		hasAdminValidator: false
 	},
 	everywhere: {
 		route: '/everywhere',

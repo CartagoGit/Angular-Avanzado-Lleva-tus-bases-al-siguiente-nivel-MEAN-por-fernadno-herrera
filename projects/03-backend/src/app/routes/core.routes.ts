@@ -21,6 +21,9 @@ export const coreRoutes: Routes = new Routes({
 			return rootResponse(getSectionFromUrl(req));
 		},
 		type: 'get',
+		hasJwtValidator: false,
+		hasSameUserValidator: false,
+		hasAdminValidator: false
 	},
 	getAll: {
 		route: '/get-all',

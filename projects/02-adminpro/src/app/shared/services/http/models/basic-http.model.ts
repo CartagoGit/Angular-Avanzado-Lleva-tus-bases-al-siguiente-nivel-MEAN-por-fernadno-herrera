@@ -31,8 +31,15 @@ const basicEndpoints: {
  */
 export class BasicHttp extends CoreHttp {
 	// ANCHOR : Constructor
-	constructor(data: { modelEndpoints: Record<string, string> }) {
-		const { modelEndpoints } = data;
-		super({ modelEndpoints: { ...modelEndpoints, ...basicEndpoints } });
+	constructor(_data: {
+		modelEndpoints: Record<string, string>;
+		middleRoutes?: string[];
+		modelRouteEndpoint: string;
+	}) {
+		const { modelEndpoints, ...rest } = _data;
+		super({
+			modelEndpoints: { ...modelEndpoints, ...basicEndpoints },
+			...rest,
+		});
 	}
 }

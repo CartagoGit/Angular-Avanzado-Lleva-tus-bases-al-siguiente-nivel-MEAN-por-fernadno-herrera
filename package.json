@@ -9,7 +9,7 @@
 		"test": "ng test",
 		"dev:clitest": "nx serve --project='01-clitest'",
 		"dev:clitest-ejercicio": "nx serve --project='01-b-angular-adv-tarea-01-master'",
-		"dev:adminpro": "nx serve --project='02-adminpro'",
+		"dev:adminpro": "nx serve --project='02-adminpro' --configuration=development",
 		"dev:backend": "nx serve --project='03-backend'",
 		"build:backend": "nx build --project='03-backend'"
 	},
@@ -25,7 +25,6 @@
 		"@angular/router": "~15.1.5",
 		"@babel/core": "^7.21.0",
 		"@nrwl/angular": "^15.7.2",
-		"axios": "^1.3.3",
 		"bcryptjs": "^2.4.3",
 		"chart.js": "^4.2.1",
 		"cors": "^2.8.5",
