@@ -101,12 +101,15 @@ export class RegisterComponent {
 		if (this.registerForm.invalid) return;
 
 		this._authSvc
-			.getLogin({
+			.login({
 				password: '123456',
 				email: 'admin@gmail.com',
+				// password: '123456',
+				// email: 'email9@gmail.com',
 			})
 			.subscribe({
 				next: (resp) => {
+					if (!resp) return;
 					console.log(resp);
 					this._storage.set('token', resp.token);
 				},

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CoreHttp } from './models/core-http.model';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { DefaultResponse } from './interfaces/response.interfaces';
 
 /**
@@ -46,12 +46,14 @@ export class AuthService extends CoreHttp<Endpoints> {
 		}} body
 	 * @returns {Observable<DefaultResponse>}
 	 */
-	public getLogin(body: {
+	public login(body: {
 		password: string;
 		email: string;
-	}): Observable<DefaultResponse> {
+	}): Observable<DefaultResponse | undefined> {
+		if (!this._isPossibleAndTimer()) return of(undefined);
 		return this._http.post<DefaultResponse>(this.routes.login, body);
 	}
+	
 
-	public getRenewToken() {}
+	public renewToken() {}
 }
