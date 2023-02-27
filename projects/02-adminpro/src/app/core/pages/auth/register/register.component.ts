@@ -109,33 +109,22 @@ export class RegisterComponent {
 			email: this.registerForm.get('email')?.value!,
 		};
 
-		this._authSvc
-			.register(
-				body
-				// {
-				// password: '123456',
-				// email: 'admin@gmail.com',
-				// password: '123456',
-				// email: 'email9@gmail.com',
-				// }
-			)
-			.subscribe({
-				next: (resp) => {
-					if (!resp) return;
+		this._authSvc.register(body).subscribe({
+			next: (resp) => {
+				if (!resp) return;
+				console.log(resp);
+				this._storage.set('token', resp.token);
+			},
+			error: (error: DefaultErrorResponse) => {
+				if (!!error.error_data.keyValue.email) {
+					this.registerForm
+						.get('email')
+						?.setErrors({ emailRegistered: true });
+				}
 
-					this._storage.set('token', resp.token);
-				},
-				error: (error: DefaultErrorResponse) => {
-					console.log('errorcillo', error);
-					if (!!error.error_data.keyValue.email) {
-						this.registerForm
-							.get('email')
-							?.setErrors({ emailRegistered: true });
-					}
-
-					this._renewMsgErrors();
-				},
-			});
+				this._renewMsgErrors();
+			},
+		});
 	}
 
 	/**

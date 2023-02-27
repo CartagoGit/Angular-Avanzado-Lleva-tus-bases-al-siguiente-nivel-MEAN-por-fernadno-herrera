@@ -3,7 +3,10 @@ import {
 	getModelSection,
 	getNewModelSection,
 } from '../helpers/get-model-section.helper';
-import { getPayloadFromJwtWithoutVerifiy } from '../helpers/json-web-token.helper';
+import {
+	createJWT,
+	getPayloadFromJwtWithoutVerifiy,
+} from '../helpers/json-web-token.helper';
 import { UserModel } from '../models/mongo-models/user.model';
 import {
 	getSectionFromUrl,
@@ -87,6 +90,7 @@ export const coreController: {
 		const endpoint = getMethodFromUrl(req);
 
 		let model: Document;
+		let token: string | undefined = undefined;
 		if (section !== 'users' && endpoint !== 'register') {
 			const { id } = getPayloadFromJwtWithoutVerifiy(req);
 			const creator: typeof UserModel | null = await UserModel.findById(id);
@@ -97,11 +101,12 @@ export const coreController: {
 			model = new UserModel(req.body);
 			(model as any).user_creator = model;
 			(model as any).user_modifier = model;
+			const { token: newToken = '' } = await createJWT({ id: model.id });
+			token = newToken;
 		}
 		await model.save();
-		console.log(model);
 
-		return { model, status_code: 201 };
+		return { model, status_code: 201, token };
 	},
 	put: async (req) => {
 		checkIdInParams(req);

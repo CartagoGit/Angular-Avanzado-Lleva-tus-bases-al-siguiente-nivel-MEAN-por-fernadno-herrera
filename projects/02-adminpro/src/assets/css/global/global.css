@@ -37,3 +37,20 @@
 .underline{
 	text-decoration: underline;
 }
+
+.fast {
+	-webkit-animation-duration: 0.3s;
+	animation-duration: 0.3s;
+	-webkit-animation-fill-mode: both;
+	animation-fill-mode: both;
+ }
+ 
+ input[type='number']::-webkit-inner-spin-button,
+ input[type='number']::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+ }
+ input[type='number'] {
+	text-align: right;
+ }
+ 

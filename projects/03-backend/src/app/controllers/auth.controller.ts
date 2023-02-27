@@ -12,22 +12,14 @@ import { getRandomEncrypt } from '../helpers/encrypt.helper';
 
 /**
  * ? Controladores especificos de los metodos para el modelo de usuarios
- * @type {({
-	login: (
+ * @type {{
+	login: (req: Request) => Promise<ResponseReturnData & ResponseReturnJwt>;
+	renewToken: (
 		req: Request
-	) => Promise<
-		ResponseReturnData & { token: string; ok: boolean; id: string }
-	>;
-	renewToken: (req: Request) => Promise<
-		ResponseReturnData & {
-			token: string;
-			ok: boolean;
-			id: string;
-		}
-	>;
+	) => Promise<ResponseReturnData & ResponseReturnJwt>;
 	googleLogin: (req: Request) => Promise<ResponseReturnData>;
 	googleClientId: () => Promise<ResponseReturnData>;
-})}
+}}
  */
 export const authController: {
 	login: (req: Request) => Promise<ResponseReturnData & ResponseReturnJwt>;
