@@ -4,7 +4,7 @@
 <section
 	id="wrapper"
 	class="login-register login-sidebar"
-	style="background-image: url(../assets/images/background/login-register.jpg)"
+	style="background-image: url(assets/images/background/login-register.jpg)"
 >
 	<div class="login-box card">
 		<div class="card-body">
@@ -162,7 +162,10 @@
 										| isValidField
 								}"
 							>
-								I agree to all <a class="underline">Terms</a></label
+								I agree to all
+								<a class="underline" routerLink="/terms"
+									>Terms</a
+								></label
 							>
 							<div
 								class="required-field"
@@ -171,7 +174,7 @@
 										| isValidField
 								"
 							>
-								Required field
+								{{ msgErrors.terms }}
 							</div>
 						</div>
 					</div>

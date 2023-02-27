@@ -1,0 +1,26 @@
+.eula-containt {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 60px;
+	background-image: url(/assets/images/background/login-register.jpg);
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+
+	/* background-color: rgb(0, 32, 59); */
+}
+
+.eula-text {
+	background-color: rgb(255, 255, 255);
+	padding: 30px;
+	border-radius: 10px;
+	box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+		rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+		rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+
+.eula-return-button {
+	position: fixed;
+	right: 30px;
+	top: 30px;
+}
