@@ -8,15 +8,13 @@
 >
 	<div class="login-box card">
 		<div class="card-body">
-			<!-- autocompleteOff -->
 			<div
 				class="form-horizontal form-material"
-				id="loginform"
 				[formGroup]="registerForm"
-				(ngSubmit)="createUser()"
 				autocomplete="chrome-off"
 			>
-				<a href="javascript:void(0)" class="text-center db"
+				<!-- (ngSubmit)="register()" -->
+				<a class="text-center db"
 					><img src="assets/images/logo-icon.png" alt="Home" /><br /><img
 						src="assets/images/logo-text.png"
 						alt="Home"
@@ -44,7 +42,7 @@
 									| isValidField
 							"
 						>
-							Required field
+							{{ msgErrors.name }}
 						</div>
 					</div>
 				</div>
@@ -70,7 +68,7 @@
 									| isValidField
 							"
 						>
-							Required field
+							{{ msgErrors.email }}
 						</div>
 					</div>
 				</div>
@@ -99,7 +97,7 @@
 										| isValidField
 								"
 							>
-								Required field
+								{{ msgErrors.password }}
 							</div>
 						</div>
 					</div>
@@ -143,7 +141,7 @@
 										| isValidField
 								"
 							>
-								Required field
+								{{ msgErrors.password2 }}
 							</div>
 						</div>
 					</div>
@@ -183,9 +181,9 @@
 						<button
 							class="btn btn-info btn-lg btn-block text-uppercase btn-rounded waves-effect waves-light"
 							type="submit"
-							(click)="createUser()"
+							(click)="register()"
 						>
-							Sign Up
+							Register
 						</button>
 					</div>
 				</div>

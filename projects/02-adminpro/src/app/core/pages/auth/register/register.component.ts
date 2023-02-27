@@ -10,6 +10,21 @@ import {
 } from '@angular/forms';
 import { AuthService } from '../../../../shared/services/http/auth.service';
 import { StorageService } from '../../../../shared/services/settings/storage.service';
+import { Subscription } from 'rxjs';
+import { getCapitalize } from 'projects/02-adminpro/src/app/shared/helpers/string.helper';
+
+type TypeErrors =
+	| 'required'
+	| 'maxlength'
+	| 'minlength'
+	| 'pattern'
+	| 'min'
+	| 'max'
+	| 'whitespace'
+	| 'samePasswords'
+	| 'email';
+
+type TypeMessageErrors = Record<TypeErrors, (params?: any) => string>;
 
 @Component({
 	selector: 'auth-register',
@@ -20,6 +35,26 @@ export class RegisterComponent {
 	// ANCHOR : Variables
 	public formSubmitted = false;
 	public showPassword = false;
+
+	private _errorMessage: TypeMessageErrors = {
+		required: () => `required`,
+		maxlength: (params) => `max ${params.requiredLength} characters`,
+		minlength: (params) => `min ${params.requiredLength} characters`,
+		pattern: () => `invalid format`,
+		max: (params) => `max amount ${params.max}`,
+		min: (params) => `min amount ${params.min}`,
+		whitespace: () => `no white spaces`,
+		samePasswords: () => `different passwords`,
+		email: () => `invalid format`,
+	};
+
+	public msgErrors = {
+		name: '',
+		email: '',
+		password: '',
+		password2: '',
+		terms: '',
+	};
 
 	public registerForm = this._fb.group(
 		{
@@ -39,6 +74,8 @@ export class RegisterComponent {
 
 	private _storage;
 
+	private _subForm!: Subscription;
+
 	// ANCHOR : Constructor
 	constructor(
 		private _fb: FormBuilder,
@@ -46,12 +83,21 @@ export class RegisterComponent {
 		private _storageSvc: StorageService
 	) {
 		this._storage = this._storageSvc.local;
+		this._subForm = this._getSubForm();
+	}
+
+	ngOnDestroy(): void {
+		this._subForm.unsubscribe();
 	}
 
 	// ANCHOR : Métodos
-	public createUser(): void {
-		this.formSubmitted = true;
 
+	/**
+	 * ? Registra un nuevo usuario si es valido
+	 * @public
+	 */
+	public register(): void {
+		this.formSubmitted = true;
 		if (this.registerForm.invalid) return;
 
 		this._authSvc
@@ -67,6 +113,41 @@ export class RegisterComponent {
 			});
 	}
 
+	/**
+	 * ? Crea y recupera la subscripcion a lo cambios de valores en el formulario
+	 * @private
+	 * @returns {Subscription}
+	 */
+	private _getSubForm(): Subscription {
+		return this.registerForm.valueChanges.subscribe({
+			next: () => {
+				for (let key in this.registerForm.controls) {
+					const errors = this.registerForm.get(key)?.errors;
+					console.log(errors);
+					if (!errors) {
+						(this.msgErrors as Record<string, string>)[key] = '';
+						continue;
+					}
+					const arrayErrorMessages = Object.entries(errors).map(
+						([key, value]) => this._errorMessage[key as TypeErrors](value)
+					);
+					const listErrorMsg = new Intl.ListFormat('en-GB').format(
+						arrayErrorMessages
+					);
+					(this.msgErrors as Record<string, string>)[key] =
+						getCapitalize(listErrorMsg);
+				}
+			},
+		});
+	}
+
+	/**
+	 * ? Crea validador para comprobar que ambas contraseñas son iguales en un formulario reactivo
+	 * @private
+	 * @param {string} password1
+	 * @param {string} password2
+	 * @returns {(ValidationErrors | null)}
+	 */
 	private _areSamePasswords(
 		password1: string,
 		password2: string
@@ -77,7 +158,7 @@ export class RegisterComponent {
 			const passwordControl2: AbstractControl = formGroup.get(password2)!;
 
 			//* Seteamos el nombre del error
-			const nameError = 'arentSamePasswords';
+			const nameError = 'samePasswords';
 
 			if (passwordControl1.value === passwordControl2.value) {
 				for (let control of [
@@ -100,9 +181,10 @@ export class RegisterComponent {
 
 			//* En caso de que los password no sean iguales, aplicamos el error,
 			// y mantenemos el resto de errores que tengan los controles
-			const error = { [nameError]: true };
+			const error = { [nameError]: false };
 			passwordControl1.setErrors({ ...passwordControl1.errors, ...error });
 			passwordControl2.setErrors({ ...passwordControl2.errors, ...error });
+
 			return { ...formGroup.errors, ...error };
 		};
 	}

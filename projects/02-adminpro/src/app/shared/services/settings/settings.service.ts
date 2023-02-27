@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { getUrlTheme } from '../../helpers/get-url-theme';
+import { getUrlTheme } from '../../helpers/get-url-theme.helper';
 import { StorageService } from './storage.service';
 
 @Injectable({
