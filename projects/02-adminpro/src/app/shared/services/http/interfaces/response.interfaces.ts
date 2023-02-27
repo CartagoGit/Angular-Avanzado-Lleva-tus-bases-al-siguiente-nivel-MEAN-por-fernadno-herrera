@@ -6,7 +6,7 @@ import { Roles } from '../../../interfaces/roles.interface';
  * @interface DefaultResponse
  * @typedef {DefaultResponse}
  */
-export interface DefaultResponse<T = undefined> {
+export interface DefaultResponse<T = unknown> {
 	ok: boolean;
 	message: string;
 	status_code: number;

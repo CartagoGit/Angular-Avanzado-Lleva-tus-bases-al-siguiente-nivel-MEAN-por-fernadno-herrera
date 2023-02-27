@@ -10,6 +10,7 @@ import { StorageService } from '../../../../shared/services/settings/storage.ser
 import { Subscription } from 'rxjs';
 import { DefaultErrorResponse } from '../../../../shared/services/http/interfaces/response.interfaces';
 import { ValidatorService } from 'projects/02-adminpro/src/app/shared/services/helpers/validator.service';
+import { SweetAlertService } from '../../../../shared/services/helpers/sweet-alert.service';
 
 @Component({
 	selector: 'auth-register',
@@ -56,7 +57,8 @@ export class RegisterComponent {
 		private _fb: FormBuilder,
 		private _authSvc: AuthService,
 		private _storageSvc: StorageService,
-		private _validatorSvc: ValidatorService
+		private _validatorSvc: ValidatorService,
+		private _sweetAlertSvc: SweetAlertService
 	) {
 		this._storage = this._storageSvc.local;
 		this._subForm = this._getSubForm();
@@ -89,10 +91,14 @@ export class RegisterComponent {
 				this._storage.set('token', resp.token);
 			},
 			error: (error: DefaultErrorResponse) => {
-				if (!!error.error_data.keyValue.email) {
+				if (!!error.error_data?.keyValue?.email) {
 					this.registerForm
 						.get('email')
 						?.setErrors({ emailRegistered: true });
+				} else {
+					this._sweetAlertSvc.alertError(
+						'You cannot register a new account'
+					);
 				}
 
 				this._validatorSvc.renewMsgErrors(

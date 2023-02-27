@@ -39,13 +39,10 @@ export class AuthService extends CoreHttp<Endpoints> {
 	// ANCHOR : Métodos
 
 	/**
-* ? Observable para realizar el login en la BD
+	 * ? Observable para realizar el login en la BD
 	 * @public
-	 * @param {{
-			password: string;
-			email: string;
-		}} body
-	 * @returns {Observable<DefaultResponse>}
+	 * @param {AuthDefaultResponse} body
+	 * @returns {Observable<DefaultResponse | undefined>}
 	 */
 	public login(
 		body: AuthDefaultResponse
