@@ -34,8 +34,8 @@ export const usersController: {
 		//* Encriptamos la contraseña
 		const { password } = req.body;
 		req.body.password = getEncryptHash(password);
-		// req.body.role = 'USER_ROLE' as Role;
-		req.body.role = "ADMIN_ROLE" as Role;
+		req.body.role = 'USER_ROLE' as Role;
+		// req.body.role = "ADMIN_ROLE" as Role;
 
 		return req.body;
 	},
