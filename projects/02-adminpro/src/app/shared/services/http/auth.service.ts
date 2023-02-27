@@ -67,5 +67,38 @@ export class AuthService extends CoreHttp<Endpoints> {
 		return this._http.post<DefaultResponse>(this.routes.register, body);
 	}
 
-	public renewToken() {}
+	/**
+	 * ? Observable para renuevar el token jwt
+	 * @public
+	 * @returns {Observable<DefaultResponse | undefined>}
+	 */
+	public renewToken(): Observable<DefaultResponse | undefined> {
+		if (!this._isPossibleAndTimer()) return of(undefined);
+		return this._http.get<DefaultResponse>(this.routes.renewToken);
+	}
+
+	/**
+	 * ? Observable para loguearse en google
+	 * @public
+	 * @param {string} token
+	 * @returns {Observable<DefaultResponse | undefined>}
+	 */
+	public googleLogin(token: string): Observable<DefaultResponse | undefined> {
+		if (!this._isPossibleAndTimer()) return of(undefined);
+		return this._http.post<DefaultResponse>(this.routes.googleLogin, {
+			token,
+		});
+	}
+
+	/**
+	 * ? Observable que devuelve el codigo id de cliente para Google
+	 * @public
+	 * @returns {Observable<DefaultResponse | undefined>}
+	 */
+	public googleClientId(): Observable<DefaultResponse<string> | undefined> {
+		if (!this._isPossibleAndTimer()) return of(undefined);
+		return this._http.get<DefaultResponse<string>>(
+			this.routes.googleClientId
+		);
+	}
 }

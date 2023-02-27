@@ -18,6 +18,7 @@ export class CoreHttp<T> {
 	} & T;
 	public routes!: Record<keyof typeof this.endpoints, string>;
 	public _modelRouteEndpoint!: string;
+	public iPossibleSub = true;
 
 	public get middleRoute() {
 		return this.apiUrl + this._middleRoutes;
@@ -29,7 +30,6 @@ export class CoreHttp<T> {
 
 	protected _http!: HttpClient;
 	protected _middleRoutes!: string;
-	protected _iPossibleSub = true;
 	protected _timer = 700;
 
 	private _coreEndpoints = {
@@ -81,9 +81,9 @@ export class CoreHttp<T> {
 	 * @returns {boolean}
 	 */
 	protected _isPossibleAndTimer(): boolean {
-		if (!this._iPossibleSub) return false;
-		this._iPossibleSub = false;
-		timer(this._timer).subscribe(() => (this._iPossibleSub = true));
+		if (!this.iPossibleSub) return false;
+		this.iPossibleSub = false;
+		timer(this._timer).subscribe(() => (this.iPossibleSub = true));
 		return true;
 	}
 
