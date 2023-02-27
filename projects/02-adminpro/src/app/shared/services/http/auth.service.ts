@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { CoreHttp } from './models/core-http.model';
 import { Observable, of } from 'rxjs';
 import { DefaultResponse } from './interfaces/response.interfaces';
+import { AuthDefaultResponse } from './interfaces/request.interface';
+import { HttpClient } from '@angular/common/http';
 
 /**
  * ? Endpoints del modelo
@@ -46,14 +48,25 @@ export class AuthService extends CoreHttp<Endpoints> {
 		}} body
 	 * @returns {Observable<DefaultResponse>}
 	 */
-	public login(body: {
-		password: string;
-		email: string;
-	}): Observable<DefaultResponse | undefined> {
+	public login(
+		body: AuthDefaultResponse
+	): Observable<DefaultResponse | undefined> {
 		if (!this._isPossibleAndTimer()) return of(undefined);
 		return this._http.post<DefaultResponse>(this.routes.login, body);
 	}
-	
+
+	/**
+	 * ? Observable para registrar un nuevo usuario
+	 * @public
+	 * @param {AuthDefaultResponse} body
+	 * @returns {Observable<DefaultResponse | undefined>}
+	 */
+	public register(
+		body: AuthDefaultResponse
+	): Observable<DefaultResponse | undefined> {
+		if (!this._isPossibleAndTimer()) return of(undefined);
+		return this._http.post<DefaultResponse>(this.routes.register, body);
+	}
 
 	public renewToken() {}
 }

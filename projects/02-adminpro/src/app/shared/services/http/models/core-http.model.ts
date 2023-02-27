@@ -1,16 +1,13 @@
 import { config } from 'projects/02-adminpro/src/environments/environment';
-import { HttpClient, HttpXhrBackend } from '@angular/common/http';
 import {
-	filter,
-	finalize,
-	mergeAll,
-	MonoTypeOperatorFunction,
-	Observable,
-	tap,
-	timer,
-} from 'rxjs';
+	HttpClient,
+	HttpXhrBackend,
+	JsonpClientBackend,
+} from '@angular/common/http';
+import { Observable, timer } from 'rxjs';
 import { DefaultResponse } from '../interfaces/response.interfaces';
-import { concatMap } from 'rxjs';
+import { Inject } from '@angular/core';
+import { ServiceLocator } from '../../injector/locator.service';
 
 /**
  * ? Core que deben extender todas los servicios http
@@ -80,11 +77,15 @@ export class CoreHttp<T> {
 			};
 		});
 
-		this._http = new HttpClient(
-			new HttpXhrBackend({
-				build: () => new XMLHttpRequest(),
-			})
-		);
+		// this._http = new HttpClient(
+		// 	new HttpXhrBackend({
+		// 		build: () => new XMLHttpRequest(),
+		// 		// build: () => new JsonpClientBackend(),
+		// 	})
+		// );
+		this._http = ServiceLocator.injector.get(HttpClient);
+
+		// this._http = HttpClient.ɵfac
 	}
 
 	/**

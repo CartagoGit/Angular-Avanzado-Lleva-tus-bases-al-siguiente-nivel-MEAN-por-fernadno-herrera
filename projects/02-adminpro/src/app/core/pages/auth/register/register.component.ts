@@ -12,6 +12,7 @@ import { AuthService } from '../../../../shared/services/http/auth.service';
 import { StorageService } from '../../../../shared/services/settings/storage.service';
 import { Subscription } from 'rxjs';
 import { getCapitalize } from 'projects/02-adminpro/src/app/shared/helpers/string.helper';
+import { DefaultErrorResponse } from '../../../../shared/services/http/interfaces/response.interfaces';
 
 type TypeErrors =
 	| 'required'
@@ -101,7 +102,7 @@ export class RegisterComponent {
 		if (this.registerForm.invalid) return;
 
 		this._authSvc
-			.login({
+			.register({
 				password: '123456',
 				email: 'admin@gmail.com',
 				// password: '123456',
@@ -110,8 +111,19 @@ export class RegisterComponent {
 			.subscribe({
 				next: (resp) => {
 					if (!resp) return;
-					console.log(resp);
+					if (!resp.ok) {
+						console.log(resp);
+
+						// console.log(resp.error);
+					}
+					//  console.log(resp);
 					this._storage.set('token', resp.token);
+				},
+				error: (error: DefaultErrorResponse ) => {
+					console.log('errrrrrorr', error);
+					if (!!error.error_data.keyValue.email) {
+						console.log(error.error_data.keyValue.email);
+					}
 				},
 			});
 	}

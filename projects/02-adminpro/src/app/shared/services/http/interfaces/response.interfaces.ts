@@ -19,3 +19,30 @@ export interface DefaultResponse<T = undefined> {
 	role?: Roles;
 	token?: string;
 }
+
+/**
+ * ? Interfaz de respuesta Erronea
+ * @export
+ * @interface DefaulErrorResponse
+ * @typedef {DefaulErrorResponse}
+ */
+export interface DefaultErrorResponse {
+	message: string;
+	ok: boolean;
+	status_code: number;
+	error_message: string;
+	error_data: ErrorData;
+	db_state: string;
+}
+
+/**
+ * ? Interfaz de la data del error
+ * @export
+ * @interface ErrorData
+ * @typedef {ErrorData}
+ */
+export interface ErrorData {
+	status_code: number;
+	reason: string;
+	keyValue?: any;
+}
