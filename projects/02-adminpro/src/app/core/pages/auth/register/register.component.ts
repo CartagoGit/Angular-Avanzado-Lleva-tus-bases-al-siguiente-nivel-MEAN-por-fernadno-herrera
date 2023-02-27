@@ -23,7 +23,8 @@ type TypeErrors =
 	| 'max'
 	| 'whitespace'
 	| 'samePasswords'
-	| 'email';
+	| 'email'
+	| 'emailRegistered';
 
 type TypeMessageErrors = Record<TypeErrors, (params?: any) => string>;
 
@@ -47,6 +48,7 @@ export class RegisterComponent {
 		whitespace: () => `no white spaces`,
 		samePasswords: () => `different passwords`,
 		email: () => `invalid format`,
+		emailRegistered: () => `email already registered`,
 	};
 
 	public msgErrors = {
@@ -101,29 +103,37 @@ export class RegisterComponent {
 		this.formSubmitted = true;
 		if (this.registerForm.invalid) return;
 
+		const body = {
+			name: this.registerForm.get('name')?.value!,
+			password: this.registerForm.get('password')?.value!,
+			email: this.registerForm.get('email')?.value!,
+		};
+
 		this._authSvc
-			.register({
-				password: '123456',
-				email: 'admin@gmail.com',
+			.register(
+				body
+				// {
+				// password: '123456',
+				// email: 'admin@gmail.com',
 				// password: '123456',
 				// email: 'email9@gmail.com',
-			})
+				// }
+			)
 			.subscribe({
 				next: (resp) => {
 					if (!resp) return;
-					if (!resp.ok) {
-						console.log(resp);
 
-						// console.log(resp.error);
-					}
-					//  console.log(resp);
 					this._storage.set('token', resp.token);
 				},
-				error: (error: DefaultErrorResponse ) => {
-					console.log('errrrrrorr', error);
+				error: (error: DefaultErrorResponse) => {
+					console.log('errorcillo', error);
 					if (!!error.error_data.keyValue.email) {
-						console.log(error.error_data.keyValue.email);
+						this.registerForm
+							.get('email')
+							?.setErrors({ emailRegistered: true });
 					}
+
+					this._renewMsgErrors();
 				},
 			});
 	}
@@ -136,24 +146,27 @@ export class RegisterComponent {
 	private _getSubForm(): Subscription {
 		return this.registerForm.valueChanges.subscribe({
 			next: () => {
-				for (let key in this.registerForm.controls) {
-					const errors = this.registerForm.get(key)?.errors;
-					console.log(errors);
-					if (!errors) {
-						(this.msgErrors as Record<string, string>)[key] = '';
-						continue;
-					}
-					const arrayErrorMessages = Object.entries(errors).map(
-						([key, value]) => this._errorMessage[key as TypeErrors](value)
-					);
-					const listErrorMsg = new Intl.ListFormat('en-GB').format(
-						arrayErrorMessages
-					);
-					(this.msgErrors as Record<string, string>)[key] =
-						getCapitalize(listErrorMsg);
-				}
+				this._renewMsgErrors();
 			},
 		});
+	}
+
+	private _renewMsgErrors() {
+		for (let key in this.registerForm.controls) {
+			const errors = this.registerForm.get(key)?.errors;
+			if (!errors) {
+				(this.msgErrors as Record<string, string>)[key] = '';
+				continue;
+			}
+			const arrayErrorMessages = Object.entries(errors).map(([key, value]) =>
+				this._errorMessage[key as TypeErrors](value)
+			);
+			const listErrorMsg = new Intl.ListFormat('en-GB').format(
+				arrayErrorMessages
+			);
+			(this.msgErrors as Record<string, string>)[key] =
+				getCapitalize(listErrorMsg);
+		}
 	}
 
 	/**

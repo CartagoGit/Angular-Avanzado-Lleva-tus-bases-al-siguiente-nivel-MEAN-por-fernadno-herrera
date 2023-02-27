@@ -15,6 +15,7 @@ export interface DefaultResponseProps {
 	error_message?: string;
 	error?: Error;
 	db_state?: string;
+	trace?: Record<string, any>[];
 }
 
 /**

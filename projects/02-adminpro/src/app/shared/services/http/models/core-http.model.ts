@@ -1,12 +1,7 @@
 import { config } from 'projects/02-adminpro/src/environments/environment';
-import {
-	HttpClient,
-	HttpXhrBackend,
-	JsonpClientBackend,
-} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable, timer } from 'rxjs';
 import { DefaultResponse } from '../interfaces/response.interfaces';
-import { Inject } from '@angular/core';
 import { ServiceLocator } from '../../injector/locator.service';
 
 /**
@@ -77,15 +72,7 @@ export class CoreHttp<T> {
 			};
 		});
 
-		// this._http = new HttpClient(
-		// 	new HttpXhrBackend({
-		// 		build: () => new XMLHttpRequest(),
-		// 		// build: () => new JsonpClientBackend(),
-		// 	})
-		// );
 		this._http = ServiceLocator.injector.get(HttpClient);
-
-		// this._http = HttpClient.ɵfac
 	}
 
 	/**

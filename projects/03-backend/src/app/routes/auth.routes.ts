@@ -25,6 +25,7 @@ export const authRoutes: Routes = new Routes({
 		hasJwtValidator: false,
 	},
 	register: {
+		...coreRoutes.routes['post'],
 		route: '/register',
 		middlewares: usersMiddlewares.post,
 		modelController: usersController.post,

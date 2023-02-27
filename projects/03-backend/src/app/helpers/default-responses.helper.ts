@@ -38,7 +38,7 @@ export const defaultResponse = (
 	const isSendFile = !!respController?.sendFile;
 	if (!!isSendFile) {
 		delete respController.sendFile;
-		res.status(statusCode).sendFile(respController.data)
+		res.status(statusCode).sendFile(respController.data);
 	}
 	//* Si no se devuelve un archivo una respuesta correcta simple
 	else {
@@ -55,19 +55,24 @@ export const defaultResponse = (
 
 /**
  * ? Crea una response predefinida y un log para mostrar los errores producidos en las peticiones
- * @param {Request} req
- * @param {Response} res
- * @param {ErrorData} error
- * @param {LogType} [logType='LOG']
- * @param {number} [statusCode=500]
+ * @param {{
+	req: Request;
+	res: Response;
+	error: ErrorData;
+	trace: Record<string, any>[];
+	logType?: LogType;
+	statusCode?: number;
+}} data
  */
-export const defaultErrorResponse = (
-	req: Request,
-	res: Response,
-	error: ErrorData,
-	logType: LogType = 'LOG',
-	statusCode: number = 500
-) => {
+export const defaultErrorResponse = (data: {
+	req: Request;
+	res: Response;
+	error: ErrorData;
+	trace: Record<string, any>[];
+	logType?: LogType;
+	statusCode?: number;
+}) => {
+	let { error, logType = 'LOG', req, res, statusCode = 500, trace } = data;
 	const method = getMethodFromUrl(req).toUpperCase().split('-').join(' ');
 	statusCode = error.status_code || statusCode;
 	const message =
@@ -82,6 +87,7 @@ export const defaultErrorResponse = (
 		error_message: error.message || 'Unknown Error',
 		error_data: error,
 		db_state: mongoState.getState(),
+		trace,
 	} as DefaultResponseProps);
 };
 

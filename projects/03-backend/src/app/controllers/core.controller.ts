@@ -5,7 +5,10 @@ import {
 } from '../helpers/get-model-section.helper';
 import { getPayloadFromJwtWithoutVerifiy } from '../helpers/json-web-token.helper';
 import { UserModel } from '../models/mongo-models/user.model';
-import { getSectionFromUrl } from '../helpers/get-model-section.helper';
+import {
+	getSectionFromUrl,
+	getMethodFromUrl,
+} from '../helpers/get-model-section.helper';
 import { checkIdInParams } from '../helpers/validator.helper';
 import { getErrorNotFields } from '../helpers/default-responses.helper';
 import { PaginationParameters } from 'mongoose-paginate-v2';
@@ -81,20 +84,22 @@ export const coreController: {
 	},
 	post: async (req) => {
 		const section = getSectionFromUrl(req);
-let model : Document ;
-		if (section !== 'users') {
+		const endpoint = getMethodFromUrl(req);
+
+		let model: Document;
+		if (section !== 'users' && endpoint !== 'register') {
 			const { id } = getPayloadFromJwtWithoutVerifiy(req);
 			const creator: typeof UserModel | null = await UserModel.findById(id);
 			req.body['user_creator'] = creator;
 			req.body['user_modifier'] = creator;
 			model = getNewModelSection(req);
-		}else {
-			model = getNewModelSection(req);
+		} else {
+			model = new UserModel(req.body);
 			(model as any).user_creator = model;
 			(model as any).user_modifier = model;
-
 		}
 		await model.save();
+		console.log(model);
 
 		return { model, status_code: 201 };
 	},

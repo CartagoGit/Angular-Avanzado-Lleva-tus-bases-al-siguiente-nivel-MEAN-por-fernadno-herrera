@@ -36,8 +36,8 @@ import { SharedModule } from './shared/shared.module';
 	bootstrap: [AppComponent],
 })
 export class AppModule {
+	//? Crea un servicio de inyeccion global
 	constructor(private injector: Injector) {
-		// Create global Service Injector.
 		ServiceLocator.injector = this.injector;
 	}
 }

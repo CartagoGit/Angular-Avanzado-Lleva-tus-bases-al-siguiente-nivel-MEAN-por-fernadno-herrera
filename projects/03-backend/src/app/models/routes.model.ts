@@ -33,6 +33,8 @@ export class Routes {
 		return mongoState.getState();
 	}
 
+	private _trace: Record<string, any>[] = [];
+
 	// ANCHOR : Constructor
 	constructor(private _routes: Record<string, RoutesProps>) {
 		this.routes = this._routes;
@@ -78,6 +80,7 @@ export class Routes {
 		next: NextFunction,
 		props: RoutesProps
 	): void {
+		this._trace = [];
 		//* Subscribe para realizar todos los metodos antes de realizar la respuesta
 		this._getSubscriptionForRoute(req, res, next, props).subscribe({
 			next: (respController) => {
@@ -85,12 +88,13 @@ export class Routes {
 			},
 			error: (error) => {
 				//* Si hay un error critico lo mostramos
-				defaultErrorResponse(
+				defaultErrorResponse({
 					req,
 					res,
-					error as ErrorData,
-					'CRITICAL ERROR'
-				);
+					error: error as ErrorData,
+					logType: 'CRITICAL ERROR',
+					trace: this._trace,
+				});
 			},
 		});
 	}
@@ -117,7 +121,7 @@ export class Routes {
 			hasAdminValidator = true,
 			hasSameUserValidator = true,
 		} = props;
-
+		this._trace = [{ initValues: props }];
 		return from(
 			//* Comprobamos si el JSON Web Token es valido
 			hasJwtValidator || hasAdminValidator
@@ -125,6 +129,7 @@ export class Routes {
 				: of({ ok: true, id: undefined })
 		).pipe(
 			concatMap((respValidatorJWT) => {
+				this._trace.push({ afterJwtValidator: respValidatorJWT });
 				const { id, ok: isJwtOk } = respValidatorJWT;
 				if (!isJwtOk) throw getErrorJWT();
 				//* Si requiere ser Admin comprobamos si el usuario es Administrador
@@ -135,13 +140,20 @@ export class Routes {
 					: of(respValidatorJWT);
 			}),
 			concatMap(({ ok: isAdminOrSameUser }) => {
+				this._trace.push({
+					afterAdminOrSameUserValidator: isAdminOrSameUser,
+				});
 				if (!isAdminOrSameUser) throw getErrorNotAdmin();
 				//* Nos subscribimos al controlador especifico del modelo
 				return from(modelController(req, res, next));
 			}),
 			concatMap((respModel) => {
+				this._trace.push({ afterModelController: respModel });
 				//* Pasamos las validaciones de los campos de los parametros
 				const errors = checkValidatorFields(req);
+				this._trace.push({
+					afterMiddlewareValidator: errors || 'no validator errors',
+				});
 				if (!!errors) throw errors;
 				//* Si pasa el controlador y las validaciones,
 				//* nos subscribimos al controlador core para realizar los cambios pertinentes
@@ -156,6 +168,7 @@ export class Routes {
 			}),
 			catchError((error) => {
 				//* Capturamos cualquier posible error
+				this._trace.push({ caughtError: true });
 				const capturedError = this._getCaughtError(error);
 				return of(capturedError);
 			})
@@ -174,6 +187,7 @@ export class Routes {
 	private _getCaughtError(error: any): {
 		error: any;
 		status_code: number;
+		trace: Record<string, any>[];
 	} {
 		let finalError: any = {};
 		if (!error.message) {
@@ -186,6 +200,7 @@ export class Routes {
 		return {
 			error: finalError,
 			status_code: finalError.status_code || 500,
+			trace: this._trace,
 		};
 	}
 
@@ -206,9 +221,15 @@ export class Routes {
 		props: RoutesProps;
 	}): void {
 		const { req, res, respController, props } = data;
+
+		const { trace, ...respControllerWithoutTrace } = respController;
+		this._trace.push({
+			afterCoreController: { respControllerWithoutTrace, props },
+		});
 		const { type } = props;
 
 		const logType = type?.toUpperCase() as LogType;
+
 		const hasData =
 			typeof respController?.data === 'boolean' ||
 			!!respController?.data ||
@@ -216,12 +237,13 @@ export class Routes {
 			!!respController?.model;
 		//* Si la respuesta de los controladores, contiene errores...
 		if (!!respController?.error) {
-			defaultErrorResponse(
+			defaultErrorResponse({
 				req,
 				res,
-				respController.error as ErrorData,
-				logType
-			);
+				error: respController.error as ErrorData,
+				logType,
+				trace: this._trace,
+			});
 			return;
 			//*  Si no existe data y la respuesta es de un get, devuelve un error de not found
 		} else if (
@@ -232,18 +254,19 @@ export class Routes {
 				logType === 'PATCH')
 		) {
 			const msgError = getNotFoundMessage(req);
-			defaultErrorResponse(
+			defaultErrorResponse({
 				req,
 				res,
-				new ErrorData({
+				error: new ErrorData({
 					message: msgError,
 					status_code: 404,
 					keyValue: {},
 					reason: 'not found',
 				}),
 				logType,
-				404
-			);
+				statusCode: 404,
+				trace: this._trace,
+			});
 			return;
 		}
 		if (

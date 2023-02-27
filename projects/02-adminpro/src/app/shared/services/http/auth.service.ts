@@ -3,7 +3,6 @@ import { CoreHttp } from './models/core-http.model';
 import { Observable, of } from 'rxjs';
 import { DefaultResponse } from './interfaces/response.interfaces';
 import { AuthDefaultResponse } from './interfaces/request.interface';
-import { HttpClient } from '@angular/common/http';
 
 /**
  * ? Endpoints del modelo

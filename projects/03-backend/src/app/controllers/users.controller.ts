@@ -34,7 +34,8 @@ export const usersController: {
 		//* Encriptamos la contraseña
 		const { password } = req.body;
 		req.body.password = getEncryptHash(password);
-		req.body.role = 'USER_ROLE' as Role;
+		// req.body.role = 'USER_ROLE' as Role;
+		req.body.role = "ADMIN_ROLE" as Role;
 
 		return req.body;
 	},
@@ -42,7 +43,7 @@ export const usersController: {
 		//* Condicionamos las respuestas a sus validadores y eliminamos las que no deban modificarse
 		const userDB = await UserModel.findById(req.params['id']);
 		if (!userDB) throw { message: getNotFoundMessage(req), status_code: 404 };
-		// req.body['model'] = userDB;
+		req.body['model'] = userDB;
 		if (userDB.email === req.body.email) {
 			cleanValidatorField(req, 'email');
 			delete req.body.email;
