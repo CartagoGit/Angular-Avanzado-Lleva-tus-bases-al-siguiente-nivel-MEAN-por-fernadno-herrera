@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs';
 import { DefaultErrorResponse } from '../../../../shared/services/http/interfaces/response.interfaces';
 import { ValidatorService } from 'projects/02-adminpro/src/app/shared/services/helpers/validator.service';
 import { SweetAlertService } from '../../../../shared/services/helpers/sweet-alert.service';
+import { AuthDefaultResponse } from 'projects/02-adminpro/src/app/shared/services/http/interfaces/request.interface';
 
 @Component({
 	selector: 'auth-register',
@@ -61,7 +62,10 @@ export class RegisterComponent {
 		private _sweetAlertSvc: SweetAlertService
 	) {
 		this._storage = this._storageSvc.local;
-		this._subForm = this._getSubForm();
+		this._subForm = this._validatorSvc.getSubForm(
+			this.registerForm,
+			this.msgErrors
+		);
 	}
 
 	ngOnDestroy(): void {
@@ -78,7 +82,7 @@ export class RegisterComponent {
 		this.formSubmitted = true;
 		if (this.registerForm.invalid) return;
 
-		const body = {
+		const body: AuthDefaultResponse = {
 			name: this.registerForm.get('name')?.value!,
 			password: this.registerForm.get('password')?.value!,
 			email: this.registerForm.get('email')?.value!,
@@ -100,23 +104,8 @@ export class RegisterComponent {
 						'You cannot register a new account'
 					);
 				}
+				this._storage.delete('token');
 
-				this._validatorSvc.renewMsgErrors(
-					this.registerForm,
-					this.msgErrors
-				);
-			},
-		});
-	}
-
-	/**
-	 * ? Crea y recupera la subscripcion a lo cambios de valores en el formulario
-	 * @private
-	 * @returns {Subscription}
-	 */
-	private _getSubForm(): Subscription {
-		return this.registerForm.valueChanges.subscribe({
-			next: () => {
 				this._validatorSvc.renewMsgErrors(
 					this.registerForm,
 					this.msgErrors

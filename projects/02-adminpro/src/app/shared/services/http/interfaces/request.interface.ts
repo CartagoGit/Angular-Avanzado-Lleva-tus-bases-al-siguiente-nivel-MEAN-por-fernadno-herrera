@@ -10,3 +10,4 @@ export interface AuthDefaultResponse {
 	email?: string;
 	token?: string;
 }
+

@@ -106,7 +106,7 @@ export const coreController: {
 		}
 		await model.save();
 
-		return { model, status_code: 201, token };
+		return { model, status_code: 201, token, id : model.id };
 	},
 	put: async (req) => {
 		checkIdInParams(req);

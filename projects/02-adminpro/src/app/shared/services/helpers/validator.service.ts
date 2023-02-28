@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AbstractControl, FormGroup, ValidationErrors } from '@angular/forms';
+import { Subscription } from 'rxjs';
 import { getCapitalize } from '../../helpers/string.helper';
 
 //* Tipos de validadores de errores
@@ -119,5 +120,23 @@ export class ValidatorService {
 			);
 			msgErrors[key] = getCapitalize(listErrorMsg);
 		}
+	}
+
+	/**
+	 * ? Crea y recupera la subscripcion a lo cambios de valores en el formulario
+	 * @public
+	 * @param {FormGroup} formGroup
+	 * @param {Record<string, string>} msgErrors
+	 * @returns {Subscription}
+	 */
+	public getSubForm(formGroup : FormGroup, msgErrors: Record<string, string>): Subscription {
+		return formGroup.valueChanges.subscribe({
+			next: () => {
+				this.renewMsgErrors(
+					formGroup,
+					msgErrors
+				);
+			},
+		});
 	}
 }
