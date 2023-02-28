@@ -37,7 +37,7 @@ export const authController: {
 		const errorMsg = {
 			message: getNotFoundMessage(req),
 			status_code: 404,
-			reason: 'invalid params',
+			reason: 'email or password incorrect',
 		} as basicError;
 		if (!userDB) throw errorMsg;
 		//* Verificamos si el password es el del usuario de dicho email

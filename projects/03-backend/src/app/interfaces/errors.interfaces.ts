@@ -1,6 +1,6 @@
 //* Tipos de razones para que la respuesta sea un error
 export type ErrorReasons =
-	| 'invalid params'
+	| 'email or password incorrect'
 	| 'unique'
 	| 'admin required'
 	| 'not fields in body'

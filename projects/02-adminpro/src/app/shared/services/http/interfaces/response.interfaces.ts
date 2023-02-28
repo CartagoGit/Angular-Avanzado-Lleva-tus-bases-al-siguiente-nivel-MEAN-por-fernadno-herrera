@@ -44,13 +44,13 @@ export interface DefaultErrorResponse {
  */
 export interface ErrorData {
 	status_code: number;
-	reason: string;
+	reason: ErrorReasons;
 	keyValue?: any;
 }
 
 //* Tipos de razones para que la respuesta sea un error
 export type ErrorReasons =
-	| 'invalid params'
+	| 'email or password incorrect'
 	| 'unique'
 	| 'admin required'
 	| 'not fields in body'

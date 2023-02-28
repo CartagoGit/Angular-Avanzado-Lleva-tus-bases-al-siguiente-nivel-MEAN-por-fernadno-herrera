@@ -66,6 +66,11 @@ export class LoginComponent {
 				console.log('❗this._authSvc.login  ➽ resp ➽ ⏩', resp);
 			},
 			error: (error: DefaultErrorResponse) => {
+				if(error.error_data.reason === 'email or password incorrect'){
+					const error = {}
+					this.loginForm.get('email')?.setErrors(error)
+					this.loginForm.get('password')?.setErrors(error)
+				}
 				console.log('❗this._authSvc.login  ➽ error ➽ ⏩', error);
 				this._storage.delete('token');
 				this._sweetAlert.alertError('You cannot log')
