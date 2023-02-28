@@ -19,6 +19,11 @@ export class SettingsService {
 	}
 
 	// ANCHOR : Metodos
+
+	/**
+	 * ? Establece el tema inicial de la app
+	 * @private
+	 */
 	private _setInitTheme(): void {
 		const theme: string = this._storageSvc.local.get('theme') as string;
 		this._linkTheme?.setAttribute(
@@ -27,6 +32,11 @@ export class SettingsService {
 		);
 	}
 
+	/**
+	 * ? Cambia el tema de la app
+	 * @public
+	 * @param {string} theme
+	 */
 	public changeTheme(theme: string): void {
 		const urlTheme = getUrlTheme(theme);
 		this._linkTheme?.setAttribute('href', urlTheme);
@@ -34,6 +44,11 @@ export class SettingsService {
 		this.checkCurrentTheme();
 	}
 
+	/**
+	 * ? Comprueba el tema actual de la app
+	 * @public
+	 * @returns {string}
+	 */
 	public checkCurrentTheme(): string {
 		let actualTheme = '';
 		this._links.forEach((element) => {

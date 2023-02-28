@@ -25,9 +25,7 @@
 				],
 				"styles": ["projects/02-adminpro/src/styles.css"],
 				"scripts": [],
-				"allowedCommonJsDependencies": [
-					"sweetalert2"
-				]
+				"allowedCommonJsDependencies": ["sweetalert2"]
 			},
 			"configurations": {
 				"production": {
@@ -52,12 +50,14 @@
 					"outputHashing": "all"
 				},
 				"development": {
-					"buildOptimizer": false,
 					"optimization": false,
-					"vendorChunk": true,
+					"outputHashing": "none",
+					"sourceMap": false,
+					"namedChunks": true,
+					"aot": false,
 					"extractLicenses": false,
-					"sourceMap": true,
-					"namedChunks": false
+					"vendorChunk": false,
+					"buildOptimizer": false
 				}
 			},
 			"defaultConfiguration": "production"

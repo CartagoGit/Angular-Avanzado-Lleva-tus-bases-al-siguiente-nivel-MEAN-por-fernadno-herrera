@@ -87,6 +87,8 @@ export const authController: {
 				images: [image],
 				google: true,
 			});
+			(user as any).user_creator = user.id;
+			(user as any).user_modifier = user.id;
 			isNewUser = true;
 		} else {
 			user = userDB;

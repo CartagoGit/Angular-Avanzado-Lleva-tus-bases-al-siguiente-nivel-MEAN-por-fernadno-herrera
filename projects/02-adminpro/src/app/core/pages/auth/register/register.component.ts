@@ -66,6 +66,8 @@ export class RegisterComponent {
 			this.registerForm,
 			this.msgErrors
 		);
+
+		
 	}
 
 	ngOnDestroy(): void {
@@ -94,6 +96,13 @@ export class RegisterComponent {
 				this._storage.set('token', resp.token);
 			},
 			error: (error: DefaultErrorResponse) => {
+				console.error(error);
+				this._storage.delete('token');
+				this._validatorSvc.renewMsgErrors(
+					this.registerForm,
+					this.msgErrors
+				);
+
 				if (!!error.error_data?.keyValue?.email) {
 					this.registerForm
 						.get('email')
@@ -103,12 +112,6 @@ export class RegisterComponent {
 						'You cannot register a new account'
 					);
 				}
-				this._storage.delete('token');
-
-				this._validatorSvc.renewMsgErrors(
-					this.registerForm,
-					this.msgErrors
-				);
 			},
 		});
 	}

@@ -69,3 +69,14 @@ Login register and recover password Page
 .img-show-password{
 	opacity: 0.2;
 }
+
+.google-social{
+	display: flex;
+	justify-content: center;
+	margin-bottom: 20px;
+}
+
+.google-btn{
+	display:flex;
+
+}

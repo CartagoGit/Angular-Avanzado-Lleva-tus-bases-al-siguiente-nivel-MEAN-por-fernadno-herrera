@@ -82,7 +82,11 @@
 				<div class="form-group row">
 					<div class="col-md-12">
 						<div class="checkbox checkbox-primary pull-left p-t-0">
-							<input id="checkbox-signup" type="checkbox" />
+							<input
+								id="checkbox-signup"
+								type="checkbox"
+								formControlName="remember"
+							/>
 							<!-- class="filled-in chk-col-light-blue" -->
 							<label for="checkbox-signup"> Remember me </label>
 						</div>
@@ -107,23 +111,8 @@
 				</div>
 				<div class="row">
 					<div class="col-xs-12 col-sm-12 col-md-12 m-t-10 text-center">
-						<div class="social">
-							<a
-								href="javascript:void(0)"
-								class="btn btn-facebook"
-								data-toggle="tooltip"
-								title="Login with Facebook"
-							>
-								<i aria-hidden="true" class="fa fa-facebook"></i>
-							</a>
-							<a
-								href="javascript:void(0)"
-								class="btn btn-googleplus"
-								data-toggle="tooltip"
-								title="Login with Google"
-							>
-								<i aria-hidden="true" class="fa fa-google-plus"></i>
-							</a>
+						<div class="google-social">
+							<div class="google-btn" #googleBtn></div>
 						</div>
 					</div>
 				</div>

@@ -91,7 +91,11 @@ export const coreController: {
 
 		let model: Document;
 		let token: string | undefined = undefined;
-		if (section !== 'users' && endpoint !== 'register') {
+		if (
+			section !== 'users' &&
+			endpoint !== 'register' &&
+			endpoint !== 'google-id'
+		) {
 			const { id } = getPayloadFromJwtWithoutVerifiy(req);
 			const creator: typeof UserModel | null = await UserModel.findById(id);
 			req.body['user_creator'] = creator;
@@ -106,7 +110,7 @@ export const coreController: {
 		}
 		await model.save();
 
-		return { model, status_code: 201, token, id : model.id };
+		return { model, status_code: 201, token, id: model.id };
 	},
 	put: async (req) => {
 		checkIdInParams(req);

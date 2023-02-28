@@ -20,7 +20,11 @@ interface BasicStorageProps<T> {
 export class StorageService {
 	// ANCHOR : Variables
 
-	private _initLocalFields = { token: 'token-jwt', theme: 'theme' };
+	private _initLocalFields = {
+		token: 'token-jwt',
+		theme: 'theme',
+		userRemember: 'user-remember',
+	};
 	private _initSessionFields = {};
 
 	private _prefix = 'cartagopro';
@@ -46,9 +50,7 @@ export class StorageService {
 	});
 
 	// ANCHOR : Constructor
-	constructor() {
-		this.clear();
-	}
+	constructor() {}
 
 	// ANCHOR : Métodos
 
@@ -78,19 +80,25 @@ export class StorageService {
  */
 class BasicStorage<T> {
 	// ANCHOR Variables
-	public typeStorage;
+	// public typeStorage;
 	public fields;
 	public name;
+
+	private _typesStorages: Record<TypesStorage, Storage> = {
+		local: window.localStorage,
+		session: window.sessionStorage,
+	};
+
+	public get typeStorage() {
+		return this._typesStorages[this.name];
+	}
 
 	//ANCHOR Cosntructor
 	constructor(data: BasicStorageProps<T>) {
 		const { fields, typeStorage } = data;
 		this.fields = fields;
-		const typesStorages: Record<TypesStorage, any> = {
-			local: localStorage,
-			session: sessionStorage,
-		};
-		this.typeStorage = typesStorages[typeStorage];
+
+		// this.typeStorage = typesStorages[typeStorage];
 		this.name = typeStorage;
 	}
 	/**
@@ -133,7 +141,7 @@ class BasicStorage<T> {
 	public set(field: keyof T, value: unknown): void {
 		if (typeof value === 'object') value = JSON.stringify(value);
 		else value = String(value);
-		this.typeStorage.setItem(this.fields[field] as string, value as string);
+		localStorage.setItem(this.fields[field] as string, value as string);
 	}
 
 	/**

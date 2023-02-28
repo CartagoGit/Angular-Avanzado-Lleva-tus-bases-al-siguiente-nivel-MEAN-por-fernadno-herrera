@@ -45,7 +45,7 @@ export class ValidatorService {
 		samePasswords: () => `different passwords`,
 		email: () => `invalid format`,
 		emailRegistered: () => `email already registered`,
-		emailOrPassCorrect: () => `email or password are incorrect`
+		emailOrPassCorrect: () => `email or password are incorrect`,
 	};
 
 	// ANCHOR : Constructor
@@ -125,19 +125,19 @@ export class ValidatorService {
 	}
 
 	/**
-	 * ? Crea y recupera la subscripcion a lo cambios de valores en el formulario
+	 * ? Crea y recupera la subscripcion a lo cambios de valores en el formulario y renueva el estado de los errores en cada cambio
 	 * @public
 	 * @param {FormGroup} formGroup
 	 * @param {Record<string, string>} msgErrors
 	 * @returns {Subscription}
 	 */
-	public getSubForm(formGroup : FormGroup, msgErrors: Record<string, string>): Subscription {
+	public getSubForm(
+		formGroup: FormGroup,
+		msgErrors: Record<string, string>
+	): Subscription {
 		return formGroup.valueChanges.subscribe({
 			next: () => {
-				this.renewMsgErrors(
-					formGroup,
-					msgErrors
-				);
+				this.renewMsgErrors(formGroup, msgErrors);
 			},
 		});
 	}
