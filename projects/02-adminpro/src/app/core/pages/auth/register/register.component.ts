@@ -91,7 +91,6 @@ export class RegisterComponent {
 		this._authSvc.register(body).subscribe({
 			next: (resp) => {
 				if (!resp) return;
-				console.log(resp);
 				this._storage.set('token', resp.token);
 			},
 			error: (error: DefaultErrorResponse) => {

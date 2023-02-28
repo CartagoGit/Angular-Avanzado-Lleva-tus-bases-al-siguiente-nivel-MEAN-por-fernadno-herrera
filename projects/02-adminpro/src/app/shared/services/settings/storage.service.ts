@@ -1,15 +1,8 @@
 import { Injectable } from '@angular/core';
 import { objectMap } from '../../helpers/object-map.helper';
 
-//* Tipos a guardar en el storage
-const localFields = { token: 'token-jwt', theme: 'theme' };
-const sessionFields = {};
-
-//* Tipado de campos del localstorage
-type LocalFields = typeof localFields;
-type SessionFields = typeof sessionFields;
-type FieldsKeys<T> = keyof T;
-
+//* Tipos de storage
+type TypesStorage = 'local' | 'session';
 /**
  * ? Interfaz de las propiedades para elegir el tipo de storage
  * @interface BasicStorageProps
@@ -18,7 +11,7 @@ type FieldsKeys<T> = keyof T;
  */
 interface BasicStorageProps<T> {
 	fields: T;
-	typeStorage: 'local' | 'session';
+	typeStorage: TypesStorage;
 }
 
 @Injectable({
@@ -27,55 +20,93 @@ interface BasicStorageProps<T> {
 export class StorageService {
 	// ANCHOR : Variables
 
-	public local = new BasicStorage<LocalFields>({
-		fields: localFields,
-		typeStorage: 'local',
-	});
-	public session = new BasicStorage<SessionFields>({
-		fields: sessionFields,
-		typeStorage: 'session',
-	});
+	private _initLocalFields = { token: 'token-jwt', theme: 'theme' };
+	private _initSessionFields = {};
 
 	private _prefix = 'cartagopro';
 
+	private _localFields: Record<keyof typeof this._initLocalFields, string> =
+		objectMap(this._initLocalFields, (value) => this._prefix + '-' + value);
+
+	private _sessionFields: Record<
+		keyof typeof this._initSessionFields,
+		string
+	> = objectMap(
+		this._initSessionFields,
+		(value) => this._prefix + '-' + value
+	);
+
+	public local = new BasicStorage<typeof this._localFields>({
+		fields: this._localFields,
+		typeStorage: 'local',
+	});
+	public session = new BasicStorage<typeof this._sessionFields>({
+		fields: this._sessionFields,
+		typeStorage: 'session',
+	});
+
 	// ANCHOR : Constructor
 	constructor() {
-		const algo = objectMap(localFields, (value, key, index, array) => ({
-			[this._prefix + '-' + key]: value,
-		}));
-		const algo2 = objectMap(localFields, (value, key, index, array) => {
-			console.log(array)
-			return value+'ju'});
-
-
-		console.log('algo', algo);
-		console.log('algo2', algo2);
+		this.clear();
 	}
 
 	// ANCHOR : Métodos
+
+	/**
+	 * ? Limpia todos los storage o el storage indicado
+	 * @public
+	 * @param {?TypesStorage} [storage]
+	 */
+	public clear(storage?: TypesStorage) {
+		if (!storage) {
+			for (let param in this) {
+				if (this[param] instanceof BasicStorage)
+					(this[param] as BasicStorage<any>).clear();
+			}
+		}
+		if (storage === 'local') this.local.clear();
+		else if (storage === 'session') this.session.clear();
+	}
 }
 
+/**
+ * ? Clase basica para cada tipo de Storage
+ * * Recibe el tipado de ese storage como generico
+ * @class BasicStorage
+ * @typedef {BasicStorage}
+ * @template T
+ */
 class BasicStorage<T> {
+	// ANCHOR Variables
 	public typeStorage;
 	public fields;
+	public name;
 
+	//ANCHOR Cosntructor
 	constructor(data: BasicStorageProps<T>) {
 		const { fields, typeStorage } = data;
 		this.fields = fields;
-		this.typeStorage =
-			typeStorage === 'local' ? localStorage : sessionStorage;
+		const typesStorages: Record<TypesStorage, any> = {
+			local: localStorage,
+			session: sessionStorage,
+		};
+		this.typeStorage = typesStorages[typeStorage];
+		this.name = typeStorage;
 	}
 	/**
 	 * ? Recupera el valor del campo
 	 * @public
-	 * @param {Fields} field
+	 * @param {keyof T} field
+	 * @param {('string' | 'array' | 'object' | 'number' | 'boolean')} [type='string']
 	 * @returns {unknown}
 	 */
 	public get(
-		field: FieldsKeys<T>,
+		field: keyof T,
 		type: 'string' | 'array' | 'object' | 'number' | 'boolean' = 'string'
 	): unknown {
-		const stringValue = localStorage.getItem(this.fields[field] as string);
+		const stringValue = this.typeStorage.getItem(
+			this.fields[field] as string
+		);
 		if (
 			stringValue === '' ||
 			stringValue === null ||
@@ -95,22 +126,23 @@ class BasicStorage<T> {
 
 	/**
 	 * ? Establece el valor en el campo
-	 * @param field
-	 * @param value
+	 * @public
+	 * @param {keyof T} field
+	 * @param {unknown} value
 	 */
-	public set(field: FieldsKeys<T>, value: unknown): void {
+	public set(field: keyof T, value: unknown): void {
 		if (typeof value === 'object') value = JSON.stringify(value);
-		value = String(value);
-		localStorage.setItem(this.fields[field] as string, value as string);
+		else value = String(value);
+		this.typeStorage.setItem(this.fields[field] as string, value as string);
 	}
 
 	/**
 	 * ? Elimina el campo del storage
 	 * @public
-	 * @param {Fields} field
+	 * @param {keyof T} field
 	 */
-	public delete(field: FieldsKeys<T>): void {
-		localStorage.removeItem(this.fields[field] as string);
+	public delete(field: keyof T): void {
+		this.typeStorage.removeItem(this.fields[field] as string);
 	}
 
 	/**
@@ -118,6 +150,6 @@ class BasicStorage<T> {
 	 * @public
 	 */
 	public clear(): void {
-		localStorage.clear();
+		this.typeStorage.clear();
 	}
 }
