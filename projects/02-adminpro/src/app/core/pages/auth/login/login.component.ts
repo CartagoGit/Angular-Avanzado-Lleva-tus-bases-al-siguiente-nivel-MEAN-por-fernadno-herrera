@@ -27,7 +27,7 @@ export class LoginComponent {
 
 	public loginForm = this._fb.group({
 		email: ['email@hardcodeado.com', [Validators.required, Validators.email]],
-		password: ['123456', [Validators.required, Validators.minLength(6)]],
+		password: ['123456', [Validators.required]],
 		remember: [false],
 	});
 
@@ -57,26 +57,30 @@ export class LoginComponent {
 
 	// ANCHOR : Métodos
 	public login() {
+		this.formSubmitted = true;
+		if (this.loginForm.invalid) return;
 		const body: AuthDefaultResponse = {
 			password: this.loginForm.get('password')?.value!,
 			email: this.loginForm.get('email')?.value!,
 		};
 		this._authSvc.login(body).subscribe({
 			next: (resp) => {
+				if(!resp) return
+				this._storage.set('token', resp.token);
 				console.log('❗this._authSvc.login  ➽ resp ➽ ⏩', resp);
 			},
 			error: (error: DefaultErrorResponse) => {
-				if(error.error_data.reason === 'email or password incorrect'){
-					const error = {}
-					this.loginForm.get('email')?.setErrors(error)
-					this.loginForm.get('password')?.setErrors(error)
-				}
+				if (error.error_data.reason === 'email or password incorrect') {
+					const error = { emailOrPassCorrect: false };
+					this.loginForm.get('email')?.setErrors(error);
+					this.loginForm.get('password')?.setErrors(error);
+				} else this._sweetAlert.alertError('You cannot Sign in');
 				console.log('❗this._authSvc.login  ➽ error ➽ ⏩', error);
 				this._storage.delete('token');
-				this._sweetAlert.alertError('You cannot log')
+				this._validatorSvc.renewMsgErrors(this.loginForm, this.msgErrors);
 			},
 		});
-		console.log('submit');
+
 		// this._router.navigate(['/']);
 	}
 }

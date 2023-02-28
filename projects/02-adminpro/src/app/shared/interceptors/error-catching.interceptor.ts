@@ -27,7 +27,7 @@ export class ErrorCatchingInterceptor implements HttpInterceptor {
 		next: HttpHandler
 	): Observable<HttpEvent<unknown>> {
 		return next.handle(request).pipe(
-			retry({ count: this._retryMaxAttempts, delay: this._retryDelay }),
+			// retry({ count: this._retryMaxAttempts, delay: this._retryDelay }),
 			catchError((error: HttpErrorResponse) => {
 				return throwError(() => error.error as DefaultErrorResponse);
 			})

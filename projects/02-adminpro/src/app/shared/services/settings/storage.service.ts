@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { objectMap } from '../../helpers/object-map.helper';
 
 //* Tipos a guardar en el storage
 const localFields = { token: 'token-jwt', theme: 'theme' };
@@ -35,8 +36,21 @@ export class StorageService {
 		typeStorage: 'session',
 	});
 
+	private _prefix = 'cartagopro';
+
 	// ANCHOR : Constructor
-	constructor() {}
+	constructor() {
+		const algo = objectMap(localFields, (value, key, index, array) => ({
+			[this._prefix + '-' + key]: value,
+		}));
+		const algo2 = objectMap(localFields, (value, key, index, array) => {
+			console.log(array)
+			return value+'ju'});
+
+
+		console.log('algo', algo);
+		console.log('algo2', algo2);
+	}
 
 	// ANCHOR : Métodos
 }

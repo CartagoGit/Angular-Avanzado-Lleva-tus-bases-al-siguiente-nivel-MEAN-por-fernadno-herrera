@@ -14,7 +14,8 @@ export type TypeValidatorErrors =
 	| 'whitespace'
 	| 'samePasswords'
 	| 'email'
-	| 'emailRegistered';
+	| 'emailRegistered'
+	| 'emailOrPassCorrect';
 
 //* Tipo de los mensajes de error
 export type TypeValidatorMessageErrors = Record<
@@ -44,6 +45,7 @@ export class ValidatorService {
 		samePasswords: () => `different passwords`,
 		email: () => `invalid format`,
 		emailRegistered: () => `email already registered`,
+		emailOrPassCorrect: () => `email or password are incorrect`
 	};
 
 	// ANCHOR : Constructor
