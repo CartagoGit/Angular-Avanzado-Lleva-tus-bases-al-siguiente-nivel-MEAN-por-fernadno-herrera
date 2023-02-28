@@ -91,11 +91,7 @@ export const coreController: {
 
 		let model: Document;
 		let token: string | undefined = undefined;
-		if (
-			section !== 'users' &&
-			endpoint !== 'register' &&
-			endpoint !== 'google-id'
-		) {
+		if (section !== 'users' && endpoint !== 'register') {
 			const { id } = getPayloadFromJwtWithoutVerifiy(req);
 			const creator: typeof UserModel | null = await UserModel.findById(id);
 			req.body['user_creator'] = creator;

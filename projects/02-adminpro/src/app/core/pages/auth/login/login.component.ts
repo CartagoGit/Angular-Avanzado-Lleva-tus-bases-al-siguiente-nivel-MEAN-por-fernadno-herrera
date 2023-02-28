@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, NgZone, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { StorageService } from 'projects/02-adminpro/src/app/shared/services/settings/storage.service';
@@ -16,16 +16,6 @@ type RembemberUser =
 			remember: boolean;
 	  }
 	| undefined;
-
-/**
- * ? Respuesta desde Google al pasarle el cliente id para recuperar el credencial
- * @interface CredentialResponse
- * @typedef {CredentialResponse}
- */
-interface CredentialResponse {
-	credential: string;
-	select_by: string;
-}
 
 @Component({
 	selector: 'auth-login',
@@ -62,7 +52,8 @@ export class LoginComponent {
 		private _fb: FormBuilder,
 		private _authSvc: AuthService,
 		private _storageSvc: StorageService,
-		private _sweetAlert: SweetAlertService
+		private _sweetAlert: SweetAlertService,
+		private _ngZone: NgZone
 	) {
 		this._storage = this._storageSvc.local;
 		this._subForm = this._validatorSvc.getSubForm(
@@ -161,7 +152,13 @@ export class LoginComponent {
 			//* Recupera el id del cliente de google desde la api
 			client_id: clientGoogleId,
 
-			callback: this._handleCredentialResponse,
+			callback: ({ credential }) => {
+				//* Pasamos la credencial proviniente de google en un entorno que mantenga el uso en angular con
+				//* NgZone, pudiendo asi usar Rxjs en un entorno externo como es el de google
+				this._ngZone.run(() => {
+					this._handleCredentialResponse(credential);
+				});
+			},
 		});
 		google.accounts.id.renderButton(
 			this._googleBtnHtml,
@@ -172,32 +169,20 @@ export class LoginComponent {
 	/**
 	 * ? Manejador de la respuesta y los credenciales para autenticarse con google identify
 	 * @private
-	 * @param {CredentialResponse} response
+	 * @param {string} credential
 	 */
-	private _handleCredentialResponse(response: CredentialResponse) {
-		console.log('❗_handleCredentialResponse  ➽ response ➽ ⏩', response);
-
-		var urlGoogleLogin = 'http://localhost:5000/api/auth/google-login';
-				// console.log('Encoded JWT ID token: ' + response.credential);
-				fetch(urlGoogleLogin, {
-					method: 'POST',
-					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify({ token: response.credential }),
-				})
-					.then((resp) => resp.json())
-					.then(
-						(data) => data
-						// console.log('ServerData', data)
-					)
-					.catch(console.error);
-		// this._authSvc.googleLogin(response.credential).subscribe({
-		// 	next: (resp) => {
-		// 		console.log(resp);
-		// 	},
-		// 	error: (error) => {
-		// 		this._sweetAlert.alertError('Log in with Google Identify');
-		// 		console.error(error);
-		// 	},
-		// });
+	private _handleCredentialResponse(credential: string) {
+		this._authSvc.googleLogin(credential).subscribe({
+			next: (resp) => {
+				if (!resp) return;
+				const { token } = resp;
+				this._storage.set('token', token);
+			},
+			error: (error) => {
+				console.error(error);
+				this._storage.delete('token');
+				this._sweetAlert.alertError('Log in with Google Identify');
+			},
+		});
 	}
 }

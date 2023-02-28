@@ -5,6 +5,7 @@ import { Roles } from '../../../interfaces/roles.interface';
  * @export
  * @interface DefaultResponse
  * @typedef {DefaultResponse}
+ * @template T
  */
 export interface DefaultResponse<T = unknown> {
 	ok: boolean;
@@ -18,6 +19,43 @@ export interface DefaultResponse<T = unknown> {
 	method?: string;
 	role?: Roles;
 	token?: string;
+	google?: DataFromGoogle;
+	isNewUser?: boolean;
+}
+
+/**
+ * ? Datos recibidos desde el login de google
+ * @export
+ * @interface DataGoogle
+ * @typedef {DataGoogle}
+ */
+export interface DataFromGoogle {
+	token: string;
+	userId: string;
+	data: DataAccountGoogle;
+	completeName: string;
+	email: string;
+	image: string;
+}
+
+/**
+ * ? Datos exactos de la cuenta  de usuario de la respuesta del login de google
+ */
+export interface DataAccountGoogle {
+	iss: string;
+	nbf: number;
+	aud: string;
+	sub: string;
+	email: string;
+	email_verified: boolean;
+	azp: string;
+	name: string;
+	picture: string;
+	given_name: string;
+	family_name: string;
+	iat: number;
+	exp: number;
+	jti: string;
 }
 
 /**
@@ -71,3 +109,23 @@ export type ErrorReasons =
 	| 'not id in params'
 	| 'not found'
 	| 'internal error';
+
+/**
+ * ? Respuesta recibida con el modelo de usuario
+ * @export
+ * @interface ResponseUserModel
+ * @typedef {ResponseUserModel}
+ */
+export interface ResponseUserModel {
+	name: string;
+	email: string;
+	images: string[];
+	role: string;
+	google: boolean;
+	user_creator: string;
+	user_modifier: string;
+	createdAt: Date;
+	updatedAt: Date;
+	id: string;
+	password?: string;
+}

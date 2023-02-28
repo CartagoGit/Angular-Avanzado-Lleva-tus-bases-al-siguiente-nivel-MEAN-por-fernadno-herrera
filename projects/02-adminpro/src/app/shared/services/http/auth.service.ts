@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
 import { CoreHttp } from './models/core-http.model';
 import { Observable, of } from 'rxjs';
-import { DefaultResponse } from './interfaces/response.interfaces';
+import {
+	DefaultResponse,
+	ResponseUserModel,
+} from './interfaces/response.interfaces';
 import { AuthDefaultResponse } from './interfaces/request.interface';
 
 /**
@@ -78,13 +81,18 @@ export class AuthService extends CoreHttp<Endpoints> {
 	 * ? Observable para loguearse en google
 	 * @public
 	 * @param {string} token
-	 * @returns {Observable<DefaultResponse | undefined>}
+	 * @returns {(Observable<DefaultResponse<ResponseUserModel> | undefined>)}
 	 */
-	public googleLogin(token: string): Observable<DefaultResponse | undefined> {
+	public googleLogin(
+		token: string
+	): Observable<DefaultResponse<ResponseUserModel> | undefined> {
 		if (!this._isPossibleAndTimer()) return of(undefined);
-		return this._http.post<DefaultResponse>(this.routes.googleLogin, {
-			token,
-		});
+		return this._http.post<DefaultResponse<ResponseUserModel>>(
+			this.routes.googleLogin,
+			{
+				token,
+			}
+		);
 	}
 
 	/**

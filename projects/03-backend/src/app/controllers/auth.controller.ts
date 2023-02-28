@@ -102,7 +102,7 @@ export const authController: {
 
 		return {
 			ok,
-			jwt: token,
+			token,
 			status_code: 200,
 			model: user,
 			google: {
