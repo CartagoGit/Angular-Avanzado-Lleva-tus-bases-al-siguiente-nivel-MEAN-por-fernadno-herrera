@@ -9,6 +9,7 @@ import bcrypt from 'bcryptjs';
 import { config } from '../../environments/config';
 import { ResponseReturnJwt } from '../interfaces/json-web-token.interface';
 import { getRandomEncrypt } from '../helpers/encrypt.helper';
+import { basicError } from '../models/error-data.model';
 
 /**
  * ? Controladores especificos de los metodos para el modelo de usuarios
@@ -33,7 +34,11 @@ export const authController: {
 		const { password, email } = req.body;
 		//* Verificamos el email
 		const userDB = await UserModel.findOne({ email });
-		const errorMsg = { message: getNotFoundMessage(req), status_code: 404 };
+		const errorMsg = {
+			message: getNotFoundMessage(req),
+			status_code: 404,
+			reason: 'invalid params',
+		} as basicError;
 		if (!userDB) throw errorMsg;
 		//* Verificamos si el password es el del usuario de dicho email
 		const validPassword = bcrypt.compareSync(password, userDB.password);

@@ -5,7 +5,7 @@ import {
 	defaultErrorResponse,
 	defaultResponse,
 } from '../helpers/default-responses.helper';
-import { ErrorData } from './error-data.model';
+import { ErrorData, basicError } from './error-data.model';
 import { LogType } from '../interfaces/logs.interfaces';
 import { getNotFoundMessage } from '../helpers/get-model-section.helper';
 import {
@@ -189,11 +189,12 @@ export class Routes {
 		status_code: number;
 		trace: Record<string, any>[];
 	} {
-		let finalError: any = {};
+		let finalError: basicError;
 		if (!error.message) {
 			finalError = {
 				message: error,
 				data: {},
+				status_code: 500,
 			};
 		} else finalError = error;
 		finalError.reason = error.reason || 'internal error';

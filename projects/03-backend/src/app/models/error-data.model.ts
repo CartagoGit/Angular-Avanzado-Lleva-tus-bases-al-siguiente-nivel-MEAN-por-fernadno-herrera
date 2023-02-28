@@ -1,3 +1,4 @@
+import { ErrorReasons } from '../interfaces/errors.interfaces';
 
 /**
  * ? Interfaz basico de los errores
@@ -8,8 +9,9 @@
 export interface basicError {
 	message: string;
 	status_code: number;
-	reason?: string | string[];
-	keyValue?: {} | [];
+	reason?: ErrorReasons | ErrorReasons[];
+	keyValue?: Record<string, any> | any[];
+	data?: any;
 }
 
 /**
@@ -23,7 +25,7 @@ export class ErrorData extends Error {
 	public status_code;
 	public keyValue;
 	public reason;
-	constructor(data: Required<basicError>) {
+	constructor(data: basicError) {
 		super(data.message);
 		this.status_code = data.status_code;
 		this.keyValue = data.keyValue;

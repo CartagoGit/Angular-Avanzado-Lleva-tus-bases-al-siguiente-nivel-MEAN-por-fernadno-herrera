@@ -1,9 +1,5 @@
 import { Component } from '@angular/core';
-import {
-	AbstractControlOptions,
-	FormBuilder,
-	Validators,
-} from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { StorageService } from 'projects/02-adminpro/src/app/shared/services/settings/storage.service';
 import { Subscription } from 'rxjs';
@@ -46,7 +42,7 @@ export class LoginComponent {
 		private _fb: FormBuilder,
 		private _authSvc: AuthService,
 		private _storageSvc: StorageService,
-		private sweetAlert: SweetAlertService
+		private _sweetAlert: SweetAlertService
 	) {
 		this._storage = this._storageSvc.local;
 		this._subForm = this._validatorSvc.getSubForm(
@@ -72,6 +68,7 @@ export class LoginComponent {
 			error: (error: DefaultErrorResponse) => {
 				console.log('❗this._authSvc.login  ➽ error ➽ ⏩', error);
 				this._storage.delete('token');
+				this._sweetAlert.alertError('You cannot log')
 			},
 		});
 		console.log('submit');

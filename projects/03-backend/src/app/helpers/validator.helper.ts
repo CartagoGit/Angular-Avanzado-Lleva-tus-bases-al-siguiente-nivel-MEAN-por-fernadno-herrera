@@ -84,7 +84,7 @@ export const checkIdInParams = (req: Request): void => {
 		throw {
 			message: "There are not any 'id' in params route",
 			status_code: 404,
-			reason: 'not same user',
+			reason: 'not id in params',
 		} as basicError;
 	}
 };

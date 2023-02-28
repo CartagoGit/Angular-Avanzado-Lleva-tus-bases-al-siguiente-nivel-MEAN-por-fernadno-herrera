@@ -22,7 +22,7 @@ export const checkGoogleLoginAndGetData = async (req: Request): Promise<TokenPay
 		const badToken = !ticket ? 'ticket' : 'payload';
 		throw {
 			status_code: 401,
-			reason: `bad ${badToken} token`,
+			reason: 'bad token',
 			message: `The Google Auth Token has a bad ${badToken}`,
 		} as basicError;
 	}

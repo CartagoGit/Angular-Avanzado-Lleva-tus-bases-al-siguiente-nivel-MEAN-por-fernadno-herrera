@@ -1,0 +1,23 @@
+//* Tipos de razones para que la respuesta sea un error
+export type ErrorReasons =
+	| 'invalid params'
+	| 'unique'
+	| 'admin required'
+	| 'not fields in body'
+	| 'not params in url'
+	| 'model not found'
+	| 'not valid id'
+	| 'invalid type file'
+	| 'not found file'
+	| 'not found id in model'
+	| 'bad format extension'
+	| 'cannot upload files'
+	| 'cannot delete files'
+	| 'file not found'
+	| 'bad token'
+	| 'invalid jwt'
+	| 'validation'
+	| 'not same user'
+	| 'not id in params'
+	| 'not found'
+	| 'internal error';

@@ -363,7 +363,7 @@ export const throwErrorDeleteFiles = (error: any): void => {
 			error_data: error,
 			message:
 				'Cannot delete files from the model. Contact with your server administrator',
-			reason: 'cannot dedlete files',
+			reason: 'cannot delete files',
 			status_code: 500,
 		} as basicError;
 	}
