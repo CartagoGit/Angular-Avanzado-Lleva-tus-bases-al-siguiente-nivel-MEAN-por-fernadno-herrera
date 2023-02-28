@@ -33,14 +33,14 @@ export class RegisterComponent {
 
 	public registerForm = this._fb.group(
 		{
-			name: ['NombreHardcodeado', [Validators.required]],
+			name: ['', [Validators.required]],
 			email: [
-				'email@hardcodeado.com',
+				'',
 				[Validators.required, Validators.email],
 			],
-			password: ['123456', [Validators.required, Validators.minLength(6)]],
-			password2: ['123456', [Validators.required, Validators.minLength(6)]],
-			terms: [true, Validators.requiredTrue],
+			password: ['', [Validators.required, Validators.minLength(6)]],
+			password2: ['', [Validators.required, Validators.minLength(6)]],
+			terms: [false, Validators.requiredTrue],
 		},
 		{
 			validators: [
@@ -67,7 +67,7 @@ export class RegisterComponent {
 			this.msgErrors
 		);
 
-		
+
 	}
 
 	ngOnDestroy(): void {

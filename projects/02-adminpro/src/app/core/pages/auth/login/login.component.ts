@@ -1,8 +1,8 @@
-import { Component, ElementRef, NgZone, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { StorageService } from 'projects/02-adminpro/src/app/shared/services/settings/storage.service';
-import { Subscription } from 'rxjs';
+import { defer, finalize, of, Subscription } from 'rxjs';
 import { ValidatorService } from '../../../../shared/services/helpers/validator.service';
 import { AuthService } from '../../../../shared/services/http/auth.service';
 import { AuthDefaultResponse } from '../../../../shared/services/http/interfaces/request.interface';
@@ -38,7 +38,7 @@ export class LoginComponent {
 
 	public loginForm = this._fb.group({
 		email: ['', [Validators.required, Validators.email]],
-		password: ['123456', [Validators.required]],
+		password: ['', [Validators.required]],
 		remember: [false],
 	});
 
@@ -52,7 +52,7 @@ export class LoginComponent {
 		private _fb: FormBuilder,
 		private _authSvc: AuthService,
 		private _storageSvc: StorageService,
-		private _sweetAlert: SweetAlertService,
+		private _sweetAlert: SweetAlertService
 	) {
 		this._storage = this._storageSvc.local;
 		this._subForm = this._validatorSvc.getSubForm(
@@ -150,7 +150,6 @@ export class LoginComponent {
 		google.accounts.id.initialize({
 			//* Recupera el id del cliente de google desde la api
 			client_id: clientGoogleId,
-
 			//* CUIDADO -> Si pasamos el handle como tal la referencia al "this" pasa a ser el objeto de google
 			//* Para evitar esto pasamos la funcion como funcion de flecha, y mantenemos la referencia a nuestra clase de angular
 			callback: ({ credential }) =>
