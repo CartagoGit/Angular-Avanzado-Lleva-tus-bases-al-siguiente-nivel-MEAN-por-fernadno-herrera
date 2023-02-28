@@ -53,7 +53,6 @@ export class LoginComponent {
 		private _authSvc: AuthService,
 		private _storageSvc: StorageService,
 		private _sweetAlert: SweetAlertService,
-		private _ngZone: NgZone
 	) {
 		this._storage = this._storageSvc.local;
 		this._subForm = this._validatorSvc.getSubForm(
@@ -136,8 +135,8 @@ export class LoginComponent {
 				this._initGoogleLogin(googleClientId);
 			},
 			error: (error) => {
-				this._sweetAlert.alertError('Getting Google Client ID from Api');
 				console.error(error);
+				this._sweetAlert.alertError('Getting Google Client ID from Api');
 			},
 		});
 	}
@@ -152,13 +151,10 @@ export class LoginComponent {
 			//* Recupera el id del cliente de google desde la api
 			client_id: clientGoogleId,
 
-			callback: ({ credential }) => {
-				//* Pasamos la credencial proviniente de google en un entorno que mantenga el uso en angular con
-				//* NgZone, pudiendo asi usar Rxjs en un entorno externo como es el de google
-				this._ngZone.run(() => {
-					this._handleCredentialResponse(credential);
-				});
-			},
+			//* CUIDADO -> Si pasamos el handle como tal la referencia al "this" pasa a ser el objeto de google
+			//* Para evitar esto pasamos la funcion como funcion de flecha, y mantenemos la referencia a nuestra clase de angular
+			callback: ({ credential }) =>
+				this._handleCredentialResponse(credential),
 		});
 		google.accounts.id.renderButton(
 			this._googleBtnHtml,
