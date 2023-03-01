@@ -6,6 +6,7 @@ import {
 	ResponseUserModel,
 } from './interfaces/response.interfaces';
 import { AuthDefaultResponse } from './interfaces/request.interface';
+import { HttpHeaders } from '@angular/common/http';
 
 /**
  * ? Endpoints del modelo
@@ -72,9 +73,15 @@ export class AuthService extends CoreHttp<Endpoints> {
 	 * @public
 	 * @returns {Observable<DefaultResponse | undefined>}
 	 */
-	public renewToken(): Observable<DefaultResponse | undefined> {
+	public renewToken(token?: string): Observable<DefaultResponse | undefined> {
 		if (!this._isPossibleAndTimer()) return of(undefined);
-		return this._http.get<DefaultResponse>(this.routes.renewToken);
+		const headers = new HttpHeaders({
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${token}`,
+		});
+		return this._http.get<DefaultResponse>(this.routes.renewToken, {
+			headers,
+		});
 	}
 
 	/**

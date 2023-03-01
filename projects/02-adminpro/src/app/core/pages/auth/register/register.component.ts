@@ -12,6 +12,7 @@ import { DefaultErrorResponse } from '../../../../shared/services/http/interface
 import { ValidatorService } from 'projects/02-adminpro/src/app/shared/services/helpers/validator.service';
 import { SweetAlertService } from '../../../../shared/services/helpers/sweet-alert.service';
 import { AuthDefaultResponse } from 'projects/02-adminpro/src/app/shared/services/http/interfaces/request.interface';
+import { Router } from '@angular/router';
 
 @Component({
 	selector: 'auth-register',
@@ -34,10 +35,7 @@ export class RegisterComponent {
 	public registerForm = this._fb.group(
 		{
 			name: ['', [Validators.required]],
-			email: [
-				'',
-				[Validators.required, Validators.email],
-			],
+			email: ['', [Validators.required, Validators.email]],
 			password: ['', [Validators.required, Validators.minLength(6)]],
 			password2: ['', [Validators.required, Validators.minLength(6)]],
 			terms: [false, Validators.requiredTrue],
@@ -59,15 +57,14 @@ export class RegisterComponent {
 		private _authSvc: AuthService,
 		private _storageSvc: StorageService,
 		private _validatorSvc: ValidatorService,
-		private _sweetAlertSvc: SweetAlertService
+		private _sweetAlertSvc: SweetAlertService,
+		private _router: Router
 	) {
 		this._storage = this._storageSvc.local;
 		this._subForm = this._validatorSvc.getSubForm(
 			this.registerForm,
 			this.msgErrors
 		);
-
-
 	}
 
 	ngOnDestroy(): void {
@@ -94,6 +91,7 @@ export class RegisterComponent {
 			next: (resp) => {
 				if (!resp) return;
 				this._storage.set('token', resp.token);
+				this._router.navigate(['/']);
 			},
 			error: (error: DefaultErrorResponse) => {
 				console.error(error);

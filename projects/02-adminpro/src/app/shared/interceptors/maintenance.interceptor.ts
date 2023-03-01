@@ -35,7 +35,6 @@ export class MaintenanceInterceptor implements HttpInterceptor {
 				const { status_code } = (body as DefaultResponse) || {};
 				if (status_code !== 503) this._finishMaintenance();
 				// throw { status_code: 503 };
-				console.log(resp);
 			}),
 			catchError((error: DefaultErrorResponse) => {
 				const { status_code } = error;
@@ -47,12 +46,20 @@ export class MaintenanceInterceptor implements HttpInterceptor {
 		);
 	}
 
+	/**
+	 * ? Comienza el mantenimiento al recibir un status 503 desde el servidor
+	 * @private
+	 */
 	private _startMaintenance() {
 		this._stateSvc.isMaintenance = true;
 		this._stateSvc.isFinishedMaintenance = false;
 		this._router.navigate(['/maintenance']);
 	}
 
+	/**
+	 * ? Termina el estado de mantenimiento cuando se deja de recibir un 503 desde el servidor
+	 * @private
+	 */
 	private _finishMaintenance() {
 		this._stateSvc.isMaintenance = false;
 		if (!this._stateSvc.isFinishedMaintenance) {

@@ -106,6 +106,7 @@ export class LoginComponent {
 				} else {
 					this._storage.delete('userRemember');
 				}
+				this._router.navigate(['/'])
 			},
 			error: (error: DefaultErrorResponse) => {
 				console.error(error);
@@ -119,7 +120,6 @@ export class LoginComponent {
 				} else this._sweetAlert.alertError('You cannot Sign in');
 			},
 		});
-
-		// this._router.navigate(['/']);
+		
 	}
 }

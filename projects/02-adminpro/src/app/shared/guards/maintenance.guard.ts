@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import { Route, Router, UrlSegment } from '@angular/router';
 import { StateService } from '../services/settings/state.service';
 
 @Injectable({
@@ -7,9 +7,13 @@ import { StateService } from '../services/settings/state.service';
 })
 export class MaintenanceGuard {
 	constructor(private _router: Router, private _stateSvc: StateService) {}
-	public canMatch(): boolean {
-		if (this._stateSvc.isMaintenance) {
+	public canMatch(_route: Route, segments: UrlSegment[]): boolean {
+		const { path = '' } = segments[0] || {};
+		if (this._stateSvc.isMaintenance && path !== 'maintenance') {
 			this._router.navigate(['/maintenance']);
+			return false;
+		} else if (!this._stateSvc.isMaintenance && path === 'maintenance') {
+			this._router.navigate(['/']);
 			return false;
 		}
 		return true;

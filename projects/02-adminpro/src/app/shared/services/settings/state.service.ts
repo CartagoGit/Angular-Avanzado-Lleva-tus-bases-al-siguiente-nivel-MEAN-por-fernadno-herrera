@@ -6,6 +6,7 @@ import { Injectable } from '@angular/core';
 export class StateService {
 	public isMaintenance: boolean = false;
 	public isFinishedMaintenance: boolean = true;
+	public isAuthenticated: boolean = false;
 
 	constructor() {}
 }

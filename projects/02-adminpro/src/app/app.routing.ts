@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { MaintenanceGuard } from './shared/guards/maintenance.guard';
-import { ApiOnlineGuard } from './shared/guards/api-online.guard';
+import { AuthenticatedGuard } from './shared/guards/authenticated.guard';
 
 const routes: Routes = [
 	//* Mantenimiento
@@ -12,21 +12,21 @@ const routes: Routes = [
 			import('./core/pages/maintenance/maintenance.module').then(
 				(m) => m.MaintenanceModule
 			),
-		canMatch: [ApiOnlineGuard],
+		canMatch: [MaintenanceGuard],
+	},
+	// * Solo cuando no estamos logueados
+	{
+		path: '',
+		loadChildren: () =>
+			import('./core/pages/auth/auth.module').then((m) => m.AuthModule),
+		canMatch: [MaintenanceGuard, AuthenticatedGuard],
 	},
 	//* Hay que estar logueado
 	{
 		path: '',
 		loadChildren: () =>
 			import('./pages/pages.module').then((m) => m.PagesModule),
-		canMatch: [MaintenanceGuard],
-	},
-	//* Solo cuando no estamos logueados
-	{
-		path: '',
-		loadChildren: () =>
-			import('./core/pages/auth/auth.module').then((m) => m.AuthModule),
-		canMatch: [MaintenanceGuard],
+		canMatch: [MaintenanceGuard, AuthenticatedGuard],
 	},
 	//* Publicas
 	{
