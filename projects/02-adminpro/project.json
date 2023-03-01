@@ -51,12 +51,12 @@
 				},
 				"development": {
 					"optimization": false,
-					"outputHashing": "none",
-					"sourceMap": false,
+					"outputHashing": "all",
+					"sourceMap": true,
 					"namedChunks": true,
 					"aot": false,
 					"extractLicenses": false,
-					"vendorChunk": false,
+					"vendorChunk": true,
 					"buildOptimizer": false
 				}
 			},
