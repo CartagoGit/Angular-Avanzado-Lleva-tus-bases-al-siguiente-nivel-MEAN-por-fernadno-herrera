@@ -103,7 +103,7 @@ export class CoreHttp<T> {
 	 * @public
 	 * @returns {Observable<DefaultResponse>}
 	 */
-	public getRoot(): Observable<DefaultResponse> {
+	public root(): Observable<DefaultResponse> {
 		return this._http.get<DefaultResponse>(this.routes.root);
 	}
 }

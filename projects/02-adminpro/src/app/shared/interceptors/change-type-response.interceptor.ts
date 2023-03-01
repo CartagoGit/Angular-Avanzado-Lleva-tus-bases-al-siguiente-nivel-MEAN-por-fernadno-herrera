@@ -10,7 +10,7 @@ import { Observable, catchError, throwError, retry } from 'rxjs';
 import { DefaultErrorResponse } from '../services/http/interfaces/response.interfaces';
 
 @Injectable()
-export class ErrorCatchingInterceptor implements HttpInterceptor {
+export class ChangeTypeResponseInterceptor implements HttpInterceptor {
 	private _retryDelay = 100;
 	private _retryMaxAttempts = 1;
 	constructor() {}
@@ -28,8 +28,10 @@ export class ErrorCatchingInterceptor implements HttpInterceptor {
 	): Observable<HttpEvent<unknown>> {
 		return next.handle(request).pipe(
 			// retry({ count: this._retryMaxAttempts, delay: this._retryDelay }),
-			catchError((error: HttpErrorResponse) => {
-				return throwError(() => error.error as DefaultErrorResponse);
+			catchError((httpErrorResponse: HttpErrorResponse) => {
+				return throwError(
+					() => httpErrorResponse.error as DefaultErrorResponse
+				);
 			})
 		);
 	}

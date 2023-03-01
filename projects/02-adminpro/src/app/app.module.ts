@@ -5,16 +5,17 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 //* Injector para cargar servicios en clases
 import { ServiceLocator } from './shared/services/injector/locator.service';
 // Interceptors
-import { ErrorCatchingInterceptor } from './shared/interceptors/error-catching.interceptor';
+import { ChangeTypeResponseInterceptor } from './shared/interceptors/change-type-response.interceptor';
 // Rutas
 import { AppRoutingModule } from './app.routing';
 // Modulos
-import { PagesModule } from './pages/pages.module';
+
 import { CoreModule } from './core/core.module';
 
 // Componentes
 import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
+import { MaintenanceInterceptor } from './shared/interceptors/maintenance.interceptor';
 
 @NgModule({
 	declarations: [AppComponent],
@@ -22,14 +23,18 @@ import { SharedModule } from './shared/shared.module';
 		BrowserModule,
 		AppRoutingModule,
 		HttpClientModule,
-		PagesModule,
 		CoreModule,
 		SharedModule,
 	],
 	providers: [
 		{
 			provide: HTTP_INTERCEPTORS,
-			useClass: ErrorCatchingInterceptor,
+			useClass: MaintenanceInterceptor,
+			multi: true,
+		},
+		{
+			provide: HTTP_INTERCEPTORS,
+			useClass: ChangeTypeResponseInterceptor,
 			multi: true,
 		},
 	],

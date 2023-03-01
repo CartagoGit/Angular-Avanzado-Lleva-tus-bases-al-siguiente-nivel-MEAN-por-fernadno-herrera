@@ -22,34 +22,34 @@ const routes: Routes = [
 			{
 				path: 'progress',
 				component: ProgressComponent,
-				data: { titulo: 'Barra de progreso' }
+				data: { titulo: 'Barra de progreso' },
 			},
 			{
 				path: 'graphic01',
 				component: Graphic01Component,
-				data: { titulo: 'Gráfica 1' }
+				data: { titulo: 'Gráfica 1' },
 			},
 			{
 				path: 'account-settings',
 				component: AccountSettingsComponent,
-				data: { titulo: 'Ajustes de cuenta' }
+				data: { titulo: 'Ajustes de cuenta' },
 			},
 			{
 				path: 'promises',
 				component: PromisesComponent,
-				data: { titulo: 'Promises' }
+				data: { titulo: 'Promises' },
 			},
 			{
 				path: 'rxjs',
 				component: RxjsComponent,
-				data: { titulo: 'Rxjs' }
-			},
-			{
-				path: '',
-				redirectTo: 'dashboard',
-				pathMatch: 'full',
+				data: { titulo: 'Rxjs' },
 			},
 		],
+	},
+	{
+		path: '',
+		redirectTo: 'dashboard',
+		pathMatch: 'full',
 	},
 ];
 
