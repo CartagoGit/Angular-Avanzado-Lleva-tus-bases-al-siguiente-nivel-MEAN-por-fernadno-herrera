@@ -1,5 +1,10 @@
-import { Sections, PathProps } from "../../interfaces/paths.interfaces";
-
+import { objectMap } from '../../helpers/object-map.helper';
+import {
+	Sections,
+	PathProps,
+	AuthSections,
+	NotLogedSections,
+} from '../../interfaces/paths.interfaces';
 
 /**
  * ? Clase para crear las rutas
@@ -37,6 +42,65 @@ export class Path<
 		const { name, parentName, subsections } = data;
 		this.name = name;
 		this.parentName = parentName;
-		this.subsections = subsections;
+		this.subsections = subsections
+			? objectMap(
+					subsections,
+					(value: PathProps<any>) => new Path<any>(value)
+			  )
+			: undefined;
 	}
 }
+
+const paths = {
+	loged: {
+		auth: new Path<NotLogedSections, AuthSections>({
+			name: 'auth',
+			subsections: {
+				login: {
+					name: 'login',
+				},
+				register: {
+					name: 'register',
+				},
+				terms: {
+					name: 'terms',
+				},
+			},
+		}),
+		maintenance: {
+			name: 'maintenance',
+		},
+	},
+	notLoged: {
+		general: {
+			name: 'general',
+			subsections: {
+				profile: {
+					name: 'profile',
+				},
+				settings: {
+					name: 'settings',
+				},
+			},
+		},
+		dashboard: {
+			name: 'dashboard',
+			subsections: {
+				graphic: {
+					name: 'graphic',
+				},
+				progressBar: {
+					name: 'progressBar',
+				},
+				rxjs: {
+					name: 'rxjs',
+				},
+				promises: {
+					name: 'promises',
+				},
+			},
+		},
+	},
+};
+
+// const prueba = new Path(paths.loged.auth)
