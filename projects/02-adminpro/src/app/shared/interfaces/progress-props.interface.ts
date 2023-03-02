@@ -1,5 +1,5 @@
 import { ColorBootstrap } from './color.interface';
-import { TypeNumber } from './type-numbers';
+import { TypeNumber } from './type-numbers.interface';
 /**
  * ? Propiedades para el componente de barra de progreso
  */

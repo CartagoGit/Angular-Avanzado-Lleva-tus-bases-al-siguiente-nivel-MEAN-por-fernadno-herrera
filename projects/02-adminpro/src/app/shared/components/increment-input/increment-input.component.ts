@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { getPercent } from '../../helpers/get-percent.helper';
 import { ColorBootstrap } from '../../interfaces/color.interface';
-import { TypeNumber } from '../../interfaces/type-numbers';
+import { TypeNumber } from '../../interfaces/type-numbers.interface';
 
 
 @Component({

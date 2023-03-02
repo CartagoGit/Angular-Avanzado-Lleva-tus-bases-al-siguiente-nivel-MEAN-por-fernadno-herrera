@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
-import { ProgressProps } from '../../shared/interfaces/progress-props';
+import { ProgressProps } from '../../shared/interfaces/progress-props.interface';
 
 @Component({
   selector: 'app-progress',

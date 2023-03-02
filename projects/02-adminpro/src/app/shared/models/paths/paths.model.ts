@@ -1,35 +1,42 @@
-export type NotLogedSections = 'maintenance' | 'login' | 'register' | 'terms';
+import { Sections, PathProps } from "../../interfaces/paths.interfaces";
 
-export type LogedSections = 'general' | 'dashboard';
 
-export type GeneralSections = 'settings';
-
-export type DashboardSections =
-	| 'main'
-	| 'progress-bar'
-	| 'graphic'
-	| 'promises'
-	| 'rxjs';
-
-export type ParentSections = NotLogedSections | LogedSections;
-
-export type ChildrenSections = DashboardSections | GeneralSections
-
-export type Sections = ParentSections | ChildrenSections;
-
-export class Path<T extends Sections, K extends ChildrenSections | undefined = undefined> {
-	public name : T;
-	get path () :`/${typeof this.name}`{
-		return `/${this.name}`
+/**
+ * ? Clase para crear las rutas
+ * * Debe recibir el tipo de ruta que es
+ * * Opcionalmente puede recibir el tipo de ruta del padre y de las rutas hijas
+ * @export
+ * @class Path
+ * @typedef {Path}
+ * @template ThisSection
+ * @template Children
+ * @template Parent
+ * @implements {PathProps<ThisSection, Children, Parent>}
+ */
+export class Path<
+	ThisSection extends Sections,
+	Children extends Sections | undefined = undefined,
+	Parent extends Sections | undefined = undefined
+> implements PathProps<ThisSection, Children, Parent>
+{
+	public name: ThisSection;
+	public get path(): `/${ThisSection}` {
+		return `/${this.name}`;
 	}
 
-	constructor (data: {
-		name: T
-	}){
+	public parentName?: Parent;
+	public get parentPath(): `/${Parent}` | undefined {
+		return this.parentName ? `/${this.parentName}` : undefined;
+	}
 
-		const {name}= data;
+	public subsections?: Children extends Sections
+		? Record<Children, Path<Children>>
+		: undefined;
+
+	constructor(data: PathProps<ThisSection, Children, Parent>) {
+		const { name, parentName, subsections } = data;
 		this.name = name;
-
+		this.parentName = parentName;
+		this.subsections = subsections;
 	}
-
 }

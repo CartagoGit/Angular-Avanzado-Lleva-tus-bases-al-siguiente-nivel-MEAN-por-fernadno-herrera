@@ -7,7 +7,7 @@ import {
   Plugin,
 } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
-import { GraphicProps } from '../../interfaces/graphic-props';
+import { GraphicProps } from '../../interfaces/graphic-props.interface';
 
 
 @Component({

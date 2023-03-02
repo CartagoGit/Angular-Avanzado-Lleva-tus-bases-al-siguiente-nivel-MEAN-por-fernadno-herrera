@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { GraphicProps } from '../../shared/interfaces/graphic-props';
+import { GraphicProps } from '../../shared/interfaces/graphic-props.interface';
 
 @Component({
   selector: 'app-graphic01',
