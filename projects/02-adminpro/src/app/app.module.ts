@@ -16,6 +16,7 @@ import { CoreModule } from './core/core.module';
 import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
 import { MaintenanceInterceptor } from './shared/interceptors/maintenance.interceptor';
+import { TokenInterceptor } from './shared/interceptors/token.interceptor';
 
 @NgModule({
 	declarations: [AppComponent],
@@ -27,6 +28,11 @@ import { MaintenanceInterceptor } from './shared/interceptors/maintenance.interc
 		SharedModule,
 	],
 	providers: [
+		{
+			provide: HTTP_INTERCEPTORS,
+			useClass: TokenInterceptor,
+			multi: true,
+		},
 		{
 			provide: HTTP_INTERCEPTORS,
 			useClass: MaintenanceInterceptor,

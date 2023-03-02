@@ -1,5 +1,6 @@
-import { Roles } from '../interfaces/roles.interface';
-import { BaseModelsProps } from '../interfaces/base-model.interface';
+import { Roles } from "../../interfaces/roles.interface";
+import { BaseModelsProps } from "./base-model.interface";
+
 
 /**
  * ? Propiedades que recibe el Modelo de usuarios a recibir desde el back
