@@ -1,4 +1,4 @@
-import { Path } from '../models/paths/paths.model';
+// import { Path } from '../models/paths/paths.model';
 
 //$ Secciones de las rutas
 //* Secciones generales
@@ -43,16 +43,14 @@ export type Sections = ParentSections | ChildrenLogedSections | ChildrenNotLoged
  * @template Children
  * @template Parent
  */
-export interface PathProps<
-	ThisSection extends Sections,
-	Children extends Sections | undefined = undefined,
-	Parent extends Sections | undefined = undefined
-> {
-	name: ThisSection;
-	path?: `/${ThisSection}`;
-	parentName?: Parent;
-	parentPath?: `/${Parent}`;
-	subsections?: Children extends Sections
-		? Record<Children, Path<Children>>
-		: undefined;
-}
+// export type PathProps<
+// 	ThisSection extends Sections,
+// 	Children extends Sections = any ,
+// 	Parent extends Sections =any
+// > = {
+// 	name: ThisSection;
+// 	path?: `/${ThisSection}`;
+// 	parentName?: Parent;
+// 	parentPath?: `/${Parent}`;
+
+// } & Record<Children, Path<Children, undefined, ThisSection>>
