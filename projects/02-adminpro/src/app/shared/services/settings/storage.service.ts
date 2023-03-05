@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { objectMap, objectKeyMap } from '../../helpers/object-map.helper';
+import { paths } from '../../models/paths/paths.model';
 
 //* Tipos de storage
 type TypesStorage = 'local' | 'session';
@@ -49,7 +50,9 @@ export class StorageService {
 	});
 
 	// ANCHOR : Constructor
-	constructor() {}
+	constructor() {
+		console.log(paths.loged.auth);
+	}
 
 	// ANCHOR : Métodos
 

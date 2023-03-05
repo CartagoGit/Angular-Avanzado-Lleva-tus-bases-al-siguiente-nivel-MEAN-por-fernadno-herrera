@@ -15,24 +15,22 @@ import { ParentSections } from '../../interfaces/paths.interfaces';
 // 	providedIn: 'root',
 // })
 // export class RoutesPath
-// implements Record<RootSections, Path<ParentSections, ChildrenSections>>
+// 	implements Record<RootSections, Path<ParentSections, ChildrenSections>>
 // {
-// public notLoged!: Path<NotLogedSections>;
+// 	public notLoged!: Path<NotLogedSections>;
 
-// public loged = new Path<LogedSections, ChildrenSections>({
-// 	name: 'dashboard',
-// 	subsections: {
-// 		graphic: new Path<DashboardSections>({
-// 			name: 'graphic',
-// 		}),
-// 		general: new Path<GeneralSections>({}),
-// 	},
-// });
+// 	public loged = new Path<LogedSections, ChildrenSections>({
+// 		name: 'dashboard',
+// 		subsections: {
+// 			graphic: new Path<DashboardSections>({
+// 				name: 'graphic',
+// 			}),
+// 			general: new Path<GeneralSections>({}),
+// 		},
+// 	});
 
-// static routes : Record<Sections, Path<ParentSections>> = {
-
-// }
-// constructor() {
-// this.notLoged = new Path({ name: 'notLoged', subsections: {} });
+// 	static routes: Record<Sections, Path<ParentSections>> = {};
+// 	constructor() {
+// 		this.notLoged = new Path({ name: 'notLoged', subsections: {} });
 // 	}
 // }

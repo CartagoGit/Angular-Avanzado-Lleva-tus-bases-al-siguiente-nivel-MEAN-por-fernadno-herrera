@@ -1,4 +1,4 @@
-// import { Path } from '../models/paths/paths.model';
+import { Path } from '../models/paths/paths.model';
 
 //$ Secciones de las rutas
 //* Secciones generales
@@ -26,13 +26,17 @@ export type DashboardSections =
 //* Secciones Padre generales
 export type ParentSections = NotLogedSections | LogedSections;
 
-export type ChildrenNotLogedSections = AuthSections
+export type ChildrenNotLogedSections = AuthSections;
 
 //* Secicones hijas de las secciones generales
 export type ChildrenLogedSections = DashboardSections | GeneralSections;
 
 //* Todas las secciones
-export type Sections = ParentSections | ChildrenLogedSections | ChildrenNotLogedSections | RootSections;
+export type Sections =
+	| ParentSections
+	| ChildrenLogedSections
+	| ChildrenNotLogedSections
+	| RootSections;
 
 /**
  * ? Propiedades del modelo de rutas, donde se debe pasar el tipado de la ruta, y opcionalmente el tipado del padre y de los hijos
@@ -43,14 +47,9 @@ export type Sections = ParentSections | ChildrenLogedSections | ChildrenNotLoged
  * @template Children
  * @template Parent
  */
-// export type PathProps<
-// 	ThisSection extends Sections,
-// 	Children extends Sections = any ,
-// 	Parent extends Sections =any
-// > = {
-// 	name: ThisSection;
-// 	path?: `/${ThisSection}`;
-// 	parentName?: Parent;
-// 	parentPath?: `/${Parent}`;
-
-// } & Record<Children, Path<Children, undefined, ThisSection>>
+export type PathProps = {
+	name: string;
+	parentName?: string;
+	parentFullPath?: string;
+	children?: PathProps[];
+};

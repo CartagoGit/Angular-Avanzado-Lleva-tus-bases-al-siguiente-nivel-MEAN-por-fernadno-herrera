@@ -42,8 +42,6 @@ export const objectMap = <KeyEntrie extends string, ValueEntrie, MapResult>(
 	return output;
 };
 
-
-
 /**
  * ? Cambia las keys de un objeto
  * @template KeyEntrie
@@ -85,9 +83,13 @@ export const objectKeyMap = <
 		return [mapResult, value];
 	}) as Array<[MapResult, ValueEntrie]>;
 
-	const keyFinal : ReadonlyArray<MapResult> = mappedEntries.map(([key, _value]) => key)
+	const keyFinal: ReadonlyArray<MapResult> = mappedEntries.map(
+		([key, _value]) => key
+	);
 
 	//* Convertirmos el array en un nuevo objeto con los nuevos valores
-	const output = Object.fromEntries(mappedEntries) as {[key in typeof keyFinal[number]] : ValueEntrie};
-	return output as {[key in typeof keyFinal[number]] : ValueEntrie};
+	const output = Object.fromEntries(mappedEntries) as {
+		[key in (typeof keyFinal)[number]]: ValueEntrie;
+	};
+	return output as { [key in (typeof keyFinal)[number]]: ValueEntrie };
 };
