@@ -13,18 +13,21 @@ import { PathProps, Sections } from '../../interfaces/paths.interfaces';
  * @implements {PathProps<ThisSection, Children, Parent>}
  */
 
-export class Path {
-	public name: string;
+type IPath = Path & { [key in Sections]?: Path };
+
+export class Path implements IPath {
+// export class Path {
+	public readonly name: string;
 	public get path(): string {
 		return `/${this.name}`;
 	}
 
-	public parentName?: string;
+	public readonly parentName?: string;
 	public get parentPath(): string | undefined {
 		return this.parentName ? `/${this.parentName}` : undefined;
 	}
 
-	public parentFullPath?: string;
+	public readonly parentFullPath?: string;
 	public get fullPath(): string {
 		return this.parentFullPath ? this.parentFullPath + this.path : this.path;
 	}
@@ -36,8 +39,6 @@ export class Path {
 		this.parentFullPath = parentFullPath;
 
 		this._createChildren(children);
-
-		// this.makePathsImmutable(this)
 	}
 
 	// ANCHOR : Methods
@@ -49,8 +50,10 @@ export class Path {
 	 */
 	private _createChildren(children: PathProps[]) {
 		for (const child of children) {
+
 			console.log('child', child);
 			if (!!child.children) {
+				// FIXME Si el hijo tiene mas hijos, estos se crean en el padre tambien
 				this._createChildren(child.children);
 			}
 			const propValue = new Path({
@@ -58,17 +61,17 @@ export class Path {
 				parentName: this.name,
 				parentFullPath: this.fullPath,
 			}); // Crear nueva instancia de Path
+			// FIXME Las propiedades no salen en el inteliseasne pero si por consola
 			Object.defineProperty(this, child.name, {
 				value: propValue,
 				// configurable: true,
-				// enumerable: true,
+				enumerable: true,
 				writable: false,
 			});
 
 			console.log(this);
 		}
 	}
-	
 }
 
 export const paths = {
@@ -95,38 +98,38 @@ export const paths = {
 				},
 			],
 		}),
-		maintenance: {
+		maintenance: new Path({
 			name: 'maintenance',
-		},
+		}),
 	},
 	notLoged: {
-		general: {
+		general: new Path({
 			name: 'general',
-			subsections: {
-				profile: {
+			children: [
+				{
 					name: 'profile',
 				},
-				settings: {
+				{
 					name: 'settings',
 				},
-			},
-		},
-		dashboard: {
+			],
+		}),
+		dashboard: new Path({
 			name: 'dashboard',
-			subsections: {
-				graphic: {
+			children: [
+				{
 					name: 'graphic',
 				},
-				progressBar: {
+				{
 					name: 'progressBar',
 				},
-				rxjs: {
+				{
 					name: 'rxjs',
 				},
-				promises: {
+				{
 					name: 'promises',
 				},
-			},
-		},
+			],
+		}),
 	},
 };
