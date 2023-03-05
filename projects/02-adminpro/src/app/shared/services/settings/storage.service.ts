@@ -36,6 +36,22 @@ export class StorageService {
 			perrete: 's',
 		},
 	};
+
+	private _pruebanum = {
+		num1: {
+			nombre: 'un nombre',
+			num: 2,
+		},
+		num2: {
+			nombre: 'un nombre 2',
+			num: 5,
+		},
+		num3: {
+			nombre: 'un nombre 2',
+			num: 5,
+		},
+	};
+
 	private _initSessionFields = {};
 
 	private _prefix = 'cartagopro';
@@ -50,12 +66,30 @@ export class StorageService {
 	private _pruebaFF = objectMap(this._prueba, (value, key, index, array) => ({
 		jojo: { jiji: '' },
 	}));
+
 	private _pruebaCambiandoKeyFF = objectMap(
 		this._prueba,
 		(value, key, index, array) => ({
 			[`${key}uyyyy`]: { jiji: value },
 		})
 	);
+
+	private _pruebaCambiandoKeyFF2 = objectMap(
+		this._prueba,
+		(value, key, index, array) => ({
+			[key + 'uyyyy']: { jiji: value },
+		})
+	);
+
+	private _pruebanumop: Record<
+		keyof typeof this._pruebanum,
+		(typeof this._pruebanum)[keyof typeof this._pruebanum]
+	> = objectMap(this._pruebanum, (value) => {
+		return {
+			...value,
+			num: value.num + 1,
+		};
+	});
 
 	private _sessionFields: Record<
 		keyof typeof this._initSessionFields,
