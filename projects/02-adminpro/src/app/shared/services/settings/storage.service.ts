@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { objectMap } from '../../helpers/object-map.helper';
+import { objectMap, objectKeyMap } from '../../helpers/object-map.helper';
 
 //* Tipos de storage
 type TypesStorage = 'local' | 'session';
@@ -85,11 +85,14 @@ export class StorageService {
 		keyof typeof this._pruebanum,
 		(typeof this._pruebanum)[keyof typeof this._pruebanum]
 	> = objectMap(this._pruebanum, (value) => {
+		this._pruebaFF
 		return {
 			...value,
 			num: value.num + 1,
 		};
 	});
+
+	private _changeKey = objectKeyMap(this._prueba, (key) => key + 'uyyyy');
 
 	private _sessionFields: Record<
 		keyof typeof this._initSessionFields,
