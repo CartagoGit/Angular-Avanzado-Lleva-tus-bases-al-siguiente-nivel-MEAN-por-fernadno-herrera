@@ -26,80 +26,17 @@ export class StorageService {
 		userRemember: 'user-remember',
 	};
 
-	private _prueba = {
-		juajua: {
-			juju: {
-				posi: 'si',
-			},
-		},
-		lororo: {
-			perrete: 's',
-		},
-	};
-
-	private _pruebanum = {
-		num1: {
-			nombre: 'un nombre',
-			num: 2,
-		},
-		num2: {
-			nombre: 'un nombre 2',
-			num: 5,
-		},
-		num3: {
-			nombre: 'un nombre 2',
-			num: 5,
-		},
-	};
-
 	private _initSessionFields = {};
 
 	private _prefix = 'cartagopro';
 
-	// private _localFields: Record<keyof typeof this._initLocalFields, string> =
-	private _localFields = objectMap(
-		this._initLocalFields,
-		(value, key, index, array) => this._prefix + '-' + value
-	);
-
-	// private _pruebaFF : Record<keyof typeof this._prueba, string> = objectMap(this._prueba, (value, key, index, array) => 'hola'
-	private _pruebaFF = objectMap(this._prueba, (value, key, index, array) => ({
-		jojo: { jiji: '' },
-	}));
-
-	private _pruebaCambiandoKeyFF = objectMap(
-		this._prueba,
-		(value, key, index, array) => ({
-			[`${key}uyyyy`]: { jiji: value },
-		})
-	);
-
-	private _pruebaCambiandoKeyFF2 = objectMap(
-		this._prueba,
-		(value, key, index, array) => ({
-			[key + 'uyyyy']: { jiji: value },
-		})
-	);
-
-	private _pruebanumop: Record<
-		keyof typeof this._pruebanum,
-		(typeof this._pruebanum)[keyof typeof this._pruebanum]
-	> = objectMap(this._pruebanum, (value) => {
-		this._pruebaFF
-		return {
-			...value,
-			num: value.num + 1,
-		};
-	});
-
-	private _changeKey = objectKeyMap(this._prueba, (key) => key + 'uyyyy');
-
+	private _localFields: Record<keyof typeof this._initLocalFields, string> =
+		objectMap(this._initLocalFields, (value) => this._prefixAndValue(value));
 	private _sessionFields: Record<
 		keyof typeof this._initSessionFields,
 		string
-	> = objectMap(
-		this._initSessionFields,
-		(value) => this._prefix + '-' + value
+	> = objectMap(this._initSessionFields, (value) =>
+		this._prefixAndValue(value)
 	);
 
 	public local = new BasicStorage<typeof this._localFields>({
@@ -115,6 +52,16 @@ export class StorageService {
 	constructor() {}
 
 	// ANCHOR : Métodos
+
+	/**
+	 * ? Recupera el valor del campo indicado añadiendole el prefijo
+	 * @private
+	 * @param {string} value
+	 * @returns {string}
+	 */
+	private _prefixAndValue(value: string): string {
+		return this._prefix + '-' + value;
+	}
 
 	/**
 	 * ? Limpia todos los storage o el storage indicado
