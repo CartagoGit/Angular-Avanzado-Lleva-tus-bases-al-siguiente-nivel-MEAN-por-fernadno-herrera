@@ -13,10 +13,9 @@ import { PathProps, Sections } from '../../interfaces/paths.interfaces';
  * @implements {PathProps<ThisSection, Children, Parent>}
  */
 
-type IPath = Path & { [key in Sections]?: Path };
+export class Path {
+	// ANCHOR : Variables
 
-export class Path implements IPath {
-// export class Path {
 	public readonly name: string;
 	public get path(): string {
 		return `/${this.name}`;
@@ -32,71 +31,59 @@ export class Path implements IPath {
 		return this.parentFullPath ? this.parentFullPath + this.path : this.path;
 	}
 
+	public everyPath: string[];
+
 	constructor(data: PathProps) {
-		const { name, parentName, parentFullPath, children = [] } = data;
+		const { name, parentName, parentFullPath, ...children } = data;
 		this.name = name;
 		this.parentName = parentName;
 		this.parentFullPath = parentFullPath;
 
-		this._createChildren(children);
-	}
+		this.everyPath = this.fullPath
+			.split('/')
+			.filter((path) => !!path)
+			.map((path) => path.toLowerCase());
 
-	// ANCHOR : Methods
-
-	/**
-	 * ? Crea las rutas hijas
-	 * @private
-	 * @param {PathProps[]} children
-	 */
-	private _createChildren(children: PathProps[]) {
-		for (const child of children) {
-
-			console.log('child', child);
-			if (!!child.children) {
-				// FIXME Si el hijo tiene mas hijos, estos se crean en el padre tambien
-				this._createChildren(child.children);
-			}
+		for (const [key, child] of Object.entries(children)) {
+			//* Crea nueva instancia de Path por cada hijo
 			const propValue = new Path({
 				...child,
 				parentName: this.name,
 				parentFullPath: this.fullPath,
-			}); // Crear nueva instancia de Path
-			// FIXME Las propiedades no salen en el inteliseasne pero si por consola
+			});
+			// REVIEW Las propiedades no salen en el inteliseasne pero si por consola - No se ha encontrado solucion a inferir el tipo de las propiedades
 			Object.defineProperty(this, child.name, {
 				value: propValue,
-				// configurable: true,
+				configurable: false,
 				enumerable: true,
 				writable: false,
 			});
-
-			console.log(this);
 		}
 	}
+
+	// ANCHOR : Methods
 }
 
-export const paths = {
+export const pathsTree = {
 	loged: {
 		auth: new Path({
 			name: 'auth',
-			children: [
-				{
-					name: 'login',
-					children: [
-						{
-							name: 'unHijoDeLogin',
-						},
-						{
-							name: 'otroHijoDeLogin',
-						},
-					],
+			login: {
+				name: 'login',
+
+				maintenance: {
+					name: 'unHijoDeLogin',
 				},
-				{
-					name: 'register',
+				dashboard: {
+					name: 'otroHijoDeLogin',
 				},
-				{
-					name: 'terms',
-				},
-			],
+			},
+			register: {
+				name: 'register',
+			},
+			terms: {
+				name: 'terms',
+			},
 		}),
 		maintenance: new Path({
 			name: 'maintenance',
@@ -105,31 +92,54 @@ export const paths = {
 	notLoged: {
 		general: new Path({
 			name: 'general',
-			children: [
-				{
-					name: 'profile',
-				},
-				{
-					name: 'settings',
-				},
-			],
+			profile: {
+				name: 'profile',
+			},
+			settings: {
+				name: 'settings',
+			},
 		}),
 		dashboard: new Path({
 			name: 'dashboard',
-			children: [
-				{
-					name: 'graphic',
-				},
-				{
-					name: 'progressBar',
-				},
-				{
-					name: 'rxjs',
-				},
-				{
-					name: 'promises',
-				},
-			],
+			graphic: {
+				name: 'graphic',
+			},
+			progressBar: {
+				name: 'progressBar',
+			},
+			rxjs: {
+				name: 'rxjs',
+			},
+			promises: {
+				name: 'promises',
+			},
 		}),
 	},
+};
+
+
+/**
+ * ? Funcion para obtener la ruta de una seccion
+ * @param {Sections} section
+ * @param {*} [paths=pathsTree]
+ * @returns {(Path | undefined)}
+ */
+export const getPath = (
+	section: Sections,
+	paths: any = pathsTree
+): Path | undefined => {
+	let result: Path | undefined;
+	if (!(typeof paths === 'object')) return undefined;
+	for (const [key, value] of Object.entries(paths)) {
+		if (typeof value !== 'object') continue;
+		if (value instanceof Path) {
+			if (key === section) return value;
+			if (!!value) result = getPath(section, value);
+			if (!!result) return result;
+		} else {
+			result = getPath(section, value);
+			if (!!result) return result;
+		}
+	}
+	return result;
 };

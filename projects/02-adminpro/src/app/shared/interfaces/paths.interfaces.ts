@@ -1,4 +1,3 @@
-import { Path } from '../models/paths/paths.model';
 
 //$ Secciones de las rutas
 //* Secciones generales
@@ -14,11 +13,11 @@ export type NotLogedSections = 'maintenance' | 'auth';
 export type LogedSections = 'general' | 'dashboard';
 
 //* Secciones internas hijas
-export type GeneralSections = 'settings';
+export type GeneralSections = 'settings' | 'profile';
 
 export type DashboardSections =
 	| 'main'
-	| 'progress-bar'
+	| 'progressBar'
 	| 'graphic'
 	| 'promises'
 	| 'rxjs';
@@ -51,5 +50,5 @@ export type PathProps = {
 	name: string;
 	parentName?: string;
 	parentFullPath?: string;
-	children?: PathProps[];
-};
+
+} & { [key in Sections]?: PathProps };
