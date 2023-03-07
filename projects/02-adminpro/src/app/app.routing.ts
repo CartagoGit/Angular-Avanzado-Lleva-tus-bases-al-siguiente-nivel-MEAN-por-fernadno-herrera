@@ -3,11 +3,12 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { MaintenanceGuard } from './shared/guards/maintenance.guard';
 import { AuthenticatedGuard } from './shared/guards/authenticated.guard';
+import { paths } from './shared/constants/paths.constant';
 
 const routes: Routes = [
 	//* Mantenimiento
 	{
-		path: 'maintenance',
+		path: paths.getPath('maintenance')?.name,
 		loadChildren: () =>
 			import('./core/pages/maintenance/maintenance.module').then(
 				(m) => m.MaintenanceModule
@@ -43,4 +44,6 @@ const routes: Routes = [
 	imports: [RouterModule.forRoot(routes)],
 	exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule {
+	constructor() {}
+}

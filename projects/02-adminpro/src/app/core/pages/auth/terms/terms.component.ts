@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { paths } from 'projects/02-adminpro/src/app/shared/constants/paths.constant';
 
 @Component({
   selector: 'app-terms',
@@ -6,5 +7,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./terms.component.css']
 })
 export class TermsComponent {
+	public registerPath = paths.getPath('register');
 
 }

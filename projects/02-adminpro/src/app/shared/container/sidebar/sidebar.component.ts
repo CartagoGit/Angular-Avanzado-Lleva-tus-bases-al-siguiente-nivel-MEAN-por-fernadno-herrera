@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { paths } from '../../constants/paths.constant';
 import { SidebarService } from '../../services/settings/sidebar.service';
 
 
@@ -8,6 +9,8 @@ import { SidebarService } from '../../services/settings/sidebar.service';
   styles: [],
 })
 export class SidebarComponent {
+	public settingsPath = paths.getPath('settings');
+	public loginPath = paths.getPath('login');
   public menuItems: any[];
   constructor(private _sidebarSvc: SidebarService) {
     this.menuItems = this._sidebarSvc.menu;

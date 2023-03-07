@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { paths } from '../../constants/paths.constant';
 import { StorageService } from '../../services/settings/storage.service';
 
 @Component({
@@ -8,6 +9,9 @@ import { StorageService } from '../../services/settings/storage.service';
 	styles: [],
 })
 export class HeaderComponent {
+
+	public settingsPath = paths.getPath('settings');
+
 	constructor(private _storageSvc: StorageService, private _router: Router) {}
 
 	public logout(): void {

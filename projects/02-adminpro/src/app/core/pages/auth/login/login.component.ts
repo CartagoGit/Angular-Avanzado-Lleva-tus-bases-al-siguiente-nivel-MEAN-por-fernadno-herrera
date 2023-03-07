@@ -9,6 +9,7 @@ import { AuthDefaultResponse } from '../../../../shared/services/http/interfaces
 import { DefaultErrorResponse } from '../../../../shared/services/http/interfaces/response.interfaces';
 import { SweetAlertService } from '../../../../shared/services/helpers/sweet-alert.service';
 import { GoogleService } from '../../../../shared/services/settings/google.service';
+import { paths } from 'projects/02-adminpro/src/app/shared/constants/paths.constant';
 
 //* Tipo de dato a recuperar del localstorage cuando se pulsa el boton de recordar
 type RembemberUser =
@@ -26,6 +27,8 @@ type RembemberUser =
 export class LoginComponent {
 	// ANCHOR : variables
 	@ViewChild('googleBtn') googleBtnRef!: ElementRef;
+
+	public registerPath = paths.getPath('register');
 
 	public needRecover = false;
 	public formSubmitted = false;
@@ -120,6 +123,6 @@ export class LoginComponent {
 				} else this._sweetAlert.alertError('You cannot Sign in');
 			},
 		});
-		
+
 	}
 }

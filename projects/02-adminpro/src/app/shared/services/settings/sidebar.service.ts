@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { paths } from '../../constants/paths.constant';
 
 interface SubmenuRoutes {
 	title: string;
@@ -15,30 +16,39 @@ interface MenuRoutes {
 	providedIn: 'root',
 })
 export class SidebarService {
+	private _dashboardPath = paths.getPath('dashboard');
+	private _progressBarPath = paths.getPath('progressBar');
+	private _graphic01Path = paths.getPath('graphic01');
+	private _promisesPath = paths.getPath('promises');
+	private _rxjsPath = paths.getPath('rxjs');
+	private _generalPath = paths.getPath('general');
+	private _settingsPath = paths.getPath('settings');
+	private _profilePath = paths.getPath('profile');
+
 	public menu: MenuRoutes[] = [
 		{
-			title: 'Dashboard',
+			title: this._dashboardPath?.title!,
 			icon: 'mdi mdi-gauge',
 			submenu: [
 				{
 					title: 'Main',
-					url: './',
+					url: this._dashboardPath?.fullPath!,
 				},
 				{
-					title: 'ProgressBar',
-					url: './progress',
+					title: this._progressBarPath?.title!,
+					url: this._progressBarPath?.fullPath!,
 				},
 				{
-					title: 'Graphic',
-					url: './graphic01',
+					title: this._graphic01Path?.title!,
+					url: this._graphic01Path?.fullPath!,
 				},
 				{
-					title: 'Promises',
-					url: './promises',
+					title: this._promisesPath?.title!,
+					url: this._promisesPath?.fullPath!,
 				},
 				{
-					title: 'Rxjs',
-					url: './rxjs',
+					title: this._rxjsPath?.title!,
+					url: this._rxjsPath?.fullPath!,
 				},
 			],
 		},

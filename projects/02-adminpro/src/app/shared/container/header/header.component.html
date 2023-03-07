@@ -383,15 +383,15 @@
 							</li>
 							<li role="separator" class="divider"></li>
 							<li>
-								<a [routerLink]="['account-settings']"
+								<a [routerLink]="[settingsPath?.fullPath]"
 									><i class="ti-settings"></i> Account Setting</a
 								>
 							</li>
 							<li role="separator" class="divider"></li>
 							<li>
-								<div (click)="logout()"
-									><i class="fa fa-power-off"></i> Logout</div
-								>
+								<div (click)="logout()">
+									<i class="fa fa-power-off"></i> Logout
+								</div>
 							</li>
 						</ul>
 					</div>

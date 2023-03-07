@@ -18,7 +18,7 @@ export type GeneralSections = 'settings' | 'profile';
 export type DashboardSections =
 	| 'main'
 	| 'progressBar'
-	| 'graphic'
+	| 'graphic01'
 	| 'promises'
 	| 'rxjs';
 
@@ -50,5 +50,6 @@ export type PathProps = {
 	name: string;
 	parentName?: string;
 	parentFullPath?: string;
+	title?: string;
 
 } & { [key in Sections]?: PathProps };

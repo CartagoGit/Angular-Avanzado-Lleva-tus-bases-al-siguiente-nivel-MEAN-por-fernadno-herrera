@@ -16,6 +16,8 @@ import { PathProps, Sections } from '../../interfaces/paths.interfaces';
 export class Path {
 	// ANCHOR : Variables
 
+	public readonly title?: string;
+
 	public readonly name: string;
 	public get path(): string {
 		return `/${this.name}`;
@@ -34,10 +36,11 @@ export class Path {
 	public everyPath: string[];
 
 	constructor(data: PathProps) {
-		const { name, parentName, parentFullPath, ...children } = data;
+		const { name, parentName, parentFullPath, title, ...children } = data;
 		this.name = name;
 		this.parentName = parentName;
 		this.parentFullPath = parentFullPath;
+		this.title = title;
 
 		this.everyPath = this.fullPath
 			.split('/')
@@ -63,83 +66,3 @@ export class Path {
 
 	// ANCHOR : Methods
 }
-
-export const pathsTree = {
-	loged: {
-		auth: new Path({
-			name: 'auth',
-			login: {
-				name: 'login',
-
-				maintenance: {
-					name: 'unHijoDeLogin',
-				},
-				dashboard: {
-					name: 'otroHijoDeLogin',
-				},
-			},
-			register: {
-				name: 'register',
-			},
-			terms: {
-				name: 'terms',
-			},
-		}),
-		maintenance: new Path({
-			name: 'maintenance',
-		}),
-	},
-	notLoged: {
-		general: new Path({
-			name: 'general',
-			profile: {
-				name: 'profile',
-			},
-			settings: {
-				name: 'settings',
-			},
-		}),
-		dashboard: new Path({
-			name: 'dashboard',
-			graphic: {
-				name: 'graphic',
-			},
-			progressBar: {
-				name: 'progressBar',
-			},
-			rxjs: {
-				name: 'rxjs',
-			},
-			promises: {
-				name: 'promises',
-			},
-		}),
-	},
-};
-
-
-/**
- * ? Funcion para obtener la ruta de una seccion
- * @param {Sections} section
- * @param {*} [paths=pathsTree]
- * @returns {(Path | undefined)}
- */
-export const getPath = (
-	section: Sections,
-	paths: any = pathsTree
-): Path | undefined => {
-	let result: Path | undefined;
-	if (!(typeof paths === 'object')) return undefined;
-	for (const [key, value] of Object.entries(paths)) {
-		if (typeof value !== 'object') continue;
-		if (value instanceof Path) {
-			if (key === section) return value;
-			if (!!value) result = getPath(section, value);
-			if (!!result) return result;
-		} else {
-			result = getPath(section, value);
-			if (!!result) return result;
-		}
-	}
-	return result;
-};

@@ -13,6 +13,7 @@ import { ValidatorService } from 'projects/02-adminpro/src/app/shared/services/h
 import { SweetAlertService } from '../../../../shared/services/helpers/sweet-alert.service';
 import { AuthDefaultResponse } from 'projects/02-adminpro/src/app/shared/services/http/interfaces/request.interface';
 import { Router } from '@angular/router';
+import { paths } from '../../../../shared/constants/paths.constant';
 
 @Component({
 	selector: 'auth-register',
@@ -23,6 +24,9 @@ export class RegisterComponent {
 	// ANCHOR : Variables
 	public formSubmitted = false;
 	public showPassword = false;
+
+	public termsPath = paths.getPath('terms');
+	public loginPath = paths.getPath('login');
 
 	public msgErrors = {
 		name: '',

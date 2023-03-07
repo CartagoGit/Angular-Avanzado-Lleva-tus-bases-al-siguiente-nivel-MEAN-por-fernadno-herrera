@@ -8,47 +8,74 @@ import { PagesComponent } from './pages.component';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
 import { PromisesComponent } from './promises/promises.component';
 import { RxjsComponent } from './rxjs/rxjs.component';
+import { paths } from '../shared/constants/paths.constant';
+
+const dashboardPath = paths.getPath('dashboard');
+const progressBarPath = paths.getPath('progressBar');
+const graphic01Path = paths.getPath('graphic01');
+const promisesPath = paths.getPath('promises');
+const rxjsPath = paths.getPath('rxjs');
+const generalPath = paths.getPath('general');
+const settingsPath = paths.getPath('settings');
+const profilePath = paths.getPath('profile');
 
 const routes: Routes = [
 	{
-		path: 'dashboard',
+		path: dashboardPath?.name,
 		component: PagesComponent,
 		children: [
 			{
 				path: '',
 				component: DashboardComponent,
-				data: { titulo: 'Dashboard' },
+				data: { titulo: dashboardPath?.title },
 			},
 			{
-				path: 'progress',
+				path: progressBarPath?.name,
 				component: ProgressComponent,
-				data: { titulo: 'Barra de progreso' },
+				data: { titulo: progressBarPath?.title },
 			},
 			{
-				path: 'graphic01',
+				path: graphic01Path?.name,
 				component: Graphic01Component,
-				data: { titulo: 'Gráfica 1' },
+				data: { titulo: graphic01Path?.title },
 			},
 			{
-				path: 'account-settings',
-				component: AccountSettingsComponent,
-				data: { titulo: 'Ajustes de cuenta' },
-			},
-			{
-				path: 'promises',
+				path: promisesPath?.name,
 				component: PromisesComponent,
-				data: { titulo: 'Promises' },
+				data: { titulo: promisesPath?.title },
 			},
 			{
-				path: 'rxjs',
+				path: rxjsPath?.name,
 				component: RxjsComponent,
-				data: { titulo: 'Rxjs' },
+				data: { titulo: rxjsPath?.title },
 			},
 		],
 	},
 	{
+		path: generalPath?.name,
+		component: PagesComponent,
+		children: [
+			{
+				path: settingsPath?.name,
+				component: AccountSettingsComponent,
+				data: { titulo: settingsPath?.title },
+			},
+			{
+				path: profilePath?.name,
+				data: { titulo: profilePath?.title },
+				redirectTo: dashboardPath?.fullPath,
+			},
+			{
+				path: '',
+				redirectTo: dashboardPath?.fullPath,
+				pathMatch: 'full',
+			},
+		],
+	},
+
+	{
 		path: '',
-		redirectTo: 'dashboard',
+		redirectTo: dashboardPath?.fullPath,
 		pathMatch: 'full',
 	},
 ];
