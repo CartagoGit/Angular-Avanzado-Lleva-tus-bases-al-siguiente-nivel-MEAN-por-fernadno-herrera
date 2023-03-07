@@ -51,5 +51,6 @@ export type PathProps = {
 	parentName?: string;
 	parentFullPath?: string;
 	title?: string;
+	icon? : string;
 
 } & { [key in Sections]?: PathProps };

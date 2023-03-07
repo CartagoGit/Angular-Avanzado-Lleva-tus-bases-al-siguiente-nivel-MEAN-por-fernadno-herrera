@@ -43,6 +43,7 @@ class PathConstants {
 			dashboard: new Path({
 				name: 'dashboard',
 				title: 'Dashboard',
+				icon: 'mdi mdi-gauge',
 				graphic01: {
 					title: 'Graphic 01',
 					name: 'graphic01',

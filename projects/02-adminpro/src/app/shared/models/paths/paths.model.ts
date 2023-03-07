@@ -17,6 +17,7 @@ export class Path {
 	// ANCHOR : Variables
 
 	public readonly title?: string;
+	public readonly icon?: string;
 
 	public readonly name: string;
 	public get path(): string {
@@ -33,14 +34,16 @@ export class Path {
 		return this.parentFullPath ? this.parentFullPath + this.path : this.path;
 	}
 
-	public everyPath: string[];
+	public readonly everyPath: string[];
 
 	constructor(data: PathProps) {
-		const { name, parentName, parentFullPath, title, ...children } = data;
+		const { name, parentName, parentFullPath, title, icon, ...children } =
+			data;
 		this.name = name;
 		this.parentName = parentName;
 		this.parentFullPath = parentFullPath;
 		this.title = title;
+		this.icon = icon;
 
 		this.everyPath = this.fullPath
 			.split('/')

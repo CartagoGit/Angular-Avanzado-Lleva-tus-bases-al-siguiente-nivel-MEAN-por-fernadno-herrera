@@ -28,7 +28,7 @@ export class SidebarService {
 	public menu: MenuRoutes[] = [
 		{
 			title: this._dashboardPath?.title!,
-			icon: 'mdi mdi-gauge',
+			icon: this._dashboardPath?.icon!,
 			submenu: [
 				{
 					title: 'Main',
