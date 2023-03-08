@@ -12,10 +12,12 @@ export class HeaderComponent {
 
 	public settingsPath = paths.getPath('settings');
 
+	private _loginPath = paths.getPath('login');
+
 	constructor(private _storageSvc: StorageService, private _router: Router) {}
 
 	public logout(): void {
 		this._storageSvc.local.delete('token');
-		this._router.navigate(['/login']);
+		this._router.navigate([this._loginPath?.path]);
 	}
 }
