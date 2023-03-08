@@ -10,6 +10,7 @@ import { DefaultErrorResponse } from '../../../../shared/services/http/interface
 import { SweetAlertService } from '../../../../shared/services/helpers/sweet-alert.service';
 import { GoogleService } from '../../../../shared/services/settings/google.service';
 import { paths } from 'projects/02-adminpro/src/app/shared/constants/paths.constant';
+import { StateService } from 'projects/02-adminpro/src/app/shared/services/settings/state.service';
 
 //* Tipo de dato a recuperar del localstorage cuando se pulsa el boton de recordar
 type RembemberUser =
@@ -56,7 +57,8 @@ export class LoginComponent {
 		private _authSvc: AuthService,
 		private _storageSvc: StorageService,
 		private _sweetAlert: SweetAlertService,
-		private _googleSvc: GoogleService
+		private _googleSvc: GoogleService,
+		private _stateSvc: StateService
 	) {
 		this._storage = this._storageSvc.local;
 		this._subForm = this._validatorSvc.getSubForm(
@@ -100,7 +102,7 @@ export class LoginComponent {
 		this._authSvc.login(body).subscribe({
 			next: (resp) => {
 				if (!resp) return;
-				this._storage.set('token', resp.token);
+
 				if (this.loginForm.get('remember')?.value === true) {
 					this._storage.set('userRemember', {
 						email: this.loginForm.get('email')?.value,
@@ -109,7 +111,8 @@ export class LoginComponent {
 				} else {
 					this._storage.delete('userRemember');
 				}
-				this._router.navigate(['/'])
+
+				this._stateSvc.login(resp.token!);
 			},
 			error: (error: DefaultErrorResponse) => {
 				console.error(error);
@@ -123,6 +126,5 @@ export class LoginComponent {
 				} else this._sweetAlert.alertError('You cannot Sign in');
 			},
 		});
-
 	}
 }

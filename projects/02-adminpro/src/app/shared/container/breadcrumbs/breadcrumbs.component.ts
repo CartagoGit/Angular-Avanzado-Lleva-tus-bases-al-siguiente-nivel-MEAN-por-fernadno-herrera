@@ -30,7 +30,7 @@ export class BreadcrumbsComponent {
 				map((event) => event.snapshot.data)
 			)
 			.subscribe(({ titulo }) => {
-				console.log(titulo);
+				// console.log(titulo);
 				this.titulo = titulo;
 				document.title = `AdminPro - ${titulo}`;
 			});

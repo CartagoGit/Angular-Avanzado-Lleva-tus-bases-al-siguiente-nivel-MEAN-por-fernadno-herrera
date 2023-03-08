@@ -14,6 +14,7 @@ import { SweetAlertService } from '../../../../shared/services/helpers/sweet-ale
 import { AuthDefaultResponse } from 'projects/02-adminpro/src/app/shared/services/http/interfaces/request.interface';
 import { Router } from '@angular/router';
 import { paths } from '../../../../shared/constants/paths.constant';
+import { StateService } from 'projects/02-adminpro/src/app/shared/services/settings/state.service';
 
 @Component({
 	selector: 'auth-register',
@@ -62,7 +63,8 @@ export class RegisterComponent {
 		private _storageSvc: StorageService,
 		private _validatorSvc: ValidatorService,
 		private _sweetAlertSvc: SweetAlertService,
-		private _router: Router
+		private _router: Router,
+		private _stateSvc: StateService
 	) {
 		this._storage = this._storageSvc.local;
 		this._subForm = this._validatorSvc.getSubForm(
@@ -94,8 +96,7 @@ export class RegisterComponent {
 		this._authSvc.register(body).subscribe({
 			next: (resp) => {
 				if (!resp) return;
-				this._storage.set('token', resp.token);
-				this._router.navigate(['/']);
+				this._stateSvc.login(resp.token!);
 			},
 			error: (error: DefaultErrorResponse) => {
 				console.error(error);

@@ -25,6 +25,11 @@ const routes: Routes = [
 		data: { titulo: termsPath?.title },
 		component: TermsComponent,
 	},
+	{
+		path: '',
+		pathMatch: 'full',
+		redirectTo: loginPath?.fullPath!,
+	},
 ];
 
 @NgModule({

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { paths } from '../../constants/paths.constant';
 import { StorageService } from '../../services/settings/storage.service';
+import { StateService } from '../../services/settings/state.service';
 
 @Component({
 	selector: 'app-header',
@@ -9,15 +10,13 @@ import { StorageService } from '../../services/settings/storage.service';
 	styles: [],
 })
 export class HeaderComponent {
-
 	public settingsPath = paths.getPath('settings');
 
 	private _loginPath = paths.getPath('login');
 
-	constructor(private _storageSvc: StorageService, private _router: Router) {}
+	constructor(private _stateSvc: StateService) {}
 
 	public logout(): void {
-		this._storageSvc.local.delete('token');
-		this._router.navigate([this._loginPath?.path]);
+		this._stateSvc.logout();
 	}
 }

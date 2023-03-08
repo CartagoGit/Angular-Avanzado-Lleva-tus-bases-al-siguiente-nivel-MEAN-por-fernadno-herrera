@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { StateService } from './shared/services/settings/state.service';
 
 @Component({
 	selector: 'app-root',
@@ -6,5 +7,8 @@ import { Component } from '@angular/core';
 	styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-	constructor() {}
+	constructor(private _stateSvc: StateService) {
+		console.log('init',this._stateSvc.isAuthenticated)
+
+	}
 }

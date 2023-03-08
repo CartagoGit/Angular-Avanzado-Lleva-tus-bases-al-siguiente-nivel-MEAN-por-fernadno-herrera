@@ -2,8 +2,9 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { MaintenanceGuard } from './shared/guards/maintenance.guard';
-import { AuthenticatedGuard } from './shared/guards/authenticated.guard';
 import { paths } from './shared/constants/paths.constant';
+import { AuthorizationGuard } from './shared/guards/authorization.guard';
+import { DashboardGuard } from './shared/guards/dashboard.guard';
 
 const routes: Routes = [
 	//* Mantenimiento
@@ -17,19 +18,24 @@ const routes: Routes = [
 	},
 	// * Solo cuando no estamos logueados
 	{
-		path: '',
+		path: paths.getPath('auth')?.name!,
 		loadChildren: () =>
 			import('./core/pages/auth/auth.module').then((m) => m.AuthModule),
-		canMatch: [MaintenanceGuard, AuthenticatedGuard],
+		canMatch: [AuthorizationGuard, MaintenanceGuard],
 	},
 	//* Hay que estar logueado
 	{
 		path: '',
 		loadChildren: () =>
 			import('./pages/pages.module').then((m) => m.PagesModule),
-		canMatch: [MaintenanceGuard, AuthenticatedGuard],
+		canMatch: [DashboardGuard, MaintenanceGuard],
 	},
 	//* Publicas
+	{
+		path: '',
+		pathMatch: 'full',
+		redirectTo: paths.getPath('login')?.fullPath!,
+	},
 	{
 		path: '**',
 		loadChildren: () =>

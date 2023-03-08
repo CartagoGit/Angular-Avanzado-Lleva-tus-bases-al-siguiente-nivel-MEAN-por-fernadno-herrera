@@ -28,6 +28,7 @@ const routes: Routes = [
 				path: '',
 				component: DashboardComponent,
 				data: { titulo: dashboardPath?.title },
+				pathMatch: 'full',
 			},
 			{
 				path: progressBarPath?.name,

@@ -1,5 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { fromEvent, Subscription } from 'rxjs';
+import { Router } from '@angular/router';
+import { paths } from '../../../shared/constants/paths.constant';
 
 @Component({
 	selector: 'app-maintenance',
@@ -7,6 +9,8 @@ import { fromEvent, Subscription } from 'rxjs';
 	styleUrls: ['./maintenance.component.css'],
 })
 export class MaintenanceComponent {
+	// ANCHOR: Variables
+
 	@ViewChild('imgMaintenance') maintenanceRef!: ElementRef;
 	private _maintenanceHtml!: HTMLDivElement;
 	private _maintenanceWidth!: number;
@@ -14,11 +18,30 @@ export class MaintenanceComponent {
 
 	private _mouseEventSubscriptions: Subscription[] = [];
 
+	private _loginPath = paths.getPath('login');
+
+	// ANCHOR : Constructor
+
+	constructor(private _router: Router) {}
+
 	ngAfterViewInit(): void {
 		this._maintenanceHtml = this.maintenanceRef.nativeElement;
 		this._maintenanceWidth = this._maintenanceHtml.clientWidth;
 		this._maintenanceHeight = this._maintenanceHtml.clientHeight;
+		this._createMouseSubscriptions();
+	}
 
+	ngOnDestroy(): void {
+		this._mouseEventSubscriptions.forEach((sub) => sub.unsubscribe());
+	}
+
+	// ANCHOR : Methods
+
+	/**
+	 * ? Crea las suscripciones a los eventos del mouse
+	 * @private
+	 */
+	private _createMouseSubscriptions(): void {
 		const mouseMove = fromEvent<MouseEvent>(
 			this._maintenanceHtml,
 			'mousemove'
@@ -54,7 +77,11 @@ export class MaintenanceComponent {
 		this._mouseEventSubscriptions.push(mouseMove, mouseLeave);
 	}
 
-	ngOnDestroy(): void {
-		this._mouseEventSubscriptions.forEach((sub) => sub.unsubscribe());
+	/**
+	 * ? Reintenta volver a la entrada
+	 * @public
+	 */
+	public tryEntry(): void {
+		this._router.navigate([this._loginPath?.fullPath]);
 	}
 }

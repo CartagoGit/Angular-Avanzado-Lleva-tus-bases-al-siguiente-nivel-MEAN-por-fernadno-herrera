@@ -35,6 +35,7 @@ export class Config implements ConfigProps {
 	get API_ENDPOINT() {
 		return this.API_URL + '/api';
 	}
+	
 
 	// ANCHOR : Constructor
 	constructor(data: ConfigProps) {
