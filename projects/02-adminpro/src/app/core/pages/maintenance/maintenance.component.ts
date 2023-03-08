@@ -24,16 +24,16 @@ export class MaintenanceComponent {
 			'mousemove'
 		).subscribe({
 			next: (event) => {
-				const { layerX, layerY } = event as any;
+				const { offsetX, offsetY } = event;
 
 				const yRotation =
-					((layerY - this._maintenanceWidth / 2) /
+					((offsetY - this._maintenanceWidth / 2) /
 						this._maintenanceWidth) *
-					10;
+					20;
 				const xRotation =
-					((layerX - this._maintenanceHeight / 2) /
+					((offsetX - this._maintenanceHeight / 2) /
 						this._maintenanceHeight) *
-					10;
+					20;
 
 				const stringRotation = `rotateX(${xRotation}deg) rotateY(${yRotation}deg) scale(1) perspective(500px) scale(1.1)`;
 
