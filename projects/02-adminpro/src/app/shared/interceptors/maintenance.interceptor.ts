@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import {
 	HttpRequest,
 	HttpHandler,
-	HttpEvent,
 	HttpInterceptor,
+	HttpEvent,
 } from '@angular/common/http';
 import { Observable, catchError, throwError, tap } from 'rxjs';
 import {
@@ -13,9 +13,12 @@ import {
 
 import { Router } from '@angular/router';
 import { StateService } from '../services/settings/state.service';
+import { paths } from '../constants/paths.constant';
 
 @Injectable()
 export class MaintenanceInterceptor implements HttpInterceptor {
+	private _maintenancePath = paths.getPath('maintenance');
+
 	constructor(private _router: Router, private _stateSvc: StateService) {}
 
 	/**
@@ -34,7 +37,7 @@ export class MaintenanceInterceptor implements HttpInterceptor {
 				const { body } = resp as any;
 				const { status_code } = (body as DefaultResponse) || {};
 				if (status_code !== 503) this._finishMaintenance();
-				// throw { status_code: 503 };
+				throw { status_code: 503 };
 			}),
 			catchError((error: DefaultErrorResponse) => {
 				const { status_code } = error;
@@ -53,7 +56,7 @@ export class MaintenanceInterceptor implements HttpInterceptor {
 	private _startMaintenance() {
 		this._stateSvc.isMaintenance = true;
 		this._stateSvc.isFinishedMaintenance = false;
-		this._router.navigate(['/maintenance']);
+		this._router.navigate([this._maintenancePath?.path]);
 	}
 
 	/**
