@@ -38,7 +38,7 @@ export class MaintenanceInterceptor implements HttpInterceptor {
 				const { status_code } = (body as DefaultResponse) || {};
 				if (status_code !== 503 && (type === null || type === undefined))
 					this._finishMaintenance();
-				
+
 				// throw { status_code: 503 };
 			}),
 			catchError((error: DefaultErrorResponse) => {
@@ -69,7 +69,7 @@ export class MaintenanceInterceptor implements HttpInterceptor {
 		this._stateSvc.isMaintenance = false;
 		if (!this._stateSvc.isFinishedMaintenance) {
 			this._stateSvc.isFinishedMaintenance = true;
-			this._router.navigate(['/']);
+			// this._router.navigate(['/']);
 		}
 	}
 }

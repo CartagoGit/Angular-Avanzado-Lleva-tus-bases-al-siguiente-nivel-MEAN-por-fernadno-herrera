@@ -15,8 +15,8 @@ export class AuthorizationGuard {
 
 	// ANCHOR : methods
 	canMatch(route: Route): boolean {
-		console.log('auth', route);
-		if (!!this._stateSvc.isAuthenticated ) {
+		const token = localStorage.getItem('token');
+		if (!!token) {
 			console.log('authorization guard');
 			this._router.navigate([this._dashboardPath?.path]);
 			return false;
