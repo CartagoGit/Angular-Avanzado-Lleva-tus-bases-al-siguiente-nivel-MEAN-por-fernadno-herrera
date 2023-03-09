@@ -18,7 +18,7 @@ export class AuthorizationGuard {
 		const token = localStorage.getItem('token');
 		if (!!token) {
 			console.log('authorization guard');
-			this._router.navigate([this._dashboardPath?.path]);
+			this._router.navigate([this._dashboardPath?.fullPath]);
 			return false;
 		}
 		return true;
