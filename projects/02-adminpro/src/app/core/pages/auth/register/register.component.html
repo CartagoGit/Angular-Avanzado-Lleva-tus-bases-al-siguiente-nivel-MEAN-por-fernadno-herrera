@@ -8,10 +8,11 @@
 >
 	<div class="login-box card">
 		<div class="card-body">
-			<div
+			<form
 				class="form-horizontal form-material"
 				[formGroup]="registerForm"
 				autocomplete="chrome-off"
+				(ngSubmit)="register()"
 			>
 				<!-- (ngSubmit)="register()" -->
 				<a class="text-center db"
@@ -184,8 +185,8 @@
 						<button
 							class="btn btn-info btn-lg btn-block text-uppercase btn-rounded waves-effect waves-light"
 							type="submit"
-							(click)="register()"
-						>
+							>
+							<!-- (click)="register()" -->
 							Register
 						</button>
 					</div>
@@ -200,7 +201,7 @@
 						</p>
 					</div>
 				</div>
-			</div>
+			</form>
 		</div>
 	</div>
 </section>

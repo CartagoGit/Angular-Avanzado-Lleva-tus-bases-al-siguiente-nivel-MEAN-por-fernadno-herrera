@@ -94,7 +94,10 @@ export class LoginComponent {
 	public login() {
 		this.formSubmitted = true;
 
-		if (this.loginForm.invalid) return;
+		if (this.loginForm.invalid) {
+			this._validatorSvc.renewMsgErrors(this.loginForm, this.msgErrors);
+			return;
+		}
 		const body: AuthDefaultResponse = {
 			password: this.loginForm.get('password')?.value!,
 			email: this.loginForm.get('email')?.value!,
@@ -117,14 +120,22 @@ export class LoginComponent {
 			error: (error: DefaultErrorResponse) => {
 				console.error(error);
 				this._storage.delete('token');
-				this._validatorSvc.renewMsgErrors(this.loginForm, this.msgErrors);
 
 				if (error?.error_data?.reason === 'email or password incorrect') {
-					const error = { emailOrPassCorrect: false };
-					this.loginForm.get('email')?.setErrors(error);
-					this.loginForm.get('password')?.setErrors(error);
+					const errorEmailOrPass = { emailOrPassCorrect: false };
+					this.loginForm.get('email')?.setErrors(errorEmailOrPass);
+					this.loginForm.get('password')?.setErrors(errorEmailOrPass);
 				} else this._sweetAlert.alertError('You cannot Sign in');
+				this._validatorSvc.renewMsgErrors(this.loginForm, this.msgErrors);
 			},
 		});
+	}
+
+	/**
+	 * ? Resetea el estado del formulario
+	 */
+	public valueChange() {
+		this._validatorSvc.cleanErrors(this.loginForm, ['emailOrPassCorrect']);
+		this._validatorSvc.renewMsgErrors(this.loginForm, this.msgErrors);
 	}
 }

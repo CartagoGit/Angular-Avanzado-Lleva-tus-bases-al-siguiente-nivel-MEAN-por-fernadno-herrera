@@ -85,7 +85,10 @@ export class RegisterComponent {
 	 */
 	public register(): void {
 		this.formSubmitted = true;
-		if (this.registerForm.invalid) return;
+		if (this.registerForm.invalid) {
+			this._validatorSvc.renewMsgErrors(this.registerForm, this.msgErrors);
+			return;
+		}
 
 		const body: AuthDefaultResponse = {
 			name: this.registerForm.get('name')?.value!,
@@ -101,12 +104,12 @@ export class RegisterComponent {
 			error: (error: DefaultErrorResponse) => {
 				console.error(error);
 				this._storage.delete('token');
-				this._validatorSvc.renewMsgErrors(
-					this.registerForm,
-					this.msgErrors
-				);
 
-				if (!!error.error_data?.keyValue?.email) {
+				if (
+					!!error.error_data?.keyValue?.email?.msg.includes(
+						'That param must be unique'
+					)
+				) {
 					this.registerForm
 						.get('email')
 						?.setErrors({ emailRegistered: true });
@@ -115,7 +118,19 @@ export class RegisterComponent {
 						'You cannot register a new account'
 					);
 				}
+				this._validatorSvc.renewMsgErrors(
+					this.registerForm,
+					this.msgErrors
+				);
 			},
 		});
+	}
+
+	/**
+	 * ? Resetea el estado del formulario
+	 */
+	public valueChange() {
+		this.formSubmitted = false;
+		this._validatorSvc.cleanErrors(this.registerForm);
 	}
 }

@@ -18,6 +18,7 @@
 				id="loginform"
 				*ngIf="!needRecover"
 				[formGroup]="loginForm"
+				(ngSubmit)="login()"
 			>
 				<div class="form-group m-t-40">
 					<div class="col-xs-12 form-input">
@@ -27,12 +28,15 @@
 							placeholder="Email"
 							formControlName="email"
 							email
+							(input)="valueChange()"
 						/>
 						<div
 							class="required-field"
 							*ngIf="
-								[loginForm.get('email')!.valid, formSubmitted]
-									| isValidField
+								[
+									loginForm.get('email')!.valid || loginForm.valid,
+									formSubmitted
+								] | isValidField
 							"
 						>
 							{{ msgErrors.email }}
@@ -50,12 +54,16 @@
 								[ngClass]="{
 									'text-password': !showPassword
 								}"
+								(input)="valueChange()"
 							/>
 							<div
 								class="required-field"
 								*ngIf="
-									[loginForm.get('password')!.valid, formSubmitted]
-										| isValidField
+									[
+										loginForm.get('password')!.valid ||
+											loginForm.valid,
+										formSubmitted
+									] | isValidField
 								"
 							>
 								{{ msgErrors.password }}
@@ -102,8 +110,8 @@
 					<div class="col-xs-12">
 						<button
 							class="btn btn-info btn-lg btn-block text-uppercase btn-rounded waves-effect waves-light"
-							type="button"
-							(click)="login()"
+							type="submit"
+							(ngSubmit)="login()"
 						>
 							Log In
 						</button>
@@ -119,7 +127,9 @@
 				<div class="form-group m-b-0">
 					<div class="col-sm-12 text-center">
 						Don't have an account?
-						<a class="text-primary m-l-5" [routerLink]="registerPath?.fullPath"
+						<a
+							class="text-primary m-l-5"
+							[routerLink]="registerPath?.fullPath"
 							><b>Sign Up</b></a
 						>
 					</div>

@@ -33,7 +33,7 @@ export class TokenInterceptor implements HttpInterceptor {
 			},
 		});
 
-		if (!!token) this._stateSvc.login(token as string);
+		// if (!!token) this._stateSvc.login(token as string);
 
 		return next.handle(request).pipe(
 			catchError((error: DefaultErrorResponse) => {

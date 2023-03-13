@@ -125,6 +125,29 @@ export class ValidatorService {
 	}
 
 	/**
+	 * ? Limpia los errores de los controles del formulario
+	 * @public
+	 * @param {FormGroup} formGroup
+	 */
+	public cleanErrors(formGroup: FormGroup, specificErrors?: string[]) {
+		for (let key in formGroup.controls) {
+			const control = formGroup.get(key);
+			if (!!specificErrors) {
+				for (let error of specificErrors) {
+					delete control?.errors?.[error];
+				}
+				if (
+					control?.errors !== null &&
+					control?.errors !== undefined &&
+					Object.keys(control?.errors!).length === 0
+				) {
+					control?.setErrors(null);
+				}
+			} else control?.setErrors(null);
+		}
+	}
+
+	/**
 	 * ? Crea y recupera la subscripcion a lo cambios de valores en el formulario y renueva el estado de los errores en cada cambio
 	 * @public
 	 * @param {FormGroup} formGroup
