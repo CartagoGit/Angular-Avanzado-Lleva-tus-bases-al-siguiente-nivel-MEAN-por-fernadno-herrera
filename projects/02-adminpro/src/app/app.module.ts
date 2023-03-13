@@ -33,11 +33,11 @@ import { TokenInterceptor } from './shared/interceptors/token.interceptor';
 			useClass: TokenInterceptor,
 			multi: true,
 		},
-		// {
-		// 	provide: HTTP_INTERCEPTORS,
-		// 	useClass: MaintenanceInterceptor,
-		// 	multi: true,
-		// },
+		{
+			provide: HTTP_INTERCEPTORS,
+			useClass: MaintenanceInterceptor,
+			multi: true,
+		},
 		{
 			provide: HTTP_INTERCEPTORS,
 			useClass: ChangeTypeResponseInterceptor,

@@ -34,12 +34,13 @@ export class MaintenanceInterceptor implements HttpInterceptor {
 	): Observable<HttpEvent<unknown>> {
 		return next.handle(request).pipe(
 			tap((resp) => {
+				console.log('hola :)');
 				const { body, type } = resp as any;
 				const { status_code } = (body as DefaultResponse) || {};
 				if (status_code !== 503 && (type === null || type === undefined))
 					this._finishMaintenance();
 
-				// throw { status_code: 503 };
+				throw { status_code: 503 };
 			}),
 			catchError((error: DefaultErrorResponse) => {
 				const { status_code } = error;
