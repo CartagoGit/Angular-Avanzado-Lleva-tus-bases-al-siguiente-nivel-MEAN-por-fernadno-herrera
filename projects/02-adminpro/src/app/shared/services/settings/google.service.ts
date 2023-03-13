@@ -7,9 +7,12 @@ import { StorageService } from './storage.service';
 	providedIn: 'root',
 })
 export class GoogleService {
-
 	private _storage;
-	constructor(private _authSvc: AuthService, private _sweetAlert: SweetAlertService, private _storageSvc: StorageService ) {
+	constructor(
+		private _authSvc: AuthService,
+		private _sweetAlert: SweetAlertService,
+		private _storageSvc: StorageService
+	) {
 		this._storage = this._storageSvc.local;
 	}
 
@@ -17,7 +20,7 @@ export class GoogleService {
 	 * ? Recupera y genera todo lo necesario para realizar el boton y el login con google identity
 	 * @param googleBtnRef
 	 */
-	public createGoogleLogin(googleBtnRef: ElementRef){
+	public createGoogleLogin(googleBtnRef: ElementRef) {
 		this._catchGoogleClientId(googleBtnRef.nativeElement);
 	}
 
@@ -25,7 +28,7 @@ export class GoogleService {
 	 * ? Recupera el id del cliente que es publico, desde la api
 	 * @private
 	 */
-	private _catchGoogleClientId(googleBtnHtml : HTMLDivElement) {
+	private _catchGoogleClientId(googleBtnHtml: HTMLDivElement) {
 		this._authSvc.googleClientId().subscribe({
 			next: (resp) => {
 				if (!resp) return;
@@ -45,7 +48,10 @@ export class GoogleService {
 	 * @param {string} clientGoogleId
 	 * @param {HTMLDivElement} googleBtnHtml
 	 */
-	private _instanceGoogleLogin(clientGoogleId: string, googleBtnHtml: HTMLDivElement) {
+	private _instanceGoogleLogin(
+		clientGoogleId: string,
+		googleBtnHtml: HTMLDivElement
+	) {
 		google.accounts.id.initialize({
 			//* Recupera el id del cliente de google desde la api
 			client_id: clientGoogleId,
@@ -69,7 +75,6 @@ export class GoogleService {
 		this._authSvc.googleLogin(credential).subscribe({
 			next: (resp) => {
 				if (!resp) return;
-				console.log(resp);
 				const { token } = resp;
 				this._storage.set('token', token);
 			},

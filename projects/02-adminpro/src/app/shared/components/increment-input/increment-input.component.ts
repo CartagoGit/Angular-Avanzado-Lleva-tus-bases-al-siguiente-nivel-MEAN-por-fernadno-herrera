@@ -75,7 +75,6 @@ export class IncrementInputComponent {
    * @param element
    */
   public onChangeInput(value: number, element: HTMLInputElement) {
-    console.log(1);
     if (isNaN(value) || value === null) value = 0;
     this._value = value;
     this._checkAndSetValueInRange();

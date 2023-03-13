@@ -2,6 +2,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { fromEvent, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { paths } from '../../../shared/constants/paths.constant';
+import { AuthService } from '../../../shared/services/http/auth.service';
 
 @Component({
 	selector: 'app-maintenance',
@@ -22,7 +23,7 @@ export class MaintenanceComponent {
 
 	// ANCHOR : Constructor
 
-	constructor(private _router: Router) {}
+	constructor(private _router: Router, private _authSvc: AuthService) {}
 
 	ngAfterViewInit(): void {
 		this._maintenanceHtml = this.maintenanceRef.nativeElement;
@@ -82,6 +83,10 @@ export class MaintenanceComponent {
 	 * @public
 	 */
 	public tryEntry(): void {
-		this._router.navigate([this._loginPath?.fullPath]);
+		this._authSvc.renewToken().subscribe({
+			next: () => {
+				this._router.navigate([this._loginPath?.fullPath]);
+			},
+		});
 	}
 }

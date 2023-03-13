@@ -17,7 +17,6 @@ export class StateService {
 	}
 
 	set isAuthenticated(value: boolean) {
-		console.log('se setea el auth', value);
 		this._isAuthenticated = value;
 	}
 
@@ -32,9 +31,9 @@ export class StateService {
 		this._router.navigate([this._loginPath?.fullPath]);
 	}
 
-	public login(token : string) : void {
+	public login(token: string): void {
 		this._storageSvc.local.set('token', token);
 		this.isAuthenticated = true;
-		this._router.navigate([this._dashboardPath?.fullPath])
+		this._router.navigate([this._dashboardPath?.fullPath]);
 	}
 }

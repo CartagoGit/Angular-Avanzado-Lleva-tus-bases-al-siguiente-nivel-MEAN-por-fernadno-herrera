@@ -14,29 +14,27 @@ const routes: Routes = [
 			import('./core/pages/maintenance/maintenance.module').then(
 				(m) => m.MaintenanceModule
 			),
-		canMatch: [
-			// MaintenanceGuard
-		],
+		canMatch: [MaintenanceGuard],
 	},
 	// * Solo cuando no estamos logueados
 	{
 		path: paths.getPath('auth')?.name!,
-		loadChildren: () =>{
-			console.log('Cargando auth');
-			return import('./core/pages/auth/auth.module').then((m) => m.AuthModule)},
-		canMatch: [AuthorizationGuard,
+		loadChildren: () =>
+			import('./core/pages/auth/auth.module').then((m) => m.AuthModule),
+		canMatch: [
+			AuthorizationGuard,
 			// MaintenanceGuard
 		],
 	},
 	//* Hay que estar logueado
 	{
 		path: '',
-		loadChildren: () =>{
-			console.log('Cargando dashboard');
-			return import('./pages/pages.module').then((m) => m.PagesModule)},
-		canMatch: [DashboardGuard,
+		loadChildren: () =>
+			import('./pages/pages.module').then((m) => m.PagesModule),
+		canMatch: [
+			DashboardGuard,
 			//  MaintenanceGuard
-			],
+		],
 	},
 	//* Publicas
 	{
