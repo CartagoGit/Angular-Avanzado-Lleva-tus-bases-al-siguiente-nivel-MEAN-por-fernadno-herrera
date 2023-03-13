@@ -21,8 +21,9 @@ const routes: Routes = [
 	// * Solo cuando no estamos logueados
 	{
 		path: paths.getPath('auth')?.name!,
-		loadChildren: () =>
-			import('./core/pages/auth/auth.module').then((m) => m.AuthModule),
+		loadChildren: () =>{
+			console.log('Cargando auth');
+			return import('./core/pages/auth/auth.module').then((m) => m.AuthModule)},
 		canMatch: [AuthorizationGuard,
 			// MaintenanceGuard
 		],
@@ -30,8 +31,9 @@ const routes: Routes = [
 	//* Hay que estar logueado
 	{
 		path: '',
-		loadChildren: () =>
-			import('./pages/pages.module').then((m) => m.PagesModule),
+		loadChildren: () =>{
+			console.log('Cargando dashboard');
+			return import('./pages/pages.module').then((m) => m.PagesModule)},
 		canMatch: [DashboardGuard,
 			//  MaintenanceGuard
 			],
