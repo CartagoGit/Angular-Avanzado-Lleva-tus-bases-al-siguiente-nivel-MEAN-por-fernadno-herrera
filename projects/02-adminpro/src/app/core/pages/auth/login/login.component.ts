@@ -2,7 +2,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { StorageService } from 'projects/02-adminpro/src/app/shared/services/settings/storage.service';
-import { defer, finalize, of, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { ValidatorService } from '../../../../shared/services/helpers/validator.service';
 import { AuthService } from '../../../../shared/services/http/auth.service';
 import { AuthDefaultResponse } from '../../../../shared/services/http/interfaces/request.interface';
@@ -51,7 +51,6 @@ export class LoginComponent {
 
 	// ANCHOR : Constructor
 	constructor(
-		private _router: Router,
 		private _validatorSvc: ValidatorService,
 		private _fb: FormBuilder,
 		private _authSvc: AuthService,

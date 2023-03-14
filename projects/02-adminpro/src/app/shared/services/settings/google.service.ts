@@ -1,19 +1,19 @@
 import { ElementRef, Injectable } from '@angular/core';
 import { SweetAlertService } from '../helpers/sweet-alert.service';
 import { AuthService } from '../http/auth.service';
-import { StorageService } from './storage.service';
+import { StateService } from './state.service';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class GoogleService {
-	private _storage;
+
 	constructor(
 		private _authSvc: AuthService,
 		private _sweetAlert: SweetAlertService,
-		private _storageSvc: StorageService
+		private _stateSvc: StateService
 	) {
-		this._storage = this._storageSvc.local;
+
 	}
 
 	/**
@@ -76,11 +76,11 @@ export class GoogleService {
 			next: (resp) => {
 				if (!resp) return;
 				const { token } = resp;
-				this._storage.set('token', token);
+				this._stateSvc.login(token!);
 			},
 			error: (error) => {
 				console.error(error);
-				this._storage.delete('token');
+				this._stateSvc.logout();
 				this._sweetAlert.alertError('Log in with Google Identify');
 			},
 		});
