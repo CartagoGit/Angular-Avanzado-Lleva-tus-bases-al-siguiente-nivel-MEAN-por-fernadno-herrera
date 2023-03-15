@@ -8,14 +8,14 @@ import { DashboardGuard } from './shared/guards/dashboard.guard';
 
 const routes: Routes = [
 	//* Mantenimiento
-	{
-		path: paths.getPath('maintenance')?.name,
-		loadChildren: () =>
-			import('./core/pages/maintenance/maintenance.module').then(
-				(m) => m.MaintenanceModule
-			),
-		canMatch: [MaintenanceGuard],
-	},
+	// {
+	// 	path: paths.getPath('maintenance')?.name,
+	// 	loadChildren: () =>
+	// 		import('./core/pages/maintenance/maintenance.module').then(
+	// 			(m) => m.MaintenanceModule
+	// 		),
+	// 	canMatch: [MaintenanceGuard],
+	// },
 	// * Solo cuando no estamos logueados
 	{
 		path: paths.getPath('auth')?.name!,
@@ -23,7 +23,6 @@ const routes: Routes = [
 			import('./core/pages/auth/auth.module').then((m) => m.AuthModule),
 		canMatch: [
 			AuthorizationGuard,
-			// MaintenanceGuard
 		],
 	},
 	//* Hay que estar logueado
@@ -32,8 +31,7 @@ const routes: Routes = [
 		loadChildren: () =>
 			import('./pages/pages.module').then((m) => m.PagesModule),
 		canMatch: [
-			DashboardGuard,
-			//  MaintenanceGuard
+			// DashboardGuard,
 		],
 	},
 	//* Publicas
@@ -48,9 +46,6 @@ const routes: Routes = [
 			import('./core/pages/nopagefound/nopagefound.module').then(
 				(m) => m.NopagefoundModule
 			),
-		canMatch: [
-			// MaintenanceGuard
-		],
 	},
 ];
 

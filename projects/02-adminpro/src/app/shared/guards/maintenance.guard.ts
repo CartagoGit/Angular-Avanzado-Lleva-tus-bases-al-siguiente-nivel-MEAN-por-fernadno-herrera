@@ -12,6 +12,7 @@ export class MaintenanceGuard {
 
 	constructor(private _router: Router, private _stateSvc: StateService) {}
 	public canMatch(): Observable<boolean> | boolean {
+		console.log('maintenance');
 		if (!this._stateSvc.isMaintenance) {
 			this._router.navigate([this._loginPath?.path]);
 			return false;

@@ -40,7 +40,7 @@ export class TokenInterceptor implements HttpInterceptor {
 				const { status_code } = error;
 				if (status_code === 401) {
 					console.log(error);
-					this._stateSvc.logout()
+					// this._stateSvc.logout()
 				}
 				return throwError(() => error);
 			})

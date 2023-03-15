@@ -6,6 +6,8 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ServiceLocator } from './shared/services/injector/locator.service';
 // Interceptors
 import { ChangeTypeResponseInterceptor } from './shared/interceptors/change-type-response.interceptor';
+import { MaintenanceInterceptor } from './shared/interceptors/maintenance.interceptor';
+import { TokenInterceptor } from './shared/interceptors/token.interceptor';
 // Rutas
 import { AppRoutingModule } from './app.routing';
 // Modulos
@@ -15,8 +17,6 @@ import { CoreModule } from './core/core.module';
 // Componentes
 import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
-import { MaintenanceInterceptor } from './shared/interceptors/maintenance.interceptor';
-import { TokenInterceptor } from './shared/interceptors/token.interceptor';
 
 @NgModule({
 	declarations: [AppComponent],

@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { CoreHttp } from './models/core-http.model';
-import { Observable, of } from 'rxjs';
+import { Observable, of, tap, throwError, catchError } from 'rxjs';
 import {
 	DefaultResponse,
 	ResponseUserModel,
 } from './interfaces/response.interfaces';
 import { AuthDefaultResponse } from './interfaces/request.interface';
 import { HttpHeaders } from '@angular/common/http';
+import { StorageService } from '../settings/storage.service';
 
 /**
  * ? Endpoints del modelo
@@ -36,7 +37,7 @@ const modelRouteEndpoint = '/auth';
 })
 export class AuthService extends CoreHttp<Endpoints> {
 	// ANCHOR : Constructor
-	constructor() {
+	constructor(private _storage: StorageService) {
 		super({ modelEndpoints, modelRouteEndpoint });
 	}
 
@@ -74,7 +75,7 @@ export class AuthService extends CoreHttp<Endpoints> {
 	 * @returns {Observable<DefaultResponse | undefined>}
 	 */
 	public renewToken(token?: string): Observable<DefaultResponse | undefined> {
-		if (!this._isPossibleAndTimer()) return of(undefined);
+		// if (!this._isPossibleAndTimer()) return of(undefined);
 		const headers = new HttpHeaders({
 			'Content-Type': 'application/json',
 			Authorization: `Bearer ${token}`,

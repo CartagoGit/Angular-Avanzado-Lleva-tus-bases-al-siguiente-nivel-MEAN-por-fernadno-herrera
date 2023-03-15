@@ -12,7 +12,6 @@ export class StateService {
 	private _isAuthenticated: boolean = false;
 
 	get isAuthenticated(): boolean {
-		console.log('se pilla el auth', this._isAuthenticated);
 		return this._isAuthenticated;
 	}
 
@@ -25,15 +24,15 @@ export class StateService {
 
 	constructor(private _storageSvc: StorageService, private _router: Router) {}
 
-	public logout(): void {
+	public logout(redirect: boolean = true): void {
 		this._storageSvc.local.delete('token');
 		this.isAuthenticated = false;
-		this._router.navigate([this._loginPath?.fullPath]);
+		if (redirect) this._router.navigate([this._loginPath?.fullPath]);
 	}
 
-	public login(token: string): void {
+	public login(token: string, redirect: boolean = true): void {
 		this._storageSvc.local.set('token', token);
 		this.isAuthenticated = true;
-		this._router.navigate([this._dashboardPath?.fullPath]);
+		if (redirect) this._router.navigate([this._dashboardPath?.fullPath]);
 	}
 }

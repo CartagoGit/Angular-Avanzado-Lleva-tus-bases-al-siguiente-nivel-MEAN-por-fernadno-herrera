@@ -16,6 +16,9 @@ export class DashboardGuard {
 
 	// ANCHOR : methods
 	canMatch(): boolean {
+		const token = localStorage.getItem('token');
+		if(!token) this._stateSvc.logout();
+		console.log('dash');
 		if (this._stateSvc.isMaintenance) {
 			this._router.navigate([this._maintenancePath?.fullPath]);
 			return false;

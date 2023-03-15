@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { catchError, map, Observable, of, throwError } from 'rxjs';
 import { paths } from '../constants/paths.constant';
 import { AuthService } from '../services/http/auth.service';
 import { StateService } from '../services/settings/state.service';
+import { StorageService } from '../services/settings/storage.service';
 
 @Injectable({
 	providedIn: 'root',
@@ -16,15 +17,21 @@ export class AuthorizationGuard {
 	// ANCHOR : constructor
 	constructor(
 		private _router: Router,
-		private _stateSvc: StateService
+		private _stateSvc: StateService,
+		private _authSvc: AuthService,
+		private _storageSvc: StorageService
 	) {}
 
 	// ANCHOR : methods
 	canMatch(): boolean | Observable<boolean> {
+		console.log('auth');
 		if (this._stateSvc.isMaintenance) {
 			this._router.navigate([this._maintenancePath?.fullPath]);
 			return false;
 		}
-		return true;
+
+		const token = this._storageSvc.local.get('token') as string | undefined;
+		if (!!token) this._stateSvc.login(token);
+		return !token;
 	}
 }
