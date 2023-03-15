@@ -23,7 +23,7 @@ export class DashboardGuard {
 
 	// ANCHOR : methods
 	canMatch(): boolean | Observable<boolean> {
-		return true
+		// return true
 		if (this._stateSvc.isMaintenance) {
 			this._router.navigate([this._maintenancePath?.fullPath]);
 			return false;

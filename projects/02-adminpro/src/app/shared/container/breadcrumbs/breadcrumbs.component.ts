@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {  ActivationEnd, Router } from '@angular/router';
+import { ActivationEnd, Router } from '@angular/router';
 import { filter, map, Subscription } from 'rxjs';
 
 @Component({
@@ -11,7 +11,7 @@ export class BreadcrumbsComponent {
 	private _tituloSubs$!: Subscription;
 	public titulo: string = '';
 
-	constructor(private router: Router, ) {
+	constructor(private router: Router) {
 		this._tituloSubs$ = this._getArgsRouter();
 	}
 
@@ -30,7 +30,6 @@ export class BreadcrumbsComponent {
 				map((event) => event.snapshot.data)
 			)
 			.subscribe(({ titulo }) => {
-				// console.log(titulo);
 				this.titulo = titulo;
 				document.title = `AdminPro - ${titulo}`;
 			});
