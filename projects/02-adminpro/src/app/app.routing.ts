@@ -8,45 +8,41 @@ import { DashboardGuard } from './shared/guards/dashboard.guard';
 
 const routes: Routes = [
 	//* Mantenimiento
-	// {
-	// 	path: paths.getPath('maintenance')?.name,
-	// 	loadChildren: () =>
-	// 		import('./core/pages/maintenance/maintenance.module').then(
-	// 			(m) => m.MaintenanceModule
-	// 		),
-	// 	canMatch: [MaintenanceGuard],
-	// },
+	{
+		path: paths.getPath('maintenance')?.name,
+		loadChildren: () =>
+			import('./core/pages/maintenance/maintenance.module').then(
+				(m) => m.MaintenanceModule
+			),
+		canMatch: [MaintenanceGuard],
+	},
+	//* Publicas
+	{
+		path: paths.getPath('no-page-found')?.name!,
+		loadChildren: () =>
+			import('./core/pages/nopagefound/nopagefound.module').then(
+				(m) => m.NopagefoundModule
+			),
+	},
 	// * Solo cuando no estamos logueados
 	{
 		path: paths.getPath('auth')?.name!,
 		loadChildren: () =>
 			import('./core/pages/auth/auth.module').then((m) => m.AuthModule),
-		canMatch: [
-			AuthorizationGuard,
-		],
+		canMatch: [AuthorizationGuard],
 	},
 	//* Hay que estar logueado
 	{
 		path: '',
 		loadChildren: () =>
 			import('./pages/pages.module').then((m) => m.PagesModule),
-		canMatch: [
-			// DashboardGuard,
-		],
+		canMatch: [DashboardGuard],
 	},
-	//* Publicas
-	{
-		path: '',
-		pathMatch: 'full',
-		redirectTo: paths.getPath('login')?.fullPath!,
-	},
+	//* Redireccionar
 	{
 		path: '**',
-		loadChildren: () =>
-			import('./core/pages/nopagefound/nopagefound.module').then(
-				(m) => m.NopagefoundModule
-			),
-	},
+		redirectTo: paths.getPath('no-page-found')?.name!,
+	}
 ];
 
 @NgModule({

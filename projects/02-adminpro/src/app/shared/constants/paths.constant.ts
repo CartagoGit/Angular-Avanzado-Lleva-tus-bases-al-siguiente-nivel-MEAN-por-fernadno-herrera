@@ -26,6 +26,10 @@ class PathConstants {
 				name: 'maintenance',
 				title: 'Maintenance',
 			}),
+			'no-page-found': new Path({
+				name: 'no-page-found',
+				title: 'No Page Found',
+			}),
 		},
 		notLoged: {
 			general: new Path({

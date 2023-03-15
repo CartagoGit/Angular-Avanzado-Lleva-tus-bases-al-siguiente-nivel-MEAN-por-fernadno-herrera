@@ -8,8 +8,6 @@ import {
 import { Observable, catchError, throwError } from 'rxjs';
 import { StorageService } from '../services/settings/storage.service';
 import { DefaultErrorResponse } from '../services/http/interfaces/response.interfaces';
-import { Router } from '@angular/router';
-import { paths } from '../constants/paths.constant';
 import { StateService } from '../services/settings/state.service';
 
 @Injectable()
@@ -38,9 +36,10 @@ export class TokenInterceptor implements HttpInterceptor {
 		return next.handle(request).pipe(
 			catchError((error: DefaultErrorResponse) => {
 				const { status_code } = error;
+				console.log();
 				if (status_code === 401) {
 					console.log(error);
-					// this._stateSvc.logout()
+					this._stateSvc.logout()
 				}
 				return throwError(() => error);
 			})

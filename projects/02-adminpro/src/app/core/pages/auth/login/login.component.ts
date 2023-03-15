@@ -113,7 +113,7 @@ export class LoginComponent {
 				} else {
 					this._storage.delete('userRemember');
 				}
-
+console.log('jajaj');
 				this._stateSvc.login(resp.token!);
 			},
 			error: (error: DefaultErrorResponse) => {

@@ -75,7 +75,6 @@ export class AuthService extends CoreHttp<Endpoints> {
 	 * @returns {Observable<DefaultResponse | undefined>}
 	 */
 	public renewToken(token?: string): Observable<DefaultResponse | undefined> {
-		// if (!this._isPossibleAndTimer()) return of(undefined);
 		const headers = new HttpHeaders({
 			'Content-Type': 'application/json',
 			Authorization: `Bearer ${token}`,

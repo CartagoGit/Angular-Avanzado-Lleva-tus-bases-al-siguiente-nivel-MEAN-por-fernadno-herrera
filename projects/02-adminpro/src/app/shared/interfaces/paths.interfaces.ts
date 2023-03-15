@@ -1,4 +1,3 @@
-
 //$ Secciones de las rutas
 //* Secciones generales
 export type RootSections = 'notLoged' | 'loged';
@@ -7,7 +6,7 @@ export type RootSections = 'notLoged' | 'loged';
 export type AuthSections = 'login' | 'register' | 'terms';
 
 //* fuera del login
-export type NotLogedSections = 'maintenance' | 'auth';
+export type NotLogedSections = 'maintenance' | 'auth' | 'no-page-found';
 
 //* Estando logueado
 export type LogedSections = 'general' | 'dashboard';
@@ -51,6 +50,5 @@ export type PathProps = {
 	parentName?: string;
 	parentFullPath?: string;
 	title?: string;
-	icon? : string;
-
+	icon?: string;
 } & { [key in Sections]?: PathProps };

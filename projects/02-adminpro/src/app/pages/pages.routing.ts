@@ -18,6 +18,7 @@ const rxjsPath = paths.getPath('rxjs');
 const generalPath = paths.getPath('general');
 const settingsPath = paths.getPath('settings');
 const profilePath = paths.getPath('profile');
+const nonPageFound = paths.getPath('no-page-found');
 
 const routes: Routes = [
 	{
@@ -50,6 +51,10 @@ const routes: Routes = [
 				component: RxjsComponent,
 				data: { titulo: rxjsPath?.title },
 			},
+			{
+				path: '**',
+				redirectTo: nonPageFound?.fullPath!,
+			},
 		],
 	},
 	{
@@ -67,17 +72,23 @@ const routes: Routes = [
 				redirectTo: dashboardPath?.fullPath,
 			},
 			{
-				path: '',
-				redirectTo: dashboardPath?.fullPath,
-				pathMatch: 'full',
+				path: '**',
+				redirectTo: nonPageFound?.fullPath!,
 			},
 		],
 	},
 
+	// {
+	// 	path: '',
+	// 	loadChildren: () =>
+	// 		import('../core/pages/nopagefound/nopagefound.module').then(
+	// 			(m) => m.NopagefoundModule
+	// 		),
+	// 		pathMatch: 'full',
+	// },
 	{
-		path: '',
-		redirectTo: dashboardPath?.fullPath,
-		pathMatch: 'full',
+		path: '**',
+		redirectTo: nonPageFound?.fullPath!,
 	},
 ];
 

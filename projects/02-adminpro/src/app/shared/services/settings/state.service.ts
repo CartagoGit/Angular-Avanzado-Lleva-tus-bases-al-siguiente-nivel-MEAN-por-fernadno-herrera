@@ -27,12 +27,14 @@ export class StateService {
 	public logout(redirect: boolean = true): void {
 		this._storageSvc.local.delete('token');
 		this.isAuthenticated = false;
-		if (redirect) this._router.navigate([this._loginPath?.fullPath]);
+		if (!!redirect) this._router.navigate([this._loginPath?.fullPath]);
 	}
 
 	public login(token: string, redirect: boolean = true): void {
 		this._storageSvc.local.set('token', token);
 		this.isAuthenticated = true;
-		if (redirect) this._router.navigate([this._dashboardPath?.fullPath]);
+		if (!!redirect) {
+			this._router.navigate([this._dashboardPath?.fullPath]);
+		}
 	}
 }
