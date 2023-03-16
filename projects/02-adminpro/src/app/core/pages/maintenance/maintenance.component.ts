@@ -5,7 +5,7 @@ import { paths } from '../../../shared/constants/paths.constant';
 import { AuthService } from '../../../shared/services/http/auth.service';
 
 @Component({
-	selector: 'app-maintenance',
+	selector: 'global-maintenance',
 	templateUrl: './maintenance.component.html',
 	styleUrls: ['./maintenance.component.css'],
 })

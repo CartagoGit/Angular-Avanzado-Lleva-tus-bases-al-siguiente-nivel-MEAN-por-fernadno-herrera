@@ -1,6 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 import { StorageService } from 'projects/02-adminpro/src/app/shared/services/settings/storage.service';
 import { Subscription } from 'rxjs';
 import { ValidatorService } from '../../../../shared/services/helpers/validator.service';

@@ -7,14 +7,11 @@ import { StateService } from './state.service';
 	providedIn: 'root',
 })
 export class GoogleService {
-
 	constructor(
 		private _authSvc: AuthService,
 		private _sweetAlert: SweetAlertService,
 		private _stateSvc: StateService
-	) {
-
-	}
+	) {}
 
 	/**
 	 * ? Recupera y genera todo lo necesario para realizar el boton y el login con google identity
@@ -22,6 +19,25 @@ export class GoogleService {
 	 */
 	public createGoogleLogin(googleBtnRef: ElementRef) {
 		this._catchGoogleClientId(googleBtnRef.nativeElement);
+	}
+
+	/**
+	 * ? Cierra la sesion de google
+	 * @public
+	 * @returns {(
+			email: string,
+			callback?:
+				| ((response: google.accounts.id.RevocationResponse) => void)
+				| undefined
+		) => void}
+	 */
+	public logoutGoogle(): (
+		email: string,
+		callback?:
+			| ((response: google.accounts.id.RevocationResponse) => void)
+			| undefined
+	) => void {
+		return google.accounts.id.revoke;
 	}
 
 	/**

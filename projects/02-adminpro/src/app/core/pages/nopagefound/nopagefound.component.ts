@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { paths } from '../../../shared/constants/paths.constant';
 
 @Component({
-	selector: 'app-nopagefound',
+	selector: 'global-nopagefound',
 	templateUrl: './nopagefound.component.html',
 	styleUrls: ['./nopagefound.component.css'],
 })
