@@ -80,10 +80,10 @@ export class CoreHttp<T> {
 	 * @protected
 	 * @returns {boolean}
 	 */
-	protected _isPossibleAndTimer(): boolean {
+	protected _isPossibleAndTimer(time? : number): boolean {
 		if (!this.iPossibleSub) return false;
 		this.iPossibleSub = false;
-		timer(this._timer).subscribe(() => (this.iPossibleSub = true));
+		timer(time || this._timer).subscribe(() => (this.iPossibleSub = true));
 		return true;
 	}
 

@@ -1,4 +1,4 @@
-import { ElementRef, Injectable } from '@angular/core';
+import { ElementRef, Injectable, NgZone } from '@angular/core';
 import { SweetAlertService } from '../helpers/sweet-alert.service';
 import { AuthService } from '../http/auth.service';
 import { StateService } from './state.service';
@@ -10,7 +10,8 @@ export class GoogleService {
 	constructor(
 		private _authSvc: AuthService,
 		private _sweetAlert: SweetAlertService,
-		private _stateSvc: StateService
+		private _stateSvc: StateService,
+		private _ngZone: NgZone
 	) {}
 
 	/**
@@ -19,25 +20,6 @@ export class GoogleService {
 	 */
 	public createGoogleLogin(googleBtnRef: ElementRef) {
 		this._catchGoogleClientId(googleBtnRef.nativeElement);
-	}
-
-	/**
-	 * ? Cierra la sesion de google
-	 * @public
-	 * @returns {(
-			email: string,
-			callback?:
-				| ((response: google.accounts.id.RevocationResponse) => void)
-				| undefined
-		) => void}
-	 */
-	public logoutGoogle(): (
-		email: string,
-		callback?:
-			| ((response: google.accounts.id.RevocationResponse) => void)
-			| undefined
-	) => void {
-		return google.accounts.id.revoke;
 	}
 
 	/**
@@ -78,7 +60,13 @@ export class GoogleService {
 		});
 		google.accounts.id.renderButton(
 			googleBtnHtml,
-			{ theme: 'outline', size: 'large', type: 'standard' } // customization attributes
+			{
+				theme: 'outline',
+				size: 'large',
+				type: 'standard',
+				shape: 'pill',
+				text: 'signin',
+			} // customization attributes
 		);
 	}
 
@@ -90,9 +78,10 @@ export class GoogleService {
 	private _handleCredentialResponse(credential: string) {
 		this._authSvc.googleLogin(credential).subscribe({
 			next: (resp) => {
+				console.log('❗this._authSvc.googleLogin  ➽ resp ➽ ⏩', resp);
 				if (!resp) return;
 				const { token } = resp;
-				this._stateSvc.login(token!);
+				this._ngZone.run(() => this._stateSvc.login(token!));
 			},
 			error: (error) => {
 				console.error(error);
