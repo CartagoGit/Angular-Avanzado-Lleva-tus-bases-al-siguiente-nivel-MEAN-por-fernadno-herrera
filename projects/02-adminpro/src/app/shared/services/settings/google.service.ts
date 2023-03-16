@@ -78,7 +78,7 @@ export class GoogleService {
 	private _handleCredentialResponse(credential: string) {
 		this._authSvc.googleLogin(credential).subscribe({
 			next: (resp) => {
-				console.log('❗this._authSvc.googleLogin  ➽ resp ➽ ⏩', resp);
+				// console.log('❗this._authSvc.googleLogin  ➽ resp ➽ ⏩', resp);
 				if (!resp) return;
 				const { token } = resp;
 				this._ngZone.run(() => this._stateSvc.login(token!));
