@@ -42,7 +42,7 @@ const routes: Routes = [
 	{
 		path: '**',
 		redirectTo: paths.getPath('no-page-found')?.name!,
-	}
+	},
 ];
 
 @NgModule({

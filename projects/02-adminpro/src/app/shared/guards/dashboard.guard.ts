@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { paths } from '../constants/paths.constant';
 import { StateService } from '../services/settings/state.service';
 import { AuthService } from '../services/http/auth.service';
-import { map, Observable } from 'rxjs';
+import { map, Observable, take, timer } from 'rxjs';
 import { StorageService } from '../services/settings/storage.service';
 
 @Injectable({
@@ -12,6 +12,8 @@ import { StorageService } from '../services/settings/storage.service';
 export class DashboardGuard {
 	// ANCHOR : variables
 	private _maintenancePath = paths.getPath('maintenance');
+	private _isPassedTime = true;
+	private _isLogued = false;
 
 	// ANCHOR : constructor
 	constructor(
@@ -22,7 +24,7 @@ export class DashboardGuard {
 	) {}
 
 	// ANCHOR : methods
-	canMatch(): boolean | Observable<boolean> {
+	public canMatch(): boolean | Observable<boolean> {
 		// return true
 		if (this._stateSvc.isMaintenance) {
 			this._router.navigate([this._maintenancePath?.fullPath]);
@@ -31,12 +33,22 @@ export class DashboardGuard {
 		const token = this._storageSvc.local.get('token') as string | undefined;
 		if (!token) this._stateSvc.logout();
 
+		if (!this._isPassedTime) return this._isLogued;
+
 		return this._authSvc.renewToken(token).pipe(
+			take(1),
 			map((resp) => {
+				this._isPassedTime = false;
+				timer(100).subscribe(() => {
+					this._isLogued = false;
+					this._isPassedTime = true
+				});
 				if (!resp || !resp.ok) {
 					this._stateSvc.logout();
+					this._isLogued = false;
 					return false;
 				}
+				this._isLogued = true;
 				return true;
 			})
 		);

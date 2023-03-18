@@ -18,7 +18,6 @@ import { CoreModule } from './core/core.module';
 import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
 import { RouteReuseStrategy } from '@angular/router';
-import { CustomReuseStrategy } from './shared/models/paths/custom-reuse-strategymodel';
 
 @NgModule({
 	declarations: [AppComponent],
@@ -45,8 +44,6 @@ import { CustomReuseStrategy } from './shared/models/paths/custom-reuse-strategy
 			useClass: ChangeTypeResponseInterceptor,
 			multi: true,
 		},
-
-		{ provide: RouteReuseStrategy, useClass: CustomReuseStrategy },
 	],
 	bootstrap: [AppComponent],
 })
