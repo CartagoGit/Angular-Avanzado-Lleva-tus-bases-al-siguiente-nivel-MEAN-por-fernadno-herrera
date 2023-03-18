@@ -36,12 +36,11 @@ export class DashboardGuard {
 		if (!this._isPassedTime) return this._isLogued;
 
 		return this._authSvc.renewToken(token).pipe(
-			take(1),
 			map((resp) => {
 				this._isPassedTime = false;
 				timer(100).subscribe(() => {
 					this._isLogued = false;
-					this._isPassedTime = true
+					this._isPassedTime = true;
 				});
 				if (!resp || !resp.ok) {
 					this._stateSvc.logout();
