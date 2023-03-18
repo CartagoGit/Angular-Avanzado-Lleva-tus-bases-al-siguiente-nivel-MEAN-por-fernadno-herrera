@@ -60,6 +60,7 @@ export const authController: {
 			id,
 			token,
 			role: userDB.role,
+			user: userDB,
 			data: { new_token: token, last_token: lastToken },
 		};
 	},

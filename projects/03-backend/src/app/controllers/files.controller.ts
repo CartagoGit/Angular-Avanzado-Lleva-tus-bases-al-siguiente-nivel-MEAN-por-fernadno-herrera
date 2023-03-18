@@ -15,6 +15,7 @@ import path from 'path';
 import fs from 'fs';
 import { isValidObjectId } from 'mongoose';
 import { throwErrorFileNotFound } from '../helpers/files.helpers';
+import { config } from '../../environments/config';
 
 /**
  * ? Controladores especificos para manipulacion de archivos
@@ -74,10 +75,11 @@ export const filesController: {
 		const nameFile = isFirst
 			? document.get(typeFile)[0].split('/').slice(-1)[0]
 			: checkParamFileName(req);
-		const pathFile = path.join(
-			__dirname,
-			`uploads/${model.modelName}/${typeFile}/${nameFile}`
-		);
+		// const pathFile = path.join(
+		// __dirname,
+		// `uploads/${model.modelName}/${typeFile}/${nameFile}`
+		// );
+		const pathFile = `${config.UPLOAD_FOLDER}/${model.modelName}/${typeFile}/${nameFile}`;
 		if (!fs.existsSync(pathFile)) throwErrorFileNotFound();
 
 		return {

@@ -56,7 +56,9 @@ export class Config implements ConfigProps {
 	public GOOGLE_ID!: string;
 
 	//* Otras props
-	public UPLOAD_FOLDER: string = `${__dirname}/uploads`;
+	public BASE_FOLDER: string = `${__dirname}`;
+	public UPLOAD_FOLDER: string = `${this.BASE_FOLDER}/uploads`;
+	// public UPLOAD_FOLDER: string = `/uploads`;
 	public GOOGLE_CLIENT!: { GOOGLE_ID: string; GOOGLE_CLIENT: OAuth2Client };
 	private _MONGO_PASSWORD: string =
 		process.env['MONGO_PASSWORD'] || hide_environments.MONGO_PASSWORD;
