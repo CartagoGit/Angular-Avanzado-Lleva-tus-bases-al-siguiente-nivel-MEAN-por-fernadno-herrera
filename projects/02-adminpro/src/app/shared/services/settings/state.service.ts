@@ -44,11 +44,10 @@ export class StateService {
 	/**
 	 * ? Establece el token en el storage y cambia el estado de autenticacion a logueado
 	 * @public
-	 * @param {string} token
-	 * @param {boolean} [redirect=true]
+	 * @param {{token: string, userProps : UserProps , redirect?: boolean }} data
 	 */
 	public login(data : {token: string, userProps : UserProps , redirect?: boolean } ): void {
-		const { token, redirect, userProps } = data;
+		const { token, redirect = true, userProps } = data;
 		this._storageSvc.local.set('token', token);
 		this.isAuthenticated = true;
 		this.user = new User(userProps)

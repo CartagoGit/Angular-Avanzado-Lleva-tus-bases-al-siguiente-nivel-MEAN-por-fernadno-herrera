@@ -38,6 +38,8 @@ export class DashboardGuard {
 		return this._authSvc.renewToken(token).pipe(
 			map((resp) => {
 				this._isPassedTime = false;
+
+				//* Timer para evitar doble llamada a renewToken cada vez que se cambie de ruta
 				timer(100).subscribe(() => {
 					this._isLogued = false;
 					this._isPassedTime = true;
@@ -47,6 +49,8 @@ export class DashboardGuard {
 					this._isLogued = false;
 					return false;
 				}
+				const {model, token} = resp;
+				this._stateSvc.login({token: token!, userProps: model! , redirect: false})
 				this._isLogued = true;
 				return true;
 			})

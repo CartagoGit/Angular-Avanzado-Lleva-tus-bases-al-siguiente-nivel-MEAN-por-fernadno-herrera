@@ -69,18 +69,28 @@ export const filesController: {
 		const { model, typeFile, document } =
 			await checkValidParamsForFilesAndGetModel(req);
 		const isFirst = isValidObjectId(req.originalUrl.split('/').slice(-1)[0]);
-		const existFile =
-			document.get(typeFile)[0].split('/').slice(-1)[0] || undefined;
-		if (!existFile) throwErrorFileNotFound();
-		const nameFile = isFirst
-			? document.get(typeFile)[0].split('/').slice(-1)[0]
-			: checkParamFileName(req);
+
+		const firstFile: string | undefined =
+			document.get(typeFile).lenght > 0
+				? document.get(typeFile)[0].split('/').slice(-1)[0]
+				: undefined;
+		// if (!firstFile) throwErrorFileNotFound();
+
+		const nameFile =
+			!firstFile || isFirst ? firstFile : checkParamFileName(req);
 		// const pathFile = path.join(
 		// __dirname,
 		// `uploads/${model.modelName}/${typeFile}/${nameFile}`
 		// );
-		const pathFile = `${config.UPLOAD_FOLDER}/${model.modelName}/${typeFile}/${nameFile}`;
-		if (!fs.existsSync(pathFile)) throwErrorFileNotFound();
+		let pathFile = `${config.UPLOAD_FOLDER}/${model.modelName}/${typeFile}/${nameFile}`;
+		if (!fs.existsSync(pathFile)) {
+			if (typeFile === 'images') {
+				const folderAssets = 'assets';
+				const fileName = 'no-image.jpg';
+				pathFile = `${config.BASE_FOLDER}/${folderAssets}/${typeFile}/${fileName}`;
+				if (!fs.existsSync(pathFile)) throwErrorFileNotFound();
+			} else throwErrorFileNotFound();
+		}
 
 		return {
 			status_code: 200,
