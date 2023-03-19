@@ -34,7 +34,7 @@ export const filesController: {
 		const isReplaceEveryPath = !!req.query['replace_all'];
 		const { files, filesPath, typeFile, model, filesName, id, document } =
 			await checkAndGetFilesArgs(req);
-		const { typeFileFolder } = checkAndCreateFolder({
+		const { typeFileFolder, relativeFolder } = checkAndCreateFolder({
 			nameModel: model.modelName,
 			typeFile,
 		});
@@ -50,7 +50,10 @@ export const filesController: {
 		files.forEach((file, index) =>
 			file.mv(filesPath[index], throwErrorUploadFiles)
 		);
-		await model.findByIdAndUpdate(id, { [typeFile]: filesPath });
+		const filesRoute = filesName.map(
+			(name) => `${config.API_URL}/files/download${relativeFolder}/${name}`
+		);
+		await model.findByIdAndUpdate(id, { [typeFile]: filesRoute });
 
 		return {
 			status_code: 201,
@@ -62,6 +65,7 @@ export const filesController: {
 			getFilesNames,
 			filesName,
 			filesPath,
+			filesRoute
 		};
 	},
 	download: async (req: Request) => {
@@ -71,17 +75,19 @@ export const filesController: {
 		const isFirst = isValidObjectId(req.originalUrl.split('/').slice(-1)[0]);
 
 		const firstFile: string | undefined =
-			document.get(typeFile).length > 0
-				? document.get(typeFile)[0].split('/').slice(-1)[0]
-				: undefined;
+		document.get(typeFile).length > 0
+		? document.get(typeFile)[0].split('/').slice(-1)[0]
+		: undefined;
 		if (!firstFile) throwErrorFileNotFound();
+		console.log("❗download:  ➽ firstFile ➽ ⏩" , firstFile);
 
 		const nameFile = isFirst ? firstFile : checkParamFileName(req);
 		// const pathFile = path.join(
 		// __dirname,
 		// `uploads/${model.modelName}/${typeFile}/${nameFile}`
 		// );
-		let pathFile = `${config.UPLOAD_FOLDER}/${model.modelName}/${typeFile}/${nameFile}`;
+		let pathFile = `${config.UPLOAD_FOLDER}/${model.modelName}s/${typeFile}/${nameFile}`;
+		console.log("❗download:  ➽ pathFile ➽ ⏩" , pathFile);
 		if (!fs.existsSync(pathFile)) throwErrorFileNotFound();
 
 		return {

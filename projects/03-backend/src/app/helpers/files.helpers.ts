@@ -312,7 +312,7 @@ export const getFilePath = (data: {
 	nameModel: string;
 }): string => {
 	const { nameFile, nameModel, typeFile } = data;
-	const path = `${config.UPLOAD_FOLDER}/${nameModel}/${typeFile}/${nameFile}`;
+	const path = `${config.UPLOAD_FOLDER}/${nameModel}s/${typeFile}/${nameFile}`;
 	return path;
 };
 
@@ -323,19 +323,27 @@ export const getFilePath = (data: {
 	nameModel: string;
 	typeFile: string;
 }} data
+ * @returns {{ uploadFolder: string; modelFolder: string; typeFileFolder: string, relativeFolder: string }}
  */
 export const checkAndCreateFolder = (data: {
 	nameModel: string;
 	typeFile: string;
-}): { uploadFolder: string; modelFolder: string; typeFileFolder: string } => {
+}): {
+	uploadFolder: string;
+	modelFolder: string;
+	typeFileFolder: string;
+	relativeFolder: string;
+} => {
 	const { nameModel, typeFile } = data;
+	const namePluralModel = nameModel + 's';
 	const uploadFolder = `${config.UPLOAD_FOLDER}`.toLowerCase();
-	const modelFolder = `${uploadFolder}/${nameModel}`.toLowerCase();
+	const modelFolder = `${uploadFolder}/${namePluralModel}`.toLowerCase();
 	const typeFileFolder = `${modelFolder}/${typeFile}`.toLowerCase();
 	if (!fs.existsSync(uploadFolder)) fs.mkdirSync(uploadFolder);
 	if (!fs.existsSync(modelFolder)) fs.mkdirSync(modelFolder);
 	if (!fs.existsSync(typeFileFolder)) fs.mkdirSync(typeFileFolder);
-	return { uploadFolder, modelFolder, typeFileFolder };
+	const relativeFolder = `/${namePluralModel}/${typeFile}`.toLowerCase();
+	return { uploadFolder, modelFolder, typeFileFolder, relativeFolder };
 };
 
 /**
@@ -399,7 +407,7 @@ export const deleteFilesFromTypeFile = (
 			typeFileFolder: string;
 			id: string;
 		};
-		const path = `.${typeFileFolder}/*${id}*`.replace(/\\/g, '/');
+		const path = `${typeFileFolder}/*${id}*`.replace(/\\/g, '/');
 		const filesToDelete = glob.sync(path);
 		filesToDelete.forEach((file) => {
 			fs.unlink(file, throwErrorDeleteFiles); //elimina cada archivo
