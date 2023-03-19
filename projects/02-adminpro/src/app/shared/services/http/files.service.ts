@@ -34,7 +34,6 @@ export class FilesService extends CoreHttp<Endpoints> {
 
 	// ANCHOR : Métodos
 
-
 	/**
 	 * ? Observable para subir un archivo a la BD
 	 * @public
@@ -57,7 +56,7 @@ export class FilesService extends CoreHttp<Endpoints> {
 		options?: { replaceAll?: boolean; replace?: boolean }
 	): Observable<FileUploadResponse> {
 		const { id, filesToUpload, typeFile, typeModel } = data;
-		const { replace = false, replaceAll = false } = options || {};
+		const { replace = false, replaceAll = true } = options || {};
 		const params = { replace, replaceAll };
 		const formData = new FormData();
 		filesToUpload.forEach((file) => formData.append('filesArray', file));
@@ -68,5 +67,67 @@ export class FilesService extends CoreHttp<Endpoints> {
 				params,
 			}
 		);
+	}
+
+	/**
+	 * ? Descarga el primer archivo del tipo y el modelo de la BD
+	 * @public
+	 * @param {{
+			id: string;
+			typeModel: ModelsMongo;
+			typeFile: TypesFiles;
+		}} data
+	 * @returns {*}
+	 */
+	public downloadFirstFile(data: {
+		id: string;
+		typeModel: ModelsMongo;
+		typeFile: TypesFiles;
+	}): Observable<Blob> {
+		const { id, typeModel, typeFile } = data;
+		return this._http.get(
+			`${this.routes.downloadFirstFile}/${typeModel}/${typeFile}/${id}`,
+			{
+				responseType: 'blob',
+			}
+		);
+	}
+
+	/**
+	 * ? Descarga el archivo expecifico del tipo y el modelo de la BD
+	 * @public
+	 * @param {{
+			id: string;
+			typeModel: ModelsMongo;
+			typeFile: TypesFiles;
+		}} data
+	 * @returns {Observable<Blob>}
+	 */
+	public downloadFile(data: {
+		id: string;
+		typeModel: ModelsMongo;
+		typeFile: TypesFiles;
+		fileName: string;
+	}): Observable<Blob> {
+		const { id, typeModel, typeFile } = data;
+		return this._http.get(
+			`${this.routes.downloadFile}/${typeModel}/${typeFile}/${id}`,
+			{
+				responseType: 'blob',
+			}
+		);
+	}
+
+
+	/**
+	 * ? Descarga el archivo expecifico del tipo y el modelo de la BD por su ruta completa
+	 * @public
+	 * @param {string} path
+	 * @returns {Observable<Blob>}
+	 */
+	public downloadFileFullPath(path: string): Observable<Blob> {
+		return this._http.get(path, {
+			responseType: 'blob',
+		});
 	}
 }
