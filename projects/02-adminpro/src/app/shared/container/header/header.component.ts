@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 import { paths } from '../../constants/paths.constant';
-import { StorageService } from '../../services/settings/storage.service';
 import { StateService } from '../../services/settings/state.service';
+import { User } from '../../models/mongo-models/user.model';
 
 @Component({
 	selector: 'app-header',
@@ -11,10 +10,11 @@ import { StateService } from '../../services/settings/state.service';
 })
 export class HeaderComponent {
 	public settingsPath = paths.getPath('settings');
+	public user: User;
 
-	private _loginPath = paths.getPath('login');
-
-	constructor(private _stateSvc: StateService) {}
+	constructor(private _stateSvc: StateService) {
+		this.user = this._stateSvc.user!;
+	}
 
 	public logout(): void {
 		this._stateSvc.logout();

@@ -1,6 +1,5 @@
-import { Roles } from "../../interfaces/roles.interface";
-import { BaseModelsProps } from "./base-model.interface";
-
+import { Roles } from '../../interfaces/roles.interface';
+import { BaseModelsProps } from './base-model.interface';
 
 /**
  * ? Propiedades que recibe el Modelo de usuarios a recibir desde el back
@@ -23,8 +22,9 @@ export interface UserProps extends BaseModelsProps {
  * @class User
  * @typedef {User}
  * @implements {UserProps}
-*/
+ */
 export class User implements UserProps {
+	//* Desde el back
 	public id!: string;
 	public user_creator!: string;
 	public user_modifier!: string;
@@ -37,11 +37,20 @@ export class User implements UserProps {
 	public google!: boolean;
 	public role!: Roles;
 
+	//* Para usar desde el front
 	public password?: string;
+	public defaultImgIndex: number = 0;
+
+	public defaultImg: string;
 
 	constructor(props: UserProps) {
 		for (let [key, value] of Object.entries(props)) {
 			this[key as keyof this] = value;
 		}
+
+		this.defaultImg =
+			!!this.images && this.images.length > 0
+				? this.images[this.defaultImgIndex]
+				: 'assets/images/no-image.jpg';
 	}
 }

@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 import { paths } from '../../constants/paths.constant';
+import { User } from '../../models/mongo-models/user.model';
 import { SidebarService } from '../../services/settings/sidebar.service';
 import { StateService } from '../../services/settings/state.service';
-
-
 
 @Component({
 	selector: 'app-sidebar',
@@ -15,11 +13,17 @@ export class SidebarComponent {
 	public settingsPath = paths.getPath('settings');
 	public loginPath = paths.getPath('login');
 	public menuItems: any[];
-	constructor(private _sidebarSvc: SidebarService,  private _stateSvc: StateService ) {
+	public user: User;
+
+	constructor(
+		private _sidebarSvc: SidebarService,
+		private _stateSvc: StateService
+	) {
 		this.menuItems = this._sidebarSvc.menu;
+		this.user = this._stateSvc.user!;
 	}
 
-	public logout() : void {
+	public logout(): void {
 		this._stateSvc.logout();
 	}
 }
