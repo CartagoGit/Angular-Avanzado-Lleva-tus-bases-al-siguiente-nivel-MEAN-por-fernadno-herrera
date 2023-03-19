@@ -51,7 +51,7 @@ export const filesController: {
 			file.mv(filesPath[index], throwErrorUploadFiles)
 		);
 		const filesRoute = filesName.map(
-			(name) => `${config.API_URL}/files/download${relativeFolder}/${name}`
+			(name) => `${config.API_URL}/files/download${relativeFolder}/${id}/${name}`
 		);
 		await model.findByIdAndUpdate(id, { [typeFile]: filesRoute });
 

@@ -6,7 +6,13 @@ import { User } from '../../models/mongo-models/user.model';
 @Component({
 	selector: 'app-header',
 	templateUrl: './header.component.html',
-	styles: [],
+	styles: [
+		`
+			.role {
+				color: #fff;
+			}
+		`,
+	],
 })
 export class HeaderComponent {
 	public settingsPath = paths.getPath('settings');

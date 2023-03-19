@@ -13,7 +13,7 @@
 						href="#"
 						aria-expanded="false"
 						><img
-							[src]="user.defaultImg"
+							[src]="user.defaultImgSrc | safe"
 							alt="user profile image"
 						/><span class="hide-menu">{{user.name}}</span></a
 					>

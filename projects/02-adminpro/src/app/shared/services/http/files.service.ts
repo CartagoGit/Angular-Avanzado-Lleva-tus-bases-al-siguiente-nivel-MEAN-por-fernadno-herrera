@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { CoreHttp } from './models/core-http.model';
 import { FileUploadResponse } from './interfaces/file-response.interface';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { ModelsMongo, TypesFiles } from '../../interfaces/models.interface';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 /**
  * ? Endpoints del modelo
@@ -29,7 +30,9 @@ const modelRouteEndpoint = '/files';
 export class FilesService extends CoreHttp<Endpoints> {
 	// ANCHOR : Constructor
 	constructor() {
+		// constructor(private _sanitizer: DomSanitizer) {
 		super({ modelEndpoints, modelRouteEndpoint });
+		// console.log(this._sanitizer);
 	}
 
 	// ANCHOR : Métodos
@@ -77,20 +80,22 @@ export class FilesService extends CoreHttp<Endpoints> {
 			typeModel: ModelsMongo;
 			typeFile: TypesFiles;
 		}} data
-	 * @returns {*}
+	 * @returns {Observable<string>}
 	 */
 	public downloadFirstFile(data: {
 		id: string;
 		typeModel: ModelsMongo;
 		typeFile: TypesFiles;
-	}): Observable<Blob> {
+	}): Observable<string> {
 		const { id, typeModel, typeFile } = data;
-		return this._http.get(
-			`${this.routes.downloadFirstFile}/${typeModel}/${typeFile}/${id}`,
-			{
-				responseType: 'blob',
-			}
-		);
+		return this._http
+			.get(
+				`${this.routes.downloadFirstFile}/${typeModel}/${typeFile}/${id}`,
+				{
+					responseType: 'blob',
+				}
+			)
+			.pipe(map((blob) => URL.createObjectURL(blob)));
 	}
 
 	/**
@@ -100,34 +105,39 @@ export class FilesService extends CoreHttp<Endpoints> {
 			id: string;
 			typeModel: ModelsMongo;
 			typeFile: TypesFiles;
+			fileName: string;
 		}} data
-	 * @returns {Observable<Blob>}
+	 * @returns {Observable<string>}
 	 */
 	public downloadFile(data: {
 		id: string;
 		typeModel: ModelsMongo;
 		typeFile: TypesFiles;
 		fileName: string;
-	}): Observable<Blob> {
+	}): Observable<string> {
 		const { id, typeModel, typeFile } = data;
-		return this._http.get(
-			`${this.routes.downloadFile}/${typeModel}/${typeFile}/${id}`,
-			{
+		return this._http
+			.get(`${this.routes.downloadFile}/${typeModel}/${typeFile}/${id}`, {
 				responseType: 'blob',
-			}
-		);
+			})
+			.pipe(map((blob) => URL.createObjectURL(blob)));
 	}
-
 
 	/**
 	 * ? Descarga el archivo expecifico del tipo y el modelo de la BD por su ruta completa
 	 * @public
 	 * @param {string} path
-	 * @returns {Observable<Blob>}
+	 * @returns {Observable<string>}
 	 */
-	public downloadFileFullPath(path: string): Observable<Blob> {
-		return this._http.get(path, {
-			responseType: 'blob',
-		});
+	public downloadFileFullPath(path: string): Observable<string> {
+		return this._http
+			.get(path, {
+				responseType: 'blob',
+			})
+			.pipe(
+				map((blob) => {
+					return URL.createObjectURL(blob);
+				})
+			);
 	}
 }

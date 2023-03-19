@@ -78,14 +78,11 @@ const routes: Routes = [
 		],
 	},
 
-	// {
-	// 	path: '',
-	// 	loadChildren: () =>
-	// 		import('../core/pages/nopagefound/nopagefound.module').then(
-	// 			(m) => m.NopagefoundModule
-	// 		),
-	// 		pathMatch: 'full',
-	// },
+	{
+		path: '',
+		redirectTo: dashboardPath?.fullPath!,
+		pathMatch: 'full',
+	},
 	{
 		path: '**',
 		redirectTo: nonPageFound?.fullPath!,

@@ -63,6 +63,9 @@
 				</li>
 				<li class="nav-item hidden-sm-down"></li>
 			</ul>
+			<span *ngIf="user.role === 'ADMIN_ROLE'" class="role"
+				>ADMINISTRATOR</span
+			>
 			<!-- ============================================================== -->
 			<!-- User profile and search -->
 			<!-- ============================================================== -->
@@ -344,7 +347,7 @@
 						aria-haspopup="true"
 						aria-expanded="false"
 						><img
-							[src]="user.defaultImg"
+							[src]="user.defaultImgSrc | safe"
 							alt="user profile image"
 							class="profile-pic"
 					/></a>
@@ -356,7 +359,7 @@
 								<div class="dw-user-box">
 									<div class="u-img">
 										<img
-											[src]="user.defaultImg"
+											[src]="user.defaultImgSrc | safe"
 											alt="user profile image"
 										/>
 									</div>

@@ -1,5 +1,5 @@
 import { Injector, NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 //* Injector para cargar servicios en clases
@@ -17,7 +17,6 @@ import { CoreModule } from './core/core.module';
 // Componentes
 import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
-import { RouteReuseStrategy } from '@angular/router';
 
 @NgModule({
 	declarations: [AppComponent],
