@@ -3,8 +3,6 @@ import { CoreHttp } from './models/core-http.model';
 import { FileUploadResponse } from './interfaces/file-response.interface';
 import { map, Observable } from 'rxjs';
 import { ModelsMongo, TypesFiles } from '../../interfaces/models.interface';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-
 /**
  * ? Endpoints del modelo
  * @type {{ renewToken: string; login: string; googleLogin: string; googleClientId: string; }}
@@ -30,9 +28,8 @@ const modelRouteEndpoint = '/files';
 export class FilesService extends CoreHttp<Endpoints> {
 	// ANCHOR : Constructor
 	constructor() {
-		// constructor(private _sanitizer: DomSanitizer) {
 		super({ modelEndpoints, modelRouteEndpoint });
-		// console.log(this._sanitizer);
+
 	}
 
 	// ANCHOR : Métodos

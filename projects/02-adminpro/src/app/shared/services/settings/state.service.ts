@@ -46,11 +46,21 @@ export class StateService {
 	 * @public
 	 * @param {{token: string, userProps : UserProps , redirect?: boolean }} data
 	 */
-	public login(data : {token: string, userProps : UserProps , redirect?: boolean } ): void {
-		const { token, redirect = true, userProps } = data;
+	public login(data: {
+		token: string;
+		userProps: UserProps;
+		redirect?: boolean;
+		forceRenewUser?: boolean;
+	}): void {
+		const {
+			token,
+			redirect = true,
+			userProps,
+			forceRenewUser = false,
+		} = data;
 		this._storageSvc.local.set('token', token);
 		this.isAuthenticated = true;
-		this.user = new User(userProps)
+		if (!this.user || forceRenewUser) this.user = new User(userProps);
 		if (!!redirect) {
 			this._router.navigate([this._dashboardPath?.fullPath]);
 		}
