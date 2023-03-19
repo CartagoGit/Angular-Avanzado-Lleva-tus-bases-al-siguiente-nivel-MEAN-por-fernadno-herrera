@@ -110,22 +110,4 @@ export type ErrorReasons =
 	| 'not found'
 	| 'internal error';
 
-/**
- * ? Respuesta recibida con el modelo de usuario
- * @export
- * @interface ResponseUserModel
- * @typedef {ResponseUserModel}
- */
-export interface ResponseUserModel {
-	name: string;
-	email: string;
-	images: string[];
-	role: string;
-	google: boolean;
-	user_creator: string;
-	user_modifier: string;
-	createdAt: Date;
-	updatedAt: Date;
-	id: string;
-	password?: string;
-}
+

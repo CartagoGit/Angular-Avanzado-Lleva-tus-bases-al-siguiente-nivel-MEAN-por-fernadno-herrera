@@ -9,11 +9,12 @@ import { BaseModelsProps } from "./base-model.interface";
  * @typedef {UserProps}
  */
 export interface UserProps extends BaseModelsProps {
-	images: string[];
 	name: string;
 	email: string;
 	role: Roles;
+	images: string[];
 	google: boolean;
+	password?: string;
 }
 
 /**
@@ -35,6 +36,8 @@ export class User implements UserProps {
 	public email!: string;
 	public google!: boolean;
 	public role!: Roles;
+
+	public password?: string;
 
 	constructor(props: UserProps) {
 		for (let [key, value] of Object.entries(props)) {

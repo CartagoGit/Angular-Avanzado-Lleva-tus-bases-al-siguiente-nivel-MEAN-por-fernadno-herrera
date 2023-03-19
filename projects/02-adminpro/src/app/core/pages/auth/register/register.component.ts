@@ -99,7 +99,8 @@ export class RegisterComponent {
 		this._authSvc.register(body).subscribe({
 			next: (resp) => {
 				if (!resp) return;
-				this._stateSvc.login(resp.token!);
+				const {model, token} = resp;
+				this._stateSvc.login({ token: token!, userProps: model! });
 			},
 			error: (error: DefaultErrorResponse) => {
 				console.error(error);

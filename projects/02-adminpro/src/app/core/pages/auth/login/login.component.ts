@@ -103,6 +103,7 @@ export class LoginComponent {
 		this._authSvc.login(body).subscribe({
 			next: (resp) => {
 				if (!resp) return;
+				const { token, model } = resp;
 
 				if (this.loginForm.get('remember')?.value === true) {
 					this._storage.set('userRemember', {
@@ -112,7 +113,7 @@ export class LoginComponent {
 				} else {
 					this._storage.delete('userRemember');
 				}
-				this._stateSvc.login(resp.token!);
+				this._stateSvc.login({ token: token!, userProps: model! });
 			},
 			error: (error: DefaultErrorResponse) => {
 				console.error(error);

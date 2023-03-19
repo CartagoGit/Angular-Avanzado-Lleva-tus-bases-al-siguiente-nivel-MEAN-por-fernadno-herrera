@@ -1,21 +1,11 @@
 import { Injectable } from '@angular/core';
 import { CoreHttp } from './models/core-http.model';
-import {
-	Observable,
-	of,
-	tap,
-	throwError,
-	catchError,
-	concatMap,
-	filter,
-} from 'rxjs';
-import {
-	DefaultResponse,
-	ResponseUserModel,
-} from './interfaces/response.interfaces';
+import { Observable, of } from 'rxjs';
+import { DefaultResponse } from './interfaces/response.interfaces';
 import { AuthDefaultResponse } from './interfaces/request.interface';
 import { HttpHeaders } from '@angular/common/http';
 import { StorageService } from '../settings/storage.service';
+import { UserProps } from '../../models/mongo-models/user.model';
 
 /**
  * ? Endpoints del modelo
@@ -59,9 +49,9 @@ export class AuthService extends CoreHttp<Endpoints> {
 	 */
 	public login(
 		body: AuthDefaultResponse
-	): Observable<DefaultResponse | undefined> {
+	): Observable<DefaultResponse<UserProps> | undefined> {
 		if (!this._isPossibleAndTimer()) return of(undefined);
-		return this._http.post<DefaultResponse>(this.routes.login, body);
+		return this._http.post<DefaultResponse<UserProps>>(this.routes.login, body);
 	}
 
 	/**
@@ -72,9 +62,12 @@ export class AuthService extends CoreHttp<Endpoints> {
 	 */
 	public register(
 		body: AuthDefaultResponse
-	): Observable<DefaultResponse | undefined> {
+	): Observable<DefaultResponse<UserProps> | undefined> {
 		if (!this._isPossibleAndTimer()) return of(undefined);
-		return this._http.post<DefaultResponse>(this.routes.register, body);
+		return this._http.post<DefaultResponse<UserProps>>(
+			this.routes.register,
+			body
+		);
 	}
 
 	/**
@@ -82,28 +75,31 @@ export class AuthService extends CoreHttp<Endpoints> {
 	 * @public
 	 * @returns {Observable<DefaultResponse | undefined>}
 	 */
-	public renewToken(token?: string): Observable<DefaultResponse | undefined> {
+	public renewToken(token?: string): Observable<DefaultResponse<UserProps>> {
 		// if (!this._isPossibleAndTimer()) return of(undefined);
 		const headers = new HttpHeaders({
 			'Content-Type': 'application/json',
 			Authorization: `Bearer ${token}`,
 		});
-		return this._http.get<DefaultResponse>(this.routes.renewToken, {
-			headers,
-		});
+		return this._http.get<DefaultResponse<UserProps>>(
+			this.routes.renewToken,
+			{
+				headers,
+			}
+		);
 	}
 
 	/**
 	 * ? Observable para loguearse en google
 	 * @public
 	 * @param {string} token
-	 * @returns {(Observable<DefaultResponse<ResponseUserModel> | undefined>)}
+	 * @returns {(Observable<DefaultResponse<UserProps> | undefined>)}
 	 */
 	public googleLogin(
 		token: string
-	): Observable<DefaultResponse<ResponseUserModel> | undefined> {
+	): Observable<DefaultResponse<UserProps> | undefined> {
 		if (!this._isPossibleAndTimer()) return of(undefined);
-		return this._http.post<DefaultResponse<ResponseUserModel>>(
+		return this._http.post<DefaultResponse<UserProps>>(
 			this.routes.googleLogin,
 			{
 				token,

@@ -48,7 +48,14 @@ export const authController: {
 		const id = userDB.id;
 		const { ok, token = '' } = await createJWT({ id });
 
-		return { ok, status_code: 200, token, id, role: userDB.role };
+		return {
+			ok,
+			status_code: 200,
+			token,
+			id,
+			role: userDB.role,
+			model: userDB,
+		};
 	},
 	renewToken: async (req) => {
 		const { token: lastToken, id } = await validateJWT(req);
@@ -60,7 +67,7 @@ export const authController: {
 			id,
 			token,
 			role: userDB.role,
-			user: userDB,
+			model: userDB,
 			data: { new_token: token, last_token: lastToken },
 		};
 	},
