@@ -32,8 +32,6 @@ export class StateService {
 	 * @param {boolean} [redirect=true]
 	 */
 	public logout(redirect: boolean = true): void {
-		// console.log(google.accounts.oauth2.revoke());
-		// const token = this._storageSvc.local.get('token') as string;
 		this._storageSvc.local.delete('token');
 		this.isAuthenticated = false;
 		this.user = undefined;
@@ -44,7 +42,12 @@ export class StateService {
 	/**
 	 * ? Establece el token en el storage y cambia el estado de autenticacion a logueado
 	 * @public
-	 * @param {{token: string, userProps : UserProps , redirect?: boolean }} data
+	 * @param {{
+			token: string;
+			userProps: UserProps;
+			redirect?: boolean;
+			forceRenewUser?: boolean;
+		}} data
 	 */
 	public login(data: {
 		token: string;
