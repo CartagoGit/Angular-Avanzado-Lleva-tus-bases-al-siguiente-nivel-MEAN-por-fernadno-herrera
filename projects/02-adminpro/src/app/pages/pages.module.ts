@@ -5,36 +5,24 @@ import { FormsModule } from '@angular/forms';
 
 // Modulos
 import { SharedModule } from '../shared/shared.module';
-import { ComponentsModule } from '../shared/components/components.module';
+import { DashboardModule } from './dashboard/dashboard.module';
+import { GeneralModule } from './general/general.module';
 
-
-// Componentes
-import { Graphic01Component } from './graphic01/graphic01.component';
-import { ProgressComponent } from './progress/progress.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { PagesComponent } from './pages.component';
-import { AccountSettingsComponent } from './account-settings/account-settings.component';
-import { PromisesComponent } from './promises/promises.component';
-import { RxjsComponent } from './rxjs/rxjs.component';
+// Rutas
 import { PagesRoutingModule } from './pages.routing';
+// Componentes
+import { PagesComponent } from './pages.component';
 
 @NgModule({
-	declarations: [
-		DashboardComponent,
-		PagesComponent,
-		Graphic01Component,
-		ProgressComponent,
-		AccountSettingsComponent,
-		PromisesComponent,
-		RxjsComponent,
-	],
+	declarations: [PagesComponent],
 	imports: [
 		CommonModule,
 		FormsModule,
 		SharedModule,
 		RouterModule,
 		PagesRoutingModule,
-		ComponentsModule,
+		DashboardModule,
+		GeneralModule,
 	],
 })
 export class PagesModule {}
