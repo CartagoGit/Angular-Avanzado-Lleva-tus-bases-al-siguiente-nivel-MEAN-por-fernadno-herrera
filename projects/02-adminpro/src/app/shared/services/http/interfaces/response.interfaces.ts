@@ -74,6 +74,7 @@ export interface DefaultErrorResponse {
 	trace: Record<string, any>[];
 }
 
+
 /**
  * ? Interfaz de la data del error
  * @export
@@ -109,5 +110,3 @@ export type ErrorReasons =
 	| 'not id in params'
 	| 'not found'
 	| 'internal error';
-
-

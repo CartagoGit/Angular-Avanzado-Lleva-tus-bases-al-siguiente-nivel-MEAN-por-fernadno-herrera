@@ -35,7 +35,7 @@ const modelRouteEndpoint = '/auth';
 })
 export class AuthService extends CoreHttp<Endpoints> {
 	// ANCHOR : Constructor
-	constructor(private _storage: StorageService) {
+	constructor() {
 		super({ modelEndpoints, modelRouteEndpoint });
 	}
 

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BasicHttp } from './models/basic-http.model';
+import { BasicHttp } from './basic-http.model';
 
 /**
  * ? Rutas popias del modelo de Usuarios
