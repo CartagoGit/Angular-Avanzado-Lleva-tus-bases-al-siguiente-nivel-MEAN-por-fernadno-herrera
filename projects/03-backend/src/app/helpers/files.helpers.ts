@@ -329,9 +329,9 @@ export const checkAndCreateFolder = (data: {
 	typeFile: string;
 }): { uploadFolder: string; modelFolder: string; typeFileFolder: string } => {
 	const { nameModel, typeFile } = data;
-	const uploadFolder = `${config.UPLOAD_FOLDER}`;
-	const modelFolder = `${uploadFolder}/${nameModel}`;
-	const typeFileFolder = `${modelFolder}/${typeFile}`;
+	const uploadFolder = `${config.UPLOAD_FOLDER}`.toLowerCase();
+	const modelFolder = `${uploadFolder}/${nameModel}`.toLowerCase();
+	const typeFileFolder = `${modelFolder}/${typeFile}`.toLowerCase();
 	if (!fs.existsSync(uploadFolder)) fs.mkdirSync(uploadFolder);
 	if (!fs.existsSync(modelFolder)) fs.mkdirSync(modelFolder);
 	if (!fs.existsSync(typeFileFolder)) fs.mkdirSync(typeFileFolder);
@@ -370,7 +370,7 @@ export const throwErrorDeleteFiles = (error: any): void => {
 };
 
 /**
- * Throwea un error si no se encuentra el archivo en la DB
+ * ? Throwea un error si no se encuentra el archivo en la DB
  * @returns {never}
  */
 export const throwErrorFileNotFound = (): never => {
@@ -399,7 +399,7 @@ export const deleteFilesFromTypeFile = (
 			typeFileFolder: string;
 			id: string;
 		};
-		const path = `${typeFileFolder}/*${id}*`.replace(/\\/g, '/');
+		const path = `.${typeFileFolder}/*${id}*`.replace(/\\/g, '/');
 		const filesToDelete = glob.sync(path);
 		filesToDelete.forEach((file) => {
 			fs.unlink(file, throwErrorDeleteFiles); //elimina cada archivo

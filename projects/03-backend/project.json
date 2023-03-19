@@ -13,7 +13,7 @@
 				"main": "projects/03-backend/src/main.ts",
 				"tsConfig": "projects/03-backend/tsconfig.app.json",
 				"assets": [
-					"projects/03-backend/src/assets",
+				
 					{
 						"input": "projects/03-backend/src/assets",
 						"output": "public/assets",

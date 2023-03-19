@@ -49,15 +49,16 @@ interface ConfigProps {
  */
 export class Config implements ConfigProps {
 	// ANCHOR : Variables
-	//* ConfigPropps
+	//* ConfigProps
 	public PORT!: number;
 	public MODE!: Mode;
 	public API_URL_BASE!: string;
 	public GOOGLE_ID!: string;
 
 	//* Otras props
-	public BASE_FOLDER: string = `${__dirname}`;
-	public UPLOAD_FOLDER: string = `${this.BASE_FOLDER}/uploads`;
+	// public BASE_FOLDER: string = `${__dirname}`;
+	// public BASE_FOLDER: string = `${this.API_URL_BASE}`;
+	// public UPLOAD_FOLDER: string = `${this.BASE_FOLDER}/uploads`;
 	// public UPLOAD_FOLDER: string = `/uploads`;
 	public GOOGLE_CLIENT!: { GOOGLE_ID: string; GOOGLE_CLIENT: OAuth2Client };
 	private _MONGO_PASSWORD: string =
@@ -77,6 +78,11 @@ export class Config implements ConfigProps {
 
 	get API_URL() {
 		return this.API_URL_BASE + this.PORT;
+	}
+
+	get UPLOAD_FOLDER() {
+		// return `${this.API_URL}/uploads`
+		return `${__dirname}/uploads`
 	}
 
 	get MONGO_URL() {

@@ -11,7 +11,6 @@ import {
 	getFilesNames,
 	checkParamFileName,
 } from '../helpers/files.helpers';
-import path from 'path';
 import fs from 'fs';
 import { isValidObjectId } from 'mongoose';
 import { throwErrorFileNotFound } from '../helpers/files.helpers';
@@ -62,6 +61,7 @@ export const filesController: {
 			idModel: id,
 			getFilesNames,
 			filesName,
+			filesPath,
 		};
 	},
 	download: async (req: Request) => {
@@ -71,26 +71,18 @@ export const filesController: {
 		const isFirst = isValidObjectId(req.originalUrl.split('/').slice(-1)[0]);
 
 		const firstFile: string | undefined =
-			document.get(typeFile).lenght > 0
+			document.get(typeFile).length > 0
 				? document.get(typeFile)[0].split('/').slice(-1)[0]
 				: undefined;
-		// if (!firstFile) throwErrorFileNotFound();
+		if (!firstFile) throwErrorFileNotFound();
 
-		const nameFile =
-			!firstFile || isFirst ? firstFile : checkParamFileName(req);
+		const nameFile = isFirst ? firstFile : checkParamFileName(req);
 		// const pathFile = path.join(
 		// __dirname,
 		// `uploads/${model.modelName}/${typeFile}/${nameFile}`
 		// );
 		let pathFile = `${config.UPLOAD_FOLDER}/${model.modelName}/${typeFile}/${nameFile}`;
-		if (!fs.existsSync(pathFile)) {
-			if (typeFile === 'images') {
-				const folderAssets = 'assets';
-				const fileName = 'no-image.jpg';
-				pathFile = `${config.BASE_FOLDER}/${folderAssets}/${typeFile}/${fileName}`;
-				if (!fs.existsSync(pathFile)) throwErrorFileNotFound();
-			} else throwErrorFileNotFound();
-		}
+		if (!fs.existsSync(pathFile)) throwErrorFileNotFound();
 
 		return {
 			status_code: 200,
