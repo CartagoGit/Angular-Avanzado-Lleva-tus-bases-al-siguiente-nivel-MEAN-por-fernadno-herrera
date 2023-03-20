@@ -75,19 +75,21 @@ export class LoginComponent {
 		}
 	}
 
-	ngOnInit(): void {
+	ngAfterViewInit(): void {
 		//* Nos subscribimos al observable que nos indica si el script de google ya se ha cargado
-		this._googleSvc.googleScriptLoaded$.subscribe({
-			next: (loaded) => {
-				if (loaded) this._googleSvc.createGoogleLogin(this.googleBtnRef);
-			},
-			complete: () => {
-				console.log('Google identify loaded. Subscription completed');
-			},
-		});
+		if (this._googleSvc.googleScriptLoaded)
+			this._googleSvc.createGoogleLogin(this.googleBtnRef);
+		else {
+			this._googleSvc.googleScriptLoaded$.subscribe({
+				next: (loaded) => {
+					if (loaded) this._googleSvc.createGoogleLogin(this.googleBtnRef);
+				},
+				complete: () => {
+					console.log('Google identify loaded. Subscription completed');
+				},
+			});
+		}
 	}
-
-
 
 	ngOnDestroy(): void {
 		this._subForm.unsubscribe();

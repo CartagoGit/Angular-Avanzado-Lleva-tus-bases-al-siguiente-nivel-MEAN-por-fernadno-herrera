@@ -9,11 +9,14 @@ import { StateService } from './state.service';
 })
 export class GoogleService {
 	// ANCHOR : variables
-	
+
+	public googleScriptLoaded = false;
+
 	//* Observable que se ejecuta cuando se carga el script de google
 	public googleScriptLoaded$ = new Observable<boolean>((observer) => {
 		window.onload = () => {
 			observer.next(!!window.google?.accounts?.id);
+			this.googleScriptLoaded = true;
 			// observer.complete();
 		};
 	}).pipe(first((loaded) => loaded));
