@@ -1,5 +1,4 @@
 import { ElementRef, Injectable, NgZone } from '@angular/core';
-import { first, Observable } from 'rxjs';
 import { SweetAlertService } from '../helpers/sweet-alert.service';
 import { AuthService } from '../http/auth.service';
 import { StateService } from './state.service';
@@ -9,17 +8,7 @@ import { StateService } from './state.service';
 })
 export class GoogleService {
 	// ANCHOR : variables
-
-	public googleScriptLoaded = false;
-
-	//* Observable que se ejecuta cuando se carga el script de google
-	public googleScriptLoaded$ = new Observable<boolean>((observer) => {
-		window.onload = () => {
-			observer.next(!!window.google?.accounts?.id);
-			this.googleScriptLoaded = true;
-			// observer.complete();
-		};
-	}).pipe(first((loaded) => loaded));
+	private _googleClientId: string | undefined;
 
 	// ANCHOR : Constructor
 	constructor(
@@ -28,6 +17,8 @@ export class GoogleService {
 		private _stateSvc: StateService,
 		private _ngZone: NgZone
 	) {}
+
+	// ANCHOR : Metodos
 
 	/**
 	 * ? Recupera y genera todo lo necesario para realizar el boton y el login con google identity
@@ -42,17 +33,21 @@ export class GoogleService {
 	 * @private
 	 */
 	private _catchGoogleClientId(googleBtnHtml: HTMLDivElement) {
-		this._authSvc.googleClientId().subscribe({
-			next: (resp) => {
-				if (!resp) return;
-				const googleClientId = resp.data!;
-				this._instanceGoogleLogin(googleClientId, googleBtnHtml);
-			},
-			error: (error) => {
-				console.error(error);
-				this._sweetAlert.alertError('Getting Google Client ID from Api');
-			},
-		});
+		if (this._googleClientId)
+			this._instanceGoogleLogin(this._googleClientId, googleBtnHtml);
+		else {
+			this._authSvc.googleClientId().subscribe({
+				next: (resp) => {
+					if (!resp) return;
+					this._googleClientId = resp.data!;
+					this._instanceGoogleLogin(this._googleClientId, googleBtnHtml);
+				},
+				error: (error) => {
+					console.error(error);
+					this._sweetAlert.alertError('Getting Google Client ID from Api');
+				},
+			});
+		}
 	}
 
 	/**

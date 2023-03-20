@@ -1,7 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { StorageService } from 'projects/02-adminpro/src/app/shared/services/settings/storage.service';
-import { first, fromEvent, Subscription } from 'rxjs';
+import { first, fromEvent, Observable, Subscription } from 'rxjs';
 import { ValidatorService } from '../../../../shared/services/helpers/validator.service';
 import { AuthService } from '../../../../shared/services/http/auth.service';
 import { AuthDefaultResponse } from '../../../../shared/services/http/interfaces/request.interface';
@@ -76,19 +76,7 @@ export class LoginComponent {
 	}
 
 	ngAfterViewInit(): void {
-		//* Nos subscribimos al observable que nos indica si el script de google ya se ha cargado
-		if (this._googleSvc.googleScriptLoaded)
-			this._googleSvc.createGoogleLogin(this.googleBtnRef);
-		else {
-			this._googleSvc.googleScriptLoaded$.subscribe({
-				next: (loaded) => {
-					if (loaded) this._googleSvc.createGoogleLogin(this.googleBtnRef);
-				},
-				complete: () => {
-					console.log('Google identify loaded. Subscription completed');
-				},
-			});
-		}
+		this._checkGoogleIdentifyIsLoaded();
 	}
 
 	ngOnDestroy(): void {
@@ -96,6 +84,31 @@ export class LoginComponent {
 	}
 
 	// ANCHOR : Métodos
+
+	/**
+	 * ? Verifica si el script de Google Identity ya ha sido cargado. Si es así, llama al método para crear un botón de inicio de sesión de Google.
+	 * Si aún no se ha cargado, espera a que se cargue el script y luego llama al método para crear el botón de inicio de sesión de Google.
+	 * @private
+	 * @function _checkGoogleIdentifyIsLoaded
+	 * @returns {void}
+	 */
+	private _checkGoogleIdentifyIsLoaded(): void {
+		const googleScript = document.getElementById(
+			'googleScriptSrc'
+		) as HTMLScriptElement;
+
+		// Verifica si el script ya está cargado
+		if (Boolean(googleScript.src)) {
+			// El script ya se ha cargado, así que crea el login de Google aquí
+			this._googleSvc.createGoogleLogin(this.googleBtnRef);
+		} else {
+			// Espera a que el script se cargue
+			fromEvent(googleScript, 'load').subscribe(() => {
+				// El script se ha cargado, así que crea el login de Google aquí
+				this._googleSvc.createGoogleLogin(this.googleBtnRef);
+			});
+		}
+	}
 
 	/**
 	 * ? Realiza la subscripcion http para loguearse
