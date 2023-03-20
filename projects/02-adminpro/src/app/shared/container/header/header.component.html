@@ -370,7 +370,7 @@
 											{{ user.email.length > 20 ? '...' : '' }}
 										</p>
 										<a
-											href="pages-profile.html"
+											[routerLink]="profilePath?.fullPath"
 											class="btn btn-rounded btn-danger btn-sm"
 											>View Profile</a
 										>
@@ -379,7 +379,9 @@
 							</li>
 							<li role="separator" class="divider"></li>
 							<li>
-								<a href="#"><i class="ti-user"></i> My Profile</a>
+								<a [routerLink]="profilePath?.fullPath" routerLinkActive="active"
+									><i class="ti-user"></i> My Profile</a
+								>
 							</li>
 							<li>
 								<a href="#"><i class="ti-wallet"></i> My Balance</a>

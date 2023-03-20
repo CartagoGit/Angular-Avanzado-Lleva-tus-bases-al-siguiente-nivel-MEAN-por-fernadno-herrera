@@ -16,6 +16,7 @@ import { User } from '../../models/mongo-models/user.model';
 })
 export class HeaderComponent {
 	public settingsPath = paths.getPath('settings');
+	public profilePath = paths.getPath('profile');
 	public user: User;
 
 	constructor(private _stateSvc: StateService) {

@@ -19,16 +19,27 @@
 					>
 					<ul aria-expanded="false" class="collapse">
 						<li>
-							<a [routerLink]="[profilePath?.fullPath]">My Profile </a>
+							<a
+								[routerLink]="[profilePath?.fullPath]"
+								routerLinkActive="active"
+								>My Profile
+							</a>
 						</li>
 						<li><a href="#">My Balance</a></li>
 						<li><a href="#">Inbox</a></li>
 						<li>
-							<a [routerLink]="[settingsPath?.fullPath]"
-								>Account Setting</a
+							<a
+								[routerLink]="[settingsPath?.fullPath]"
+								routerLinkActive="active"
+							>
+								Account Setting</a
 							>
 						</li>
-						<li><a tabindex="0" (click)="logout()" class="pointer">Logout</a></li>
+						<li>
+							<a tabindex="0" (click)="logout()" class="pointer"
+								>Logout</a
+							>
+						</li>
 					</ul>
 				</li>
 				<li class="nav-devider"></li>
