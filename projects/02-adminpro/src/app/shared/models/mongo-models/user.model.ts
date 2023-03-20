@@ -51,6 +51,7 @@ export class User implements UserProps {
 
 	private _filesSvc: FilesService;
 	private _hasImages: boolean;
+	private _defaultNoImageSrc : string = 'assets/images/no-image.jpg';
 
 	constructor(props: UserProps) {
 		const injector = Injector.create({
@@ -66,9 +67,8 @@ export class User implements UserProps {
 
 		this.defaultImg = this._hasImages
 			? this.images[this.defaultImgIndex]
-			: 'assets/images/no-image.jpg';
+			: this._defaultNoImageSrc;
 
-		console.log(this);
 		// this.defaultImgBlob =
 		// 	this.imagesBlob[this.defaultImgIndex] || this.defaultImg;
 		if (!this._hasImages || this.google) this.defaultImgSrc = this.defaultImg;
@@ -77,6 +77,7 @@ export class User implements UserProps {
 				next: (source) => {
 					this.defaultImgSrc = source;
 				},
+				error: () => this.defaultImgSrc = this._defaultNoImageSrc,
 			});
 		}
 	}
