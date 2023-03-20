@@ -1,7 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { StorageService } from 'projects/02-adminpro/src/app/shared/services/settings/storage.service';
-import { Subscription } from 'rxjs';
+import { first, fromEvent, Subscription } from 'rxjs';
 import { ValidatorService } from '../../../../shared/services/helpers/validator.service';
 import { AuthService } from '../../../../shared/services/http/auth.service';
 import { AuthDefaultResponse } from '../../../../shared/services/http/interfaces/request.interface';
@@ -75,9 +75,19 @@ export class LoginComponent {
 		}
 	}
 
-	ngAfterViewInit(): void {
-		this._googleSvc.createGoogleLogin(this.googleBtnRef);
+	ngOnInit(): void {
+		//* Nos subscribimos al observable que nos indica si el script de google ya se ha cargado
+		this._googleSvc.googleScriptLoaded$.subscribe({
+			next: (loaded) => {
+				if (loaded) this._googleSvc.createGoogleLogin(this.googleBtnRef);
+			},
+			complete: () => {
+				console.log('Google identify loaded. Subscription completed');
+			},
+		});
 	}
+
+
 
 	ngOnDestroy(): void {
 		this._subForm.unsubscribe();

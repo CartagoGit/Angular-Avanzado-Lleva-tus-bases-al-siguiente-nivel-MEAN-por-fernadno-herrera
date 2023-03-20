@@ -1,4 +1,5 @@
 import { ElementRef, Injectable, NgZone } from '@angular/core';
+import { first, Observable } from 'rxjs';
 import { SweetAlertService } from '../helpers/sweet-alert.service';
 import { AuthService } from '../http/auth.service';
 import { StateService } from './state.service';
@@ -7,6 +8,17 @@ import { StateService } from './state.service';
 	providedIn: 'root',
 })
 export class GoogleService {
+	// ANCHOR : variables
+	
+	//* Observable que se ejecuta cuando se carga el script de google
+	public googleScriptLoaded$ = new Observable<boolean>((observer) => {
+		window.onload = () => {
+			observer.next(!!window.google?.accounts?.id);
+			// observer.complete();
+		};
+	}).pipe(first((loaded) => loaded));
+
+	// ANCHOR : Constructor
 	constructor(
 		private _authSvc: AuthService,
 		private _sweetAlert: SweetAlertService,

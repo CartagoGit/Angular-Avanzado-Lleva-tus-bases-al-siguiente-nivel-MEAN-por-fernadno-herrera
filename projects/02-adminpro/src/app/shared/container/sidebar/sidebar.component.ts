@@ -11,6 +11,7 @@ import { StateService } from '../../services/settings/state.service';
 })
 export class SidebarComponent {
 	public settingsPath = paths.getPath('settings');
+	public profilePath = paths.getPath('profile');
 	public loginPath = paths.getPath('login');
 	public menuItems: any[];
 	public user: User;
