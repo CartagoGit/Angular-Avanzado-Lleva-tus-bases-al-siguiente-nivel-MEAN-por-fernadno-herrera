@@ -1,10 +1,11 @@
 <div class="row">
 	<div class="col-md-6">
 		<div class="card">
+			<span *ngIf="user.google" class="google-banner">Google account</span>
 			<div class="card-body">
 				<h4 class="card-title">Profile</h4>
 				<h6 class="card-subtitle">Settings</h6>
-				<form class="form p-t-20">
+				<form class="form p-t-20" [formGroup]="profileForm">
 					<div class="form-group">
 						<label for="exampleInputuname">User Name</label>
 						<div class="input-group">
@@ -12,10 +13,14 @@
 								<i class="ti-user"></i>
 							</div>
 							<input
+								formControlName="name"
 								type="text"
 								class="form-control"
-								id="exampleInputuname"
 								placeholder="Username"
+								[ngClass]="{
+									'profile-input-error':
+										isSubmited && profileForm.get('username')!.invalid
+								}"
 							/>
 						</div>
 					</div>
@@ -26,10 +31,14 @@
 								<i class="ti-email"></i>
 							</div>
 							<input
+								formControlName="email"
 								type="email"
 								class="form-control"
-								id="exampleInputEmail1"
 								placeholder="Enter email"
+								[ngClass]="{
+									'profile-input-error':
+										isSubmited && profileForm.get('email')!.invalid
+								}"
 							/>
 						</div>
 					</div>
@@ -45,30 +54,17 @@
 								></i>
 							</div>
 							<input
+								formControlName="password"
 								class="form-control"
 								type="text"
 								placeholder="Password"
 								[ngClass]="{
-									'text-password': !showPassword
+									'text-password': !showPassword,
+									'profile-input-error':
+										isSubmited && profileForm.get('password')!.invalid
 								}"
 							/>
 						</div>
-						<!-- <div
-							class="icon-show-password pointer"
-							(click)="showPassword = !showPassword"
-						>
-							<img
-								class="img-show-password"
-								width="20px"
-								height="20px"
-								[src]="
-									!!showPassword
-										? 'assets/images/icon/unlock-solid.svg'
-										: 'assets/images/icon/lock-solid.svg'
-								"
-								alt="show/hide password"
-							/>
-						</div> -->
 					</div>
 					<div class="form-group">
 						<label for="pwd2">Confirm Password</label>
@@ -82,32 +78,21 @@
 								></i>
 							</div>
 							<input
+								formControlName="password2"
 								class="form-control"
 								type="text"
 								placeholder="Password"
 								[ngClass]="{
-									'text-password': !showPassword
+									'text-password': !showPassword,
+									'profile-input-error':
+										isSubmited &&
+										profileForm.get('password2')!.invalid
 								}"
 							/>
 						</div>
-						<!-- <div
-							class="icon-show-password pointer"
-							(click)="showPassword = !showPassword"
-						>
-							<img
-								class="img-show-password"
-								width="20px"
-								height="20px"
-								[src]="
-									!!showPassword
-										? 'assets/images/icon/unlock-solid.svg'
-										: 'assets/images/icon/lock-solid.svg'
-								"
-								alt="show/hide password"
-							/>
-						</div> -->
 					</div>
 					<button
+						[disabled]="user.google"
 						type="submit"
 						class="btn btn-inverse waves-effect waves-light m-r-10 btn-block"
 					>
@@ -126,9 +111,10 @@
 				<h6 class="card-subtitle">Settings</h6>
 
 				<img src="" alt="" />
-				<input type="file" />
+				<input type="file" [disabled]="user.google" />
 				<br /><br />
 				<button
+					[disabled]="user.google"
 					type="button"
 					class="btn btn-inverse waves-effect waves-light m-r-10 btn-block"
 				>

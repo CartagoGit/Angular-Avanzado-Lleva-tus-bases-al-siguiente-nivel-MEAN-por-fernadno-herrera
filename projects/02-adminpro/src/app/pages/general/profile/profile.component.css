@@ -1,0 +1,18 @@
+.profile-input-error {
+	outline: 1px solid red;
+}
+
+.card {
+	position: relative;
+}
+
+.google-banner{
+	position: absolute;
+	top: 0;
+	right: 0;
+	color: white;
+	font-weight: 600;
+	padding: 5px 10px;
+	border-radius: 5px;
+	background-color: #ef5350;
+}
