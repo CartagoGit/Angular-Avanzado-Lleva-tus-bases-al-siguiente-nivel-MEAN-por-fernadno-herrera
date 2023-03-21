@@ -36,30 +36,76 @@
 					<div class="form-group">
 						<label for="pwd1">Password</label>
 						<div class="input-group">
-							<div class="input-group-addon">
-								<i class="ti-lock"></i>
+							<div
+								class="input-group-addon pointer"
+								(click)="showPassword = !showPassword"
+							>
+								<i
+									[ngClass]="showPassword ? 'ti-unlock' : 'ti-lock'"
+								></i>
 							</div>
 							<input
-								type="password"
 								class="form-control"
-								id="pwd1"
-								placeholder="Enter email"
+								type="text"
+								placeholder="Password"
+								[ngClass]="{
+									'text-password': !showPassword
+								}"
 							/>
 						</div>
+						<!-- <div
+							class="icon-show-password pointer"
+							(click)="showPassword = !showPassword"
+						>
+							<img
+								class="img-show-password"
+								width="20px"
+								height="20px"
+								[src]="
+									!!showPassword
+										? 'assets/images/icon/unlock-solid.svg'
+										: 'assets/images/icon/lock-solid.svg'
+								"
+								alt="show/hide password"
+							/>
+						</div> -->
 					</div>
 					<div class="form-group">
 						<label for="pwd2">Confirm Password</label>
 						<div class="input-group">
-							<div class="input-group-addon">
-								<i class="ti-lock"></i>
+							<div
+								class="input-group-addon pointer"
+								(click)="showPassword = !showPassword"
+							>
+								<i
+									[ngClass]="showPassword ? 'ti-unlock' : 'ti-lock'"
+								></i>
 							</div>
 							<input
-								type="password"
 								class="form-control"
-								id="pwd2"
-								placeholder="Enter email"
+								type="text"
+								placeholder="Password"
+								[ngClass]="{
+									'text-password': !showPassword
+								}"
 							/>
 						</div>
+						<!-- <div
+							class="icon-show-password pointer"
+							(click)="showPassword = !showPassword"
+						>
+							<img
+								class="img-show-password"
+								width="20px"
+								height="20px"
+								[src]="
+									!!showPassword
+										? 'assets/images/icon/unlock-solid.svg'
+										: 'assets/images/icon/lock-solid.svg'
+								"
+								alt="show/hide password"
+							/>
+						</div> -->
 					</div>
 					<button
 						type="submit"
@@ -76,7 +122,7 @@
 	<div class="col-md-6">
 		<div class="card">
 			<div class="card-body">
-				<h4 class="card-title">Profile</h4>
+				<h4 class="card-title">Image</h4>
 				<h6 class="card-subtitle">Settings</h6>
 
 				<img src="" alt="" />
