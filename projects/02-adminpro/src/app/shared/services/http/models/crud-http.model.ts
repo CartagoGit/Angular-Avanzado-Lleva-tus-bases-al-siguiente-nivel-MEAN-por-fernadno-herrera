@@ -34,7 +34,7 @@ type CrudEndpoints = typeof crudEndpoints;
  * @template T
  * @extends {CoreHttp<typeof crudEndpoints & T>}
  */
-export class CrudHttp<Model, ModelEndpoints> extends CoreHttp<
+export class CrudHttp<Model, ModelEndpoints, Props = any> extends CoreHttp<
 	CrudEndpoints & ModelEndpoints
 > {
 	// ANCHOR : Constructor
@@ -57,8 +57,8 @@ export class CrudHttp<Model, ModelEndpoints> extends CoreHttp<
 	 * @public
 	 * @returns {Observable<DefaultResponse<Model>>}
 	 */
-	public getAll(): Observable<DefaultResponse<Model>> {
-		return this._http.get<DefaultResponse<Model>>(
+	public getAll(): Observable<DefaultResponse<Model[]>> {
+		return this._http.get<DefaultResponse<Model[]>>(
 			this.getUrlEndpoint('getAll')
 		);
 	}
@@ -76,8 +76,8 @@ export class CrudHttp<Model, ModelEndpoints> extends CoreHttp<
 	}
 
 	public getByQuery(
-		query: Record<keyof Model, string>,
-		options: { limit: number; skip: number }
+		query?: Partial<Props>,
+		options?: { limit?: number; skip: number }
 	): Observable<DefaultResponse<Model>> {
 		return this._http.get<DefaultResponse<Model>>(
 			this.getUrlEndpoint('getByQuery'),

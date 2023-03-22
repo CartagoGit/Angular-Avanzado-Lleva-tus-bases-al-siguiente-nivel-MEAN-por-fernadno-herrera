@@ -40,7 +40,7 @@ export const coreRoutes: Routes = new Routes({
 		type: 'get',
 	},
 	getByQuery: {
-		route: '/get-by-query/',
+		route: '/get-by-query',
 		hasJwtValidator: true,
 		hasAdminValidator: true,
 		coreController: coreController.getByQuery,

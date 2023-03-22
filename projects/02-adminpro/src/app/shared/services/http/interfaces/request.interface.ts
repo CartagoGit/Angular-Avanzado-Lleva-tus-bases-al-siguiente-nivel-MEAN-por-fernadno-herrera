@@ -11,3 +11,10 @@ export interface AuthDefaultResponse {
 	token?: string;
 }
 
+export interface QueryOptions {
+	  limit?: number;
+	  skip?: number;
+	  sort?: string;
+	  select?: string;
+	  populate?: string;
+}

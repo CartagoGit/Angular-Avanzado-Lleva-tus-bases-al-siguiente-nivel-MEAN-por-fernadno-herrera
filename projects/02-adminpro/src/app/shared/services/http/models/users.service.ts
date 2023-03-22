@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CrudHttp } from './crud-http.model';
-import { User } from '../../../models/mongo-models/user.model';
+import { User, UserProps } from '../../../models/mongo-models/user.model';
 
 /**
  * ? Rutas popias del modelo de Usuarios
@@ -31,7 +31,11 @@ const modelRouteEndpoint = '/users';
 @Injectable({
 	providedIn: 'root',
 })
-export class UsersService extends CrudHttp<User, Endpoints> {
+export class UsersService extends CrudHttp<
+	User,
+	Endpoints,
+	Omit<UserProps, 'password'>
+> {
 	// ANCHOR : Constructor
 	constructor() {
 		super({ modelEndpoints, modelRouteEndpoint });
