@@ -62,4 +62,26 @@ export class CrudHttp<Model, ModelEndpoints> extends CoreHttp<
 			this.getUrlEndpoint('getAll')
 		);
 	}
+
+	/**
+	 * ? Obtiene un registro de la coleccion del tipo del Modelo <Model> por su id
+	 * @public
+	 * @param {string} id
+	 * @returns {Observable<DefaultResponse<Model>>}
+	 */
+	public getById(id: string): Observable<DefaultResponse<Model>> {
+		return this._http.get<DefaultResponse<Model>>(
+			this.getUrlEndpoint('getById', id)
+		);
+	}
+
+	public getByQuery(
+		query: Record<keyof Model, string>,
+		options : {limit: number, skip: number}
+	): Observable<DefaultResponse<Model>> {
+		return this._http.get<DefaultResponse<Model>>(
+			this.getUrlEndpoint('getByQuery'),
+			{ params: {...query} }
+		);
+	}
 }

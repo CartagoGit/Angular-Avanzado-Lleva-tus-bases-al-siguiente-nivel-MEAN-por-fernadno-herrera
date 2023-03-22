@@ -80,7 +80,7 @@ export class CoreHttp<T> {
 	 * @protected
 	 * @returns {boolean}
 	 */
-	protected _isPossibleAndTimer(time? : number): boolean {
+	protected _isPossibleAndTimer(time?: number): boolean {
 		if (!this.isPossibleSub) return false;
 		this.isPossibleSub = false;
 		timer(time || this._timer).subscribe(() => (this.isPossibleSub = true));
@@ -93,9 +93,12 @@ export class CoreHttp<T> {
 	 * @param {keyof typeof this.endpoints} endpoint
 	 * @returns {string}
 	 */
-	public getUrlEndpoint(endpoint: keyof typeof this.endpoints): string {
+	public getUrlEndpoint(
+		endpoint: keyof typeof this.endpoints,
+		id?: string
+	): string {
 		if (!this.endpoints[endpoint]) throw new Error('Invalid endpoint');
-		return this.modelRoute + this.endpoints[endpoint];
+		return this.modelRoute + this.endpoints[endpoint] + (id || '');
 	}
 
 	/**

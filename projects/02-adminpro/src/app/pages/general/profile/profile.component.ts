@@ -37,10 +37,8 @@ export class ProfileComponent {
 		private _validatorSvc: ValidatorService
 	) {
 		this.user = this._state.user!;
-		this._usersSvc.getAll().subscribe((res) => console.log(res));
 		this._createProfileForm();
 
-		console.log(this.profileForm);
 	}
 
 	ngOnInit(): void {}
