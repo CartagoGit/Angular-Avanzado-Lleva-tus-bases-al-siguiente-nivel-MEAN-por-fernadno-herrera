@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { User } from '../../../shared/models/mongo-models/user.model';
+import { UsersService } from '../../../shared/services/http/models/users.service';
 import { StateService } from '../../../shared/services/settings/state.service';
 
 @Component({
@@ -15,14 +16,45 @@ export class ProfileComponent {
 
 	public user: User;
 
-	public profileForm!: FormGroup;
+	public profileForm: FormGroup = this._fb.group({
+		name: [''],
+		email: [''],
+		password: [''],
+		password2: [''],
+	});
 
 	// ANCHOR : Constructor
-	constructor(private _fb: FormBuilder, private _state: StateService) {
+	constructor(private _fb: FormBuilder, private _state: StateService, private _usersSvc: UsersService) {
 		this.user = this._state.user!;
+		this._usersSvc.getAll().subscribe((res) => console.log(res));
+		this._createProfileForm();
+		console.log(this.profileForm);
 	}
 
-	ngOnInit(): void {
+	ngOnInit(): void {}
+
+	// ANCHOR : Methods
+
+	/**
+	 * ? Actualiza el perfil
+	 * @public
+	 */
+	public updateProfile() {
+		this.isSubmited = true;
+		console.log(this.profileForm.value);
+	}
+
+	/**
+	 * ? Actualiza la imagen del perfil
+	 * @public
+	 */
+	public updateImage() {}
+
+	/**
+	 * ? Crea el formulario del perfil
+	 * @private
+	 */
+	private _createProfileForm(): void {
 		this.profileForm = this._fb.group({
 			name: [
 				{ value: this.user.name, disabled: this.user.google },
@@ -36,6 +68,4 @@ export class ProfileComponent {
 			password2: [{ value: '', disabled: this.user.google }],
 		});
 	}
-
-	// ANCHOR : Methods
 }
