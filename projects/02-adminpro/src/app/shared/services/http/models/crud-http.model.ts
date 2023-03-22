@@ -1,6 +1,7 @@
 import { CoreHttp } from './core-http.model';
 import { DefaultResponse } from '../interfaces/response.interfaces';
 import { Observable } from 'rxjs';
+import { QueryOptions } from '../interfaces/request.interface';
 
 /**
  * ? Objeto con las rutas basicas del crud
@@ -77,11 +78,12 @@ export class CrudHttp<Model, ModelEndpoints, Props = any> extends CoreHttp<
 
 	public getByQuery(
 		query?: Partial<Props>,
-		options?: { limit?: number; skip: number }
+		options?: QueryOptions<Props>
 	): Observable<DefaultResponse<Model>> {
+
 		return this._http.get<DefaultResponse<Model>>(
 			this.getUrlEndpoint('getByQuery'),
-			{ params: { ...query } }
+			{ params: {...query} }
 		);
 	}
 }
