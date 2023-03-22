@@ -63,7 +63,6 @@ export class RegisterComponent {
 		private _storageSvc: StorageService,
 		private _validatorSvc: ValidatorService,
 		private _sweetAlertSvc: SweetAlertService,
-		private _router: Router,
 		private _stateSvc: StateService
 	) {
 		this._storage = this._storageSvc.local;

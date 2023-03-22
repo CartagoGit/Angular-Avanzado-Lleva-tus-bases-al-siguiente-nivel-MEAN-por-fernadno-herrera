@@ -1,6 +1,12 @@
 import { Component } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import {
+	FormGroup,
+	FormBuilder,
+	Validators,
+	AbstractControlOptions,
+} from '@angular/forms';
 import { User } from '../../../shared/models/mongo-models/user.model';
+import { ValidatorService } from '../../../shared/services/helpers/validator.service';
 import { UsersService } from '../../../shared/services/http/models/users.service';
 import { StateService } from '../../../shared/services/settings/state.service';
 
@@ -16,7 +22,7 @@ export class ProfileComponent {
 
 	public user: User;
 
-	public profileForm: FormGroup = this._fb.group({
+	public profileForm = this._fb.group({
 		name: [''],
 		email: [''],
 		password: [''],
@@ -24,10 +30,16 @@ export class ProfileComponent {
 	});
 
 	// ANCHOR : Constructor
-	constructor(private _fb: FormBuilder, private _state: StateService, private _usersSvc: UsersService) {
+	constructor(
+		private _fb: FormBuilder,
+		private _state: StateService,
+		private _usersSvc: UsersService,
+		private _validatorSvc: ValidatorService
+	) {
 		this.user = this._state.user!;
 		this._usersSvc.getAll().subscribe((res) => console.log(res));
 		this._createProfileForm();
+
 		console.log(this.profileForm);
 	}
 
@@ -41,6 +53,7 @@ export class ProfileComponent {
 	 */
 	public updateProfile() {
 		this.isSubmited = true;
+		if (this.profileForm.invalid || !this._isUserChanged()) return;
 		console.log(this.profileForm.value);
 	}
 
@@ -55,17 +68,42 @@ export class ProfileComponent {
 	 * @private
 	 */
 	private _createProfileForm(): void {
-		this.profileForm = this._fb.group({
-			name: [
-				{ value: this.user.name, disabled: this.user.google },
-				[Validators.required],
-			],
-			email: [
-				{ value: this.user.email, disabled: this.user.google },
-				[Validators.required, Validators.email],
-			],
-			password: [{ value: '', disabled: this.user.google }],
-			password2: [{ value: '', disabled: this.user.google }],
-		});
+		this.profileForm = this._fb.group(
+			{
+				name: [
+					{ value: this.user.name, disabled: this.user.google },
+					[Validators.required],
+				],
+				email: [
+					{ value: this.user.email, disabled: this.user.google },
+					[Validators.required, Validators.email],
+				],
+				password: [
+					{ value: '', disabled: this.user.google },
+					[Validators.minLength(6)],
+				],
+				password2: [
+					{ value: '', disabled: this.user.google },
+					[Validators.minLength(6)],
+				],
+			},
+			{
+				validators: [
+					this._validatorSvc.areSamePasswords('password', 'password2'),
+				],
+			} as AbstractControlOptions
+		);
+	}
+
+	/**
+	 * ? Valida si el usuario ha cambiado
+	 * @private
+	 * @returns {boolean}
+	 */
+	private _isUserChanged(): boolean {
+		return (
+			this.user.name !== this.profileForm.get('name')?.value ||
+			this.user.email !== this.profileForm.get('email')?.value
+		);
 	}
 }
