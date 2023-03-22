@@ -77,11 +77,11 @@ export class CrudHttp<Model, ModelEndpoints> extends CoreHttp<
 
 	public getByQuery(
 		query: Record<keyof Model, string>,
-		options : {limit: number, skip: number}
+		options: { limit: number; skip: number }
 	): Observable<DefaultResponse<Model>> {
 		return this._http.get<DefaultResponse<Model>>(
 			this.getUrlEndpoint('getByQuery'),
-			{ params: {...query} }
+			{ params: { ...query } }
 		);
 	}
 }

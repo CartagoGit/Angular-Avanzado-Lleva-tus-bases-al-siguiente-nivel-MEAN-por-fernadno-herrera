@@ -10,12 +10,12 @@ import { ServiceLocator } from '../../injector/locator.service';
  * @class CoreHttp
  * @typedef {CoreHttp}
  */
-export class CoreHttp<T> {
+export class CoreHttp<Endpoints> {
 	// ANCHOR : Variables
 	public apiUrl = config.API_ENDPOINT;
 	public endpoints!: {
-		root: string;
-	} & T;
+		root: '/';
+	} & Endpoints;
 	public routes!: Record<keyof typeof this.endpoints, string>;
 	public _modelRouteEndpoint!: string;
 	public isPossibleSub = true;
@@ -32,14 +32,14 @@ export class CoreHttp<T> {
 	protected _middleRoutes!: string;
 	protected _timer = 700;
 
-	private _coreEndpoints = {
+	private _coreEndpoints: { root: '/' } = {
 		root: '/',
 	};
 
 	// ANCHOR : Constructor
 	constructor(
 		private _data: {
-			modelEndpoints?: T;
+			modelEndpoints?: Endpoints;
 			modelRouteEndpoint: string;
 			middleRoutes?: string[];
 		}
@@ -64,11 +64,18 @@ export class CoreHttp<T> {
 		this._middleRoutes =
 			middleRoutes.length === 0 ? '' : middleRoutes.join('');
 
-		this.endpoints = { ...this._coreEndpoints, ...(modelEndpoints as T) };
+		this.endpoints = {
+			...this._coreEndpoints,
+			...(modelEndpoints as Endpoints),
+		};
 		Object.keys(this.endpoints).forEach((key) => {
 			this.routes = {
 				...this.routes,
-				[key]: this.getUrlEndpoint(key as keyof typeof this.endpoints),
+				[key]: this.getUrlEndpoint(
+					key as keyof ({
+						root: '/';
+					} & Endpoints)
+				),
 			};
 		});
 
@@ -94,7 +101,10 @@ export class CoreHttp<T> {
 	 * @returns {string}
 	 */
 	public getUrlEndpoint(
-		endpoint: keyof typeof this.endpoints,
+		// endpoint: keyof typeof this.endpoints,
+		endpoint: keyof ({
+			root: '/';
+		} & Endpoints),
 		id?: string
 	): string {
 		if (!this.endpoints[endpoint]) throw new Error('Invalid endpoint');
