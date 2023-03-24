@@ -2,6 +2,7 @@ import { CoreHttp } from './core-http.model';
 import { DefaultResponse } from '../interfaces/response.interfaces';
 import { Observable } from 'rxjs';
 import { QueryOptions } from '../interfaces/request.interface';
+import { BaseModelsProps } from '../../../models/mongo-models/base-model.interface';
 
 /**
  * ? Objeto con las rutas basicas del crud
@@ -35,7 +36,7 @@ type CrudEndpoints = typeof crudEndpoints;
  * @template T
  * @extends {CoreHttp<typeof crudEndpoints & T>}
  */
-export class CrudHttp<Model, ModelEndpoints, Props = any> extends CoreHttp<
+export class CrudHttp<Model extends BaseModelsProps, ModelEndpoints, Props = any> extends CoreHttp<
 	CrudEndpoints & ModelEndpoints
 > {
 	// ANCHOR : Constructor
@@ -77,13 +78,68 @@ export class CrudHttp<Model, ModelEndpoints, Props = any> extends CoreHttp<
 	}
 
 	public getByQuery(
+		//TODO
 		query?: Partial<Props>,
 		options?: QueryOptions<Props>
 	): Observable<DefaultResponse<Model>> {
-
 		return this._http.get<DefaultResponse<Model>>(
 			this.getUrlEndpoint('getByQuery'),
-			{ params: {...query} }
+			{ params: { ...query } }
 		);
 	}
+
+
+	/**
+	 * ? Crea un registro en la coleccion del tipo del Modelo <Model>
+	 * @public
+	 * @param {Model} model
+	 * @returns {Observable<DefaultResponse<Model>>}
+	 */
+	public post(model: Model): Observable<DefaultResponse<Model>> {
+		return this._http.post<DefaultResponse<Model>>(
+			this.getUrlEndpoint('post'),
+			{ body: { ...model } }
+		);
+	}
+
+
+	/**
+	 * ? Actualiza un registro en la coleccion del tipo del Modelo <Model>
+	 * @public
+	 * @param {Model} model
+	 * @returns {Observable<DefaultResponse<Model>>}
+	 */
+	public put(model: Model): Observable<DefaultResponse<Model>> {
+		return this._http.put<DefaultResponse<Model>>(
+			this.getUrlEndpoint('put', model.id),
+			{ body: { ...model } }
+		);
+	}
+
+
+	/**
+	 * ? Elimina un registro en la coleccion del tipo del Modelo <Model>
+	 * @public
+	 * @param {string} id
+	 * @returns {Observable<DefaultResponse<Model>>}
+	 */
+	public delete(id: string): Observable<DefaultResponse<Model>> {
+		return this._http.delete<DefaultResponse<Model>>(
+			this.getUrlEndpoint('delete', id)
+		);
+	}
+
+
+	/**
+	 * ? Elimina todos los registros de la coleccion del tipo del Modelo <Model>
+	 * @public
+	 * @returns {Observable<DefaultResponse<Model>>}
+	 */
+	public deleteCollection(): Observable<DefaultResponse<Model>> {
+		return this._http.delete<DefaultResponse<Model>>(
+			this.getUrlEndpoint('deleteCollection')
+		);
+	}
+
+	
 }
