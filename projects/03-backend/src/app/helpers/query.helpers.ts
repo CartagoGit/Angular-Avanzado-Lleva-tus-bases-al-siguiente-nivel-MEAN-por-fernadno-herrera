@@ -19,7 +19,7 @@ export const getQueryIncludeAndPaginate = (
 	const wantInclude =
 		(req.query['include'] as string).toLowerCase() === 'true';
 	delete req.query['include'];
-	const queryParams = req.query;
+	let queryParams = req.query;
 	const optionsPaginate = new PaginationParameters(req).get()[1];
 
 	let optionalReturn: undefined | object = undefined;
