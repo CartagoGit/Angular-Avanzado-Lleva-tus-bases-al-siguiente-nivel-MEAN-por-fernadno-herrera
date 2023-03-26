@@ -1,7 +1,7 @@
 import { Request } from 'express';
 import { PaginationParameters } from 'mongoose-paginate-v2';
 import { getModelSection } from './get-model-section.helper';
-import { ReturnedQuery } from '../interfaces/query.interface';
+import { QueryOptions, ReturnedQuery } from '../interfaces/query.interface';
 
 /**
  * ? Retorna si la busqueda debe ser inclusiva, los query parametros, y las opciones de paginacion incluidas en el query
