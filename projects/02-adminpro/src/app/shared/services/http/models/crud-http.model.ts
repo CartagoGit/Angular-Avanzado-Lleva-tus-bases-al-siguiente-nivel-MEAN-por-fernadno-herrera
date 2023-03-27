@@ -3,7 +3,10 @@ import { DefaultResponse } from '../interfaces/response.interfaces';
 import { Observable } from 'rxjs';
 import { QueryOptions } from '../interfaces/request.interface';
 import { BaseModelsProps } from '../../../models/mongo-models/base-model.interface';
-import { getDefaultQueryOptions } from '../../../helpers/get-default-query-options.helper';
+import {
+	getQueryOptions,
+	getParamsWithOptions,
+} from '../../../helpers/get-query-options.helper';
 
 /**
  * ? Objeto con las rutas basicas del crud
@@ -91,21 +94,9 @@ export class CrudHttp<
 	public getByQuery(
 		query?: Partial<Props>,
 		options?: QueryOptions<Props>,
-		useDefaultOptions = true
+		useDefaultOptions: boolean = true
 	): Observable<DefaultResponse<Model>> {
-		if (useDefaultOptions)
-			options = {
-				...(getDefaultQueryOptions as Partial<QueryOptions<Props>>),
-				...options,
-			};
-
-		query = query || {};
-
-		const optionsParsed = options ? JSON.stringify(options) : undefined;
-		let params = {
-			...query,
-		} as { [key: string]: string } & { options?: string };
-		if (optionsParsed) params.options = optionsParsed;
+		const params = getParamsWithOptions(query, options, useDefaultOptions);
 		return this._http.get<DefaultResponse<Model>>(
 			this.getUrlEndpoint('getByQuery'),
 			{ params }
