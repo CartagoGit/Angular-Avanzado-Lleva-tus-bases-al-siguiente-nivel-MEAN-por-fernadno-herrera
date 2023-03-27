@@ -93,8 +93,11 @@ export class CrudHttp<
 		options?: QueryOptions<Props>,
 		useDefaultOptions = true
 	): Observable<DefaultResponse<Model>> {
-		// if (useDefaultOptions)
-		// 	options = { ...getDefaultQueryOptions, ...options };
+		if (useDefaultOptions)
+			options = {
+				...(getDefaultQueryOptions as Partial<QueryOptions<Props>>),
+				...options,
+			};
 
 		query = query || {};
 
