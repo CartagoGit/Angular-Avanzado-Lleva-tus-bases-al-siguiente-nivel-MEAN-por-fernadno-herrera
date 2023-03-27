@@ -1,8 +1,9 @@
 import { config } from 'projects/02-adminpro/src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable, timer } from 'rxjs';
-import { DefaultResponse } from '../interfaces/response.interfaces';
+
 import { ServiceLocator } from '../../injector/locator.service';
+import { DefaultResponse } from '../../../interfaces/http/response.interfaces';
 
 /**
  * ? Core que deben extender todas los servicios http

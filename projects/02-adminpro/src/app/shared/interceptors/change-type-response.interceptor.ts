@@ -7,7 +7,8 @@ import {
 	HttpErrorResponse,
 } from '@angular/common/http';
 import { Observable, catchError, throwError, retry } from 'rxjs';
-import { DefaultErrorResponse } from '../services/http/interfaces/response.interfaces';
+import { DefaultErrorResponse } from '../interfaces/http/response.interfaces';
+
 
 @Injectable()
 export class ChangeTypeResponseInterceptor implements HttpInterceptor {

@@ -7,8 +7,8 @@ import {
 } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
 import { StorageService } from '../services/settings/storage.service';
-import { DefaultErrorResponse } from '../services/http/interfaces/response.interfaces';
 import { StateService } from '../services/settings/state.service';
+import { DefaultErrorResponse } from '../interfaces/http/response.interfaces';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {

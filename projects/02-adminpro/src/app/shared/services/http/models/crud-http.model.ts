@@ -1,12 +1,9 @@
 import { CoreHttp } from './core-http.model';
-import { DefaultResponse } from '../interfaces/response.interfaces';
 import { Observable } from 'rxjs';
-import { QueryOptions } from '../interfaces/request.interface';
 import { BaseModelsProps } from '../../../models/mongo-models/base-model.interface';
-import {
-	getQueryOptions,
-	getParamsWithOptions,
-} from '../../../helpers/get-query-options.helper';
+import { getParamsWithOptions } from '../../../helpers/get-query-options.helper';
+import { DefaultResponse } from '../../../interfaces/http/response.interfaces';
+import { QueryOptions } from '../../../interfaces/http/request.interface';
 
 /**
  * ? Objeto con las rutas basicas del crud
@@ -146,7 +143,7 @@ export class CrudHttp<
 	 * @public
 	 * @returns {Observable<DefaultResponse<Model>>}
 	 */
-	public deleteCollection(): Observable<DefaultResponse<Model>> {
+	public deleteCollection(): Observable<DefaultResponse<Model> | undefined> {
 		return this._http.delete<DefaultResponse<Model>>(
 			this.getUrlEndpoint('deleteCollection')
 		);

@@ -6,14 +6,10 @@ import {
 	HttpEvent,
 } from '@angular/common/http';
 import { Observable, catchError, throwError, tap } from 'rxjs';
-import {
-	DefaultErrorResponse,
-	DefaultResponse,
-} from '../services/http/interfaces/response.interfaces';
-
 import { Router } from '@angular/router';
 import { StateService } from '../services/settings/state.service';
 import { paths } from '../constants/paths.constant';
+import { DefaultErrorResponse, DefaultResponse } from '../interfaces/http/response.interfaces';
 
 @Injectable()
 export class MaintenanceInterceptor implements HttpInterceptor {

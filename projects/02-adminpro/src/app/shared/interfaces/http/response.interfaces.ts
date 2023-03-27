@@ -1,4 +1,4 @@
-import { Roles } from '../../../interfaces/roles.interface';
+import { Roles } from "../roles.interface";
 
 /**
  * ? Default response from DB

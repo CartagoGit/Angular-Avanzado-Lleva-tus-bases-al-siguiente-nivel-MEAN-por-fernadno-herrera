@@ -1,4 +1,4 @@
-import { QueryOptions } from '../services/http/interfaces/request.interface';
+import { QueryOptions } from "../interfaces/http/request.interface";
 
 /**
  * ? Recupera parametros por defecto para la paginacion de las consultas

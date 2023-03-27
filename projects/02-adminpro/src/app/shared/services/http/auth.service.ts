@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { CoreHttp } from './models/core-http.model';
 import { Observable, of } from 'rxjs';
-import { DefaultResponse } from './interfaces/response.interfaces';
-import { AuthDefaultResponse } from './interfaces/request.interface';
 import { HttpHeaders } from '@angular/common/http';
-import { StorageService } from '../settings/storage.service';
+
 import { UserProps } from '../../models/mongo-models/user.model';
+import { AuthDefaultResponse } from '../../interfaces/http/request.interface';
+import { DefaultResponse } from '../../interfaces/http/response.interfaces';
 
 /**
  * ? Endpoints del modelo

@@ -8,13 +8,12 @@ import {
 import { AuthService } from '../../../../shared/services/http/auth.service';
 import { StorageService } from '../../../../shared/services/settings/storage.service';
 import { Subscription } from 'rxjs';
-import { DefaultErrorResponse } from '../../../../shared/services/http/interfaces/response.interfaces';
 import { ValidatorService } from 'projects/02-adminpro/src/app/shared/services/helpers/validator.service';
 import { SweetAlertService } from '../../../../shared/services/helpers/sweet-alert.service';
-import { AuthDefaultResponse } from 'projects/02-adminpro/src/app/shared/services/http/interfaces/request.interface';
-import { Router } from '@angular/router';
 import { paths } from '../../../../shared/constants/paths.constant';
 import { StateService } from 'projects/02-adminpro/src/app/shared/services/settings/state.service';
+import { AuthDefaultResponse } from 'projects/02-adminpro/src/app/shared/interfaces/http/request.interface';
+import { DefaultErrorResponse } from 'projects/02-adminpro/src/app/shared/interfaces/http/response.interfaces';
 
 @Component({
 	selector: 'auth-register',

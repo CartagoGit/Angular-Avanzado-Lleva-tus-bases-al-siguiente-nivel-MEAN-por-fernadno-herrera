@@ -4,12 +4,12 @@ import { StorageService } from 'projects/02-adminpro/src/app/shared/services/set
 import { first, fromEvent, Observable, Subscription } from 'rxjs';
 import { ValidatorService } from '../../../../shared/services/helpers/validator.service';
 import { AuthService } from '../../../../shared/services/http/auth.service';
-import { AuthDefaultResponse } from '../../../../shared/services/http/interfaces/request.interface';
-import { DefaultErrorResponse } from '../../../../shared/services/http/interfaces/response.interfaces';
 import { SweetAlertService } from '../../../../shared/services/helpers/sweet-alert.service';
 import { GoogleService } from '../../../../shared/services/settings/google.service';
 import { paths } from 'projects/02-adminpro/src/app/shared/constants/paths.constant';
 import { StateService } from 'projects/02-adminpro/src/app/shared/services/settings/state.service';
+import { AuthDefaultResponse } from 'projects/02-adminpro/src/app/shared/interfaces/http/request.interface';
+import { DefaultErrorResponse } from 'projects/02-adminpro/src/app/shared/interfaces/http/response.interfaces';
 
 //* Tipo de dato a recuperar del localstorage cuando se pulsa el boton de recordar
 type RembemberUser =
