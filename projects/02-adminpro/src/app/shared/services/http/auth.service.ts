@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CoreHttp } from './models/core-http.model';
+import { CoreHttp } from '../../models/http/core-http.model';
 import { Observable, of } from 'rxjs';
 import { HttpHeaders } from '@angular/common/http';
 

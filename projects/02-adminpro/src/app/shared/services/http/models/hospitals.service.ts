@@ -1,40 +1,45 @@
 import { Injectable } from '@angular/core';
 import { CrudHttp } from '../../../models/http/crud-http.model';
-import { User, UserProps } from '../../../models/mongo-models/user.model';
+import {
+	Hospital,
+	HospitalProps,
+} from '../../../models/mongo-models/hospital.model';
+
 
 /**
  * ? Rutas popias del modelo de Usuarios
- * @type {{ isDoctor: string; getDoctors: string; getHospitals: string; }}
+ * @type {{
+	getPatients: string;
+	getDoctors: string;
+}}
  */
 const modelEndpoints: {
-	isDoctor: string;
+	getPatients: string;
 	getDoctors: string;
-	getHospitals: string;
 } = {
-	isDoctor: '/is-doctor/',
+	getPatients: '/get-patients/',
 	getDoctors: '/get-doctors/',
-	getHospitals: '/get-hospitals/',
 };
 //* Tipado de los endpoints
 type Endpoints = typeof modelEndpoints;
 
 //* Ruta del modelo
-const modelRouteEndpoint = '/users';
+const modelRouteEndpoint = '/hospitals';
 
 /**
  * ? Servicio para realizar peticiones http a las rutas del backend
  * @export
- * @class UsersService
- * @typedef {UsersService}
+ * @class HospitalsService
+ * @typedef {HospitalsService}
  * @extends {CrudHttp<Endpoints>}
  */
 @Injectable({
 	providedIn: 'root',
 })
-export class UsersService extends CrudHttp<
-	User,
+export class HospitalsService extends CrudHttp<
+	Hospital,
 	Endpoints,
-	Omit<UserProps, 'password'>
+	Omit<HospitalProps, 'password'>
 > {
 	// ANCHOR : Constructor
 	constructor() {

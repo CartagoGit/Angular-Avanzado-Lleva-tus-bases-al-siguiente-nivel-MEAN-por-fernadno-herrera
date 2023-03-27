@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CoreHttp } from './models/core-http.model';
+import { CoreHttp } from '../../models/http/core-http.model';
 import { FileUploadResponse } from '../../interfaces/http/file-response.interface';
 import { map, Observable } from 'rxjs';
 import { ModelsMongo, TypesFiles } from '../../interfaces/models.interface';

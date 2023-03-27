@@ -1,4 +1,5 @@
-import { BaseModelsProps } from '../interfaces/base-model.interface';
+import { BaseModelsProps } from "./base-model.interface";
+
 
 /**
  * ? Propiedades que recibe el Modelo de Hospitales a recibir desde el back

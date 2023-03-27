@@ -1,9 +1,10 @@
 import { CoreHttp } from './core-http.model';
 import { Observable } from 'rxjs';
-import { BaseModelsProps } from '../../../models/mongo-models/base-model.interface';
-import { getParamsWithOptions } from '../../../helpers/get-query-options.helper';
-import { DefaultResponse } from '../../../interfaces/http/response.interfaces';
-import { QueryOptions } from '../../../interfaces/http/request.interface';
+import { BaseModelsProps } from '../mongo-models/base-model.interface';
+import { getParamsWithOptions } from '../../helpers/get-query-options.helper';
+import { DefaultResponse } from '../../interfaces/http/response.interfaces';
+import { QueryOptions } from '../../interfaces/http/request.interface';
+
 
 /**
  * ? Objeto con las rutas basicas del crud
@@ -58,9 +59,11 @@ export class CrudHttp<
 	// ANCHOR : Methods
 
 	/**
-	 * ? Obtiene todos los registros de la coleccion del tipo del Modelo <Model>
+	 * ? Obtiene todos los registros de la coleccion del tipo del Modelo <Model>, con posibles parametros de paginacion
 	 * @public
-	 * @returns {Observable<DefaultResponse<Model>>}
+	 * @param {?QueryOptions<Props>} [options]
+	 * @param {boolean} [useDefaultOptions=true]
+	 * @returns {Observable<DefaultResponse<Model[]>>}
 	 */
 	public getAll(
 		options?: QueryOptions<Props>,
