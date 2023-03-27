@@ -40,7 +40,7 @@ export class ProfileComponent {
 		// 	const { data } = resp;
 		// 	console.log(data);
 		// });
-		this._usersSvc.getByQuery({  }).subscribe((resp) => {
+		this._usersSvc.getByQuery({google:true  }).subscribe((resp) => {
 			console.log(resp);
 		});
 		this._createProfileForm();

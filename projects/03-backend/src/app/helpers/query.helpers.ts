@@ -34,9 +34,17 @@ export const getQueryIncludeAndPaginate = (
 		const paramsInModel = Object.keys(model.schema.obj);
 
 		//* En caso de incluir "include" en el query, hacemos que los string sean inclusivos
+		console.log('❗queryParams ➽ ⏩', queryParams);
 		const arrayQuery = Object.entries(queryParams)
 			.filter(([key]) => paramsInModel.includes(key))
 			.map(([key, value]) => {
+				// if(value === 'true' || value === 'false')
+				try {
+					value = JSON.parse(value as string);
+				} catch (error) {
+					value = value;
+				}
+				console.log('❗.map  ➽ value ➽ ⏩', value);
 				return {
 					[key]:
 						wantInclude && typeof value === 'string'
