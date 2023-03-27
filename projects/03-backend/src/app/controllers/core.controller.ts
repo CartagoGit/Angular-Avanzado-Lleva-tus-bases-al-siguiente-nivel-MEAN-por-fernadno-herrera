@@ -49,9 +49,11 @@ export const coreController: {
 	removeFromList: (req: Request) => Promise<ResponseReturnData>;
 } = {
 	getAll: async (req) => {
-		const model = getModelSection(req);
+		// const model = getModelSection(req);
+		const { optionsPaginate, model } = getQueryIncludeAndPaginate(req);
 		const { pagination, data } = await (model as any).paginate(
-			...new PaginationParameters(req).get()
+			{},
+			optionsPaginate
 		);
 		return { data, status_code: 200, pagination };
 	},

@@ -34,7 +34,7 @@ export const getQueryIncludeAndPaginate = (
 		const paramsInModel = Object.keys(model.schema.obj);
 
 		//* En caso de incluir "include" en el query, hacemos que los string sean inclusivos
-		console.log('❗queryParams ➽ ⏩', queryParams);
+
 		const arrayQuery = Object.entries(queryParams)
 			.filter(([key]) => paramsInModel.includes(key))
 			.map(([key, value]) => {
@@ -44,7 +44,7 @@ export const getQueryIncludeAndPaginate = (
 				} catch (error) {
 					value = value;
 				}
-				console.log('❗.map  ➽ value ➽ ⏩', value);
+
 				return {
 					[key]:
 						wantInclude && typeof value === 'string'
@@ -70,7 +70,6 @@ export const getQueryIncludeAndPaginate = (
 
 		//* Añadimos los parametros a devolver
 		optionalReturn = {
-			model,
 			arrayQuery,
 			optionsPaginate,
 			modelParamsInQuery,
@@ -78,6 +77,7 @@ export const getQueryIncludeAndPaginate = (
 		};
 	}
 	let returnedObject: ReturnedQuery = {
+		model,
 		wantInclude,
 		queryParams,
 		optionsPaginate: optionsPaginateFromRequest,

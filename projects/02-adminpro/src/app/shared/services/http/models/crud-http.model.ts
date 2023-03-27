@@ -62,9 +62,14 @@ export class CrudHttp<
 	 * @public
 	 * @returns {Observable<DefaultResponse<Model>>}
 	 */
-	public getAll(): Observable<DefaultResponse<Model[]>> {
+	public getAll(
+		options?: QueryOptions<Props>,
+		useDefaultOptions: boolean = true
+	): Observable<DefaultResponse<Model[]>> {
+		const params = getParamsWithOptions({}, options, useDefaultOptions);
 		return this._http.get<DefaultResponse<Model[]>>(
-			this.getUrlEndpoint('getAll')
+			this.getUrlEndpoint('getAll'),
+			{ params }
 		);
 	}
 

@@ -1,4 +1,5 @@
 import { Roles } from "../roles.interface";
+import { Pagination } from "./pagination.interface";
 
 /**
  * ? Default response from DB
@@ -21,6 +22,7 @@ export interface DefaultResponse<T = unknown> {
 	token?: string;
 	google?: DataFromGoogle;
 	isNewUser?: boolean;
+	pagination? : Pagination;
 }
 
 /**
