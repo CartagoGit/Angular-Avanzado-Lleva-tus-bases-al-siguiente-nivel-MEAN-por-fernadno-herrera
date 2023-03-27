@@ -36,10 +36,10 @@ export class ProfileComponent {
 		private _validatorSvc: ValidatorService
 	) {
 		this.user = this._state.user!;
-		this._usersSvc.getAll().subscribe((resp) => {
-			const { data } = resp;
-			console.log(data);
-		});
+		// this._usersSvc.getAll().subscribe((resp) => {
+		// 	const { data } = resp;
+		// 	console.log(data);
+		// });
 		this._usersSvc.getByQuery({  }).subscribe((resp) => {
 			console.log(resp);
 		});

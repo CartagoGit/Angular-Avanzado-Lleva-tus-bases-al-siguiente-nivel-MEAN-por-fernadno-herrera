@@ -78,6 +78,7 @@ export const coreController: {
 
 		return {
 			queryParams,
+			optionsPaginate,
 			modelParamsInQuery,
 			include: wantInclude,
 			data,

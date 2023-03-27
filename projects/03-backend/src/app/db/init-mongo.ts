@@ -12,6 +12,7 @@ mongoose.plugin(autopopulate, { maxDepth: 3 });
 mongoosePaginate.paginate.options = {
 	limit: 50,
 	customLabels: { meta: 'pagination', docs: 'data' },
+	collation: { locale: 'es'}
 };
 mongoose.plugin(mongoosePaginate);
 
@@ -24,7 +25,7 @@ export const initMongo = () => {
 
 	//* Indicamos que no queremos que el valor de fechas de creacion se pueda modificar
 	mongoose.set('timestamps.createdAt.immutable', true);
-	
+
 
 	//* Modificamos la llamada a los metodos para que no devuelva la version y la '_id' la devuelva como 'id'
 	const transform = function (

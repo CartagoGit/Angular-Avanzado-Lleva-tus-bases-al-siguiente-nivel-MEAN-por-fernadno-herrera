@@ -9,7 +9,7 @@ import { Model } from 'mongoose';
 export interface ReturnedQuery {
 	wantInclude: boolean;
 	queryParams: any;
-	optionsPaginate: any;
+	optionsPaginate: QueryOptions<any>;
 	model?: Model<any>;
 	arrayQuery?: any[];
 	objectQuery?: any;

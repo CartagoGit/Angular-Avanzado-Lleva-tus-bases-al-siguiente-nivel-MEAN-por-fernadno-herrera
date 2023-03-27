@@ -34,7 +34,7 @@ export interface QueryOptions<Props> {
 	page?: number;
 	offset?: number; // Use offset or page to set skip position
 	pagination?: boolean;
-	include? : boolean;
+	include?: boolean;
 }
 
 //* Tipado de las opciones de ordenamiento

@@ -3,6 +3,7 @@ import { DefaultResponse } from '../interfaces/response.interfaces';
 import { Observable } from 'rxjs';
 import { QueryOptions } from '../interfaces/request.interface';
 import { BaseModelsProps } from '../../../models/mongo-models/base-model.interface';
+import { getDefaultQueryOptions } from '../../../helpers/get-default-query-options.helper';
 
 /**
  * ? Objeto con las rutas basicas del crud
@@ -36,9 +37,11 @@ type CrudEndpoints = typeof crudEndpoints;
  * @template T
  * @extends {CoreHttp<typeof crudEndpoints & T>}
  */
-export class CrudHttp<Model extends BaseModelsProps, ModelEndpoints, Props = any> extends CoreHttp<
-	CrudEndpoints & ModelEndpoints
-> {
+export class CrudHttp<
+	Model extends BaseModelsProps,
+	ModelEndpoints,
+	Props = any
+> extends CoreHttp<CrudEndpoints & ModelEndpoints> {
 	// ANCHOR : Constructor
 	constructor(_data: {
 		modelEndpoints: ModelEndpoints;
@@ -77,17 +80,34 @@ export class CrudHttp<Model extends BaseModelsProps, ModelEndpoints, Props = any
 		);
 	}
 
+	/**
+	 * ? Obtiene los registros de la colleccion del modelo <Model> que cumplan con la query pasandole los parametros de paginacion
+	 * @public
+	 * @param {?Partial<Props>} [query]
+	 * @param {?QueryOptions<Props>} [options]
+	 * @param {boolean} [useDefaultOptions=true]
+	 * @returns {Observable<DefaultResponse<Model>>}
+	 */
 	public getByQuery(
-		//TODO
 		query?: Partial<Props>,
-		options?: QueryOptions<Props>
+		options?: QueryOptions<Props>,
+		useDefaultOptions = true
 	): Observable<DefaultResponse<Model>> {
+		// if (useDefaultOptions)
+		// 	options = { ...getDefaultQueryOptions, ...options };
+
+		query = query || {};
+
+		const optionsParsed = options ? JSON.stringify(options) : undefined;
+		let params = {
+			...query,
+		} as { [key: string]: string } & { options?: string };
+		if (optionsParsed) params.options = optionsParsed;
 		return this._http.get<DefaultResponse<Model>>(
 			this.getUrlEndpoint('getByQuery'),
-			{ params: { ...query } }
+			{ params }
 		);
 	}
-
 
 	/**
 	 * ? Crea un registro en la coleccion del tipo del Modelo <Model>
@@ -102,7 +122,6 @@ export class CrudHttp<Model extends BaseModelsProps, ModelEndpoints, Props = any
 		);
 	}
 
-
 	/**
 	 * ? Actualiza un registro en la coleccion del tipo del Modelo <Model>
 	 * @public
@@ -116,7 +135,6 @@ export class CrudHttp<Model extends BaseModelsProps, ModelEndpoints, Props = any
 		);
 	}
 
-
 	/**
 	 * ? Elimina un registro en la coleccion del tipo del Modelo <Model>
 	 * @public
@@ -129,7 +147,6 @@ export class CrudHttp<Model extends BaseModelsProps, ModelEndpoints, Props = any
 		);
 	}
 
-
 	/**
 	 * ? Elimina todos los registros de la coleccion del tipo del Modelo <Model>
 	 * @public
@@ -140,6 +157,4 @@ export class CrudHttp<Model extends BaseModelsProps, ModelEndpoints, Props = any
 			this.getUrlEndpoint('deleteCollection')
 		);
 	}
-
-	
 }

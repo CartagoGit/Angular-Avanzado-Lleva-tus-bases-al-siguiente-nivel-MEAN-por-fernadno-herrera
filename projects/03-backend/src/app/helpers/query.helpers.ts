@@ -15,18 +15,22 @@ export const getQueryIncludeAndPaginate = (
 	options: { returnQueryModels?: boolean } = {}
 ): ReturnedQuery => {
 	const { returnQueryModels = false } = options;
-	if (req.query['include'] === undefined) req.query['include'] = 'true';
-	const wantInclude =
-		(req.query['include'] as string).toLowerCase() === 'true';
-	delete req.query['include'];
+	const model = getModelSection(req);
+	const optionsPaginateFromRequest: QueryOptions<typeof model.schema.obj> =
+		req.query['options'] && JSON.parse(req.query['options'] as string);
+	req.query['options'] = optionsPaginateFromRequest as any;
 	let queryParams = req.query;
-	const optionsPaginate = new PaginationParameters(req).get()[1];
+
+	const wantInclude = optionsPaginateFromRequest?.include ?? true;
+
+	const optionsPaginate = new PaginationParameters({
+		query: optionsPaginateFromRequest,
+	}).get()[1];
 
 	let optionalReturn: undefined | object = undefined;
 
 	//* En caso de querer retornar los valores del modelo que se encuentran en el query
 	if (returnQueryModels) {
-		const model = getModelSection(req);
 		const paramsInModel = Object.keys(model.schema.obj);
 
 		//* En caso de incluir "include" en el query, hacemos que los string sean inclusivos
@@ -36,7 +40,7 @@ export const getQueryIncludeAndPaginate = (
 				return {
 					[key]:
 						wantInclude && typeof value === 'string'
-							? RegExp(value as string, 'i')
+							? RegExp(value, 'i')
 							: value,
 				};
 			});
@@ -60,17 +64,18 @@ export const getQueryIncludeAndPaginate = (
 		optionalReturn = {
 			model,
 			arrayQuery,
-			objectQuery,
+			optionsPaginate,
 			modelParamsInQuery,
+			objectQuery,
 		};
 	}
 	let returnedObject: ReturnedQuery = {
 		wantInclude,
 		queryParams,
-		optionsPaginate,
+		optionsPaginate: optionsPaginateFromRequest,
 	};
 
-	//* Si existen retorno de query del modelo añadimos los valroes opcionales
+	// //* Si existen retorno de query del modelo añadimos los valroes opcionales
 	if (!!optionalReturn)
 		returnedObject = { ...returnedObject, ...(optionalReturn as object) };
 
