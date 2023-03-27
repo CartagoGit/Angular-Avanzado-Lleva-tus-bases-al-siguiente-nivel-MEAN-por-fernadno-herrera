@@ -12,7 +12,7 @@ mongoose.plugin(autopopulate, { maxDepth: 3 });
 mongoosePaginate.paginate.options = {
 	limit: 50,
 	customLabels: { meta: 'pagination', docs: 'data' },
-	collation: { locale: 'es'}
+	collation: { locale: 'es' },
 };
 mongoose.plugin(mongoosePaginate);
 
@@ -25,7 +25,6 @@ export const initMongo = () => {
 
 	//* Indicamos que no queremos que el valor de fechas de creacion se pueda modificar
 	mongoose.set('timestamps.createdAt.immutable', true);
-
 
 	//* Modificamos la llamada a los metodos para que no devuelva la version y la '_id' la devuelva como 'id'
 	const transform = function (
@@ -42,23 +41,33 @@ export const initMongo = () => {
 	//* Observable para la conexion de mongo y trigger para mostrar mensaje si hay algun cambio en la bd
 	getObservableMongoose()
 		.pipe(
-			tap(() => log(config.MONGO_URL_DB, 'MONGO', 'URL')),
+			tap(() =>
+				log({
+					msg: config.MONGO_URL_DB,
+					logType: 'MONGO',
+					optionalMessage: 'URL',
+				})
+			),
 			switchMap((_resp) => {
 				mongoState.isMongoConnected = true;
-				log('Connected succesfully', 'MONGO');
+				log({ msg: 'Connected succesfully', logType: 'MONGO' });
 				return getObservableMongooseChange();
 			})
 		)
 		.subscribe({
 			next: (resp) => {
-				log(
-					`[ ${resp.operationType.toUpperCase()} ]`,
-					'MONGO',
-					'Something changed in MongoDB'
-				);
+				log({
+					msg: `[ ${resp.operationType.toUpperCase()} ]`,
+					logType: 'MONGO',
+					optionalMessage: 'Something changed in MongoDB',
+				});
 			},
 			error: (error) => {
-				logError(error, 'MONGO', 'Mongo connection');
+				logError({
+					error,
+					logType: 'MONGO',
+					optionalMessage: 'Mongo connection',
+				});
 				mongoState.isMongoConnected = false;
 			},
 		});

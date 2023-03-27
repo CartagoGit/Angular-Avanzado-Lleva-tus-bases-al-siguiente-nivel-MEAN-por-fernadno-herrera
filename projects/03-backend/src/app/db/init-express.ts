@@ -40,6 +40,6 @@ export const initExpress = () => {
 
 	//* Inicia el servidor en el puerto establecido
 	app.listen(port, () => {
-		log(initLog, 'EXPRESS');
+		log({ msg: initLog, logType: 'EXPRESS' });
 	});
 };

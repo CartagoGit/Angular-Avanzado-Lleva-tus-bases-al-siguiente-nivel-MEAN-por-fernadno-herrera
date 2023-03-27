@@ -27,8 +27,8 @@ export const defaultResponse = (
 	logType: LogType = 'LOG',
 	statusCode: number = 200
 ): void => {
-	const method =
-		getMethodFromUrl(req).toUpperCase().split('-').join(' ') || undefined;
+	const { endpoint, query } = getMethodFromUrl(req);
+	const method = endpoint.toUpperCase().split('-').join(' ') || undefined;
 	const message =
 		respController.message ||
 		`[ Status  ${statusCode} OK - '${method}' in ${getSectionFromUrl(
@@ -47,10 +47,11 @@ export const defaultResponse = (
 			ok: true,
 			message,
 			method,
+			query,
 			db_state: mongoState.getState(),
 		});
 	}
-	log('Correct response', logType, message);
+	log({ msg: 'Correct response', logType, optionalMessage: message, query });
 };
 
 /**
@@ -73,13 +74,14 @@ export const defaultErrorResponse = (data: {
 	statusCode?: number;
 }) => {
 	let { error, logType = 'LOG', req, res, statusCode = 500, trace } = data;
-	const method = getMethodFromUrl(req).toUpperCase().split('-').join(' ');
+	const { endpoint, query } = getMethodFromUrl(req);
+	const method = endpoint.toUpperCase().split('-').join(' ');
 	statusCode = error.status_code || statusCode;
 	const message =
 		`[ ERROR -  Status  ${statusCode} - '${method}' in ${getSectionFromUrl(
 			req
 		)} ]`.toUpperCase();
-	logError(error.message, logType, message);
+	logError({ error: error.message, logType, optionalMessage: message, query });
 	res.status(statusCode).json({
 		message,
 		ok: false,
@@ -87,6 +89,7 @@ export const defaultErrorResponse = (data: {
 		error_message: error.message || 'Unknown Error',
 		error_data: error,
 		db_state: mongoState.getState(),
+		query,
 		trace,
 	} as DefaultResponseProps);
 };

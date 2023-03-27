@@ -38,10 +38,17 @@ export const getSectionFromUrl = (req: Request): string => {
 /**
  * ? Recupera el metodo a usar segun la url de la peticion
  * @param {Request} req
- * @returns {string}
+ * @returns {endpoint : string, query: object | undefined}
  */
-export const getMethodFromUrl = (req: Request): string => {
-	return req.originalUrl.replace(req.baseUrl + '/', '').split('/')[0];
+export const getMethodFromUrl = (
+	req: Request
+): { endpoint: string; query: object | undefined } => {
+	const finalUrl = req.originalUrl
+		.replace(req.baseUrl + '/', '')
+		.split('/')[0];
+	const [endpoint] = finalUrl.split('?');
+	const query = Object.keys(req.query).length > 0 ? req.query : undefined;
+	return { endpoint, query };
 };
 
 /**
@@ -54,7 +61,6 @@ export const getNotFoundMessage = (req: Request): string => {
 	const nameModel = getSectionFromUrl(req);
 	return getNotFoundMessageWithIdAndModel(id, nameModel);
 };
-
 
 /**
  * ? Devuelve el mensaje de "not found" data en el modelo respecto a su id

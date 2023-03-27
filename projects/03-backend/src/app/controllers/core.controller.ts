@@ -79,7 +79,6 @@ export const coreController: {
 		);
 
 		return {
-			queryParams,
 			optionsPaginate,
 			modelParamsInQuery,
 			include: wantInclude,
@@ -90,7 +89,7 @@ export const coreController: {
 	},
 	post: async (req) => {
 		const section = getSectionFromUrl(req);
-		const endpoint = getMethodFromUrl(req);
+		const { endpoint } = getMethodFromUrl(req);
 
 		let model: Document;
 		let token: string | undefined = undefined;
