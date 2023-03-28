@@ -66,7 +66,7 @@ export class CrudHttp<
 	 * @returns {Observable<DefaultResponse<Model[]>>}
 	 */
 	public getAll(
-		options?: QueryOptions<Props>,
+		options?: Omit<QueryOptions<Props>,'showParams'>,
 		useDefaultOptions: boolean = true
 	): Observable<DefaultResponse<Model[]>> {
 		const params = getParamsWithOptions({}, options, useDefaultOptions);

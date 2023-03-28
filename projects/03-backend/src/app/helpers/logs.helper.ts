@@ -1,4 +1,5 @@
 import { LogType } from '../interfaces/logs.interfaces';
+import { QueryOptions } from '../interfaces/query.interface';
 
 /**
  * ? Crea un mensaje de error para mostrar en el log
@@ -16,9 +17,12 @@ export const logError = (data: {
 	logType: LogType;
 	optionalMessage?: string;
 	collection?: string;
-	query?: object;
+	query?: Record<string, any> & { options?: QueryOptions<any> };
 }): string => {
 	let { error, logType = 'LOG', optionalMessage, collection, query } = data;
+	const { options, ...params } = query || {};
+	const { showQuery, showParams, showOptions } = options || {};
+
 	!error && (error = 'Unknown Error');
 	const errorMessage = `[ ERROR - ${logType.toUpperCase()} ${
 		!!collection ? ('in ' + collection + ' ').toUpperCase() : ''
@@ -26,7 +30,10 @@ export const logError = (data: {
 	Some error stopped the app. Contact with administrator.
 	${optionalMessage ? optionalMessage + ' - ' + error : error}`;
 	console.error(errorMessage);
-	if (query) console.error('<Query Params>'.toUpperCase(), query);
+	//* Mostrar mensajes opciones
+	if (showQuery) console.log('<Query Params>'.toUpperCase(), query);
+	if (showParams) console.log('<Model Params>'.toUpperCase(), params);
+	if (showOptions) console.log('<Options Params>'.toUpperCase(), options);
 	return errorMessage;
 };
 
@@ -44,14 +51,21 @@ export const log = (data: {
 	msg: string;
 	logType?: LogType;
 	optionalMessage?: string;
-	query?: object;
+	query?: Record<string, any> & { options?: QueryOptions<any> };
 }): string => {
 	const { msg, logType = 'LOG', optionalMessage, query } = data;
+	const { options, ...params } = query || {};
+	const { showQuery, showParams, showOptions } = options || {};
+
 	const message = `[ ${logType} ] : ${
 		optionalMessage ? optionalMessage + ' - ' + msg : msg
 	}`;
 	console.log(message);
-	if (query) console.log('<Query Params>'.toUpperCase(), query);
+
+	//* Mostrar mensajes opciones
+	if (showQuery) console.log('<Complete Query>'.toUpperCase(), query);
+	if (showParams) console.log('<Query Params>'.toUpperCase(), params);
+	if (showOptions) console.log('<Options Params>'.toUpperCase(), options);
 	return message;
 };
 

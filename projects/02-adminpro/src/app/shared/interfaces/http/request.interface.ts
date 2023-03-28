@@ -34,7 +34,14 @@ export interface QueryOptions<Props> {
 	page?: number;
 	offset?: number; // Use offset or page to set skip position
 	pagination?: boolean;
+
+	//!! Ajenos a mongoose-paginate-v2
 	include?: boolean;
+
+	//* Para mostrar en la respuesta de los logs del backend
+	showQuery?: boolean;
+	showParams?: boolean;
+	showOptions?: boolean;
 }
 
 //* Tipado de las opciones de ordenamiento

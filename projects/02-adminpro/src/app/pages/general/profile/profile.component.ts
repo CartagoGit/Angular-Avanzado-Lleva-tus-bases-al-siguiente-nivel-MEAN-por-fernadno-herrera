@@ -37,11 +37,11 @@ export class ProfileComponent {
 	) {
 		// TODO
 		this.user = this._state.user!;
-		this._usersSvc.getAll({ limit: 3 }).subscribe((resp) => {
+		this._usersSvc.getAll({ limit: 3, showQuery: true }).subscribe((resp) => {
 			const { data, pagination } = resp;
 			console.log(data, pagination);
 		});
-		this._usersSvc.getByQuery({ google: true }).subscribe((resp) => {
+		this._usersSvc.getByQuery({ google: true }, {showQuery: true, }).subscribe((resp) => {
 			console.log(resp);
 		});
 		this._createProfileForm();

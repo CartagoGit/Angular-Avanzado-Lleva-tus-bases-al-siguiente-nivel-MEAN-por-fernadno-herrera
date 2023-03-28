@@ -16,7 +16,6 @@ export interface ReturnedQuery {
 	modelParamsInQuery?: any;
 }
 
-
 /**
  * ? Opciones para realizar una consulta a la base de datos con el plugin mongoose-paginate-v2
  * @export
@@ -40,7 +39,14 @@ export interface QueryOptions<Props> {
 	page?: number;
 	offset?: number; // Use offset or page to set skip position
 	pagination?: boolean;
-	include? : boolean;
+
+	//!! Ajenos a mongoose-paginate-v2
+	include?: boolean;
+
+	//* Para mostrar en la respuesta de los logs del backend
+	showQuery?: boolean;
+	showParams?: boolean;
+	showOptions?: boolean;
 }
 
 //* Tipado de las opciones de ordenamiento
