@@ -85,6 +85,10 @@ export class Config implements ConfigProps {
 		return `${__dirname}/uploads`;
 	}
 
+	get DEFAULT_IMAGE() {
+		return `${__dirname}/public/assets/images/no-image.jpg`;
+	}
+
 	get MONGO_URL() {
 		return (
 			'mongodb+srv://' +
