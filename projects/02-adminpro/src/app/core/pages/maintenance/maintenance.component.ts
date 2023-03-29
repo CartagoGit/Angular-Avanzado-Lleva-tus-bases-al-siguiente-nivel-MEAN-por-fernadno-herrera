@@ -83,6 +83,7 @@ export class MaintenanceComponent {
 	 * @public
 	 */
 	public tryEntry(): void {
+		
 		this._authSvc.renewToken().subscribe({
 			next: () => {
 				this._router.navigate([this._loginPath?.fullPath]);

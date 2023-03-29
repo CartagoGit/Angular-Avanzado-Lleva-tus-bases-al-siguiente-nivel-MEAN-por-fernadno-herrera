@@ -9,6 +9,7 @@ import { Observable, catchError, throwError } from 'rxjs';
 import { StorageService } from '../services/settings/storage.service';
 import { StateService } from '../services/settings/state.service';
 import { DefaultErrorResponse } from '../interfaces/http/response.interfaces';
+import { TypeToken } from '../interfaces/http/request.interface';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
@@ -21,7 +22,7 @@ export class TokenInterceptor implements HttpInterceptor {
 		request: HttpRequest<unknown>,
 		next: HttpHandler
 	): Observable<HttpEvent<unknown>> {
-		const token: string | undefined = this._storageSvc.local.get(
+		const token: TypeToken = this._storageSvc.local.get(
 			'token',
 			'string'
 		) as string | undefined;

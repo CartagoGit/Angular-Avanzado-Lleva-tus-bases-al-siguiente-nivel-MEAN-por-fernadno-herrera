@@ -1,15 +1,16 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { StorageService } from 'projects/02-adminpro/src/app/shared/services/settings/storage.service';
-import { first, fromEvent, Observable, Subscription } from 'rxjs';
+import { fromEvent, Subscription } from 'rxjs';
 import { ValidatorService } from '../../../../shared/services/helpers/validator.service';
 import { AuthService } from '../../../../shared/services/http/auth.service';
 import { SweetAlertService } from '../../../../shared/services/helpers/sweet-alert.service';
 import { GoogleService } from '../../../../shared/services/settings/google.service';
 import { paths } from 'projects/02-adminpro/src/app/shared/constants/paths.constant';
 import { StateService } from 'projects/02-adminpro/src/app/shared/services/settings/state.service';
-import { AuthDefaultResponse } from 'projects/02-adminpro/src/app/shared/interfaces/http/request.interface';
+
 import { DefaultErrorResponse } from 'projects/02-adminpro/src/app/shared/interfaces/http/response.interfaces';
+import { AuthDefaultRequest } from 'projects/02-adminpro/src/app/shared/interfaces/http/request.interface';
 
 //* Tipo de dato a recuperar del localstorage cuando se pulsa el boton de recordar
 type RembemberUser =
@@ -121,7 +122,7 @@ export class LoginComponent {
 			this._validatorSvc.renewMsgErrors(this.loginForm, this.msgErrors);
 			return;
 		}
-		const body: AuthDefaultResponse = {
+		const body: AuthDefaultRequest = {
 			password: this.loginForm.get('password')?.value!,
 			email: this.loginForm.get('email')?.value!,
 		};

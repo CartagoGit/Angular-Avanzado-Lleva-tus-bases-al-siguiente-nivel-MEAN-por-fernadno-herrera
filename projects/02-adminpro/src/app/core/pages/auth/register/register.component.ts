@@ -12,8 +12,8 @@ import { ValidatorService } from 'projects/02-adminpro/src/app/shared/services/h
 import { SweetAlertService } from '../../../../shared/services/helpers/sweet-alert.service';
 import { paths } from '../../../../shared/constants/paths.constant';
 import { StateService } from 'projects/02-adminpro/src/app/shared/services/settings/state.service';
-import { AuthDefaultResponse } from 'projects/02-adminpro/src/app/shared/interfaces/http/request.interface';
 import { DefaultErrorResponse } from 'projects/02-adminpro/src/app/shared/interfaces/http/response.interfaces';
+import { AuthDefaultRequest } from 'projects/02-adminpro/src/app/shared/interfaces/http/request.interface';
 
 @Component({
 	selector: 'auth-register',
@@ -88,7 +88,7 @@ export class RegisterComponent {
 			return;
 		}
 
-		const body: AuthDefaultResponse = {
+		const body: AuthDefaultRequest = {
 			name: this.registerForm.get('name')?.value!,
 			password: this.registerForm.get('password')?.value!,
 			email: this.registerForm.get('email')?.value!,
