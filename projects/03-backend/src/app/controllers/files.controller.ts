@@ -83,15 +83,13 @@ export const filesController: {
 
 		const nameFile = isFirst ? firstFile : checkParamFileName(req);
 		let pathFile = `${config.UPLOAD_FOLDER}/${model.modelName}s/${typeFile}/${nameFile}`;
-		let existFile : boolean = true;
+		let existFile: boolean = true;
 		if (!fs.existsSync(pathFile)) {
-
-			if(typeFile!=='images')throwErrorFileNotFound();
+			if (typeFile !== 'images') throwErrorFileNotFound();
 			existFile = false;
 		}
-		if(!existFile && typeFile==='images') {
-			pathFile =  config.DEFAULT_IMAGE
-			console.log("❗download:  ➽ pathFile ➽ ⏩" , pathFile);
+		if (!existFile && typeFile === 'images') {
+			pathFile = config.DEFAULT_IMAGE;
 			if (!fs.existsSync(pathFile)) throwErrorFileNotFound();
 			existFile = true;
 		}

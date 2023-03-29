@@ -44,14 +44,6 @@ export class ProfileComponent {
 		private sweetAlertSvc: SweetAlertService
 	) {
 		this.user = this._state.user!;
-		// TODO
-		// this._usersSvc.getAll({ limit: 3, showQuery: true }).subscribe((resp) => {
-		// 	const { data, pagination } = resp;
-		// 	console.log(data, pagination);
-		// });
-		// this._usersSvc.getByQuery({ google: true }, {showQuery: true, }).subscribe((resp) => {
-		// 	console.log(resp);
-		// });
 		this._createProfileForm();
 	}
 
@@ -76,7 +68,9 @@ export class ProfileComponent {
 			password: password ? password : undefined,
 		};
 		this._usersSvc.put(modelProps).subscribe({
-			next: (resp) => {},
+			next: (resp) => {
+				console.log(resp);
+			},
 		});
 		console.log(this.profileForm.value);
 	}
@@ -137,7 +131,8 @@ export class ProfileComponent {
 					[Validators.minLength(6)],
 				],
 				password2: [{ value: '', disabled: this.user.google }],
-				role: [{ value: this.user.role, disabled: true }],
+				// role: [{ value: this.user.role, disabled: true }],
+				role: [this.user.role],
 			},
 			{
 				validators: [
