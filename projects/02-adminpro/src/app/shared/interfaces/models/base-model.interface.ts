@@ -13,6 +13,10 @@ export interface BaseModelsProps {
 	user_modifier: string;
 }
 
+export type ModelSpecificProps<ModelParams extends BaseModelsProps> = Partial<
+	Omit<ModelParams, keyof BaseModelsProps>
+>;
+
 /**
  * ? Interfaz para los parametros de los modelos con el id obligatorio
  * * Util para realizar consultas put
@@ -23,4 +27,4 @@ export interface BaseModelsProps {
 export type ModelPropsAndId<ModelParams extends BaseModelsProps> = Required<
 	Pick<ModelParams, 'id'>
 > &
-	Partial<Omit<ModelParams, keyof BaseModelsProps>>;
+	ModelSpecificProps<ModelParams>;

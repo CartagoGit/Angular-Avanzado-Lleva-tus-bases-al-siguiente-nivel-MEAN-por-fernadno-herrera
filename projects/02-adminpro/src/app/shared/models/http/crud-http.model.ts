@@ -7,6 +7,7 @@ import {
 import { getParamsWithOptions } from '../../helpers/get-query-options.helper';
 import { DefaultResponse } from '../../interfaces/http/response.interfaces';
 import { QueryOptions } from '../../interfaces/http/request.interface';
+import { ModelSpecificProps } from '../../interfaces/models/base-model.interface';
 
 /**
  * ? Objeto con las rutas basicas del crud
@@ -114,28 +115,33 @@ export class CrudHttp<
 	/**
 	 * ? Crea un registro en la coleccion del tipo del Modelo <Model>
 	 * @public
-	 * @param {Model} model
+	 * @param {ModelSpecificProps<Model>} model
 	 * @returns {Observable<DefaultResponse<Model>>}
 	 */
-	public post(model: Model): Observable<DefaultResponse<Model>> {
+	public post(
+		modelProps: ModelSpecificProps<Model>
+	): Observable<DefaultResponse<Model>> {
+		const body = { ...modelProps };
 		return this._http.post<DefaultResponse<Model>>(
 			this.getUrlEndpoint('post'),
-			{ body: { ...model } }
+			body
 		);
 	}
 
 	/**
 	 * ? Actualiza un registro en la coleccion del tipo del Modelo <Model>
 	 * @public
-	 * @param {Model} model
+	 * @param {ModelPropsAndId<Model>} modelParams
 	 * @returns {Observable<DefaultResponse<Model>>}
 	 */
 	public put(
-		modelParams: ModelPropsAndId<Model>
+		modelProps: ModelPropsAndId<Model>
 	): Observable<DefaultResponse<Model>> {
+		const { id, ...props } = modelProps;
+		const body = { ...props };
 		return this._http.put<DefaultResponse<Model>>(
-			this.getUrlEndpoint('put', modelParams.id),
-			{ body: { ...modelParams } }
+			this.getUrlEndpoint('put', id),
+			body
 		);
 	}
 

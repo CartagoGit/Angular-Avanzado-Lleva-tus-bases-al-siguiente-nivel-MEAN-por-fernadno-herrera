@@ -70,9 +70,10 @@ export class ProfileComponent {
 		this._usersSvc.put(modelProps).subscribe({
 			next: (resp) => {
 				console.log(resp);
+
 			},
 		});
-		console.log(this.profileForm.value);
+		
 	}
 
 	/**

@@ -1,5 +1,6 @@
 import { Roles } from "../roles.interface";
 import { Pagination } from "./pagination.interface";
+import { TypeRequest } from './log-types.interface';
 
 /**
  * ? Default response from DB
@@ -14,10 +15,11 @@ export interface DefaultResponse<T = unknown> {
 	status_code: number;
 	mode?: 'development' | 'production';
 	data?: T;
+	data_before?: T;
 	model?: T;
-	db_state?: string;
+	db_state?: 'Connected' | 'Disconnected';
 	id?: string;
-	method?: string;
+	method?: TypeRequest;
 	role?: Roles;
 	token?: string;
 	google?: DataFromGoogle;

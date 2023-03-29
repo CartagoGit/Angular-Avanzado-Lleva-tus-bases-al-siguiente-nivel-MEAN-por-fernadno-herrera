@@ -14,7 +14,6 @@ import {
 } from '../helpers/get-model-section.helper';
 import { checkIdInParams } from '../helpers/validator.helper';
 import { getErrorNotFields } from '../helpers/default-responses.helper';
-import { PaginationParameters } from 'mongoose-paginate-v2';
 import {
 	RequestFieldModifierArrays,
 	RequestFieldValues,
@@ -115,6 +114,7 @@ export const coreController: {
 		const id = req.params['id'];
 		const model = getModelSection(req);
 		req.body['user_modifier'] = getPayloadFromJwtWithoutVerifiy(req).id;
+	
 
 		const data_before = await model.findById(id);
 		const data = await model.findByIdAndUpdate(
