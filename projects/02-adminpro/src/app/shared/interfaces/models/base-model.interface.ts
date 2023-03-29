@@ -1,4 +1,4 @@
-import { Show } from '../common/utils.interface';
+
 /**
  * ? Props base que reciben todos los modelos de mongo
  * @export
@@ -13,18 +13,20 @@ export interface BaseModelsProps {
 	user_modifier: string;
 }
 
-export type ModelSpecificProps<ModelParams extends BaseModelsProps> = Partial<
-	Omit<ModelParams, keyof BaseModelsProps>
+//* Interfaz para los parametros expecificos del modelo sin las propiedades base
+export type ModelSpecificProps<Model extends BaseModelsProps> = Partial<
+	Omit<Model, keyof BaseModelsProps>
 >;
 
-/**
- * ? Interfaz para los parametros de los modelos con el id obligatorio
- * * Util para realizar consultas put
- * @export
- * @typedef {ModelPropsAndId}
- * @template ModelParams
- */
-export type ModelPropsAndId<ModelParams extends BaseModelsProps> = Required<
-	Pick<ModelParams, 'id'>
-> &
-	ModelSpecificProps<ModelParams>;
+//* Interfaz para los parametros de los modelos con el id obligatorio
+export type ModelPropsAndId<Model extends BaseModelsProps> = ModelId &
+	ModelSpecificProps<Model>;
+
+//* Interfaz para los parametros de los modelos con el id obligatorio
+export type ModelId = Required<Pick<BaseModelsProps, 'id'>>;
+
+//* Tipo de los id de los modelos
+export type TypeId<Model extends BaseModelsProps = BaseModelsProps> =
+	Model['id'];
+
+

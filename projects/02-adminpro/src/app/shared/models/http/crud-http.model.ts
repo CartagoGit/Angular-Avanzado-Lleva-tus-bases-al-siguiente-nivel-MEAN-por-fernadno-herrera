@@ -7,6 +7,7 @@ import {
 import { getParamsWithOptions } from '../../helpers/get-query-options.helper';
 import { DefaultResponse } from '../../interfaces/http/response.interfaces';
 import { QueryOptions } from '../../interfaces/http/request.interface';
+import { TypeId } from '../../interfaces/models/base-model.interface';
 import { ModelSpecificProps } from '../../interfaces/models/base-model.interface';
 
 /**
@@ -83,10 +84,10 @@ export class CrudHttp<
 	/**
 	 * ? Obtiene un registro de la coleccion del tipo del Modelo <Model> por su id
 	 * @public
-	 * @param {string} id
+	 * @param {TypeId} id
 	 * @returns {Observable<DefaultResponse<Model>>}
 	 */
-	public getById(id: string): Observable<DefaultResponse<Model>> {
+	public getById(id: TypeId): Observable<DefaultResponse<Model>> {
 		return this._http.get<DefaultResponse<Model>>(
 			this.getUrlEndpoint('getById', id)
 		);
@@ -148,10 +149,10 @@ export class CrudHttp<
 	/**
 	 * ? Elimina un registro en la coleccion del tipo del Modelo <Model>
 	 * @public
-	 * @param {string} id
+	 * @param {TypeId} id
 	 * @returns {Observable<DefaultResponse<Model>>}
 	 */
-	public delete(id: string): Observable<DefaultResponse<Model>> {
+	public delete(id: TypeId): Observable<DefaultResponse<Model>> {
 		return this._http.delete<DefaultResponse<Model>>(
 			this.getUrlEndpoint('delete', id)
 		);

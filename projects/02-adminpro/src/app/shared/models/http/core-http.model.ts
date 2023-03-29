@@ -4,6 +4,10 @@ import { Observable, timer } from 'rxjs';
 
 import { ServiceLocator } from '../../services/injector/locator.service';
 import { DefaultResponse } from '../../interfaces/http/response.interfaces';
+import {
+	BaseModelsProps,
+	TypeId,
+} from '../../interfaces/models/base-model.interface';
 
 /**
  * ? Core que deben extender todas los servicios http
@@ -98,15 +102,18 @@ export class CoreHttp<Endpoints> {
 	/**
 	 * ? Recupera el url segun el endpoint
 	 * @public
-	 * @param {keyof typeof this.endpoints} endpoint
+	 * @template Model
+	 * @param {keyof ({
+				root: '/';
+			} & Endpoints)} endpoint
+	 * @param {?TypeId} [id]
 	 * @returns {string}
 	 */
-	public getUrlEndpoint(
-		// endpoint: keyof typeof this.endpoints,
+	public getUrlEndpoint<Model extends BaseModelsProps = BaseModelsProps>(
 		endpoint: keyof ({
 			root: '/';
 		} & Endpoints),
-		id?: string
+		id?: TypeId
 	): string {
 		if (!this.endpoints[endpoint]) throw new Error('Invalid endpoint');
 		return this.modelRoute + this.endpoints[endpoint] + (id || '');

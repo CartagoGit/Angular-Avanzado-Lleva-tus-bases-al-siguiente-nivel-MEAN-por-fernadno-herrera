@@ -1,16 +1,22 @@
-
 /**
  * ? Respuesta default para el body de peticiones al Auth
  * @export
- * @interface UserDefaultResponse
- * @typedef {UserDefaultResponse}
+ * @interface AuthDefaultRequest
+ * @typedef {AuthDefaultRequest}
  */
-export interface AuthDefaultResponse {
+export interface AuthDefaultRequest {
 	name?: string;
 	password?: string;
 	email?: string;
 	token?: string;
 }
+
+//* Interfaz para los parametros de los modelos con el token obligatorio
+export type ModelToken = Required<Pick<AuthDefaultRequest, 'token'>>;
+
+//* Tipo de los token de los modelos
+export type TypeToken<Model extends AuthDefaultRequest = AuthDefaultRequest> =
+	Model['token'];
 
 /**
  * ? Opciones para realizar una consulta a la base de datos con el plugin mongoose-paginate-v2
@@ -47,5 +53,3 @@ export interface QueryOptions<Props> {
 
 //* Tipado de las opciones de ordenamiento
 type SortOptions = 'asc' | 'desc' | 'ascending' | 'descending' | 1 | -1;
-
-

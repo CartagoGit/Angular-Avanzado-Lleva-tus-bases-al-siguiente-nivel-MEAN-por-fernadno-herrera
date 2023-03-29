@@ -4,7 +4,10 @@ import { Observable, of } from 'rxjs';
 import { HttpHeaders } from '@angular/common/http';
 
 import { UserProps } from '../../models/mongo-models/user.model';
-import { AuthDefaultResponse } from '../../interfaces/http/request.interface';
+import {
+	AuthDefaultRequest,
+	TypeToken,
+} from '../../interfaces/http/request.interface';
 import { DefaultResponse } from '../../interfaces/http/response.interfaces';
 
 /**
@@ -48,10 +51,13 @@ export class AuthService extends CoreHttp<Endpoints> {
 	 * @returns {Observable<DefaultResponse | undefined>}
 	 */
 	public login(
-		body: AuthDefaultResponse
+		body: AuthDefaultRequest
 	): Observable<DefaultResponse<UserProps> | undefined> {
 		if (!this._isPossibleAndTimer()) return of(undefined);
-		return this._http.post<DefaultResponse<UserProps>>(this.routes.login, body);
+		return this._http.post<DefaultResponse<UserProps>>(
+			this.routes.login,
+			body
+		);
 	}
 
 	/**
@@ -61,7 +67,7 @@ export class AuthService extends CoreHttp<Endpoints> {
 	 * @returns {Observable<DefaultResponse | undefined>}
 	 */
 	public register(
-		body: AuthDefaultResponse
+		body: AuthDefaultRequest
 	): Observable<DefaultResponse<UserProps> | undefined> {
 		if (!this._isPossibleAndTimer()) return of(undefined);
 		return this._http.post<DefaultResponse<UserProps>>(
@@ -75,7 +81,7 @@ export class AuthService extends CoreHttp<Endpoints> {
 	 * @public
 	 * @returns {Observable<DefaultResponse | undefined>}
 	 */
-	public renewToken(token?: string): Observable<DefaultResponse<UserProps>> {
+	public renewToken(token: TypeToken): Observable<DefaultResponse<UserProps>> {
 		// if (!this._isPossibleAndTimer()) return of(undefined);
 		const headers = new HttpHeaders({
 			'Content-Type': 'application/json',
@@ -96,7 +102,7 @@ export class AuthService extends CoreHttp<Endpoints> {
 	 * @returns {(Observable<DefaultResponse<UserProps> | undefined>)}
 	 */
 	public googleLogin(
-		token: string
+		token: TypeToken
 	): Observable<DefaultResponse<UserProps> | undefined> {
 		if (!this._isPossibleAndTimer()) return of(undefined);
 		return this._http.post<DefaultResponse<UserProps>>(
