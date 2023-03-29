@@ -92,7 +92,7 @@
 						</div>
 					</div>
 					<button
-						[disabled]="user.google"
+						[disabled]="user.google && user.role !== 'ADMIN_ROLE'"
 						type="submit"
 						class="btn btn-inverse m-r-10 btn-block"
 						(click)="profileForm.valid && updateProfile()"

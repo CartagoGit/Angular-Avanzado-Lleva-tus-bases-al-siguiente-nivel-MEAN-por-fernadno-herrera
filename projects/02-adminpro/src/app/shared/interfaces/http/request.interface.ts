@@ -1,3 +1,4 @@
+
 /**
  * ? Respuesta default para el body de peticiones al Auth
  * @export
@@ -46,3 +47,5 @@ export interface QueryOptions<Props> {
 
 //* Tipado de las opciones de ordenamiento
 type SortOptions = 'asc' | 'desc' | 'ascending' | 'descending' | 1 | -1;
+
+

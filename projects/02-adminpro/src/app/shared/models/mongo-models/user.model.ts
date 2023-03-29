@@ -1,7 +1,7 @@
 import { Injector } from '@angular/core';
 import { Roles } from '../../interfaces/roles.interface';
 import { FilesService } from '../../services/http/files.service';
-import { BaseModelsProps } from './base-model.interface';
+import { BaseModelsProps } from '../../interfaces/models/base-model.interface';
 
 /**
  * ? Propiedades que recibe el Modelo de usuarios a recibir desde el back

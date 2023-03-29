@@ -1,4 +1,4 @@
-import { BaseModelsProps } from "./base-model.interface";
+import { BaseModelsProps } from "../../interfaces/models/base-model.interface";
 
 
 /**

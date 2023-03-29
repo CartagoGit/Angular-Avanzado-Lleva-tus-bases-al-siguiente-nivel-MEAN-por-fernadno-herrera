@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import Swal from 'sweetalert2';
+import Swal, { SweetAlertResult } from 'sweetalert2';
 import { StateService } from '../settings/state.service';
 
 @Injectable({
@@ -13,13 +13,15 @@ export class SweetAlertService {
 	 * @public
 	 * @param {string} [errorMsg='']
 	 */
-	public alertError(errorMsg: string = ''): void {
+	public alertError(
+		errorMsg: string = ''
+	): Promise<SweetAlertResult<any>> | undefined {
 		if (this._stateSvc.isMaintenance) {
-			this.alertMaintenance()
-			return;
+			this.alertMaintenance();
+			return undefined;
 		}
 
-		Swal.fire(
+		return Swal.fire(
 			'Error',
 			`${
 				!!errorMsg ? errorMsg + '. ' : ''
@@ -28,8 +30,8 @@ export class SweetAlertService {
 		);
 	}
 
-	public alertMaintenance(): void {
-		Swal.fire(
+	public alertMaintenance(): Promise<SweetAlertResult<any>> {
+		return Swal.fire(
 			'In maintenance',
 			`We are in maintenance. Wait, we will come soon again`,
 			'info'

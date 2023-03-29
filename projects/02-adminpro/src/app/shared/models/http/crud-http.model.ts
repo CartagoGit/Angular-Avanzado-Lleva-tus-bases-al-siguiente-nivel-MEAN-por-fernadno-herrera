@@ -1,10 +1,12 @@
 import { CoreHttp } from './core-http.model';
 import { Observable } from 'rxjs';
-import { BaseModelsProps } from '../mongo-models/base-model.interface';
+import {
+	BaseModelsProps,
+	ModelPropsAndId,
+} from '../../interfaces/models/base-model.interface';
 import { getParamsWithOptions } from '../../helpers/get-query-options.helper';
 import { DefaultResponse } from '../../interfaces/http/response.interfaces';
 import { QueryOptions } from '../../interfaces/http/request.interface';
-
 
 /**
  * ? Objeto con las rutas basicas del crud
@@ -66,10 +68,11 @@ export class CrudHttp<
 	 * @returns {Observable<DefaultResponse<Model[]>>}
 	 */
 	public getAll(
-		options?: Omit<QueryOptions<Props>,'showParams'>,
+		options?: Omit<QueryOptions<Props>, 'showParams'>,
 		useDefaultOptions: boolean = true
 	): Observable<DefaultResponse<Model[]>> {
-		const params = getParamsWithOptions({}, options, useDefaultOptions);
+		const query = undefined;
+		const params = getParamsWithOptions(query, options, useDefaultOptions);
 		return this._http.get<DefaultResponse<Model[]>>(
 			this.getUrlEndpoint('getAll'),
 			{ params }
@@ -127,10 +130,12 @@ export class CrudHttp<
 	 * @param {Model} model
 	 * @returns {Observable<DefaultResponse<Model>>}
 	 */
-	public put(model: Model): Observable<DefaultResponse<Model>> {
+	public put(
+		modelParams: ModelPropsAndId<Model>
+	): Observable<DefaultResponse<Model>> {
 		return this._http.put<DefaultResponse<Model>>(
-			this.getUrlEndpoint('put', model.id),
-			{ body: { ...model } }
+			this.getUrlEndpoint('put', modelParams.id),
+			{ body: { ...modelParams } }
 		);
 	}
 

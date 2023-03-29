@@ -1,4 +1,4 @@
-import { BaseModelsProps } from './base-model.interface';
+import { BaseModelsProps } from '../../interfaces/models/base-model.interface';
 import { Hospital } from './hospital.model';
 import { User } from './user.model';
 /**
