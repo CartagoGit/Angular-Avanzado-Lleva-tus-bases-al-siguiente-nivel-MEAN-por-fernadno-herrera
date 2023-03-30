@@ -70,10 +70,8 @@ export class ProfileComponent {
 		this._usersSvc.put(modelProps).subscribe({
 			next: (resp) => {
 				console.log(resp);
-
 			},
 		});
-		
 	}
 
 	/**
@@ -88,7 +86,10 @@ export class ProfileComponent {
 	 * @returns {boolean}
 	 */
 	private _isValidFields(): boolean {
-		if (this.profileForm.invalid || !this._isUserChanged()) return false;
+		if (this.profileForm.invalid || !this._isUserChanged()) {
+			console.warn('Form invalid or user not changed');
+			return false;
+		}
 		const {
 			password = '',
 			password2 = '',
@@ -149,9 +150,13 @@ export class ProfileComponent {
 	 * @returns {boolean}
 	 */
 	private _isUserChanged(): boolean {
-		return (
-			this.user.name !== this.profileForm.get('name')?.value ||
-			this.user.email !== this.profileForm.get('email')?.value
-		);
+		const valueChanges = {
+			name: this.user.name !== this.profileForm.get('name')?.value,
+			email: this.user.email !== this.profileForm.get('email')?.value,
+			role: this.user.role !== this.profileForm.get('role')?.value,
+			passwordChanged: this.profileForm.get('password')?.value !== '',
+			password2Changed: this.profileForm.get('password2')?.value !== '',
+		};
+		return Object.values(valueChanges).some((value) => value);
 	}
 }
