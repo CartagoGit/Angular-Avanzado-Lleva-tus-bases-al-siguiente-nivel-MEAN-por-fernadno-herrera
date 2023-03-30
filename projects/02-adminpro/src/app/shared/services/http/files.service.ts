@@ -3,6 +3,8 @@ import { CoreHttp } from '../../models/http/core-http.model';
 import { FileUploadResponse } from '../../interfaces/http/file-response.interface';
 import { map, Observable } from 'rxjs';
 import { ModelsMongo, TypesFiles } from '../../interfaces/models.interface';
+import { TypeToken } from '../../interfaces/http/request.interface';
+
 /**
  * ? Endpoints del modelo
  * @type {{ renewToken: string; login: string; googleLogin: string; googleClientId: string; }}
@@ -29,7 +31,6 @@ export class FilesService extends CoreHttp<Endpoints> {
 	// ANCHOR : Constructor
 	constructor() {
 		super({ modelEndpoints, modelRouteEndpoint });
-
 	}
 
 	// ANCHOR : Métodos
@@ -112,11 +113,14 @@ export class FilesService extends CoreHttp<Endpoints> {
 		typeFile: TypesFiles;
 		fileName: string;
 	}): Observable<string> {
-		const { id, typeModel, typeFile } = data;
+		const { id, typeModel, typeFile, fileName } = data;
 		return this._http
-			.get(`${this.routes.downloadFile}/${typeModel}/${typeFile}/${id}`, {
-				responseType: 'blob',
-			})
+			.get(
+				`${this.routes.downloadFile}/${typeModel}/${typeFile}/${id}/${fileName}`,
+				{
+					responseType: 'blob',
+				}
+			)
 			.pipe(map((blob) => URL.createObjectURL(blob)));
 	}
 
@@ -130,6 +134,9 @@ export class FilesService extends CoreHttp<Endpoints> {
 		return this._http
 			.get(path, {
 				responseType: 'blob',
+				headers: {
+					Authorization: `Bearer ${'token'}`
+				},
 			})
 			.pipe(
 				map((blob) => {

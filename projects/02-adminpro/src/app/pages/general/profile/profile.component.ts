@@ -70,6 +70,9 @@ export class ProfileComponent {
 		this._usersSvc.put(modelProps).subscribe({
 			next: (resp) => {
 				console.log(resp);
+				this.user = new User(resp.data_before!)
+				this._state.user = this.user;
+				console.log("❗this._usersSvc.put  ➽ user ➽ ⏩" , this.user);
 			},
 		});
 	}
@@ -87,7 +90,7 @@ export class ProfileComponent {
 	 */
 	private _isValidFields(): boolean {
 		if (this.profileForm.invalid || !this._isUserChanged()) {
-			console.warn('Form invalid or user not changed');
+			this.sweetAlertSvc.alertError('Form not valid or user not changed');
 			return false;
 		}
 		const {

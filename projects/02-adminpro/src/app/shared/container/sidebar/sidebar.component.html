@@ -12,11 +12,13 @@
 						class="has-arrow waves-effect waves-dark"
 						href="#"
 						aria-expanded="false"
-						><img
-							[src]="user.defaultImgSrc | safe"
-							alt="user profile image"
-						/><span class="hide-menu">{{ user.name }}</span></a
 					>
+						<img
+							[src]="user.dataImages!.defaultImgSrc | safe"
+							alt="user profile image"
+						/>
+						<span class="hide-menu">{{ user.name }}</span>
+					</a>
 					<ul aria-expanded="false" class="collapse">
 						<li>
 							<a

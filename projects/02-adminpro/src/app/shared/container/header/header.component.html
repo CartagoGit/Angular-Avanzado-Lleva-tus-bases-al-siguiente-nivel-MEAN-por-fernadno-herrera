@@ -346,11 +346,13 @@
 						data-toggle="dropdown"
 						aria-haspopup="true"
 						aria-expanded="false"
-						><img
-							[src]="user.defaultImgSrc | safe"
+					>
+						<img
+							[src]="user.dataImages!.defaultImgSrc | safe"
 							alt="user profile image"
 							class="profile-pic"
-					/></a>
+						/>
+					</a>
 					<div
 						class="dropdown-menu dropdown-menu-right animated fadeIn fast"
 					>
@@ -359,7 +361,7 @@
 								<div class="dw-user-box">
 									<div class="u-img">
 										<img
-											[src]="user.defaultImgSrc | safe"
+											[src]="user.dataImages!.defaultImgSrc | safe"
 											alt="user profile image"
 										/>
 									</div>
@@ -379,7 +381,9 @@
 							</li>
 							<li role="separator" class="divider"></li>
 							<li>
-								<a [routerLink]="profilePath?.fullPath" routerLinkActive="active"
+								<a
+									[routerLink]="profilePath?.fullPath"
+									routerLinkActive="active"
 									><i class="ti-user"></i> My Profile</a
 								>
 							</li>
