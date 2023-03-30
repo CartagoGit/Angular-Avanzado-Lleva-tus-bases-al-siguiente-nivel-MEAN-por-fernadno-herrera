@@ -1,14 +1,12 @@
 import { CoreHttp } from './core-http.model';
 import { Observable } from 'rxjs';
-import {
-	BaseModelsProps,
-	ModelPropsAndId,
-} from '../../interfaces/models/base-model.interface';
+import { ModelPropsAndId } from '../../interfaces/models/base-model-utils.interface';
 import { getParamsWithOptions } from '../../helpers/get-query-options.helper';
 import { DefaultResponse } from '../../interfaces/http/response.interfaces';
 import { QueryOptions } from '../../interfaces/http/request.interface';
-import { TypeId } from '../../interfaces/models/base-model.interface';
-import { ModelSpecificProps } from '../../interfaces/models/base-model.interface';
+import { TypeId } from '../../interfaces/models/base-model-utils.interface';
+import { ModelSpecificProps } from '../../interfaces/models/base-model-utils.interface';
+import { BaseModelsProps } from '../mongo-models/adds/base-models.model';
 
 /**
  * ? Objeto con las rutas basicas del crud

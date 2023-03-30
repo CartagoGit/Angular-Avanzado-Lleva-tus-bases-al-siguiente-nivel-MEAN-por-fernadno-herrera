@@ -13,7 +13,7 @@ import { UsersService } from '../../../shared/services/http/models/users.service
 import { StateService } from '../../../shared/services/settings/state.service';
 import { Roles } from '../../../shared/interfaces/roles.interface';
 import { SweetAlertService } from '../../../shared/services/helpers/sweet-alert.service';
-import { ModelPropsAndId } from '../../../shared/interfaces/models/base-model.interface';
+import { ModelPropsAndId } from '../../../shared/interfaces/models/base-model-utils.interface';
 
 @Component({
 	selector: 'app-profile',

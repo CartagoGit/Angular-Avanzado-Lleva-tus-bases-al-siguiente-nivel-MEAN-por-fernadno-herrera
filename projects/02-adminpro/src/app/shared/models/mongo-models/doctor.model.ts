@@ -1,4 +1,5 @@
-import { BaseModelsProps } from '../../interfaces/models/base-model.interface';
+
+import { BaseModels, BaseModelsProps } from './adds/base-models.model';
 import { Hospital } from './hospital.model';
 import { User } from './user.model';
 /**
@@ -22,12 +23,7 @@ export interface DoctorProps extends BaseModelsProps {
  * @typedef {Doctor}
  * @implements {DoctorProps}
  */
-export class Doctor implements DoctorProps {
-	public id!: string;
-	public createdAt!: Date;
-	public updatedAt!: Date;
-	public user_creator!: string;
-	public user_modifier!: string;
+export class Doctor extends BaseModels<DoctorProps> implements DoctorProps {
 
 	public images!: string[];
 	public user!: User;
@@ -36,8 +32,6 @@ export class Doctor implements DoctorProps {
 
 
 	constructor(props: DoctorProps) {
-		for (let [key, value] of Object.entries(props)) {
-			this[key as keyof this] = value;
-		}
+		super(props)
 	}
 }

@@ -1,6 +1,6 @@
 import { Roles } from '../../interfaces/roles.interface';
-import { BaseModelsProps } from '../../interfaces/models/base-model.interface';
-import { ModelsMethods } from './adds/models-methods.model';
+
+import { BaseModels, BaseModelsProps } from './adds/base-models.model';
 
 /**
  * ? Propiedades que recibe el Modelo de usuarios a recibir desde el back
@@ -24,16 +24,10 @@ export interface UserProps extends BaseModelsProps {
  * @typedef {User}
  * @implements {UserProps}
  */
-export class User extends ModelsMethods<UserProps> implements UserProps {
+export class User extends BaseModels<UserProps> implements UserProps {
 	// ANCHOR - Variables
 
 	//* Desde el back
-	public id!: string;
-	public user_creator!: string;
-	public user_modifier!: string;
-	public createdAt!: Date;
-	public updatedAt!: Date;
-
 	public name!: string;
 	public images!: string[];
 	public email!: string;
@@ -45,8 +39,7 @@ export class User extends ModelsMethods<UserProps> implements UserProps {
 
 	// ANCHOR - Constructor
 	constructor(props: UserProps) {
-		super();
-		this.update(props);
+		super(props);
 	}
 
 	// ANCHOR - Métodos

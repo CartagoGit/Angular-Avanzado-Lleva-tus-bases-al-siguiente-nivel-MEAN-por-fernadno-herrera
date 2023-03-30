@@ -4,10 +4,8 @@ import { Observable, timer } from 'rxjs';
 
 import { ServiceLocator } from '../../services/injector/locator.service';
 import { DefaultResponse } from '../../interfaces/http/response.interfaces';
-import {
-	BaseModelsProps,
-	TypeId,
-} from '../../interfaces/models/base-model.interface';
+import { TypeId } from '../../interfaces/models/base-model-utils.interface';
+import { BaseModelsProps } from '../mongo-models/adds/base-models.model';
 
 /**
  * ? Core que deben extender todas los servicios http
@@ -109,7 +107,7 @@ export class CoreHttp<Endpoints> {
 	 * @param {?TypeId} [id]
 	 * @returns {string}
 	 */
-	public getUrlEndpoint<Model extends BaseModelsProps = BaseModelsProps>(
+	public getUrlEndpoint(
 		endpoint: keyof ({
 			root: '/';
 		} & Endpoints),
