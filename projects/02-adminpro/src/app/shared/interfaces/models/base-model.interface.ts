@@ -13,6 +13,7 @@ export interface BaseModelsProps {
 	user_modifier: string;
 }
 
+
 //* Interfaz para los parametros expecificos del modelo sin las propiedades base
 export type ModelSpecificProps<Model extends BaseModelsProps> = Partial<
 	Omit<Model, keyof BaseModelsProps>

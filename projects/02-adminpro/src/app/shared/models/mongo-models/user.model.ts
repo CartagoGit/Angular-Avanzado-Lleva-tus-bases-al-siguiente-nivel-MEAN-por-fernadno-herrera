@@ -1,8 +1,6 @@
-import { Injector } from '@angular/core';
 import { Roles } from '../../interfaces/roles.interface';
-import { FilesService } from '../../services/http/files.service';
 import { BaseModelsProps } from '../../interfaces/models/base-model.interface';
-import { ImageAdd } from './adds/images.model';
+import { ModelsMethods } from './adds/models-methods.model';
 
 /**
  * ? Propiedades que recibe el Modelo de usuarios a recibir desde el back
@@ -26,7 +24,9 @@ export interface UserProps extends BaseModelsProps {
  * @typedef {User}
  * @implements {UserProps}
  */
-export class User implements UserProps {
+export class User extends ModelsMethods<UserProps> implements UserProps {
+	// ANCHOR - Variables
+
 	//* Desde el back
 	public id!: string;
 	public user_creator!: string;
@@ -42,13 +42,12 @@ export class User implements UserProps {
 
 	//* Para usar desde el front
 	public password?: string;
-	public dataImages?: ImageAdd;
 
+	// ANCHOR - Constructor
 	constructor(props: UserProps) {
-		for (let [key, value] of Object.entries(props)) {
-			this[key as keyof this] = value;
-		}
-
-		this.dataImages = new ImageAdd({ ...props })!;
+		super();
+		this.update(props);
 	}
+
+	// ANCHOR - Métodos
 }

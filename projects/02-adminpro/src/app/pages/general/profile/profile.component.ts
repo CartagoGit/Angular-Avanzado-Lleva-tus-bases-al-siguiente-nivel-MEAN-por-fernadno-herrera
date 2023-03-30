@@ -70,9 +70,10 @@ export class ProfileComponent {
 		this._usersSvc.put(modelProps).subscribe({
 			next: (resp) => {
 				console.log(resp);
-				this.user = new User(resp.data_before!)
+				// this.user = new User(resp.data_before!)
+				this.user.updateOnlyProps({ ...resp.data! });
 				this._state.user = this.user;
-				console.log("❗this._usersSvc.put  ➽ user ➽ ⏩" , this.user);
+				console.log('❗this._usersSvc.put  ➽ user ➽ ⏩', this.user);
 			},
 		});
 	}

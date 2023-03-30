@@ -12,7 +12,7 @@ export class ImageAdd {
 	private _defaultNoImageSrc: string = 'assets/images/no-image.jpg';
 
 	constructor(
-		props: { images: string[]; google: boolean } = {
+		props: { images?: string[]; google?: boolean } = {
 			images: [],
 			google: false,
 		}
@@ -27,7 +27,7 @@ export class ImageAdd {
 		this._hasImages = !!images && images.length > 0;
 
 		this.defaultImg = this._hasImages
-			? images[this.defaultImgIndex]
+			? images![this.defaultImgIndex]
 			: this._defaultNoImageSrc;
 
 		if (!this._hasImages || google) this.defaultImgSrc = this.defaultImg;
