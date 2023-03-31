@@ -15,14 +15,22 @@ import { User } from '../../models/mongo-models/user.model';
 	],
 })
 export class HeaderComponent {
+	// ANCHOR : Variables
 	public settingsPath = paths.getPath('settings');
 	public profilePath = paths.getPath('profile');
 	public user: User;
 
+	// ANCHOR : Constructor
 	constructor(private _stateSvc: StateService) {
 		this.user = this._stateSvc.user!;
 	}
 
+	// ANCHOR : Methods
+
+	/**
+	 * ? Cierra la sesión
+	 * @public
+	 */
 	public logout(): void {
 		this._stateSvc.logout();
 	}

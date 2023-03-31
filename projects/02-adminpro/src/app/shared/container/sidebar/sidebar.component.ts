@@ -10,12 +10,14 @@ import { StateService } from '../../services/settings/state.service';
 	styles: [],
 })
 export class SidebarComponent {
+	// ANCHOR : Variables
 	public settingsPath = paths.getPath('settings');
 	public profilePath = paths.getPath('profile');
 	public loginPath = paths.getPath('login');
 	public menuItems: any[];
 	public user: User;
 
+	// ANCHOR : Constructor
 	constructor(
 		private _sidebarSvc: SidebarService,
 		private _stateSvc: StateService
@@ -24,6 +26,13 @@ export class SidebarComponent {
 		this.user = this._stateSvc.user!;
 	}
 
+	// ANCHOR : Methods
+
+
+	/**
+	 * ? Cierra la sesión
+	 * @public
+	 */
 	public logout(): void {
 		this._stateSvc.logout();
 	}

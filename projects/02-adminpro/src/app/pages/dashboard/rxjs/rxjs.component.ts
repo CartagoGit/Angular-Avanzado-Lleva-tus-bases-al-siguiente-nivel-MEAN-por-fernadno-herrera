@@ -15,11 +15,13 @@ import {
 	styles: [],
 })
 export class RxjsComponent {
+	// ANCHOR - Variables
 	private _subscripcion: Subscription;
 
+	// ANCHOR - Constructor
 	constructor() {
 		// this._retornaObservable().pipe(retry(5)).subscribe({
-		this._subscripcion = this._retornaIntervalo()
+		this._subscripcion = this._returnInterval()
 			.pipe()
 			.subscribe({
 				next: (valor) => {
@@ -38,7 +40,16 @@ export class RxjsComponent {
 		this._subscripcion.unsubscribe();
 	}
 
-	private _retornaIntervalo(): Observable<number> {
+	// ANCHOR - Methods
+
+
+
+	/**
+	 * ? Retorna un observable que emite un numero cada 100ms
+	 * @private
+	 * @returns {Observable<number>}
+	 */
+	private _returnInterval(): Observable<number> {
 		return interval(100).pipe(
 			// take(4),
 			map((value) => value + 1),
@@ -47,14 +58,21 @@ export class RxjsComponent {
 		// return intervalo$;
 	}
 
-	private _retornaObservable(): Observable<number> {
+
+
+	/**
+	 * ? Retorna un observable con un intervalo
+	 * @private
+	 * @returns {Observable<number>}
+	 */
+	private _returnObservable(): Observable<number> {
 		let i = -1;
 		const obs$ = new Observable<number>((observer) => {
-			const intervalo = setInterval(() => {
+			const interval = setInterval(() => {
 				i++;
 				observer.next(i);
 				if (i === 10) {
-					clearInterval(intervalo);
+					clearInterval(interval);
 					observer.complete();
 				}
 				if (i === 2) observer.error('Ha llegado a 2');

@@ -2,6 +2,7 @@
 
 //* Roles de la app
 export const roles = ['USER_ROLE', 'ADMIN_ROLE'] as const;
+
 /**
  * ? Posibles roles de la app
  * @export

@@ -8,9 +8,11 @@ import { filter, map, Subscription } from 'rxjs';
 	styles: [],
 })
 export class BreadcrumbsComponent {
+	// ANCHOR : Variables
 	private _tituloSubs$!: Subscription;
 	public titulo: string = '';
 
+	// ANCHOR : Constructor
 	constructor(private router: Router) {
 		this._tituloSubs$ = this._getArgsRouter();
 	}
@@ -19,6 +21,12 @@ export class BreadcrumbsComponent {
 		this._tituloSubs$.unsubscribe();
 	}
 
+	// ANCHOR : Methods
+
+	/**
+	 * ? Obtiene los argumentos del router para mostrar el titulo en el docoumento
+	 * @returns {*}
+	 */
 	private _getArgsRouter(): Subscription {
 		return this.router.events
 			.pipe(

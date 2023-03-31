@@ -8,6 +8,7 @@ import { User, UserProps } from '../../models/mongo-models/user.model';
 	providedIn: 'root',
 })
 export class StateService {
+	// ANCHOR : Variables
 	public isMaintenance: boolean = false;
 	public isFinishedMaintenance: boolean = true;
 	public user: User | undefined;
@@ -24,8 +25,10 @@ export class StateService {
 		this._isAuthenticated = value;
 	}
 
+	// ANCHOR : Constructor
 	constructor(private _storageSvc: StorageService, private _router: Router) {}
 
+	// ANCHOR : Methods
 	/**
 	 * ? Elimina el token del storage y cambia el estado de autenticacion a deslogueado
 	 * @public

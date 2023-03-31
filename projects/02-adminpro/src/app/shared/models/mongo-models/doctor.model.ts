@@ -25,12 +25,14 @@ export interface DoctorProps extends BaseModelsProps {
  */
 export class Doctor extends BaseModels<DoctorProps> implements DoctorProps {
 
+	// ANCHOR : Variables
 	public images!: string[];
 	public user!: User;
 	public hospitals!: Hospital[];
 	public patients!: User[];
 
 
+	// ANCHOR : Constructor
 	constructor(props: DoctorProps) {
 		super(props)
 	}

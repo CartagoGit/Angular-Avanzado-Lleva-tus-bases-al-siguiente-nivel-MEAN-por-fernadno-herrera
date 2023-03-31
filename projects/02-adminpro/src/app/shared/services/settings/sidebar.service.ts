@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { paths } from '../../constants/paths.constant';
 
+//* Interface de las rutas de los subemus
 interface SubmenuRoutes {
 	title: string;
 	url: string;
 }
 
+//* Interface de las rutas del menu principal
 interface MenuRoutes {
 	title: string;
 	icon: string;
@@ -16,14 +18,12 @@ interface MenuRoutes {
 	providedIn: 'root',
 })
 export class SidebarService {
+	// ANCHOR : Variables
 	private _dashboardPath = paths.getPath('dashboard');
 	private _progressBarPath = paths.getPath('progressBar');
 	private _graphic01Path = paths.getPath('graphic01');
 	private _promisesPath = paths.getPath('promises');
 	private _rxjsPath = paths.getPath('rxjs');
-	private _generalPath = paths.getPath('general');
-	private _settingsPath = paths.getPath('settings');
-	private _profilePath = paths.getPath('profile');
 
 	public menu: MenuRoutes[] = [
 		{
@@ -54,5 +54,6 @@ export class SidebarService {
 		},
 	];
 
+	// ANCHOR : Constructor
 	constructor() {}
 }

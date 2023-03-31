@@ -39,6 +39,12 @@ export class AccountSettingsComponent {
 
 	// ANCHOR : Métodos
 
+
+	/**
+	 * ? Cambia el tema de la aplicación
+	 * @public
+	 * @param {string} theme
+	 */
 	public changeTheme(theme: string) {
 		this._settingsSvc.changeTheme(theme);
 	}

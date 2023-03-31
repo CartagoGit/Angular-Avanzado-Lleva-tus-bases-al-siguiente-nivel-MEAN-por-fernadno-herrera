@@ -30,6 +30,13 @@ export class SweetAlertService {
 		);
 	}
 
+
+
+	/**
+	 * ? Crea una alerta de error prefefinida para cuando la app entra en mantenimiento con sweet alert
+	 * @public
+	 * @returns {Promise<SweetAlertResult<any>>}
+	 */
 	public alertMaintenance(): Promise<SweetAlertResult<any>> {
 		return Swal.fire(
 			'In maintenance',

@@ -6,8 +6,12 @@ import { Component } from '@angular/core';
 	styles: [],
 })
 export class PromisesComponent {
+
+	// ANCHOR - Constructor
+	constructor() {}
+
 	ngOnInit(): void {
-		this.getUsuarios().then((usuarios) => {
+		this.getUsersFromReqResIn().then((usuarios) => {
 			console.log(usuarios);
 		});
 		// const promise = new Promise((resolve, reject) => {
@@ -20,7 +24,15 @@ export class PromisesComponent {
 		// console.log('fin del init');
 	}
 
-	public getUsuarios(): Promise<any> {
+	// ANCHOR Metodos
+
+
+	/**
+	 * ? Obtiene los usuarios de la API de reqres.in
+	 * @public
+	 * @returns {Promise<any>}
+	 */
+	public getUsersFromReqResIn(): Promise<any> {
 		return new Promise((resolve) => {
 			fetch('https://reqres.in/api/users')
 				.then((resp) => resp.json())

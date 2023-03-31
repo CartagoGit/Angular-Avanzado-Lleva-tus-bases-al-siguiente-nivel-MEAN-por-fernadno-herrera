@@ -8,9 +8,13 @@ import { Observable } from 'rxjs';
 	providedIn: 'root',
 })
 export class MaintenanceGuard {
+	// ANCHOR : Variables
 	private _loginPath = paths.getPath('login');
 
+	// ANCHOR : Constructor
 	constructor(private _router: Router, private _stateSvc: StateService) {}
+
+	// ANCHOR: Methods
 	public canMatch(): Observable<boolean> | boolean {
 		if (!this._stateSvc.isMaintenance) {
 			this._router.navigate([this._loginPath?.path]);

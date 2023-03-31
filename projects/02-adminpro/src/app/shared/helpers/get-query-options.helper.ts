@@ -1,4 +1,4 @@
-import { QueryOptions } from "../interfaces/http/request.interface";
+import { QueryOptions } from '../interfaces/http/request.interface';
 
 /**
  * ? Recupera parametros por defecto para la paginacion de las consultas
@@ -35,7 +35,6 @@ export const getQueryOptions = <Props>(
 	};
 };
 
-
 /**
  * ? Recupera los parametros de paginacion de las consultas parseadas
  * @template Props
@@ -53,7 +52,6 @@ export const getOptionsParsed = <Props>(
 	return optionsParsed;
 };
 
-
 /**
  * ? Recupera los parametros de consulta y paginacion de las consultas
  * @template Props
@@ -66,7 +64,7 @@ export const getParamsWithOptions = <Props>(
 	query?: Partial<Props>,
 	options?: QueryOptions<Props>,
 	useDefaultOptions: boolean = true
-): Record<string,string> & { options?: string } => {
+): Record<string, string> & { options?: string } => {
 	query = query || {};
 	const optionsParsed = getOptionsParsed(options, useDefaultOptions);
 	let params = {

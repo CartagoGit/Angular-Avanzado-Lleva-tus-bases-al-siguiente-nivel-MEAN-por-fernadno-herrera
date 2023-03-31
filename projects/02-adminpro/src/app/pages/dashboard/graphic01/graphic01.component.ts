@@ -7,6 +7,7 @@ import { GraphicProps } from '../../../shared/interfaces/graphic-props.interface
   styles: [],
 })
 export class Graphic01Component {
+	// ANCHOR - Variables
   public examples: GraphicProps[] = [
     //EXAMPLE 1
     {
@@ -139,4 +140,7 @@ export class Graphic01Component {
       options: { responsive: true },
     },
   ];
+
+  // ANCHOR - Constructor
+  constructor() {}
 }

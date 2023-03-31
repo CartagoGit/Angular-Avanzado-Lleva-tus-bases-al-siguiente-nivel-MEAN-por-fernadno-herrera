@@ -24,9 +24,11 @@ export class Hospital
 	extends BaseModels<HospitalProps>
 	implements HospitalProps
 {
+	// ANCHOR : Variables
 	public images!: string[];
 	public name!: string;
 
+	// ANCHOR : Constructor
 	constructor(props: HospitalProps) {
 		super(props);
 	}

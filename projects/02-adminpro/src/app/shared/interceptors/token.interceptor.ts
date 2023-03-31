@@ -18,7 +18,7 @@ export class TokenInterceptor implements HttpInterceptor {
 		private _stateSvc: StateService
 	) {}
 
-	intercept(
+	public intercept(
 		request: HttpRequest<unknown>,
 		next: HttpHandler
 	): Observable<HttpEvent<unknown>> {

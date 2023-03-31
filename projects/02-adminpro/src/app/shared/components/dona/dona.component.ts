@@ -16,6 +16,7 @@ import { GraphicProps } from '../../interfaces/graphic-props.interface';
   styles: [],
 })
 export class DonaComponent {
+	// ANCHOR : Variables
   @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
   @Input() props!: GraphicProps;
   // Props

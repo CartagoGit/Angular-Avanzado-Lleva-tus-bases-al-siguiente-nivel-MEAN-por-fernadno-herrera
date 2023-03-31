@@ -1,6 +1,15 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
+
+
+/**
+ * ? Sanitiza una url para rutas de imagenes
+ * @export
+ * @class SanitizerPipe
+ * @typedef {SanitizerPipe}
+ * @implements {PipeTransform}
+ */
 @Pipe({
 	name: 'safe',
 })
