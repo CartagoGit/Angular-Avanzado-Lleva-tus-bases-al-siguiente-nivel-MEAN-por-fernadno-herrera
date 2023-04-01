@@ -54,7 +54,8 @@ export const log = (data: {
 	query?: Record<string, any> & { options?: QueryOptions<any> };
 }): string => {
 	const { msg, logType = 'LOG', optionalMessage, query } = data;
-	const { options, ...params } = query || {};
+	let { options, ...params } = query || {};
+
 	const { showQuery, showParams, showOptions } = options || {};
 
 	const message = `[ ${logType} ] : ${

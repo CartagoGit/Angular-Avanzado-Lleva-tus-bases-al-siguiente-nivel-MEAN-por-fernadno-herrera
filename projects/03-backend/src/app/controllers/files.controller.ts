@@ -28,10 +28,12 @@ export const filesController: {
 	download: (req: Request) => Promise<ResponseReturnData>;
 } = {
 	upload: async (req: Request) => {
+		const options = req.query['options'] as any;
+		const { replace, replaceAll } = options;
 		//* Si se recibe el valor replace, elimina los archivos que existieran en el anterior path del modelo, sino simplemente añade nuevos
-		const isReplace = !!req.query['replace'];
-		//* Si se recibe el valor 'replace_all', elimina TODOS los archivos de ese tipo que existan de esa id
-		const isReplaceEveryPath = !!req.query['replace_all'];
+		const isReplace = !!replace;
+		//* Si se recibe el valor 'replaceAll', elimina TODOS los archivos de ese tipo que existan de esa id
+		const isReplaceEveryPath = !!replaceAll;
 		const { files, filesPath, typeFile, model, filesName, id, document } =
 			await checkAndGetFilesArgs(req);
 		const { typeFileFolder, relativeFolder } = checkAndCreateFolder({

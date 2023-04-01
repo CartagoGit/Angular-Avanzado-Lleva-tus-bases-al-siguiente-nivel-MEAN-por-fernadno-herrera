@@ -16,15 +16,16 @@ export const getQueryIncludeAndPaginate = (
 ): ReturnedQuery => {
 	const { returnQueryModels = false } = options;
 	const model = getModelSection(req);
-	const optionsPaginateFromRequest: QueryOptions<typeof model.schema.obj> =
-		req.query['options'] && JSON.parse(req.query['options'] as string);
-	req.query['options'] = optionsPaginateFromRequest as any;
+	const optionsFromQuery: QueryOptions<typeof model.schema.obj> = req.query[
+		'options'
+	] as object;
+	req.query['options'] = optionsFromQuery as any;
 	let queryParams = req.query;
 
-	const wantInclude = optionsPaginateFromRequest?.include ?? true;
+	const wantInclude = optionsFromQuery?.include ?? true;
 
 	const optionsPaginate = new PaginationParameters({
-		query: optionsPaginateFromRequest,
+		query: optionsFromQuery,
 	}).get()[1];
 
 	let optionalReturn: undefined | object = undefined;
@@ -80,7 +81,7 @@ export const getQueryIncludeAndPaginate = (
 		model,
 		wantInclude,
 		queryParams,
-		optionsPaginate: optionsPaginateFromRequest,
+		optionsFromQuery,
 	};
 
 	// //* Si existen retorno de query del modelo añadimos los valroes opcionales

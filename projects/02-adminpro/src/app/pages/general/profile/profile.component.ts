@@ -107,7 +107,6 @@ export class ProfileComponent {
 			});
 	}
 
-
 	/**
 	 * ? Cambia la imagen seleccionada que se actualizara en el perfil
 	 * @public

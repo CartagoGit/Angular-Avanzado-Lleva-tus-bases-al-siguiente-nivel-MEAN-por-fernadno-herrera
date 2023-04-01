@@ -49,10 +49,10 @@ export const coreController: {
 } = {
 	getAll: async (req) => {
 		// const model = getModelSection(req);
-		const { optionsPaginate, model } = getQueryIncludeAndPaginate(req);
+		const { optionsFromQuery, model } = getQueryIncludeAndPaginate(req);
 		const { pagination, data } = await (model as any).paginate(
 			{},
-			optionsPaginate
+			optionsFromQuery
 		);
 		return { data, status_code: 200, pagination };
 	},
@@ -64,8 +64,7 @@ export const coreController: {
 	},
 	getByQuery: async (req) => {
 		const {
-			optionsPaginate,
-			queryParams,
+			optionsFromQuery,
 			wantInclude,
 			objectQuery,
 			model,
@@ -74,11 +73,11 @@ export const coreController: {
 
 		const { data, pagination } = await (model as any).paginate(
 			objectQuery,
-			optionsPaginate
+			optionsFromQuery
 		);
 
 		return {
-			optionsPaginate,
+			optionsFromQuery,
 			modelParamsInQuery,
 			include: wantInclude,
 			data,
@@ -114,7 +113,7 @@ export const coreController: {
 		const id = req.params['id'];
 		const model = getModelSection(req);
 		req.body['user_modifier'] = getPayloadFromJwtWithoutVerifiy(req).id;
-	
+
 
 		const data_before = await model.findById(id);
 		const data = await model.findByIdAndUpdate(

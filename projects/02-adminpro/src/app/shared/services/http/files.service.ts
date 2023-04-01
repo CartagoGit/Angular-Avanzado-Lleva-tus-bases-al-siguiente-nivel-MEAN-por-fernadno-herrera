@@ -53,7 +53,11 @@ export class FilesService extends CoreHttp<Endpoints> {
 	): Observable<FileUploadResponse> {
 		const { id, filesToUpload, typeFile, typeModel } = data;
 		const { replace = false, replaceAll = true } = options || {};
-		const params = { replace, replaceAll };
+		const params = {
+			replace,
+			replaceAll,
+			options: JSON.stringify({ replace, replaceAll }),
+		};
 		const formData = new FormData();
 		filesToUpload.forEach((file) => formData.append('filesArray', file));
 		return this._http.put<FileUploadResponse>(

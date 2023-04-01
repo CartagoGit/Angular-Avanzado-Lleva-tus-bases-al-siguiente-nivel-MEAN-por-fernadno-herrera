@@ -21,7 +21,7 @@ export const everywhereController: {
 		const searching = req.params['search'];
 		const field = req.params['field'];
 
-		const { wantInclude, optionsPaginate } = getQueryIncludeAndPaginate(req);
+		const { wantInclude, optionsFromQuery } = getQueryIncludeAndPaginate(req);
 
 		const nameModels: string[] = [];
 		const datas = await Promise.all(
@@ -35,7 +35,7 @@ export const everywhereController: {
 							? { $regex: searching, $options: 'i' }
 							: searching,
 					},
-					optionsPaginate
+					optionsFromQuery
 				);
 			})
 		);

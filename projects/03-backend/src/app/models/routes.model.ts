@@ -84,6 +84,12 @@ export class Routes {
 		//* Subscribe para realizar todos los metodos antes de realizar la respuesta
 		this._getSubscriptionForRoute(req, res, next, props).subscribe({
 			next: (respController) => {
+				//* Si hay opciones en la query las convertimos a un objeto
+				const options =
+					req.query['options'] &&
+					JSON.parse(req.query['options'] as string);
+				if(!!options) req.query['options'] = options as any;
+
 				this._doFinalResponse({ req, res, respController, props });
 			},
 			error: (error) => {
