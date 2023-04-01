@@ -42,6 +42,9 @@
 img {
 	width: 100%;
 	max-width: 400px;
+	max-height: 400px;
+	object-fit:contain;
+	transition: 300ms ease;
 }
 /*
 input[type='file'],

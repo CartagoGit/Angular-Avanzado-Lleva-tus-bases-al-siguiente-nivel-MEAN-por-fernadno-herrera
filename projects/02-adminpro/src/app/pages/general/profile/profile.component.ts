@@ -26,7 +26,9 @@ export class ProfileComponent {
 	// ANCHOR : Variables
 	public showPassword: boolean = false;
 	public isSubmited: boolean = false;
-	public fileName: string = '';
+	public image: { name: string; file?: File; url?: string } = {
+		name: '',
+	};
 
 	public user: User;
 
@@ -105,9 +107,16 @@ export class ProfileComponent {
 	}
 
 	public changeImage(event: Event): void {
-		const filesList : FileList | null = (event.target as HTMLInputElement).files;
+		const filesList: FileList | null = (event.target as HTMLInputElement)
+			.files;
 		if (!filesList) return;
-		this.fileName = filesList[0].name;
+
+		this.image = {
+			...this.image,
+			file: filesList[0],
+			name: filesList[0].name,
+			url: URL.createObjectURL(filesList[0]),
+		};
 		this.profileForm.get('images')!.setValue(Array.from(filesList));
 	}
 

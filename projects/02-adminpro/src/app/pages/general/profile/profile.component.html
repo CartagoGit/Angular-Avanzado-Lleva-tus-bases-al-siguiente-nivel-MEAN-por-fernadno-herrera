@@ -111,7 +111,7 @@
 
 				<!-- [ngClass]="{ disabled: user.google }" -->
 				<!-- (click)="(!user.google)" -->
-				<div class="input-file" [title]="fileName">
+				<div class="input-file" [title]="image.name">
 					<input
 						#inputHiddenFile
 						type="file"
@@ -133,13 +133,13 @@
 						class="file-name form-control ellipsis pointer"
 						(click)="inputHiddenFile.click()"
 					>
-						{{ fileName }}
+						{{ image.name }}
 					</div>
 				</div>
 
 				<div class="img-container">
 					<img
-						[src]="user.dataImages!.defaultImgSrc | safe"
+						[src]="image.url || user.dataImages!.defaultImgSrc | safe"
 						alt="profile user image"
 					/>
 				</div>
