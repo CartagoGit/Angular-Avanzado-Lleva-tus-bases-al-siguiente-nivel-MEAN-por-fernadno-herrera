@@ -144,7 +144,7 @@
 						class="file-name form-control ellipsis pointer"
 						(click)="!user.google && inputHiddenFile.click()"
 					>
-						{{ image.name }}
+						{{ image.name || 'Actual profile image' }}
 					</div>
 				</div>
 
@@ -164,7 +164,9 @@
 				<i class="fa fa-image"></i>
 				<span class="m-l-5"
 					>{{
-						user.google ? 'Not allowed for google accounts' : 'Update image'
+						user.google
+							? 'Not allowed for google accounts'
+							: 'Update image'
 					}}
 				</span>
 			</button>

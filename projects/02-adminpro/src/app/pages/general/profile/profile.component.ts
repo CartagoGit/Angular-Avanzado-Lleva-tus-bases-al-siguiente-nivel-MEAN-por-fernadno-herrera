@@ -115,7 +115,10 @@ export class ProfileComponent {
 	public changeImage(event: Event): void {
 		const filesList: FileList | null = (event.target as HTMLInputElement)
 			.files;
-		if (!filesList) return;
+		if (!filesList || !filesList[0]) {
+			this.image = { name: '' };
+			return;
+		}
 
 		this.image = {
 			...this.image,
