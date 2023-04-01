@@ -90,20 +90,22 @@ export class ProfileComponent {
 	public updateImageProfile(): void {
 		const files = this.profileForm.get('images')?.value;
 		console.log(files);
-		// // if (!files || !Array.isArray(files) || files.length === 0) return;
-		// this._filesSvc
-		// 	.uploadFile({
-		// 		filesToUpload: files!,
-		// 		id: this.user.id,
-		// 		typeFile: 'images',
-		// 		typeModel: 'users',
-		// 	})
-		// 	.subscribe({
-		// 		next: (resp) => {},
-		// 		error: (error) => {
-		// 			this._sweetAlertSvc.alertError(error.error.msg);
-		// 		},
-		// 	});
+		// if (!files || !Array.isArray(files) || files.length === 0) return;
+		this._filesSvc
+			.uploadFile({
+				filesToUpload: files!,
+				id: this.user.id,
+				typeFile: 'images',
+				typeModel: 'users',
+			})
+			.subscribe({
+				next: (resp) => {
+					this.user.updateOnlyImages({ images: resp.filesRoute });
+				},
+				error: (error) => {
+					this._sweetAlertSvc.alertError(error.error.msg);
+				},
+			});
 	}
 
 	public changeImage(event: Event): void {
