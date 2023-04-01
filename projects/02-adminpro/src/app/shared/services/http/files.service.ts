@@ -1,9 +1,13 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Type } from '@angular/core';
 import { CoreHttp } from '../../models/http/core-http.model';
-import { FileUploadResponse } from '../../interfaces/http/file-response.interface';
+import {
+	FileUploadResponse,
+	FileNeededRequest,
+} from '../../interfaces/http/file-response.interface';
 import { map, Observable } from 'rxjs';
 import { ModelsMongo, TypesFiles } from '../../interfaces/models.interface';
 import { TypeToken } from '../../interfaces/http/request.interface';
+import { TypeId } from '../../interfaces/models/base-model-utils.interface';
 
 /**
  * ? Endpoints del modelo
@@ -38,21 +42,15 @@ export class FilesService extends CoreHttp<Endpoints> {
 	/**
 	 * ? Observable para subir un archivo a la BD
 	 * @public
-	 * @param {{
-				id: string;
+	 * @param {FileNeededRequest & {
 				filesToUpload: File[];
-				typeModel: ModelsMongo;
-				typeFile: TypesFiles;
 			}} data
 	 * @param {?{ replaceAll?: boolean; replace?: boolean }} [options]
 	 * @returns {Observable<FileUploadResponse>}
 	 */
 	public uploadFile(
-		data: {
-			id: string;
+		data: FileNeededRequest & {
 			filesToUpload: File[];
-			typeModel: ModelsMongo;
-			typeFile: TypesFiles;
 		},
 		options?: { replaceAll?: boolean; replace?: boolean }
 	): Observable<FileUploadResponse> {
@@ -73,18 +71,10 @@ export class FilesService extends CoreHttp<Endpoints> {
 	/**
 	 * ? Descarga el primer archivo del tipo y el modelo de la BD
 	 * @public
-	 * @param {{
-			id: string;
-			typeModel: ModelsMongo;
-			typeFile: TypesFiles;
-		}} data
+	 * @param {FileNeededRequest} data
 	 * @returns {Observable<string>}
 	 */
-	public downloadFirstFile(data: {
-		id: string;
-		typeModel: ModelsMongo;
-		typeFile: TypesFiles;
-	}): Observable<string> {
+	public downloadFirstFile(data: FileNeededRequest): Observable<string> {
 		const { id, typeModel, typeFile } = data;
 		return this._http
 			.get(
@@ -99,20 +89,16 @@ export class FilesService extends CoreHttp<Endpoints> {
 	/**
 	 * ? Descarga el archivo expecifico del tipo y el modelo de la BD
 	 * @public
-	 * @param {{
-			id: string;
-			typeModel: ModelsMongo;
-			typeFile: TypesFiles;
-			fileName: string;
-		}} data
+	 * @param {FileNeededRequest & {
+				fileName: string;
+			}} data
 	 * @returns {Observable<string>}
 	 */
-	public downloadFile(data: {
-		id: string;
-		typeModel: ModelsMongo;
-		typeFile: TypesFiles;
-		fileName: string;
-	}): Observable<string> {
+	public downloadFile(
+		data: FileNeededRequest & {
+			fileName: string;
+		}
+	): Observable<string> {
 		const { id, typeModel, typeFile, fileName } = data;
 		return this._http
 			.get(
@@ -135,7 +121,7 @@ export class FilesService extends CoreHttp<Endpoints> {
 			.get(path, {
 				responseType: 'blob',
 				headers: {
-					Authorization: `Bearer ${'token'}`
+					Authorization: `Bearer ${'token'}`,
 				},
 			})
 			.pipe(

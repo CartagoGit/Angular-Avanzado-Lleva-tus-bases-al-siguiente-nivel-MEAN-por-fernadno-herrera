@@ -3,6 +3,7 @@ import {
 	FormBuilder,
 	Validators,
 	AbstractControlOptions,
+	ValidatorFn,
 } from '@angular/forms';
 import {
 	User,
@@ -14,6 +15,7 @@ import { StateService } from '../../../shared/services/settings/state.service';
 import { Roles } from '../../../shared/interfaces/roles.interface';
 import { SweetAlertService } from '../../../shared/services/helpers/sweet-alert.service';
 import { ModelPropsAndId } from '../../../shared/interfaces/models/base-model-utils.interface';
+import { FilesService } from '../../../shared/services/http/files.service';
 
 @Component({
 	selector: 'app-profile',
@@ -32,7 +34,8 @@ export class ProfileComponent {
 		email: ['', [Validators.required, Validators.email]],
 		password: ['', [Validators.minLength(6)]],
 		password2: ['', [Validators.minLength(6)]],
-		role: ['USER_ROLE', [Validators.required]] as Roles[], // TODO
+		images: [[] as File[]],
+		role: ['USER_ROLE' as Roles, [Validators.required]], // TODO
 	});
 
 	// ANCHOR : Constructor
@@ -41,7 +44,8 @@ export class ProfileComponent {
 		private _state: StateService,
 		private _usersSvc: UsersService,
 		private _validatorSvc: ValidatorService,
-		private sweetAlertSvc: SweetAlertService
+		private _sweetAlertSvc: SweetAlertService,
+		private _filesSvc: FilesService
 	) {
 		this.user = this._state.user!;
 		this._createProfileForm();
@@ -72,8 +76,7 @@ export class ProfileComponent {
 				console.log(resp);
 				// this.user = new User(resp.data_before!)
 				this.user.updateOnlyProps({ ...resp.data! });
-				this._state.user = this.user;
-				console.log('❗this._usersSvc.put  ➽ user ➽ ⏩', this.user);
+				// this._state.user = this.user;
 			},
 		});
 	}
@@ -82,7 +85,18 @@ export class ProfileComponent {
 	 * ? Actualiza la imagen del perfil
 	 * @public
 	 */
-	public updateImage() {}
+	public updateImageProfile(): void {
+		const files = this.profileForm.get('images')?.value;
+		if (!files || !Array.isArray(files) || files.length === 0) return;
+		this._filesSvc
+			.uploadFile({
+				filesToUpload: files,
+				id: this.user.id,
+				typeFile: 'images',
+				typeModel: 'users',
+			})
+			.subscribe({ next: () => {} });
+	}
 
 	/**
 	 * ? Valida si el formulario tiene los campos correctos y validos
@@ -91,7 +105,7 @@ export class ProfileComponent {
 	 */
 	private _isValidFields(): boolean {
 		if (this.profileForm.invalid || !this._isUserChanged()) {
-			this.sweetAlertSvc.alertError('Form not valid or user not changed');
+			this._sweetAlertSvc.alertError('Form not valid or user not changed');
 			return false;
 		}
 		const {
@@ -103,7 +117,7 @@ export class ProfileComponent {
 		} = this.profileForm.value;
 
 		if (!email || !name || !role) {
-			this.sweetAlertSvc.alertError('Email, name and role are required');
+			this._sweetAlertSvc.alertError('Email, name and role are required');
 			return false;
 		}
 		if (
@@ -111,7 +125,7 @@ export class ProfileComponent {
 			password2!.length !== 0 &&
 			(password !== password2 || password!.length < 6)
 		) {
-			this.sweetAlertSvc.alertError(
+			this._sweetAlertSvc.alertError(
 				'Passwords must be equal and have at least 6 characters'
 			);
 			return false;
@@ -139,6 +153,7 @@ export class ProfileComponent {
 				password2: [{ value: '', disabled: this.user.google }],
 				// role: [{ value: this.user.role, disabled: true }],
 				role: [this.user.role],
+				images: [[] as File[]],
 			},
 			{
 				validators: [
