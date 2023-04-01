@@ -102,6 +102,8 @@ export class ProfileComponent {
 				next: (resp) => {
 					this.user.updateOnlyImages({ images: resp.filesRoute });
 					this._sweetAlertSvc.alertSuccess('Image updated');
+					this.image = { name: '' };
+					this.profileForm.get('images')?.setValue([]);
 				},
 				error: (error: DefaultErrorResponse) => {
 					this._sweetAlertSvc.alertError(error.error_message);
