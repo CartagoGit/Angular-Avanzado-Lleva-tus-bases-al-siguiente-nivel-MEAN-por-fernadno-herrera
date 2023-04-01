@@ -3,7 +3,6 @@ import {
 	FormBuilder,
 	Validators,
 	AbstractControlOptions,
-	ValidatorFn,
 } from '@angular/forms';
 import {
 	User,
@@ -16,6 +15,7 @@ import { Roles } from '../../../shared/interfaces/roles.interface';
 import { SweetAlertService } from '../../../shared/services/helpers/sweet-alert.service';
 import { ModelPropsAndId } from '../../../shared/interfaces/models/base-model-utils.interface';
 import { FilesService } from '../../../shared/services/http/files.service';
+import { DefaultErrorResponse } from '../../../shared/interfaces/http/response.interfaces';
 
 @Component({
 	selector: 'app-profile',
@@ -88,12 +88,11 @@ export class ProfileComponent {
 	 * @public
 	 */
 	public updateImageProfile(): void {
-		const files = this.profileForm.get('images')?.value;
-		console.log(files);
-		// if (!files || !Array.isArray(files) || files.length === 0) return;
+		const images = this.profileForm.get('images')?.value;
+		if (!images || !Array.isArray(images) || images.length === 0) return;
 		this._filesSvc
 			.uploadFile({
-				filesToUpload: files!,
+				filesToUpload: images!,
 				id: this.user.id,
 				typeFile: 'images',
 				typeModel: 'users',
@@ -102,8 +101,8 @@ export class ProfileComponent {
 				next: (resp) => {
 					this.user.updateOnlyImages({ images: resp.filesRoute });
 				},
-				error: (error) => {
-					this._sweetAlertSvc.alertError(error.error.msg);
+				error: (error: DefaultErrorResponse) => {
+					this._sweetAlertSvc.alertError(error.error_message);
 				},
 			});
 	}
