@@ -5,7 +5,6 @@ import { Observable, timer } from 'rxjs';
 import { ServiceLocator } from '../../services/injector/locator.service';
 import { DefaultResponse } from '../../interfaces/http/response.interfaces';
 import { TypeId } from '../../interfaces/models/base-model-utils.interface';
-import { BaseModelsProps } from '../mongo-models/adds/base-models.model';
 
 /**
  * ? Core que deben extender todas los servicios http

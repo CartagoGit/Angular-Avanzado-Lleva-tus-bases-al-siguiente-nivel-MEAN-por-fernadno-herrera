@@ -1,13 +1,10 @@
-import { Injectable, Type } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { CoreHttp } from '../../models/http/core-http.model';
 import {
 	FileUploadResponse,
 	FileNeededRequest,
 } from '../../interfaces/http/file-response.interface';
 import { map, Observable } from 'rxjs';
-import { ModelsMongo, TypesFiles } from '../../interfaces/models.interface';
-import { TypeToken } from '../../interfaces/http/request.interface';
-import { TypeId } from '../../interfaces/models/base-model-utils.interface';
 
 /**
  * ? Endpoints del modelo

@@ -1,11 +1,11 @@
-<div class="row">
+<form class="row" [formGroup]="profileForm">
 	<div class="col-md-6">
 		<div class="card">
 			<span *ngIf="user.google" class="google-banner">Google account</span>
 			<div class="card-body">
 				<h4 class="card-title">Profile</h4>
 				<h6 class="card-subtitle">Settings</h6>
-				<form class="form p-t-20" [formGroup]="profileForm">
+				<div class="form p-t-20">
 					<div class="form-group">
 						<label for="exampleInputuname">User Name</label>
 						<div class="input-group">
@@ -90,17 +90,16 @@
 							/>
 						</div>
 					</div>
-					<button
-						[disabled]="user.google && user.role !== 'ADMIN_ROLE'"
-						type="submit"
-						class="btn btn-inverse m-r-10 btn-block"
-						(click)="profileForm.valid && updateProfile()"
-					>
-						<i class="fa fa-save"></i
-						><span class="m-l-5">Save modify</span>
-					</button>
-				</form>
+				</div>
 			</div>
+			<button
+				[disabled]="user.google && user.role !== 'ADMIN_ROLE'"
+				type="submit"
+				class="btn btn-inverse m-r-10 btn-block"
+				(click)="profileForm.valid && updateProfile()"
+			>
+				<i class="fa fa-save"></i><span class="m-l-5">Save modify</span>
+			</button>
 		</div>
 	</div>
 
@@ -110,18 +109,21 @@
 				<h4 class="card-title">Image</h4>
 				<h6 class="card-subtitle">Settings</h6>
 
-				<img src="" alt="" />
-				<input type="file" [disabled]="user.google" />
+				<input type="file" (change)="changeImage($event )"/>
 				<br /><br />
-				<button
-					[disabled]="user.google"
-					type="button"
-					class="btn btn-inverse m-r-10 btn-block"
-					(click)="updateImageProfile()"
-				>
-					<i class="fa fa-image"></i><span class="m-l-5">Save image</span>
-				</button>
+				<img
+					[src]="user.dataImages!.defaultImgSrc | safe"
+					alt="profile user image"
+				/>
 			</div>
+			<button
+				[disabled]="user.google"
+				type="button"
+				class="btn btn-inverse m-r-10 btn-block"
+				(click)="updateImageProfile()"
+			>
+				<i class="fa fa-image"></i><span class="m-l-5">Save image</span>
+			</button>
 		</div>
 	</div>
-</div>
+</form>

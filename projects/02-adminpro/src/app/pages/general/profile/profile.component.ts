@@ -73,7 +73,6 @@ export class ProfileComponent {
 		};
 		this._usersSvc.put(modelProps).subscribe({
 			next: (resp) => {
-				console.log(resp);
 				// this.user = new User(resp.data_before!)
 				this.user.updateOnlyProps({ ...resp.data! });
 				// this._state.user = this.user;
@@ -87,15 +86,27 @@ export class ProfileComponent {
 	 */
 	public updateImageProfile(): void {
 		const files = this.profileForm.get('images')?.value;
-		if (!files || !Array.isArray(files) || files.length === 0) return;
-		this._filesSvc
-			.uploadFile({
-				filesToUpload: files,
-				id: this.user.id,
-				typeFile: 'images',
-				typeModel: 'users',
-			})
-			.subscribe({ next: () => {} });
+		console.log(files);
+		// // if (!files || !Array.isArray(files) || files.length === 0) return;
+		// this._filesSvc
+		// 	.uploadFile({
+		// 		filesToUpload: files!,
+		// 		id: this.user.id,
+		// 		typeFile: 'images',
+		// 		typeModel: 'users',
+		// 	})
+		// 	.subscribe({
+		// 		next: (resp) => {},
+		// 		error: (error) => {
+		// 			this._sweetAlertSvc.alertError(error.error.msg);
+		// 		},
+		// 	});
+	}
+
+	public changeImage(event: Event): void {
+		const filesList : FileList | null = (event.target as HTMLInputElement).files;
+		if (!filesList) return;
+		this.profileForm.get('images')!.setValue(Array.from(filesList));
 	}
 
 	/**
@@ -153,7 +164,7 @@ export class ProfileComponent {
 				password2: [{ value: '', disabled: this.user.google }],
 				// role: [{ value: this.user.role, disabled: true }],
 				role: [this.user.role],
-				images: [[] as File[]],
+				images: [{ value: [] as File[], disabled: this.user.google }],
 			},
 			{
 				validators: [
