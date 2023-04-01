@@ -78,6 +78,7 @@ export class ProfileComponent {
 			next: (resp) => {
 				// this.user = new User(resp.data_before!)
 				this.user.updateOnlyProps({ ...resp.data! });
+				this._sweetAlertSvc.alertSuccess('Profile updated');
 				// this._state.user = this.user;
 			},
 		});
@@ -100,6 +101,7 @@ export class ProfileComponent {
 			.subscribe({
 				next: (resp) => {
 					this.user.updateOnlyImages({ images: resp.filesRoute });
+					this._sweetAlertSvc.alertSuccess('Image updated');
 				},
 				error: (error: DefaultErrorResponse) => {
 					this._sweetAlertSvc.alertError(error.error_message);

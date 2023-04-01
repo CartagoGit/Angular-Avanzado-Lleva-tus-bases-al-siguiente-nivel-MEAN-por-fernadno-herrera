@@ -8,6 +8,12 @@ import { StateService } from '../settings/state.service';
 export class SweetAlertService {
 	constructor(private _stateSvc: StateService) {}
 
+	public alertSuccess(
+		msg: string = ''
+	): Promise<SweetAlertResult<any>> | undefined {
+		return Swal.fire('Success', `${msg}`, 'success');
+	}
+
 	/**
 	 * ? Crea una alerta de error prefefinida con sweet alert
 	 * @public
@@ -29,8 +35,6 @@ export class SweetAlertService {
 			'error'
 		);
 	}
-
-
 
 	/**
 	 * ? Crea una alerta de error prefefinida para cuando la app entra en mantenimiento con sweet alert
