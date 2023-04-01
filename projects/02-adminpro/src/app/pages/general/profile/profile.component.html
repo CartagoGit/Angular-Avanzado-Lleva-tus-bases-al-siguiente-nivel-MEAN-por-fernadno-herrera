@@ -98,7 +98,7 @@
 				class="btn btn-inverse m-r-10 btn-block"
 				(click)="profileForm.valid && updateProfile()"
 			>
-				<i class="fa fa-save"></i><span class="m-l-5">Save modify</span>
+				<i class="fa fa-save"></i><span class="m-l-5">Update profile</span>
 			</button>
 		</div>
 	</div>
@@ -107,14 +107,42 @@
 		<div class="card">
 			<div class="card-body">
 				<h4 class="card-title">Image</h4>
-				<h6 class="card-subtitle">Settings</h6>
+				<h6 class="card-subtitle">Change profile image</h6>
 
-				<input type="file" (change)="changeImage($event )"/>
-				<br /><br />
-				<img
-					[src]="user.dataImages!.defaultImgSrc | safe"
-					alt="profile user image"
-				/>
+				<!-- [ngClass]="{ disabled: user.google }" -->
+				<!-- (click)="(!user.google)" -->
+				<div class="input-file" [title]="fileName">
+					<input
+						#inputHiddenFile
+						type="file"
+						(change)="changeImage($event)"
+						accept=".jpg, .jpeg, .png, .gif, .bmp, .tif, .tiff|images/*"
+						class="pointer"
+						hidden="true"
+					/>
+
+					<button
+						[disabled]="user.google"
+						type="button"
+						class="btn btn-inverse fake-image-button"
+						(click)="inputHiddenFile.click()"
+					>
+						<i class="fa fa-upload"></i><span class="m-l-5">Upload</span>
+					</button>
+					<div
+						class="file-name form-control ellipsis pointer"
+						(click)="inputHiddenFile.click()"
+					>
+						{{ fileName }}
+					</div>
+				</div>
+
+				<div class="img-container">
+					<img
+						[src]="user.dataImages!.defaultImgSrc | safe"
+						alt="profile user image"
+					/>
+				</div>
 			</div>
 			<button
 				[disabled]="user.google"
@@ -122,7 +150,7 @@
 				class="btn btn-inverse m-r-10 btn-block"
 				(click)="updateImageProfile()"
 			>
-				<i class="fa fa-image"></i><span class="m-l-5">Save image</span>
+				<i class="fa fa-image"></i><span class="m-l-5">Update image</span>
 			</button>
 		</div>
 	</div>
