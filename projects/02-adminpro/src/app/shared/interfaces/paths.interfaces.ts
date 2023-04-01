@@ -9,7 +9,7 @@ export type AuthSections = 'login' | 'register' | 'terms';
 export type NotLogedSections = 'maintenance' | 'auth' | 'no-page-found';
 
 //* Estando logueado
-export type LogedSections = 'general' | 'dashboard';
+export type LogedSections = 'general' | 'dashboard' | 'support';
 
 //* Secciones internas hijas
 export type GeneralSections = 'settings' | 'profile';
@@ -21,13 +21,18 @@ export type DashboardSections =
 	| 'promises'
 	| 'rxjs';
 
+export type SupportSections = 'users' | 'hospitals' | 'doctors';
+
 //* Secciones Padre generales
 export type ParentSections = NotLogedSections | LogedSections;
 
 export type ChildrenNotLogedSections = AuthSections;
 
 //* Secicones hijas de las secciones generales
-export type ChildrenLogedSections = DashboardSections | GeneralSections;
+export type ChildrenLogedSections =
+	| DashboardSections
+	| GeneralSections
+	| SupportSections;
 
 //* Todas las secciones
 export type Sections =

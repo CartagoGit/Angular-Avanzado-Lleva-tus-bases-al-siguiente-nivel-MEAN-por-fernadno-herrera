@@ -65,6 +65,24 @@ class PathConstants {
 					name: 'promises',
 				},
 			}),
+			support: new Path({
+				name: 'support',
+				title: 'Support',
+				icon: 'mdi mdi-folder-lock-open',
+				users :{
+					title: 'Users',
+					name: 'users',
+				},
+				hospitals :{
+					title: 'Hospitals',
+					name: 'hospitals',
+				},
+				doctors :{
+					title: 'Doctors',
+					name: 'doctors',
+				},
+
+			})
 		},
 	};
 

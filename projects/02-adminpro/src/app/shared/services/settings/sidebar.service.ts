@@ -19,11 +19,21 @@ interface MenuRoutes {
 })
 export class SidebarService {
 	// ANCHOR : Variables
+
+	//* Dashboard
 	private _dashboardPath = paths.getPath('dashboard');
 	private _progressBarPath = paths.getPath('progressBar');
 	private _graphic01Path = paths.getPath('graphic01');
 	private _promisesPath = paths.getPath('promises');
 	private _rxjsPath = paths.getPath('rxjs');
+
+	//* Support
+	private _supportPath = paths.getPath('support');
+	private _usersPath = paths.getPath('users');
+	private _hospitalsPath = paths.getPath('hospitals');
+	private _doctorsPath = paths.getPath('doctors');
+
+
 
 	public menu: MenuRoutes[] = [
 		{
@@ -49,6 +59,25 @@ export class SidebarService {
 				{
 					title: this._rxjsPath?.title!,
 					url: this._rxjsPath?.fullPath!,
+				},
+			],
+		},
+		{
+			title: this._supportPath?.title!,
+			icon: this._supportPath?.icon!,
+			submenu: [
+				{
+					title: 'Users',
+					url: this._usersPath?.fullPath!,
+
+				},
+				{
+					title: 'Hospitals',
+					url: this._hospitalsPath?.fullPath!,
+				},
+				{
+					title: 'Doctors',
+					url: this._doctorsPath?.fullPath!,
 				},
 			],
 		},
