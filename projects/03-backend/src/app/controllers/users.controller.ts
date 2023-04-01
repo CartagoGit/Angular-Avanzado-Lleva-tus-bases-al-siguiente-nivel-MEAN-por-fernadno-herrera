@@ -9,9 +9,8 @@ import { getNotFoundMessage } from '../helpers/get-model-section.helper';
 import { getEncryptHash } from '../helpers/encrypt.helper';
 import { Role } from '../interfaces/roles.interface';
 import { getPayloadFromJwtWithoutVerifiy } from '../helpers/json-web-token.helper';
-import {
-	DoctorModel,
-} from '../models/mongo-models/doctors.model';
+import { basicError } from '../models/error-data.model';
+import { DoctorModel } from '../models/mongo-models/doctors.model';
 
 /**
  * ? Controladores especificos de los metodos para el modelo de usuarios
@@ -42,7 +41,18 @@ export const usersController: {
 	put: async (req) => {
 		//* Condicionamos las respuestas a sus validadores y eliminamos las que no deban modificarse
 		const userDB = await UserModel.findById(req.params['id']);
-		if (!userDB) throw { message: getNotFoundMessage(req), status_code: 404 };
+		if (!userDB)
+			throw {
+				message: getNotFoundMessage(req),
+				status_code: 404,
+				reason: 'not found id in model',
+			} as basicError;
+		if (!!userDB.google)
+			throw {
+				message: 'An user with google account can not be modified',
+				status_code: 400,
+				reason: 'cannot google user',
+			} as basicError;
 		req.body['model'] = userDB;
 		if (userDB.email === req.body.email) {
 			cleanValidatorField(req, 'email');

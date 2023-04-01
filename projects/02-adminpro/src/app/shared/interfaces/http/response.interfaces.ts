@@ -1,5 +1,5 @@
-import { Roles } from "../roles.interface";
-import { Pagination } from "./pagination.interface";
+import { Roles } from '../roles.interface';
+import { Pagination } from './pagination.interface';
 import { TypeRequest } from './log-types.interface';
 
 /**
@@ -24,7 +24,7 @@ export interface DefaultResponse<T = unknown> {
 	token?: string;
 	google?: DataFromGoogle;
 	isNewUser?: boolean;
-	pagination? : Pagination;
+	pagination?: Pagination;
 }
 
 /**
@@ -78,7 +78,6 @@ export interface DefaultErrorResponse {
 	trace: Record<string, any>[];
 }
 
-
 /**
  * ? Interfaz de la data del error
  * @export
@@ -113,4 +112,5 @@ export type ErrorReasons =
 	| 'not same user'
 	| 'not id in params'
 	| 'not found'
-	| 'internal error';
+	| 'internal error'
+	| 'cannot google user';

@@ -20,4 +20,5 @@ export type ErrorReasons =
 	| 'not same user'
 	| 'not id in params'
 	| 'not found'
-	| 'internal error';
+	| 'internal error'
+	| 'cannot google user';
