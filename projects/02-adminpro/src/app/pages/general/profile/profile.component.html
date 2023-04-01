@@ -98,7 +98,14 @@
 				class="btn btn-inverse m-r-10 btn-block"
 				(click)="profileForm.valid && updateProfile()"
 			>
-				<i class="fa fa-save"></i><span class="m-l-5">Update profile</span>
+				<i class="fa fa-save"></i>
+				<span class="m-l-5"
+					>{{
+						user.google
+							? 'Not allowed for google accounts'
+							: 'Update profile'
+					}}
+				</span>
 			</button>
 		</div>
 	</div>
@@ -111,7 +118,11 @@
 
 				<!-- [ngClass]="{ disabled: user.google }" -->
 				<!-- (click)="(!user.google)" -->
-				<div class="input-file" [title]="image.name">
+				<div
+					class="input-file"
+					[title]="image.name"
+					[ngClass]="{ disabled: user.google }"
+				>
 					<input
 						#inputHiddenFile
 						type="file"
@@ -131,7 +142,7 @@
 					</button>
 					<div
 						class="file-name form-control ellipsis pointer"
-						(click)="inputHiddenFile.click()"
+						(click)="!user.google && inputHiddenFile.click()"
 					>
 						{{ image.name }}
 					</div>
@@ -150,7 +161,12 @@
 				class="btn btn-inverse m-r-10 btn-block"
 				(click)="updateImageProfile()"
 			>
-				<i class="fa fa-image"></i><span class="m-l-5">Update image</span>
+				<i class="fa fa-image"></i>
+				<span class="m-l-5"
+					>{{
+						user.google ? 'Not allowed for google accounts' : 'Update image'
+					}}
+				</span>
 			</button>
 		</div>
 	</div>
