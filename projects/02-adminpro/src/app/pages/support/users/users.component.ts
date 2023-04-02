@@ -20,9 +20,17 @@ export class UsersComponent {
 	public paginationData: PaginationData = { limit: 5, page: 1 };
 	public isLoading: boolean = false;
 
-	public rolesName: Record<Role, string> = {
-		ADMIN_ROLE: 'Administrator',
-		USER_ROLE: 'Common user',
+	public rolesData: Record<Role, { text: string; typeLabel: string }> = {
+		ADMIN_ROLE: { text: 'Administrator', typeLabel: 'label-info' },
+		USER_ROLE: { text: 'User', typeLabel: 'label-primary' },
+	};
+
+	public googleUserData: Record<
+		'true' | 'false',
+		{ text: string; typeLabel: string }
+	> = {
+		true: { text: 'Google user', typeLabel: 'label-danger' },
+		false: { text: 'Common user', typeLabel: 'label-warning' },
 	};
 
 	public pagination?: Pagination;

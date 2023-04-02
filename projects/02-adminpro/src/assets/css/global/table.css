@@ -19,6 +19,8 @@
 
 .table-grid__header .table-grid__field {
 	border: none;
+	display: flex;
+	justify-content: center;
 }
 
 .table-grid__field {

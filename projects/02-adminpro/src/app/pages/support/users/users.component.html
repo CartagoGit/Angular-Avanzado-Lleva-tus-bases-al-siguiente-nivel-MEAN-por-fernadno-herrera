@@ -38,6 +38,8 @@
 						<div class="table-grid__field">Email</div>
 						<div class="table-grid__field">Name</div>
 						<div class="table-grid__field">Role</div>
+						<div class="table-grid__field">Google</div>
+
 						<div class="table-grid__field">Registered</div>
 						<div class="table-grid__field d-center">Actions</div>
 					</div>
@@ -50,20 +52,48 @@
 									class="portrait"
 								/>
 							</div>
-							<div class="table-grid__field">
+							<div class="table-grid__field" [title]="user.email">
 								<span>{{ user.email }}</span>
 							</div>
-							<div class="table-grid__field">
+							<div class="table-grid__field" [title]="user.name">
 								<span>
 									{{ user.name }}
 								</span>
 							</div>
-							<div class="table-grid__field">
-								<span>
-									{{ rolesName[user.role] }}
+							<div
+								class="table-grid__field d-center"
+								[title]="rolesData[user.role].text"
+							>
+								<span
+									class="label"
+									[ngClass]="rolesData[user.role].typeLabel"
+								>
+									{{ rolesData[user.role].text }}
 								</span>
 							</div>
-							<div class="table-grid__field">
+							<div
+								class="table-grid__field d-center"
+								[title]="
+									googleUserData[user.google ? 'true' : 'false'].text
+								"
+							>
+								<span
+									class="label"
+									[ngClass]="
+										googleUserData[user.google ? 'true' : 'false']
+											.typeLabel
+									"
+								>
+									{{
+										googleUserData[user.google ? 'true' : 'false']
+											.text
+									}}
+								</span>
+							</div>
+							<div
+								class="table-grid__field d-center"
+								[title]="user.createdAt | date : 'dd-MMM-yyyy'"
+							>
 								<span>
 									{{ user.createdAt | date : 'dd-MMM-yyyy' }}
 								</span>
