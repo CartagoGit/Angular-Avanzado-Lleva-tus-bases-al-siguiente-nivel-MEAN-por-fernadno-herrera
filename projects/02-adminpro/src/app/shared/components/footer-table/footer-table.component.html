@@ -15,7 +15,7 @@
 		<ul class="pagination">
 			<li
 				class="page-item"
-				(click)="changePage(1)"
+				(click)="pagination?.hasPrevPage && changePage(1)"
 				[ngClass]="{ disabled: !pagination?.hasPrevPage }"
 			>
 				<div class="page-link">
@@ -24,7 +24,7 @@
 			</li>
 			<li
 				class="page-item"
-				(click)="changePage(pagination?.page! - 1)"
+				(click)="pagination?.hasPrevPage && changePage(pagination?.page! - 1)"
 				[ngClass]="{ disabled: !pagination?.hasPrevPage }"
 			>
 				<div class="page-link">
@@ -45,7 +45,7 @@
 			</li>
 			<li
 				class="page-item"
-				(click)="changePage(pagination?.page! + 1)"
+				(click)="pagination?.hasNextPage && changePage(pagination?.page! + 1)"
 				[ngClass]="{ disabled: !pagination?.hasNextPage }"
 			>
 				<div class="page-link">
@@ -54,7 +54,7 @@
 			</li>
 			<li
 				class="page-item"
-				(click)="changePage(pagination?.totalPages!)"
+				(click)="pagination?.hasNextPage && changePage(pagination?.totalPages!)"
 				[ngClass]="{ disabled: !pagination?.hasNextPage }"
 			>
 				<div class="page-link">

@@ -69,7 +69,7 @@ export class FooterTableComponent {
 	 * @param {number} page
 	 */
 	public changePage(page: number) {
-		if(page === this.pagination?.page) return;
+		if (page === this.pagination?.page) return;
 		this.pageChanged.emit(page);
 	}
 }
