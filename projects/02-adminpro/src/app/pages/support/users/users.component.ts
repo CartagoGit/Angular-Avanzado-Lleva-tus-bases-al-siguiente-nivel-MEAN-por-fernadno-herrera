@@ -5,6 +5,7 @@ import { SweetAlertService } from '../../../shared/services/helpers/sweet-alert.
 import { User } from '../../../shared/models/mongo-models/user.model';
 import { Role } from '../../../../../../03-backend/src/app/interfaces/roles.interface';
 import { formatDate } from '../../../shared/constants/strings.constants';
+import { Pagination } from '../../../shared/interfaces/http/pagination.interface';
 
 @Component({
 	selector: 'app-users',
@@ -16,11 +17,14 @@ export class UsersComponent {
 	public formatDate = formatDate;
 	public users: User[] = [];
 	public paginationData: PaginationData = { limit: 5, page: 1 };
+	public isLoading : boolean = false;
 
-	public rolesName : { [key in Role]: string } = {
+	public rolesName: Record<Role, string> = {
 		ADMIN_ROLE: 'Administrator',
 		USER_ROLE: 'Common user',
-	}
+	};
+
+	public pagination?: Pagination;
 
 	// ANCHOR - Constructor
 	constructor(
@@ -37,6 +41,7 @@ export class UsersComponent {
 	 * @public
 	 */
 	public loadUsers() {
+		this.isLoading= true;
 		this._usersService.getAll(this.paginationData).subscribe({
 			next: (res) => {
 				if (!res || !res.data) {
@@ -44,6 +49,8 @@ export class UsersComponent {
 					return;
 				}
 				this.users = res.data.map((user) => new User(user));
+				this.pagination = res.pagination;
+				this.isLoading= false;
 			},
 			error: (err) => {
 				this._sweetAlertService.alertError(err.error.msg);
