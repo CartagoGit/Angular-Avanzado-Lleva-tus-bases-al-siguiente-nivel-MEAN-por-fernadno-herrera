@@ -4,10 +4,11 @@ import { IncrementInputComponent } from './increment-input/increment-input.compo
 import { FormsModule } from '@angular/forms';
 import { DonaComponent } from './dona/dona.component';
 import { NgChartsModule } from 'ng2-charts';
+import { FooterTableComponent } from './footer-table/footer-table.component';
 
 @NgModule({
-  declarations: [IncrementInputComponent, DonaComponent],
+  declarations: [IncrementInputComponent, DonaComponent, FooterTableComponent],
   imports: [CommonModule, FormsModule , NgChartsModule],
-  exports: [IncrementInputComponent, DonaComponent],
+  exports: [IncrementInputComponent, DonaComponent, FooterTableComponent],
 })
 export class ComponentsModule {}
