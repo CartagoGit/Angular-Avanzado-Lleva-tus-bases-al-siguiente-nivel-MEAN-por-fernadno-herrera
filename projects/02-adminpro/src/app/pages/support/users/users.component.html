@@ -32,47 +32,62 @@
 			<div class="card-body">
 				<h4 class="card-title">Users</h4>
 				<h6 class="card-subtitle">Register users in the app</h6>
-				<div class="table-responsive">
-					<table class="table table-bordered">
-						<thead>
-							<tr>
-								<th>Image</th>
-								<th>Email</th>
-								<th>Name</th>
-								<th>Role</th>
-								<th>Registered</th>
-								<th class="text-nowrap">Actions</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr *ngFor="let user of users">
-								<td><img [src]="user.dataImages?.defaultImgSrc! | safe" alt="profile image user" class="portrait"></td>
-								<td>{{user.email}}</td>
-								<td>{{user.name}}</td>
-								<td>
-									{{rolesName[user.role]}}
-								</td>
-								<td>{{user.createdAt | date: 'dd-MMM-yyyy'}}</td>
-								<td class="text-nowrap">
-									<a
-										href="#"
-										data-toggle="tooltip"
-										data-original-title="Edit"
-									>
-										<i class="fa fa-pencil text-inverse m-r-10"></i>
-									</a>
-									<a
-										href="#"
-										data-toggle="tooltip"
-										data-original-title="remove"
-									>
-										<i class="fa fa-close text-danger"></i>
-									</a>
-								</td>
-							</tr>
-						</tbody>
-					</table>
+				<div class="table-grid table-ellipsis table-users">
+					<div class="table-grid__header table-grid__row">
+						<div class="table-grid__field center-items">Img</div>
+						<div class="table-grid__field">Email</div>
+						<div class="table-grid__field">Name</div>
+						<div class="table-grid__field">Role</div>
+						<div class="table-grid__field">Registered</div>
+						<div class="table-grid__field d-center">Actions</div>
+					</div>
+					<div class="table-grid__body">
+						<div *ngFor="let user of users" class="table-grid__row">
+							<div class="table-grid__field center-items">
+								<img
+									[src]="user.dataImages?.defaultImgSrc! | safe"
+									alt="profile image user"
+									class="portrait"
+								/>
+							</div>
+							<div class="table-grid__field">
+								<span>{{ user.email }}</span>
+							</div>
+							<div class="table-grid__field">
+								<span>
+									{{ user.name }}
+								</span>
+							</div>
+							<div class="table-grid__field">
+								<span>
+									{{ rolesName[user.role] }}
+								</span>
+							</div>
+							<div class="table-grid__field">
+								<span>
+									{{ user.createdAt | date : 'dd-MMM-yyyy' }}
+								</span>
+							</div>
+							<div class="table-grid__field text-nowrap d-center">
+								<a
+									href="#"
+									data-toggle="tooltip"
+									data-original-title="Edit"
+								>
+									<i class="fa fa-pencil text-inverse m-r-10"></i>
+								</a>
+								<a
+									href="#"
+									data-toggle="tooltip"
+									data-original-title="remove"
+								>
+									<i class="fa fa-close text-danger"></i>
+								</a>
+							</div>
+						</div>
+					</div>
 				</div>
+
 				<div class="footer-table">
 					<div class="footer-results">
 						<div class="footer-result">

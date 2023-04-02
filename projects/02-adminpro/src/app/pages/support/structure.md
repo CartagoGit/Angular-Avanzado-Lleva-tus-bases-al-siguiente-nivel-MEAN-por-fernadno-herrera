@@ -36,7 +36,7 @@
 				<h4 class="card-title">Users</h4>
 				<h6 class="card-subtitle">Register users in the app</h6>
 				<div class="table-responsive">
-					<table class="table table-bordered">
+					<table class="table table-bordered table-ellipsis">
 						<thead>
 							<tr>
 								<th>Image</th>

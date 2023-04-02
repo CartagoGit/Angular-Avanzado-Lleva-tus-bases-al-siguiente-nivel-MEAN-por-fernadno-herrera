@@ -4,6 +4,7 @@ import { UsersService } from '../../../shared/services/http/models/users.service
 import { SweetAlertService } from '../../../shared/services/helpers/sweet-alert.service';
 import { User } from '../../../shared/models/mongo-models/user.model';
 import { Role } from '../../../../../../03-backend/src/app/interfaces/roles.interface';
+import { formatDate } from '../../../shared/constants/strings.constants';
 
 @Component({
 	selector: 'app-users',
@@ -12,6 +13,7 @@ import { Role } from '../../../../../../03-backend/src/app/interfaces/roles.inte
 })
 export class UsersComponent {
 	// ANCHOR - Variables
+	public formatDate = formatDate;
 	public users: User[] = [];
 	public paginationData: PaginationData = { limit: 5, page: 1 };
 

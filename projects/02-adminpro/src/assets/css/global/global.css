@@ -54,8 +54,8 @@ input[type='number'] {
 	text-align: right;
 }
 
-img.portrait{
-	object-fit:cover !important;
+img.portrait {
+	object-fit: cover !important;
 	width: 30px !important;
 	height: 30px !important;
 	border-radius: 100%;
@@ -65,4 +65,19 @@ img.portrait{
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
+}
+
+.center-items {
+	display: grid !important;
+	place-items: center !important;
+}
+
+.d-end {
+	display: flex;
+	justify-content: flex-end;
+}
+
+.d-center {
+	display: flex;
+	justify-content: center;
 }
