@@ -18,6 +18,18 @@ export type ModelToken = Required<Pick<AuthDefaultRequest, 'token'>>;
 export type TypeToken<Model extends AuthDefaultRequest = AuthDefaultRequest> =
 	Model['token'];
 
+
+/**
+ * ? Datos para la paginacion de las respuestas
+ * @export
+ * @interface PaginationData
+ * @typedef {PaginationData}
+ */
+export interface PaginationData {
+	limit: number;
+	page: number;
+}
+
 /**
  * ? Opciones para realizar una consulta a la base de datos con el plugin mongoose-paginate-v2
  * @export
@@ -25,10 +37,10 @@ export type TypeToken<Model extends AuthDefaultRequest = AuthDefaultRequest> =
  * @typedef {QueryOptions}
  * @template Props
  */
-export interface QueryOptions<Props> {
+export type QueryOptions<Props> = Partial<PaginationData> & {
 	select?: Partial<keyof Props> | Partial<keyof Props[]>;
 	sort?: Record<Partial<keyof Props>, SortOptions>; // { field: 'asc', test: -1, otherField : desc } // asc, desc, ascending, descending, 1, and -1
-	populate?:
+	populate?: // Para hacer populate de los campos deseados
 		| Partial<keyof Props>
 		| Partial<keyof Props[]>
 		| {
@@ -37,10 +49,9 @@ export interface QueryOptions<Props> {
 				match?: RegExp;
 				sort?: Record<string, SortOptions>;
 		  };
-	limit?: number;
-	page?: number;
+
 	offset?: number; // Use offset or page to set skip position
-	pagination?: boolean;
+	pagination?: boolean; // por defecto es true, si no se desea paginacion pasar en false
 
 	//!! Ajenos a mongoose-paginate-v2
 	include?: boolean;
@@ -49,7 +60,7 @@ export interface QueryOptions<Props> {
 	showQuery?: boolean;
 	showParams?: boolean;
 	showOptions?: boolean;
-}
+};
 
 //* Tipado de las opciones de ordenamiento
 type SortOptions = 'asc' | 'desc' | 'ascending' | 'descending' | 1 | -1;
