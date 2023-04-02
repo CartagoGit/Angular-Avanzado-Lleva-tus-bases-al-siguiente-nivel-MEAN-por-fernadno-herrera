@@ -18,12 +18,6 @@ import { DashboardRoutingModule } from './dashboard.routing';
 		RxjsComponent,
 	],
 	imports: [CommonModule, DashboardRoutingModule, ComponentsModule],
-	exports: [
-		MainDashboardComponent,
-		Graphic01Component,
-		ProgressComponent,
-		PromisesComponent,
-		RxjsComponent,
-	],
+	exports: [],
 })
 export class DashboardModule {}

@@ -33,8 +33,6 @@ export class SidebarService {
 	private _hospitalsPath = paths.getPath('hospitals');
 	private _doctorsPath = paths.getPath('doctors');
 
-
-
 	public menu: MenuRoutes[] = [
 		{
 			title: this._dashboardPath?.title!,
@@ -69,15 +67,14 @@ export class SidebarService {
 				{
 					title: 'Users',
 					url: this._usersPath?.fullPath!,
-
-				},
-				{
-					title: 'Hospitals',
-					url: this._hospitalsPath?.fullPath!,
 				},
 				{
 					title: 'Doctors',
 					url: this._doctorsPath?.fullPath!,
+				},
+				{
+					title: 'Hospitals',
+					url: this._hospitalsPath?.fullPath!,
 				},
 			],
 		},

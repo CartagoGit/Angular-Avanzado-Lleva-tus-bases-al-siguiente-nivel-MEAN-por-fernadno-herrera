@@ -8,7 +8,12 @@ import { GeneralRoutingModule } from './general.routing';
 
 @NgModule({
 	declarations: [AccountSettingsComponent, ProfileComponent],
-	imports: [CommonModule, GeneralRoutingModule, ReactiveFormsModule, SharedModule],
-	exports: [AccountSettingsComponent, ProfileComponent],
+	imports: [
+		CommonModule,
+		GeneralRoutingModule,
+		ReactiveFormsModule,
+		SharedModule,
+	],
+	exports: [],
 })
 export class GeneralModule {}
