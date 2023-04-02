@@ -15,7 +15,7 @@
 	</div>
 </div>
 
-<div class="row animated fadeIn fast">
+<div class="row animated fadeIn fast" *ngIf="isLoading">
 	<div class="col-12">
 		<div class="card">
 			<div class="card-body">
@@ -29,95 +29,72 @@
 	</div>
 </div>
 
-<div class="row animated fadeIn fast">
+<div class="row animated fadeIn fast" *ngIf="!isLoading">
 	<div class="col-12">
 		<div class="card">
 			<div class="card-body">
 				<h4 class="card-title">Users</h4>
 				<h6 class="card-subtitle">Register users in the app</h6>
-				<div class="table-responsive">
-					<table class="table table-bordered table-ellipsis">
-						<thead>
-							<tr>
-								<th>Image</th>
-								<th>Email</th>
-								<th>Name</th>
-								<th>Role</th>
-								<th>Auth</th>
-								<th class="text-nowrap">Actions</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr *ngFor="let user of users">
-								<td>Tantas earum numeris</td>
-								<td>Tantas earum numeris</td>
-								<td>Tantas earum numeris</td>
-								<td>
-									<div class="progress progress-xs margin-vertical-10">
-										<div
-											class="progress-bar bg-inverse"
-											style="width: 50%; height: 6px"
-										></div>
-									</div>
-								</td>
-								<td>July 11, 2015</td>
-								<td class="text-nowrap">
-									<a
-										href="#"
-										data-toggle="tooltip"
-										data-original-title="Edit"
-									>
-										<i class="fa fa-pencil text-inverse m-r-10"></i>
-									</a>
-									<a
-										href="#"
-										data-toggle="tooltip"
-										data-original-title="remove"
-									>
-										<i class="fa fa-close text-danger"></i>
-									</a>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-				<div class="footer-table">
-					<div class="footer-results">
-						<div class="footer-result">
-							<span class="footer-total-label">Total:</span>
-							<span class="footer-total-result">9999</span>
+				<div class="table-grid table-ellipsis table-users">
+					<div class="table-grid__header table-grid__row">
+						<div class="table-grid__field center-items">Img</div>
+						<div class="table-grid__field">Email</div>
+						<div class="table-grid__field">Name</div>
+						<div class="table-grid__field">Role</div>
+						<div class="table-grid__field">Registered</div>
+						<div class="table-grid__field d-center">Actions</div>
+					</div>
+					<div class="table-grid__body">
+						<div *ngFor="let user of users" class="table-grid__row">
+							<div class="table-grid__field center-items">
+								<img
+									[src]="user.dataImages?.defaultImgSrc! | safe"
+									alt="profile image user"
+									class="portrait"
+								/>
+							</div>
+							<div class="table-grid__field">
+								<span>{{ user.email }}</span>
+							</div>
+							<div class="table-grid__field">
+								<span>
+									{{ user.name }}
+								</span>
+							</div>
+							<div class="table-grid__field">
+								<span>
+									{{ rolesName[user.role] }}
+								</span>
+							</div>
+							<div class="table-grid__field">
+								<span>
+									{{ user.createdAt | date : 'dd-MMM-yyyy' }}
+								</span>
+							</div>
+							<div class="table-grid__field text-nowrap d-center">
+								<a
+									href="#"
+									data-toggle="tooltip"
+									data-original-title="Edit"
+								>
+									<i class="fa fa-pencil text-inverse m-r-10"></i>
+								</a>
+								<a
+									href="#"
+									data-toggle="tooltip"
+									data-original-title="remove"
+								>
+									<i class="fa fa-close text-danger"></i>
+								</a>
+							</div>
 						</div>
 					</div>
-					<div class="footer-pagination">
-						<ul class="pagination">
-							<li class="page-item">
-								<a class="page-link" href="javascript:void(0)">
-									<i class="fa fa-angle-left"></i>
-								</a>
-							</li>
-							<li class="page-item">
-								<a class="page-link" href="javascript:void(0)">1</a>
-							</li>
-							<li class="page-item">
-								<a class="page-link" href="javascript:void(0)">2</a>
-							</li>
-							<li class="page-item">
-								<a class="page-link" href="javascript:void(0)">3</a>
-							</li>
-							<li class="page-item">
-								<a class="page-link" href="javascript:void(0)">4</a>
-							</li>
-							<li class="page-item">
-								<a class="page-link" href="javascript:void(0)">5</a>
-							</li>
-							<li class="page-item">
-								<a class="page-link" href="javascript:void(0)">
-									<i class="fa fa-angle-right"></i>
-								</a>
-							</li>
-						</ul>
-					</div>
 				</div>
+
+				<app-footer-table
+					[pagination]="pagination"
+					(pageChanged)="changePage($event)"
+				></app-footer-table>
 			</div>
 		</div>
 	</div>
