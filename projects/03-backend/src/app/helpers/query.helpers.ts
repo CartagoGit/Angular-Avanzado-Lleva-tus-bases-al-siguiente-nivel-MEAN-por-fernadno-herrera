@@ -19,6 +19,7 @@ export const getQueryIncludeAndPaginate = (
 	const optionsFromQuery: QueryOptions<typeof model.schema.obj> = req.query[
 		'options'
 	] as object;
+	console.log("❗optionsFromQuery ➽ ⏩" , optionsFromQuery);
 	req.query['options'] = optionsFromQuery as any;
 	let queryParams = req.query;
 
