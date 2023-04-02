@@ -5,6 +5,7 @@
 	margin-bottom: 16px;
 	border-collapse: collapse;
 	border-radius: 5px;
+	overflow: auto;
 }
 
 .table-grid__header {

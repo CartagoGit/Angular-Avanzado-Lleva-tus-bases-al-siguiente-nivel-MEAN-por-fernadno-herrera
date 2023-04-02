@@ -71,7 +71,6 @@ export class UsersComponent {
 	}
 
 	public changePage(page: number) {
-		console.log('❗changePage  ➽ page ➽ ⏩', page);
 		this.paginationData.page = page;
 		this.loadUsers();
 	}
