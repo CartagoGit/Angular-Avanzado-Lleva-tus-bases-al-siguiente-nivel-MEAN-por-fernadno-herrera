@@ -29,8 +29,8 @@ export class UsersComponent {
 		'true' | 'false',
 		{ text: string; typeLabel: string }
 	> = {
-		true: { text: 'Google user', typeLabel: 'label-danger' },
-		false: { text: 'Common user', typeLabel: 'label-warning' },
+		true: { text: 'Google', typeLabel: 'label-danger' },
+		false: { text: 'Email', typeLabel: 'label-success' },
 	};
 
 	public pagination?: Pagination;
