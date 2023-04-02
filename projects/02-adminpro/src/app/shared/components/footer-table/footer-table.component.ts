@@ -4,7 +4,7 @@ import { Pagination } from '../../interfaces/http/pagination.interface';
 //* Resultados a mostrar en el footer
 interface Result {
 	label: string;
-	result: string | number;
+	value: string | number;
 }
 
 @Component({
@@ -14,16 +14,62 @@ interface Result {
 })
 export class FooterTableComponent {
 	// ANCHOR : Variables
-	@Input('pagination') pagination?: Pagination;
+	private _pagination?: Pagination;
+	@Input('pagination') set pagination(value: Pagination | undefined) {
+		if (!value) return;
+		this._pagination = value;
+		this.pagesShowed = this._calculatePagesShowed();
+	}
+	get pagination(): Pagination | undefined {
+		return this._pagination;
+	}
+
 	@Input('showTotal') showTotal: boolean = true;
 	@Input('results') results: Result[] = [];
 
 	@Output('pageChange') pageChange = new EventEmitter<number>();
 
-	
+	public pagesShowed: number[] = [];
 
 	// ANCHOR: Constructor
 	constructor() {}
 
 	// ANCHOR: Methods
+	/**
+	 * ? Calcula las paginas que se mostraran en el footer
+	 * @private
+	 * @returns {number[]}
+	 */
+	private _calculatePagesShowed(): number[] {
+		const pagesShowed: number[] = [];
+		const { totalPages, page } = this.pagination!;
+		let start = page - 2;
+		let end = page + 2;
+
+		if (start < 1) {
+			start = 1;
+			end = 5;
+		}
+
+		if (end > totalPages) {
+			end = totalPages;
+			if (totalPages - 4 > 1) start = totalPages - 4;
+		}
+
+		for (let i = start; i <= end; i++) {
+			pagesShowed.push(i);
+		}
+
+		return pagesShowed;
+	}
+
+	/**
+	 * ? Cambia la pagina
+	 * @public
+	 * @param {number} page
+	 */
+	public changePage(page: number) {
+		if(page === this.pagination?.page) return;
+		this.pageChange.emit(page);
+	}
 }

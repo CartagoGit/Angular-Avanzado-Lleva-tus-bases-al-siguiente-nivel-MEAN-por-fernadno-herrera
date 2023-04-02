@@ -2,36 +2,63 @@
 	<div class="footer-results">
 		<div class="footer-result" *ngIf="showTotal">
 			<span class="footer-total-label">Total:</span>
-			<span class="footer-total-result">{{
-				pagination?.totalDocs || 0
-			}}</span>
+			<span class="footer-total-result">
+				{{ pagination?.totalDocs || 0 }}</span
+			>
+		</div>
+		<div class="footer-result" *ngFor="let result of results">
+			<span class="footer-total-label">{{ result.label }}:</span>
+			<span class="footer-total-result"> {{ result.value }} || '' }}</span>
 		</div>
 	</div>
 	<div class="footer-pagination">
 		<ul class="pagination">
-			<li class="page-item">
+			<li
+				class="page-item"
+				(click)="changePage(1)"
+				[ngClass]="{ disabled: !pagination?.hasPrevPage }"
+			>
+				<div class="page-link">
+					<i class="fa fa-angle-double-left"></i>
+				</div>
+			</li>
+			<li
+				class="page-item"
+				(click)="changePage(pagination?.page! - 1)"
+				[ngClass]="{ disabled: !pagination?.hasPrevPage }"
+			>
 				<div class="page-link">
 					<i class="fa fa-angle-left"></i>
 				</div>
 			</li>
-			<li class="page-item">
-				<div class="page-link">1</div>
+			<li
+				*ngFor="let numPage of pagesShowed"
+				class="page-item"
+				(click)="changePage(numPage)"
+			>
+				<div
+					class="page-link"
+					[ngClass]="{ 'selected-page': pagination?.page === numPage }"
+				>
+					{{ numPage }}
+				</div>
 			</li>
-			<li class="page-item">
-				<div class="page-link">2</div>
-			</li>
-			<li class="page-item">
-				<div class="page-link">3</div>
-			</li>
-			<li class="page-item">
-				<div class="page-link">4</div>
-			</li>
-			<li class="page-item">
-				<div class="page-link">5</div>
-			</li>
-			<li class="page-item">
+			<li
+				class="page-item"
+				(click)="changePage(pagination?.page! + 1)"
+				[ngClass]="{ disabled: !pagination?.hasNextPage }"
+			>
 				<div class="page-link">
 					<i class="fa fa-angle-right"></i>
+				</div>
+			</li>
+			<li
+				class="page-item"
+				(click)="changePage(pagination?.totalPages!)"
+				[ngClass]="{ disabled: !pagination?.hasNextPage }"
+			>
+				<div class="page-link">
+					<i class="fa fa-angle-double-right"></i>
 				</div>
 			</li>
 		</ul>

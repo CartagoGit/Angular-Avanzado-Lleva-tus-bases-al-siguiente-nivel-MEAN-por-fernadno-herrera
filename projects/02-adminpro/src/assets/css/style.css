@@ -60,8 +60,6 @@ Global Styles
 @import url(../css/animate.css);
 @import url(../css/animate.css);
 @import url(./global/global.css);
-@import url(./global/modify-others.css);
-@import url(./global/footer.css);
 @import url(./global/table.css);
 
 * {
