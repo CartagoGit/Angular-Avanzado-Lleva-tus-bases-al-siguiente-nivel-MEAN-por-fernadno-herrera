@@ -5,9 +5,10 @@ import { SupportRoutingModule } from './support.routing';
 import { UsersComponent } from './users/users.component';
 import { HospitalsComponent } from './hospitals/hospitals.component';
 import { DoctorsComponent } from './doctors/doctors.component';
+import { SharedModule } from '../../shared/shared.module';
 
 @NgModule({
 	declarations: [UsersComponent, HospitalsComponent, DoctorsComponent],
-	imports: [CommonModule, SupportRoutingModule],
+	imports: [CommonModule, SupportRoutingModule, SharedModule],
 })
 export class SupportModule {}

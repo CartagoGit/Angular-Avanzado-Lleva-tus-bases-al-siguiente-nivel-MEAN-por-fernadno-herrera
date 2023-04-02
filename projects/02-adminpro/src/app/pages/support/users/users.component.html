@@ -40,24 +40,19 @@
 								<th>Email</th>
 								<th>Name</th>
 								<th>Role</th>
-								<th>Auth</th>
+								<th>Registered</th>
 								<th class="text-nowrap">Actions</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr *ngFor="let user of users">
-								<td>Tantas earum numeris</td>
-								<td>Tantas earum numeris</td>
-								<td>Tantas earum numeris</td>
+								<td><img [src]="user.dataImages?.defaultImgSrc! | safe" alt="profile image user" class="portrait"></td>
+								<td>{{user.email}}</td>
+								<td>{{user.name}}</td>
 								<td>
-									<div class="progress progress-xs margin-vertical-10">
-										<div
-											class="progress-bar bg-inverse"
-											style="width: 50%; height: 6px"
-										></div>
-									</div>
+									{{rolesName[user.role]}}
 								</td>
-								<td>July 11, 2015</td>
+								<td>{{user.createdAt | date: 'dd-MMM-yyyy'}}</td>
 								<td class="text-nowrap">
 									<a
 										href="#"

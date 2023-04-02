@@ -58,6 +58,7 @@ img.portrait{
 	object-fit:cover !important;
 	width: 30px !important;
 	height: 30px !important;
+	border-radius: 100%;
 }
 
 .ellipsis {

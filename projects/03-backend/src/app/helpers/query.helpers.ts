@@ -12,15 +12,13 @@ import { QueryOptions, ReturnedQuery } from '../interfaces/query.interface';
  */
 export const getQueryIncludeAndPaginate = (
 	req: Request,
-	options: { returnQueryModels?: boolean } = {}
+	optionsForBackend: { returnQueryModels?: boolean } = {}
 ): ReturnedQuery => {
-	const { returnQueryModels = false } = options;
+	const { returnQueryModels = false } = optionsForBackend;
 	const model = getModelSection(req);
 	const optionsFromQuery: QueryOptions<typeof model.schema.obj> = req.query[
 		'options'
 	] as object;
-	console.log("❗optionsFromQuery ➽ ⏩" , optionsFromQuery);
-	req.query['options'] = optionsFromQuery as any;
 	let queryParams = req.query;
 
 	const wantInclude = optionsFromQuery?.include ?? true;
@@ -40,7 +38,6 @@ export const getQueryIncludeAndPaginate = (
 		const arrayQuery = Object.entries(queryParams)
 			.filter(([key]) => paramsInModel.includes(key))
 			.map(([key, value]) => {
-				// if(value === 'true' || value === 'false')
 				try {
 					value = JSON.parse(value as string);
 				} catch (error) {
