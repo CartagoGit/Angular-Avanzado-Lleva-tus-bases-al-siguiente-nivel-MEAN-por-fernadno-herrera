@@ -1,0 +1,32 @@
+.footer-table {
+	display: flex;
+	justify-content: space-between;
+}
+
+.footer-results {
+	display: flex;
+	align-items: center;
+	gap: 15px;
+	line-height: 16px;
+	align-items: flex-end;
+}
+
+.footer-result {
+	display: flex;
+	font-weight: 300;
+	font-size: 14px;
+	gap: 5px;
+}
+
+.footer-total-result {
+	font-size: 16px;
+	font-weight: 400;
+}
+
+.pagination {
+	margin-bottom: 0px !important;
+}
+
+.page-link {
+	border-color: rgb(233, 236, 239) !important;
+}
