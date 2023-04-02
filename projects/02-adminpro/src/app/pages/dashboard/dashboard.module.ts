@@ -7,6 +7,7 @@ import { ProgressComponent } from './progress/progress.component';
 import { PromisesComponent } from './promises/promises.component';
 import { RxjsComponent } from './rxjs/rxjs.component';
 import { ComponentsModule } from '../../shared/components/components.module';
+import { DashboardRoutingModule } from './dashboard.routing';
 
 @NgModule({
 	declarations: [
@@ -16,7 +17,7 @@ import { ComponentsModule } from '../../shared/components/components.module';
 		PromisesComponent,
 		RxjsComponent,
 	],
-	imports: [CommonModule, ComponentsModule],
+	imports: [CommonModule, DashboardRoutingModule, ComponentsModule],
 	exports: [
 		MainDashboardComponent,
 		Graphic01Component,

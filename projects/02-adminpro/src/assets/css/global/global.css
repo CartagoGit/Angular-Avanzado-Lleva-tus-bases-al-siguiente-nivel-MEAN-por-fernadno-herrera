@@ -54,6 +54,12 @@ input[type='number'] {
 	text-align: right;
 }
 
+img.portrait{
+	object-fit:cover !important;
+	width: 30px !important;
+	height: 30px !important;
+}
+
 .ellipsis {
 	white-space: nowrap;
 	overflow: hidden;

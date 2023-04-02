@@ -4,10 +4,11 @@ import { AccountSettingsComponent } from './account-settings/account-settings.co
 import { ProfileComponent } from './profile/profile.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../shared/shared.module';
+import { GeneralRoutingModule } from './general.routing';
 
 @NgModule({
 	declarations: [AccountSettingsComponent, ProfileComponent],
-	imports: [CommonModule, ReactiveFormsModule, SharedModule],
+	imports: [CommonModule, GeneralRoutingModule, ReactiveFormsModule, SharedModule],
 	exports: [AccountSettingsComponent, ProfileComponent],
 })
 export class GeneralModule {}

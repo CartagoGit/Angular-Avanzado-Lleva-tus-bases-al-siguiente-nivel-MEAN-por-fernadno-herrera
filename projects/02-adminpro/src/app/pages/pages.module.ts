@@ -5,11 +5,15 @@ import { FormsModule } from '@angular/forms';
 
 // Modulos
 import { SharedModule } from '../shared/shared.module';
+
+// Secciones
 import { DashboardModule } from './dashboard/dashboard.module';
 import { GeneralModule } from './general/general.module';
+import { SupportModule } from './support/support.module';
 
 // Rutas
 import { PagesRoutingModule } from './pages.routing';
+
 // Componentes
 import { PagesComponent } from './pages.component';
 
@@ -23,6 +27,7 @@ import { PagesComponent } from './pages.component';
 		PagesRoutingModule,
 		DashboardModule,
 		GeneralModule,
+		SupportModule
 	],
 })
 export class PagesModule {}
