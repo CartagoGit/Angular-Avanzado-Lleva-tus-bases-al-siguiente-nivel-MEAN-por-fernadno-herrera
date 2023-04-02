@@ -27,7 +27,7 @@ export class FooterTableComponent {
 	@Input('showTotal') showTotal: boolean = true;
 	@Input('results') results: Result[] = [];
 
-	@Output('pageChange') pageChange = new EventEmitter<number>();
+	@Output('pageChanged') pageChanged = new EventEmitter<number>();
 
 	public pagesShowed: number[] = [];
 
@@ -70,6 +70,6 @@ export class FooterTableComponent {
 	 */
 	public changePage(page: number) {
 		if(page === this.pagination?.page) return;
-		this.pageChange.emit(page);
+		this.pageChanged.emit(page);
 	}
 }

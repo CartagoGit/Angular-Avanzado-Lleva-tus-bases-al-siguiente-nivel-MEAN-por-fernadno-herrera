@@ -6,6 +6,7 @@ import { User } from '../../../shared/models/mongo-models/user.model';
 import { Role } from '../../../../../../03-backend/src/app/interfaces/roles.interface';
 import { formatDate } from '../../../shared/constants/strings.constants';
 import { Pagination } from '../../../shared/interfaces/http/pagination.interface';
+import { minTimeBeforeLoader } from '../../../shared/constants/time.constants';
 
 @Component({
 	selector: 'app-users',
@@ -17,7 +18,7 @@ export class UsersComponent {
 	public formatDate = formatDate;
 	public users: User[] = [];
 	public paginationData: PaginationData = { limit: 5, page: 1 };
-	public isLoading : boolean = false;
+	public isLoading: boolean = false;
 
 	public rolesName: Record<Role, string> = {
 		ADMIN_ROLE: 'Administrator',
@@ -41,20 +42,29 @@ export class UsersComponent {
 	 * @public
 	 */
 	public loadUsers() {
-		this.isLoading= true;
+		const timer = setTimeout(() => {
+			this.isLoading = true;
+		}, minTimeBeforeLoader);
 		this._usersService.getAll(this.paginationData).subscribe({
 			next: (res) => {
+				clearTimeout(timer);
 				if (!res || !res.data) {
 					this._sweetAlertService.alertError('Cannot load users');
 					return;
 				}
 				this.users = res.data.map((user) => new User(user));
-				this.pagination = res.pagination;
-				this.isLoading= false;
+				this.pagination = { ...res.pagination! };
+				this.isLoading = false;
 			},
 			error: (err) => {
 				this._sweetAlertService.alertError(err.error.msg);
 			},
 		});
+	}
+
+	public changePage(page: number) {
+		console.log('❗changePage  ➽ page ➽ ⏩', page);
+		this.paginationData.page = page;
+		this.loadUsers();
 	}
 }

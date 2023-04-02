@@ -9,7 +9,7 @@ export const getDefaultQueryOptions = <Props>(): QueryOptions<Props> => {
 	const defaultQueryOptions: Readonly<QueryOptions<Props>> = {
 		include: true,
 		limit: 20,
-		offset: 0,
+		// offset: 0,
 		page: 1,
 		pagination: true,
 	};
