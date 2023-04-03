@@ -42,7 +42,6 @@ export class UsersComponent {
 		page: 0,
 		searchText: '',
 	};
-	
 
 	// ANCHOR - Constructor
 	constructor(
@@ -50,7 +49,6 @@ export class UsersComponent {
 		private _usersService: UsersService,
 		private _sweetAlertService: SweetAlertService
 	) {
-
 		this.loadUsers();
 	}
 
@@ -140,5 +138,19 @@ export class UsersComponent {
 					},
 				});
 			});
+	}
+
+	public changeRole(user: User): void {
+		const finalRole: Role =
+			user.role === 'ADMIN_ROLE' ? 'USER_ROLE' : 'ADMIN_ROLE';
+		this._usersService.put({ ...user, role: finalRole }).subscribe({
+			next: () => {
+				this._sweetAlertService.alertSuccess('User role changed correctly');
+				user.role = finalRole;
+			},
+			error: (err) => {
+				this._sweetAlertService.alertError(err.error.msg);
+			},
+		});
 	}
 }

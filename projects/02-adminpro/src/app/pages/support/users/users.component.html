@@ -73,8 +73,15 @@
 								[title]="rolesData[user.role].text"
 							>
 								<span
-									class="label"
-									[ngClass]="rolesData[user.role].typeLabel"
+									[class]="
+										'label pointer ' + rolesData[user.role].typeLabel
+									"
+									(click)="
+										actualUser.role === 'ADMIN_ROLE' &&
+											user.id !== actualUser.id &&
+											changeRole(user)
+									"
+									[ngClass]="{ disabled: user.id === actualUser.id }"
 								>
 									{{ rolesData[user.role].text }}
 								</span>
@@ -107,13 +114,13 @@
 								</span>
 							</div>
 							<div class="table-grid__field text-nowrap d-center">
-								<div
+								<!-- <div
 									class="pointer"
 									data-toggle="tooltip"
 									data-original-title="Edit"
 								>
 									<i class="fa fa-pencil text-inverse m-r-10"></i>
-								</div>
+								</div> -->
 								<div
 									class="pointer"
 									[ngClass]="{
