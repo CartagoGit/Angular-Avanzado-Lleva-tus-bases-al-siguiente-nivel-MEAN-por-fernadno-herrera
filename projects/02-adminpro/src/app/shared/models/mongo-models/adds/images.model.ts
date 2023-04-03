@@ -1,7 +1,6 @@
 import { Injector } from '@angular/core';
 import { FilesService } from '../../../services/http/files.service';
 
-
 /**
  * ? Clase que permite agregar imagenes a un modelo
  * @export
@@ -17,7 +16,7 @@ export class ImageAdd {
 
 	private _filesSvc: FilesService;
 	private _hasImages: boolean;
-	private _defaultNoImageSrc: string = 'assets/images/no-image.jpg';
+	// private _defaultNoImageSrc: string = 'assets/images/no-image.jpg';
 
 	// ANCHOR : Constructor
 	constructor(
@@ -37,19 +36,17 @@ export class ImageAdd {
 		this._hasImages = !!images && images.length > 0;
 
 		//* Asigna la imagen por defecto y la descarga si es necesario
-		this.defaultImg = this._hasImages
-			? images![this.defaultImgIndex]
-			: this._defaultNoImageSrc;
+		this.defaultImg = this._hasImages ? images![this.defaultImgIndex] : '';
+		// : this._defaultNoImageSrc;
 
 		if (!this._hasImages || google) this.defaultImgSrc = this.defaultImg;
 		else {
-
 			this._filesSvc.downloadFileFullPath(this.defaultImg).subscribe({
 				next: (source) => {
-
 					this.defaultImgSrc = source;
 				},
-				error: () => (this.defaultImgSrc = this._defaultNoImageSrc),
+				error: () => (this.defaultImgSrc = ''),
+				// error: () => (this.defaultImgSrc = this._defaultNoImageSrc),
 			});
 		}
 	}
