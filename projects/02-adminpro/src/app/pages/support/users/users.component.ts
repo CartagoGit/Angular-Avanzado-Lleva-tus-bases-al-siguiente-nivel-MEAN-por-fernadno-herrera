@@ -8,6 +8,7 @@ import { formatDate } from '../../../shared/constants/strings.constants';
 import { Pagination } from '../../../shared/interfaces/http/pagination.interface';
 import { minTimeBeforeLoader } from '../../../shared/constants/time.constants';
 import { StateService } from '../../../shared/services/settings/state.service';
+import { DefaultErrorResponse } from '../../../shared/interfaces/http/response.interfaces';
 
 @Component({
 	selector: 'page-users',
@@ -96,8 +97,8 @@ export class UsersComponent {
 					};
 					this.paginationData = { ...this.paginationData, page: 1 };
 				},
-				error: (err) => {
-					this._sweetAlertService.alertError(err.error.msg);
+				error: (err: DefaultErrorResponse) => {
+					this._sweetAlertService.alertError(err.error_message);
 				},
 			});
 	}
@@ -133,8 +134,8 @@ export class UsersComponent {
 						);
 						this.loadUsers({ obleyLoad: true });
 					},
-					error: (err) => {
-						this._sweetAlertService.alertError(err.error.msg);
+					error: (err : DefaultErrorResponse) => {
+						this._sweetAlertService.alertError(err.error_message);
 					},
 				});
 			});
@@ -148,8 +149,8 @@ export class UsersComponent {
 				this._sweetAlertService.alertSuccess('User role changed correctly');
 				user.role = finalRole;
 			},
-			error: (err) => {
-				this._sweetAlertService.alertError(err.error.msg);
+			error: (err: DefaultErrorResponse) => {
+				this._sweetAlertService.alertError(err.error_message);
 			},
 		});
 	}
