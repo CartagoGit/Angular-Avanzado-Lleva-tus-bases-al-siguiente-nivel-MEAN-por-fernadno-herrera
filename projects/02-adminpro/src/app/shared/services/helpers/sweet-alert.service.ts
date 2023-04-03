@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import Swal, { SweetAlertResult } from 'sweetalert2';
+import Swal, { SweetAlertIcon, SweetAlertResult } from 'sweetalert2';
 import { StateService } from '../settings/state.service';
 
 @Injectable({
@@ -47,5 +47,38 @@ export class SweetAlertService {
 			`We are in maintenance. Wait, we will come soon again`,
 			'info'
 		);
+	}
+
+	/**
+	 * ? Crea un modal predefinido de confirmacion con sweet alert
+	 * @public
+	 * @param {?{
+			title?: string;
+			text?: string;
+			icon?: SweetAlertIcon;
+		}} [data]
+	 * @returns {Promise<SweetAlertResult<any>>}
+	 */
+	public confirmDeleteModal(data?: {
+		title?: string;
+		text?: string;
+		icon?: SweetAlertIcon;
+		confirmButtonText?: string;
+	}): Promise<SweetAlertResult<any>> {
+		const {
+			title = 'Are you sure?',
+			text = 'You would accept to delete. Are you sure?',
+			icon = 'warning',
+			confirmButtonText = 'Yes, delete it',
+		} = data || {};
+		return Swal.fire({
+			title,
+			text,
+			icon,
+			showCancelButton: true,
+			// confirmButtonColor: '#3085d6',
+			// cancelButtonColor: '#d33',
+			confirmButtonText,
+		});
 	}
 }
