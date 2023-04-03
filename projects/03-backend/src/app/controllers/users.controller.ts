@@ -47,13 +47,24 @@ export const usersController: {
 				status_code: 404,
 				reason: 'not found id in model',
 			} as basicError;
-		if (!!userDB.google)
+		const { id: idModifier } = getPayloadFromJwtWithoutVerifiy(req);
+		const userModifierDB = await UserModel.findById(idModifier);
+		req.body['model'] = userDB;
+
+		if (!!userDB.google) {
+			const message =
+				'Just the role of a google user can be modified, and only an administrator can do it';
+			if (req.body.role && (userModifierDB.role as Role) === 'ADMIN_ROLE') {
+				req.body.info = `${message}. Other fields are not modified`;
+				return req.body;
+			}
 			throw {
-				message: 'An user with google account can not be modified',
-				status_code: 400,
+				message,
+				status_code: 409,
 				reason: 'cannot google user',
 			} as basicError;
-		req.body['model'] = userDB;
+		}
+
 		if (userDB.email === req.body.email) {
 			cleanValidatorField(req, 'email');
 			delete req.body.email;
@@ -61,8 +72,6 @@ export const usersController: {
 		if (!!req.body.password)
 			req.body.password = getEncryptHash(req.body.password);
 
-		const { id: idModifier } = getPayloadFromJwtWithoutVerifiy(req);
-		const userModifierDB = await UserModel.findById(idModifier);
 		if (req.body.role && (userModifierDB.role as Role) !== 'ADMIN_ROLE') {
 			removeParamAndSetInfo(req, 'role');
 			req.body.info.role += ' if you have not ADMIN_ROLE';
