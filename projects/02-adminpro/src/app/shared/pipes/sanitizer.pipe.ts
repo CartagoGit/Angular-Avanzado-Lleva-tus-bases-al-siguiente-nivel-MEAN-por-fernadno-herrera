@@ -17,6 +17,7 @@ export class SanitizerPipe implements PipeTransform {
 	constructor(private _sanitized: DomSanitizer) {}
 	transform(value: string): SafeUrl | string {
 		if (!value) return value;
+		
 		return this._sanitized.bypassSecurityTrustUrl(value);
 	}
 }

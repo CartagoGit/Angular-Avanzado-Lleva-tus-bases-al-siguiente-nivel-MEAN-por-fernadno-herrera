@@ -13,10 +13,10 @@ import { AppRoutingModule } from './app.routing';
 // Modulos
 
 import { CoreModule } from './core/core.module';
+import { SharedModule } from './shared/shared.module';
 
 // Componentes
 import { AppComponent } from './app.component';
-import { SharedModule } from './shared/shared.module';
 
 @NgModule({
 	declarations: [AppComponent],
