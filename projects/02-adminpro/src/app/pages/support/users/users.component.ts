@@ -56,7 +56,7 @@ export class UsersComponent {
 			this.isLoading = true;
 		}, minTimeBeforeLoader);
 		let query = {};
-		console.log(this.searchText);
+	
 		if (!!this.searchText)
 			query = { ...query, name: this.searchText, email: this.searchText };
 		this._usersService
@@ -75,6 +75,7 @@ export class UsersComponent {
 					this.users = res.data.map((user) => new User(user));
 					this.pagination = { ...res.pagination! };
 					this.isLoading = false;
+					this.paginationData = {page: 1, limit: 5}
 				},
 				error: (err) => {
 					this._sweetAlertService.alertError(err.error.msg);
