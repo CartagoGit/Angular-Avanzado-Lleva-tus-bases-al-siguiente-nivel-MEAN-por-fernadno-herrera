@@ -9,7 +9,7 @@ import { Pagination } from '../../../shared/interfaces/http/pagination.interface
 import { minTimeBeforeLoader } from '../../../shared/constants/time.constants';
 
 @Component({
-	selector: 'app-users',
+	selector: 'page-users',
 	templateUrl: './users.component.html',
 	styleUrls: ['./users.component.css'],
 })
@@ -37,9 +37,9 @@ export class UsersComponent {
 	public searchText?: string;
 
 	private _lastSearch = {
-		page : 0,
-		searchText: ''
-	}
+		page: 0,
+		searchText: '',
+	};
 
 	// ANCHOR - Constructor
 	constructor(
@@ -55,8 +55,16 @@ export class UsersComponent {
 	 * ? Carga los usuarios de la base de datos con los parametros de paginacion
 	 * @public
 	 */
-	public loadUsers() {
-		if(this.searchText === this._lastSearch.searchText && this.paginationData.page === this._lastSearch.page) return;
+	public loadUsers(data?: { obleyLoad?: boolean }) {
+		const { obleyLoad = false } = data || {};
+		if (
+			!obleyLoad &&
+			this.searchText === this._lastSearch.searchText &&
+			this.paginationData.page === this._lastSearch.page
+		) {
+			return;
+		}
+
 		const timer = setTimeout(() => {
 			this.isLoading = true;
 		}, minTimeBeforeLoader);
@@ -79,7 +87,10 @@ export class UsersComponent {
 					this.users = res.data.map((user) => new User(user));
 					this.pagination = { ...res.pagination! };
 					this.isLoading = false;
-					this._lastSearch = { page : this.paginationData.page, searchText: this.searchText! };
+					this._lastSearch = {
+						page: this.paginationData.page,
+						searchText: this.searchText!,
+					};
 					this.paginationData = { ...this.paginationData, page: 1 };
 				},
 				error: (err) => {
@@ -98,7 +109,31 @@ export class UsersComponent {
 		this.loadUsers();
 	}
 
-	public changeSearchText(text: string) {
-		this.searchText = text;
+	/**
+	 * ? Elimina un usuario
+	 * @public
+	 * @param {User} user
+	 */
+	public deleteUser(user: User): void {
+		this._sweetAlertService
+			.confirmDeleteModal({
+				title: 'Delete user',
+				text: `Are you sure you want to delete the user '${user.name}'?`,
+				icon: 'warning',
+			})
+			.then((result) => {
+				if (!result.isConfirmed) return;
+				this._usersService.delete(user.id).subscribe({
+					next: () => {
+						this._sweetAlertService.alertSuccess(
+							'User deleted correctly'
+						);
+						this.loadUsers({ obleyLoad: true });
+					},
+					error: (err) => {
+						this._sweetAlertService.alertError(err.error.msg);
+					},
+				});
+			});
 	}
 }

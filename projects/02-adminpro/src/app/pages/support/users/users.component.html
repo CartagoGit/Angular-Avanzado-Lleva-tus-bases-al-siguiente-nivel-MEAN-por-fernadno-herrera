@@ -11,8 +11,7 @@
 						type="text"
 						class="form-control"
 						placeholder="Search user..."
-						[ngModel]="searchText"
-						(ngModelChange)="changeSearchText($event)"
+						[(ngModel)]="searchText"
 						(keyup.enter)="loadUsers()"
 					/>
 				</div>
@@ -108,20 +107,21 @@
 								</span>
 							</div>
 							<div class="table-grid__field text-nowrap d-center">
-								<a
-									href="#"
+								<div
+									class="pointer"
 									data-toggle="tooltip"
 									data-original-title="Edit"
 								>
 									<i class="fa fa-pencil text-inverse m-r-10"></i>
-								</a>
-								<a
-									href="#"
+								</div>
+								<div
+									class="pointer"
+									(click)="deleteUser(user)"
 									data-toggle="tooltip"
 									data-original-title="remove"
 								>
 									<i class="fa fa-close text-danger"></i>
-								</a>
+								</div>
 							</div>
 						</div>
 					</div>

@@ -56,6 +56,7 @@ export class SweetAlertService {
 			title?: string;
 			text?: string;
 			icon?: SweetAlertIcon;
+			confirmButtonText?: string;
 		}} [data]
 	 * @returns {Promise<SweetAlertResult<any>>}
 	 */
