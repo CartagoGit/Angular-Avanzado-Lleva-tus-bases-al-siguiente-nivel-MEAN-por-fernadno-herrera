@@ -7,6 +7,7 @@ import { Role } from '../../../../../../03-backend/src/app/interfaces/roles.inte
 import { formatDate } from '../../../shared/constants/strings.constants';
 import { Pagination } from '../../../shared/interfaces/http/pagination.interface';
 import { minTimeBeforeLoader } from '../../../shared/constants/time.constants';
+import { StateService } from '../../../shared/services/settings/state.service';
 
 @Component({
 	selector: 'page-users',
@@ -35,17 +36,21 @@ export class UsersComponent {
 
 	public pagination?: Pagination;
 	public searchText?: string;
+	public actualUser: User = this._stateService.user!;
 
 	private _lastSearch = {
 		page: 0,
 		searchText: '',
 	};
+	
 
 	// ANCHOR - Constructor
 	constructor(
+		private _stateService: StateService,
 		private _usersService: UsersService,
 		private _sweetAlertService: SweetAlertService
 	) {
+
 		this.loadUsers();
 	}
 

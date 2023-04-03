@@ -116,8 +116,16 @@
 								</div>
 								<div
 									class="pointer"
-									[ngClass]="{ disabled: user.role === 'ADMIN_ROLE' }"
-									(click)="user.role!=='ADMIN_ROLE' && deleteUser(user)"
+									[ngClass]="{
+										disabled:
+											user.role === 'ADMIN_ROLE' ||
+											actualUser.id === user.id
+									}"
+									(click)="
+										user.role !== 'ADMIN_ROLE' &&
+											actualUser.id !== user.id &&
+											deleteUser(user)
+									"
 									data-toggle="tooltip"
 									data-original-title="remove"
 								>
