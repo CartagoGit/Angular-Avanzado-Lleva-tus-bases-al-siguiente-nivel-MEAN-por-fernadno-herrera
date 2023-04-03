@@ -35,6 +35,8 @@ export class UsersComponent {
 
 	public pagination?: Pagination;
 
+	public searchText?: string;
+
 	// ANCHOR - Constructor
 	constructor(
 		private _usersService: UsersService,
@@ -53,7 +55,7 @@ export class UsersComponent {
 		const timer = setTimeout(() => {
 			this.isLoading = true;
 		}, minTimeBeforeLoader);
-		this._usersService.getAll(this.paginationData).subscribe({
+		this._usersService.getByQuery({},{...this.paginationData, someQuery: true}).subscribe({
 			next: (res) => {
 				clearTimeout(timer);
 				if (!res || !res.data) {
@@ -70,6 +72,12 @@ export class UsersComponent {
 		});
 	}
 
+
+	/**
+	 * ? Cambia la pagina de la tabla
+	 * @public
+	 * @param {number} page
+	 */
 	public changePage(page: number) {
 		this.paginationData.page = page;
 		this.loadUsers();

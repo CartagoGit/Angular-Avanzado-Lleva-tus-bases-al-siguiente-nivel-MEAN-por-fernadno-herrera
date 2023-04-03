@@ -22,6 +22,7 @@ export const getQueryIncludeAndPaginate = (
 	let queryParams = req.query;
 
 	const wantInclude = optionsFromQuery?.include ?? true;
+	const wantSomeQuery = optionsFromQuery?.someQuery ?? false; // Para que acepte alguna de las query pasadas, con que una sea valida, se retornara el resultado
 
 	const optionsPaginate = new PaginationParameters({
 		query: optionsFromQuery,
@@ -54,8 +55,15 @@ export const getQueryIncludeAndPaginate = (
 
 		//* Asignamos el objeto que se buscara con los RegExp en caso de incluirlos en el paginate
 		let objectQuery = {};
-		for (const keyValue of arrayQuery) {
-			objectQuery = { ...objectQuery, ...keyValue };
+		// for (const keyValue of arrayQuery) {
+		// 	objectQuery = { ...objectQuery, ...keyValue };
+		// }
+
+		if (!!wantSomeQuery) objectQuery = { $or: arrayQuery };
+		else {
+			for (const keyValue of arrayQuery) {
+				objectQuery = { ...objectQuery, ...keyValue };
+			}
 		}
 
 		//* Extraemos los parametros recibidos que se encuentran en el modelo para mostrarlos en la response

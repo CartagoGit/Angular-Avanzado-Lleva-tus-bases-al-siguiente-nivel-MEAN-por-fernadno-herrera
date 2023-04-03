@@ -54,12 +54,14 @@ export type QueryOptions<Props> = Partial<PaginationData> & {
 	pagination?: boolean; // por defecto es true, si no se desea paginacion pasar en false
 
 	//!! Ajenos a mongoose-paginate-v2
-	include?: boolean;
+	include?: boolean; // Para ser inclusivo con los string de las query -> Ejemplo: ario encuentra Mario
+	someQuery?: boolean; // Para hacer una consulta con el operador $or, que valga alguna de las query pasadas
 
 	//* Para mostrar en la respuesta de los logs del backend
 	showQuery?: boolean;
 	showParams?: boolean;
 	showOptions?: boolean;
+
 };
 
 //* Tipado de las opciones de ordenamiento

@@ -103,9 +103,9 @@ export class CrudHttp<
 		query?: Partial<Props>,
 		options?: QueryOptions<Props>,
 		useDefaultOptions: boolean = true
-	): Observable<DefaultResponse<Model>> {
+	): Observable<DefaultResponse<Model[]>> {
 		const params = getParamsWithOptions(query, options, useDefaultOptions);
-		return this._http.get<DefaultResponse<Model>>(
+		return this._http.get<DefaultResponse<Model[]>>(
 			this.getUrlEndpoint('getByQuery'),
 			{ params }
 		);

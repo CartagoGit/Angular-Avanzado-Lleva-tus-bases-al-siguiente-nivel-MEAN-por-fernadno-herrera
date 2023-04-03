@@ -41,7 +41,8 @@ export interface QueryOptions<Props> {
 	pagination?: boolean;
 
 	//!! Ajenos a mongoose-paginate-v2
-	include?: boolean;
+	include?: boolean; // Para ser inclusivo con los string de las query -> Ejemplo: ario encuentra Mario
+	someQuery?: boolean; // Para hacer una consulta con el operador $or, que valga alguna de las query pasadas
 
 	//* Para mostrar en la respuesta de los logs del backend
 	showQuery?: boolean;
