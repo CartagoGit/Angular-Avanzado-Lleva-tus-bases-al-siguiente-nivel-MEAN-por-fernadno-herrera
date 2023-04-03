@@ -21,4 +21,5 @@ export type ErrorReasons =
 	| 'not id in params'
 	| 'not found'
 	| 'internal error'
-	| 'cannot google user';
+	| 'cannot google user'
+	| 'cannot delete yourself';

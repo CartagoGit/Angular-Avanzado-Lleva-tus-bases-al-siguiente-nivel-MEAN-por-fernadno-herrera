@@ -21,6 +21,7 @@ import {
 import { ResponseReturnData } from '../interfaces/response.interface';
 import { getQueryIncludeAndPaginate } from '../helpers/query.helpers';
 import { Document } from 'mongoose';
+import { basicError } from '../models/error-data.model';
 
 /**
  * ? Controladores generales para los metodos que usan todos los modelos
@@ -131,6 +132,14 @@ export const coreController: {
 	delete: async (req) => {
 		checkIdInParams(req);
 		const id = req.params['id'];
+		//* Si el usuario intenta eliminarse a si mismo throweamos un error
+		if (id === getPayloadFromJwtWithoutVerifiy(req).id) {
+			throw {
+				message: 'You can not delete yourself',
+				status_code: 409,
+				reason: 'cannot delete yourself',
+			} as basicError;
+		}
 		const data = await getModelSection(req).findByIdAndDelete(id, {
 			new: true,
 		});
