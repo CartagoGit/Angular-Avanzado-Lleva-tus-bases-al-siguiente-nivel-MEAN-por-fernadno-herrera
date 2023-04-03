@@ -116,7 +116,8 @@
 								</div>
 								<div
 									class="pointer"
-									(click)="deleteUser(user)"
+									[ngClass]="{ disabled: user.role === 'ADMIN_ROLE' }"
+									(click)="user.role!=='ADMIN_ROLE' && deleteUser(user)"
 									data-toggle="tooltip"
 									data-original-title="remove"
 								>
