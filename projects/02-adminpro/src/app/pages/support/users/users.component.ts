@@ -34,8 +34,12 @@ export class UsersComponent {
 	};
 
 	public pagination?: Pagination;
-
 	public searchText?: string;
+
+	private _lastSearch = {
+		page : 0,
+		searchText: ''
+	}
 
 	// ANCHOR - Constructor
 	constructor(
@@ -52,18 +56,18 @@ export class UsersComponent {
 	 * @public
 	 */
 	public loadUsers() {
+		if(this.searchText === this._lastSearch.searchText && this.paginationData.page === this._lastSearch.page) return;
 		const timer = setTimeout(() => {
 			this.isLoading = true;
 		}, minTimeBeforeLoader);
 		let query = {};
-	
+
 		if (!!this.searchText)
 			query = { ...query, name: this.searchText, email: this.searchText };
 		this._usersService
 			.getByQuery(query, {
 				...this.paginationData,
 				someQuery: true,
-				showQuery: true,
 			})
 			.subscribe({
 				next: (res) => {
@@ -75,7 +79,8 @@ export class UsersComponent {
 					this.users = res.data.map((user) => new User(user));
 					this.pagination = { ...res.pagination! };
 					this.isLoading = false;
-					this.paginationData = {page: 1, limit: 5}
+					this._lastSearch = { page : this.paginationData.page, searchText: this.searchText! };
+					this.paginationData = { ...this.paginationData, page: 1 };
 				},
 				error: (err) => {
 					this._sweetAlertService.alertError(err.error.msg);
@@ -95,6 +100,5 @@ export class UsersComponent {
 
 	public changeSearchText(text: string) {
 		this.searchText = text;
-		// this.loadUsers();
 	}
 }

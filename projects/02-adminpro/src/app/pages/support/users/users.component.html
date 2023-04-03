@@ -2,14 +2,20 @@
 	<div class="col-12">
 		<div class="card">
 			<div class="card-body">
-				<input
-					type="text"
-					class="form-control"
-					placeholder="Search user..."
-					[ngModel]="searchText"
-					(ngModelChange)="changeSearchText($event)"
-					(keyup.enter)="loadUsers()"
-				/>
+				<div class="input-group">
+					<span class="input-group-addon pointer" (click)="loadUsers()">
+						<i class="ti-search"></i>
+					</span>
+
+					<input
+						type="text"
+						class="form-control"
+						placeholder="Search user..."
+						[ngModel]="searchText"
+						(ngModelChange)="changeSearchText($event)"
+						(keyup.enter)="loadUsers()"
+					/>
+				</div>
 			</div>
 		</div>
 	</div>
