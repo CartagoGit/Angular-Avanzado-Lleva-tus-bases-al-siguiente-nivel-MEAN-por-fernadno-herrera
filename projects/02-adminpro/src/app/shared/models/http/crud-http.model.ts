@@ -1,5 +1,5 @@
 import { CoreHttp } from './core-http.model';
-import { Observable } from 'rxjs';
+import { Observable, of, switchMap } from 'rxjs';
 import { ModelPropsAndId } from '../../interfaces/models/base-model-utils.interface';
 import { getParamsWithOptions } from '../../helpers/get-query-options.helper';
 import { DefaultResponse } from '../../interfaces/http/response.interfaces';
@@ -105,10 +105,24 @@ export class CrudHttp<
 		useDefaultOptions: boolean = true
 	): Observable<DefaultResponse<Model[]>> {
 		const params = getParamsWithOptions(query, options, useDefaultOptions);
-		return this._http.get<DefaultResponse<Model[]>>(
-			this.getUrlEndpoint('getByQuery'),
-			{ params }
-		);
+		return this._http
+			.get<DefaultResponse<Model[]>>(this.getUrlEndpoint('getByQuery'), {
+				params,
+			})
+			.pipe(
+				//* Si el valor de la pagina es mayor al total de paginas, se vuelve a realizar la peticion con la pagina 1
+				switchMap((res) => {
+					const page = options?.page || 1;
+					const totalPages = res.pagination?.totalPages || 0;
+					if (totalPages === 0 || page <= totalPages) return of(res);
+
+					return this.getByQuery(
+						query,
+						{ ...options, page: 1 },
+						useDefaultOptions
+					);
+				})
+			);
 	}
 
 	/**

@@ -6,7 +6,9 @@
 					type="text"
 					class="form-control"
 					placeholder="Search user..."
-					[(ngModel)]="searchText"
+					[ngModel]="searchText"
+					(ngModelChange)="changeSearchText($event)"
+					(keyup.enter)="loadUsers()"
 				/>
 			</div>
 		</div>

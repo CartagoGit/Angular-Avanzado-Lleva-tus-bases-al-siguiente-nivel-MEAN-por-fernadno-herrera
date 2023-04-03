@@ -55,23 +55,32 @@ export class UsersComponent {
 		const timer = setTimeout(() => {
 			this.isLoading = true;
 		}, minTimeBeforeLoader);
-		this._usersService.getByQuery({},{...this.paginationData, someQuery: true}).subscribe({
-			next: (res) => {
-				clearTimeout(timer);
-				if (!res || !res.data) {
-					this._sweetAlertService.alertError('Cannot load users');
-					return;
-				}
-				this.users = res.data.map((user) => new User(user));
-				this.pagination = { ...res.pagination! };
-				this.isLoading = false;
-			},
-			error: (err) => {
-				this._sweetAlertService.alertError(err.error.msg);
-			},
-		});
+		let query = {};
+		console.log(this.searchText);
+		if (!!this.searchText)
+			query = { ...query, name: this.searchText, email: this.searchText };
+		this._usersService
+			.getByQuery(query, {
+				...this.paginationData,
+				someQuery: true,
+				showQuery: true,
+			})
+			.subscribe({
+				next: (res) => {
+					clearTimeout(timer);
+					if (!res || !res.data) {
+						this._sweetAlertService.alertError('Cannot load users');
+						return;
+					}
+					this.users = res.data.map((user) => new User(user));
+					this.pagination = { ...res.pagination! };
+					this.isLoading = false;
+				},
+				error: (err) => {
+					this._sweetAlertService.alertError(err.error.msg);
+				},
+			});
 	}
-
 
 	/**
 	 * ? Cambia la pagina de la tabla
@@ -81,5 +90,10 @@ export class UsersComponent {
 	public changePage(page: number) {
 		this.paginationData.page = page;
 		this.loadUsers();
+	}
+
+	public changeSearchText(text: string) {
+		this.searchText = text;
+		// this.loadUsers();
 	}
 }
