@@ -1,5 +1,6 @@
 import { Injector } from '@angular/core';
 import { FilesService } from '../../../services/http/files.service';
+import { pathDefaultImage } from '../../../constants/strings.constants';
 
 /**
  * ? Clase que permite agregar imagenes a un modelo
@@ -36,7 +37,9 @@ export class ImageAdd {
 		this._hasImages = !!images && images.length > 0;
 
 		//* Asigna la imagen por defecto y la descarga si es necesario
-		this.defaultImg = this._hasImages ? images![this.defaultImgIndex] : '';
+		this.defaultImg = this._hasImages
+			? images![this.defaultImgIndex]
+			: pathDefaultImage;
 		// : this._defaultNoImageSrc;
 
 		if (!this._hasImages || google) this.defaultImgSrc = this.defaultImg;
