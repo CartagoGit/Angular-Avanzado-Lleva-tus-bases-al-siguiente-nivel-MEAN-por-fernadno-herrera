@@ -95,3 +95,7 @@ img.portrait {
 	pointer-events: unset !important;
 	cursor: not-allowed !important;
 }
+
+.hide{
+	display: none !important;
+}

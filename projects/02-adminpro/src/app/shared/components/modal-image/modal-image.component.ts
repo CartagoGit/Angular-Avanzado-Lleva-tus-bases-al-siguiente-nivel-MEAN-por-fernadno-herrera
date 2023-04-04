@@ -7,9 +7,19 @@ import { Component } from '@angular/core';
 })
 export class ModalImageComponent {
 	// ANCHOR - Variables
+	public showModal: boolean = true;
 
 	// ANCHOR - Constructor
 	constructor() {}
 
 	// ANCHOR - Methods
+
+
+	/**
+	 * ? Method to toggle the modal
+	 * @public
+	 */
+	public toggleModal(): void {
+		this.showModal = !this.showModal;
+	}
 }
