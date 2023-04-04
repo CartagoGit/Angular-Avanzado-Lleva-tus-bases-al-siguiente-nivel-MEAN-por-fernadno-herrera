@@ -1,0 +1,9 @@
+.base {
+	position: relative;
+}
+.base--body {
+	z-index: 0;
+}
+.base-addons {
+	z-index: 1;
+}

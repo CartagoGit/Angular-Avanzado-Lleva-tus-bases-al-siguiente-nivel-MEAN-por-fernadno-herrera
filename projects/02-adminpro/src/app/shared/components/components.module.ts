@@ -5,10 +5,11 @@ import { FormsModule } from '@angular/forms';
 import { DonaComponent } from './dona/dona.component';
 import { NgChartsModule } from 'ng2-charts';
 import { FooterTableComponent } from './footer-table/footer-table.component';
+import { ModalImageComponent } from './modal-image/modal-image.component';
 
 @NgModule({
-  declarations: [IncrementInputComponent, DonaComponent, FooterTableComponent],
+  declarations: [IncrementInputComponent, DonaComponent, FooterTableComponent, ModalImageComponent],
   imports: [CommonModule, FormsModule , NgChartsModule],
-  exports: [IncrementInputComponent, DonaComponent, FooterTableComponent],
+  exports: [IncrementInputComponent, DonaComponent, FooterTableComponent, ModalImageComponent],
 })
 export class ComponentsModule {}
