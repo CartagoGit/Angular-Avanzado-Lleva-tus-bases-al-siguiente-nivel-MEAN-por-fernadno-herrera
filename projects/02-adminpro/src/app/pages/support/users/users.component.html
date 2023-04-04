@@ -53,7 +53,7 @@
 					</div>
 					<div class="table-grid__body">
 						<div *ngFor="let user of users" class="table-grid__row">
-							<div class="table-grid__field center-items">
+							<div class="table-grid__field center-items pointer" (click)="clickImage(user)">
 								<img
 									[src]="user.dataImages?.defaultImgSrc! | safe"
 									alt="profile image user"

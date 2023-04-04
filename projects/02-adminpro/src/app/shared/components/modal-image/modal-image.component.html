@@ -1,6 +1,6 @@
 <div
 	class="modal fade show modal-background animated fadeIn fast"
-	[class.hide]="!showModal"
+	[class.hide]="!modalSvc.isOpen"
 	id="modal-image"
 	tabindex="-1"
 	role="dialog"
@@ -16,7 +16,7 @@
 					class="close pointer"
 					data-dismiss="modal"
 					aria-label="Close"
-					(click)="toggleModal()"
+					(click)="modalSvc.close()"
 				>
 					<span aria-hidden="true">×</span>
 				</button>
@@ -28,7 +28,12 @@
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal" (click)="toggleModal()">
+				<button
+					type="button"
+					class="btn btn-default"
+					data-dismiss="modal"
+					(click)="modalSvc.close()"
+				>
 					Close
 				</button>
 				<button type="button" class="btn btn-primary">Load</button>

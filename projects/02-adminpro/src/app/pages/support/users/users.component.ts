@@ -9,6 +9,8 @@ import { Pagination } from '../../../shared/interfaces/http/pagination.interface
 import { minTimeBeforeLoader } from '../../../shared/constants/time.constants';
 import { StateService } from '../../../shared/services/settings/state.service';
 import { DefaultErrorResponse } from '../../../shared/interfaces/http/response.interfaces';
+import { ModalService } from '../../../shared/services/settings/modal.service';
+import { ModalImageComponent } from '../../../shared/components/modal-image/modal-image.component';
 
 @Component({
 	selector: 'page-users',
@@ -48,7 +50,8 @@ export class UsersComponent {
 	constructor(
 		private _stateService: StateService,
 		private _usersService: UsersService,
-		private _sweetAlertService: SweetAlertService
+		private _sweetAlertService: SweetAlertService,
+		private _modalSvc: ModalService
 	) {
 		this.loadUsers();
 	}
@@ -141,6 +144,12 @@ export class UsersComponent {
 			});
 	}
 
+
+	/**
+	 * ? Cambia el rol de un usuario
+	 * @public
+	 * @param {User} user
+	 */
 	public changeRole(user: User): void {
 		const finalRole: Role =
 			user.role === 'ADMIN_ROLE' ? 'USER_ROLE' : 'ADMIN_ROLE';
@@ -153,5 +162,15 @@ export class UsersComponent {
 				this._sweetAlertService.alertError(err.error_message);
 			},
 		});
+	}
+
+
+	/**
+	 * ? Abre el modal para ver la imagen de un usuario
+	 * @public
+	 * @param {User} user
+	 */
+	public clickImage(user: User) {
+		this._modalSvc.open(ModalImageComponent, {data: user});
 	}
 }

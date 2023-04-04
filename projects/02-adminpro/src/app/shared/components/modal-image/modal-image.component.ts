@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ModalService } from '../../services/settings/modal.service';
 
 @Component({
 	selector: 'app-modal-image',
@@ -7,19 +8,9 @@ import { Component } from '@angular/core';
 })
 export class ModalImageComponent {
 	// ANCHOR - Variables
-	public showModal: boolean = true;
 
 	// ANCHOR - Constructor
-	constructor() {}
+	constructor(public modalSvc: ModalService) {}
 
 	// ANCHOR - Methods
-
-
-	/**
-	 * ? Method to toggle the modal
-	 * @public
-	 */
-	public toggleModal(): void {
-		this.showModal = !this.showModal;
-	}
 }
