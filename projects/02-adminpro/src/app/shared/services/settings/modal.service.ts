@@ -6,7 +6,7 @@ import { Injectable, Type } from '@angular/core';
 export class ModalService {
 	// ANCHOR : Variables
 	private _isOpen: boolean = false;
-	
+
 	get isOpen(): boolean {
 		return this._isOpen;
 	}
@@ -30,7 +30,7 @@ export class ModalService {
 	 */
 	public open<T>(component: Type<T>, options?: { data?: any }): void {
 		const { data } = options || {};
-		console.log(component, data);
+		console.log(component, data); 
 		this._isOpen = true;
 	}
 
