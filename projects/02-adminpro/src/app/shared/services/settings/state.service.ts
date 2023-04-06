@@ -11,6 +11,7 @@ import {
 	map,
 	distinctUntilChanged,
 } from 'rxjs';
+import { isEqual } from '../../helpers/object.helper';
 
 @Injectable({
 	providedIn: 'root',
@@ -50,13 +51,19 @@ export class StateService {
 		};
 
 		const store = this.createStore(algo);
-		const { observer, observable$, state, params, getState } = store;
-		const { data$, pagination$, meta$ } = params;
+		const { observer, state$, state, params, getState } = store;
+		const { data$, pagination$, meta$, isCharging$ } = params;
 
+		state$.subscribe((state) => {
+			console.log('STATE-->', state);
+		});
 		meta$.subscribe((meta) => {
-			console.log(meta);
+			console.log('META-->', meta);
 		});
 
+		isCharging$.subscribe((isCharging) => {
+			console.log('ISCHARGING-->', isCharging);
+		});
 		observer.next({
 			...getState(),
 			meta: {
@@ -95,14 +102,32 @@ export class StateService {
 			...getState(),
 			isCharging: true,
 		});
+		observer.next({
+			...getState(),
+			isCharging: true,
+		});
 	}
 
 	// ANCHOR : Methods
-	public createStore<T extends { [key in K]: T[key] }, K extends keyof T>(
+
+	/**
+	 * ? Metodo para crear un store de donde observar los cambios en cualquier estado que se pase como argumento
+	 * @public
+	 * @template T
+	 * @param {T} obj
+	 * @returns {{
+			observer: Observer<T>;
+			state$: Observable<T>;
+			state: T;
+			params: { [key in keyof T & string as `${key}$`]: Observable<T[key]> };
+			getState: () => T;
+		}}
+	 */
+	public createStore<T extends { [key in keyof T]: T[key] }>(
 		obj: T
 	): {
 		observer: Observer<T>;
-		observable$: Observable<T>;
+		state$: Observable<T>;
 		state: T;
 		params: { [key in keyof T & string as `${key}$`]: Observable<T[key]> };
 		getState: () => T;
@@ -111,22 +136,22 @@ export class StateService {
 
 		//* Creamos un observable para cada propiedad del objeto
 		let params = {} as {
-			[K in keyof T & string as `${K}$`]: Observable<T[K]>;
+			[key in keyof T & string as `${key}$`]: Observable<T[key]>;
 		};
 
 		for (let key of Object.keys(obj)) {
 			params = {
 				...params,
 				[`${key}$`]: observer.pipe(
-					map((obj) => obj[key as K]),
-					distinctUntilChanged()
+					map((obj) => obj[key as keyof T]),
+					distinctUntilChanged(isEqual)
 				),
 			};
 		}
 
 		return {
 			observer,
-			observable$: observer.asObservable(),
+			state$: observer.asObservable().pipe(distinctUntilChanged(isEqual)),
 			get state() {
 				return observer.value;
 			},
