@@ -121,7 +121,8 @@ export class StateService {
 			state: T;
 			params: { [key in keyof T & string as `${key}$`]: Observable<T[key]> };
 			getState: () => T;
-		}}
+
+	}	}}
 	 */
 	public createStore<T extends { [key in keyof T]: T[key] }>(
 		obj: T
@@ -131,6 +132,7 @@ export class StateService {
 		state: T;
 		params: { [key in keyof T & string as `${key}$`]: Observable<T[key]> };
 		getState: () => T;
+		setState: (newState: T) => void;
 	} {
 		const observer = new BehaviorSubject(obj);
 
@@ -157,6 +159,7 @@ export class StateService {
 			},
 			params,
 			getState: () => observer.value,
+			setState: (newState: T) => observer.next(newState),
 		};
 	}
 
