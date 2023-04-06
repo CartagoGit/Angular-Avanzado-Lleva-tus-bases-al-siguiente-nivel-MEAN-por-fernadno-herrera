@@ -14,6 +14,7 @@ import {
 	firstValueFrom,
 } from 'rxjs';
 import { isEqual } from '../../helpers/object.helper';
+import { switchMap } from 'rxjs';
 
 @Injectable({
 	providedIn: 'root',
@@ -141,14 +142,23 @@ export class StateService {
 	 * @public
 	 * @template T
 	 * @param {T} obj
+	 * @param {?{
+				allowDeepChanges?: boolean;
+				allowDeepChangesInParams?: (keyof T)[] | boolean;
+				allowDeepChangesInState?: boolean;
+			}} [options]
 	 * @returns {{
 			observer: Observer<T>;
 			state$: Observable<T>;
-			state: T;
+			firstState: T;
 			params: { [key in keyof T & string as `${key}$`]: Observable<T[key]> };
 			getState: () => T;
-
-	}	}}
+			setState: (newState: T) => void;
+			resetState: () => void;
+			getParam: <P extends keyof T>(param: P) => T[P];
+			setParam: <P extends keyof T>(param: P, value: T[P]) => void;
+			resetParam: (param: keyof T) => void;
+		}}
 	 */
 	public createStore<T extends { [key in keyof T]: T[key] }>(
 		obj: T,
@@ -175,28 +185,54 @@ export class StateService {
 			allowDeepChangesInState = true,
 		} = options || {};
 		const observer = new BehaviorSubject(obj);
+		const observable = observer.asObservable();
 
 		//* Creamos un observable para cada propiedad del objeto
 		let params = {} as {
 			[key in keyof T & string as `${key}$`]: Observable<T[key]>;
 		};
 
+		const allowedObservable = <V>(value: V): Observable<V> =>
+			of(value).pipe(distinctUntilChanged(isEqual));
+		const notAllowedObservable = <V>(value: V): Observable<V> =>
+			of(value).pipe(distinctUntilChanged());
+
 		for (let key of Object.keys(obj)) {
 			params = {
 				...params,
 				[`${key}$`]: observer.pipe(
 					map((obj) => obj[key as keyof T]),
-					distinctUntilChanged(isEqual)
+					switchMap((value) => {
+						//* Solo permitimos comparaciones profundas en los parametros que se especifiquen o si se especifica que se permitan en todos
+						if (allowDeepChanges && !!allowDeepChangesInParams) {
+							if (Array.isArray(allowDeepChangesInParams)) {
+								if (allowDeepChangesInParams.includes(key as keyof T))
+									return allowedObservable(value);
+								else return notAllowedObservable(value);
+							} else if (!!allowDeepChangesInParams)
+								return allowedObservable(value);
+							else return notAllowedObservable(value);
+						} else return notAllowedObservable(value);
+					})
 				),
 			};
 		}
 
 		const firstState = observer.value;
 
+		const state$ = observable.pipe(
+			switchMap((state) => {
+				//* Solo permitimos comparaciones profundas en el estado si se especifica que se permitan
+				if (allowDeepChanges && allowDeepChangesInState)
+					return allowedObservable(state);
+				else return notAllowedObservable(state);
+			})
+		);
+
 		return {
 			observer,
-			state$: observer.asObservable().pipe(distinctUntilChanged(isEqual)),
-			firstState: observer.value,
+			state$,
+			firstState,
 			params,
 			getState: () => observer.value,
 			setState: (newState: T) => observer.next(newState),
