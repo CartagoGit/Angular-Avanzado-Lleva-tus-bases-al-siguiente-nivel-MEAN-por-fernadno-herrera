@@ -63,6 +63,7 @@ export class StateService {
 			setState,
 			setParam,
 			getParam,
+			finishState,
 		} = store;
 		const { data$, pagination$, meta$, isCharging$ } = params;
 
@@ -73,8 +74,11 @@ export class StateService {
 			console.log('META-->', meta);
 		});
 
-		isCharging$.subscribe((isCharging) => {
-			console.log('ISCHARGING-->', isCharging);
+		isCharging$.subscribe({
+			next: (isCharging) => {
+				console.log('ISCHARGING-->', isCharging);
+			},
+			complete: () => console.log('se completo'),
 		});
 		observer.next({
 			...getState(),
@@ -133,6 +137,12 @@ export class StateService {
 		console.log('BEFORE RESET PAGINATION', { ...getState() });
 		store.resetParam('pagination');
 		console.log('AFTER RESET PAGINATION', { ...getState() });
+		finishState();
+		observer.next({
+			...getState(),
+			isCharging: true,
+		});
+		console.log(getState());
 	}
 
 	// ANCHOR : Methods
@@ -141,7 +151,7 @@ export class StateService {
 	 * ? Metodo para crear un store de donde observar los cambios en cualquier estado que se pase como argumento
 	 * @public
 	 * @template T
-	 * @param {T} obj
+	 * @param {T} state
 	 * @param {?{
 				allowDeepChanges?: boolean;
 				allowDeepChangesInParams?: (keyof T)[] | boolean;
@@ -158,33 +168,46 @@ export class StateService {
 			getParam: <P extends keyof T>(param: P) => T[P];
 			setParam: <P extends keyof T>(param: P, value: T[P]) => void;
 			resetParam: (param: keyof T) => void;
+			completeState: () => void;
 		}}
 	 */
 	public createStore<T extends { [key in keyof T]: T[key] }>(
-		obj: T,
+		state: T,
 		options?: {
 			allowDeepChanges?: boolean;
 			allowDeepChangesInParams?: (keyof T)[] | boolean;
 			allowDeepChangesInState?: boolean;
 		}
 	): {
+		/** Observer del estado */
 		observer: Observer<T>;
+		/** Observable que emite el estado actual */
 		state$: Observable<T>;
+		/** Estado inicial */
 		firstState: T;
+		/** Objeto que contiene los observables de cada parametro del estado */
 		params: { [key in keyof T & string as `${key}$`]: Observable<T[key]> };
+		/** Metodo que retorna el estado actual */
 		getState: () => T;
+		/** Metodo que establece un nuevo estado */
 		setState: (newState: T) => void;
+		/** Metodo que resetea el estado a su estado inicial */
 		resetState: () => void;
+		/** Metodo que retorna el valor de un parametro del estado */
 		getParam: <P extends keyof T>(param: P) => T[P];
+		/** Metodo que establece un nuevo valor a un parametro del estado */
 		setParam: <P extends keyof T>(param: P, value: T[P]) => void;
+		/** Metodo que resetea el valor de un parametro del estado a su estado inicial */
 		resetParam: (param: keyof T) => void;
+		/** Metodo que completa los Observables del estado */
+		completeState: () => void;
 	} {
 		const {
 			allowDeepChanges = true,
 			allowDeepChangesInParams = true,
 			allowDeepChangesInState = true,
 		} = options || {};
-		const observer = new BehaviorSubject(obj);
+		const observer = new BehaviorSubject(state);
 		const observable = observer.asObservable();
 
 		//* Creamos un observable para cada propiedad del objeto
@@ -197,7 +220,7 @@ export class StateService {
 		const notAllowedObservable = <V>(value: V): Observable<V> =>
 			of(value).pipe(distinctUntilChanged());
 
-		for (let key of Object.keys(obj)) {
+		for (let key of Object.keys(state)) {
 			params = {
 				...params,
 				[`${key}$`]: observer.pipe(
@@ -250,6 +273,7 @@ export class StateService {
 					[param]: firstState[param],
 				});
 			},
+			completeState: () => observer.complete(),
 		};
 	}
 
