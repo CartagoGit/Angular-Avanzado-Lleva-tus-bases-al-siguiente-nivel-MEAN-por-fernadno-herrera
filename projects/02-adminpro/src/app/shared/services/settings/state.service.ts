@@ -7,17 +7,10 @@ import {
 	Observer,
 	Observable,
 	BehaviorSubject,
-	of,
 	map,
 	distinctUntilChanged,
-	first,
-	firstValueFrom,
-	from,
-	mergeMap,
-	iif,
 } from 'rxjs';
 import { isEqual } from '../../helpers/object.helper';
-import { switchMap, concatMap } from 'rxjs';
 
 @Injectable({
 	providedIn: 'root',
@@ -41,123 +34,7 @@ export class StateService {
 	}
 
 	// ANCHOR : Constructor
-	constructor(private _storageSvc: StorageService, private _router: Router) {
-		const algo = {
-			isCharging: false,
-			data: [] as boolean[],
-			meta: {
-				total: 0,
-				pages: 0,
-				page: 0,
-			},
-			pagination: {
-				page: 0,
-				limit: 0,
-			},
-		};
-
-		const store = this.createStore(algo);
-		const {
-			observer,
-			state$,
-			firstState,
-			params,
-			getState,
-			setState,
-			setParam,
-			getParam,
-			completeState,
-		} = store;
-		const { data$, pagination$, meta$, isCharging$ } = params;
-
-		state$.subscribe((state) => {
-			console.log('STATE-->', state);
-		});
-		meta$.subscribe((meta) => {
-			console.log('META-->', meta);
-		});
-		pagination$.subscribe((pagination) => {
-			console.log('PAGINATION-->', pagination);
-		});
-
-		isCharging$.subscribe({
-			next: (isCharging) => {
-				console.log('ISCHARGING-->', isCharging);
-			},
-			complete: () => console.log('se completo'),
-		});
-		observer.next({
-			...getState(),
-			meta: {
-				...getState().meta,
-				total: 100,
-			},
-		});
-
-		observer.next({
-			...getState(),
-			meta: {
-				...getState().meta,
-				pages: 10,
-			},
-		});
-		observer.next({
-			...getState(),
-			meta: {
-				...getState().meta,
-				pages: 10,
-			},
-		});
-		observer.next({
-			...getState(),
-			isCharging: true,
-		});
-		observer.next({
-			...getState(),
-			isCharging: true,
-		});
-		observer.next({
-			...getState(),
-			isCharging: true,
-		});
-		observer.next({
-			...getState(),
-			isCharging: true,
-		});
-		observer.next({
-			...getState(),
-			isCharging: true,
-		});
-		// setState({
-		// 	...getState(),
-		// 	pagination: {
-		// 		...getState().pagination,
-		// 		page: 2,
-		// 	},
-		// });
-		setParam('pagination', {
-			...getParam('pagination'),
-			page: 2,
-			limit: 10,
-		});
-		setParam('pagination', {
-			page: 2,
-			limit: 10,
-		});
-		setParam('pagination', {
-			page: 4,
-			limit: 10,
-		});
-		console.log('BEFORE RESET PAGINATION', { ...getState() });
-		store.resetParam('pagination');
-		console.log('AFTER RESET PAGINATION', { ...getState() });
-		completeState();
-		observer.next({
-			...getState(),
-			isCharging: true,
-		});
-		console.log(getState());
-	}
+	constructor(private _storageSvc: StorageService, private _router: Router) {}
 
 	// ANCHOR : Methods
 
@@ -229,13 +106,11 @@ export class StateService {
 			[key in keyof T & string as `${key}$`]: Observable<T[key]>;
 		};
 
-
-
 		for (let keyString of Object.keys(state)) {
 			const key = keyString as keyof T;
-			
+
 			//* Funcion que verifica si se permite comparaciones profundas en un parametro
-			const isAllowedParam = (key: keyof T) => {
+			const isAllowedDeepParam = (key: keyof T) => {
 				if (!allowDeepChanges || !allowDeepChangesInParams) return false;
 				if (Array.isArray(allowDeepChangesInParams)) {
 					return allowDeepChangesInParams.includes(key);
@@ -248,14 +123,12 @@ export class StateService {
 					map((obj) => obj[key]),
 					//*  Solo permitimos comparaciones profundas en los parametros que se especifiquen o si se especifica que se permitan en todos
 					distinctUntilChanged(
-						isAllowedParam(key) ? isEqual : (x, y) => x === y
+						isAllowedDeepParam(key) ? isEqual : (x, y) => x === y
 					)
 				),
 			};
 		}
-
 		const firstState = observer.value;
-
 		const state$ = observable.pipe(
 			distinctUntilChanged(
 				allowDeepChanges && allowDeepChangesInState
@@ -263,7 +136,6 @@ export class StateService {
 					: (x, y) => x === y
 			)
 		);
-
 		return {
 			observer,
 			state$,
