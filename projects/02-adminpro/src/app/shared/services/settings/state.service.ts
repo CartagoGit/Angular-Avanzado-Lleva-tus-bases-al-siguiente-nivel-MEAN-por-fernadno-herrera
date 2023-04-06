@@ -12,9 +12,12 @@ import {
 	distinctUntilChanged,
 	first,
 	firstValueFrom,
+	from,
+	mergeMap,
+	iif,
 } from 'rxjs';
 import { isEqual } from '../../helpers/object.helper';
-import { switchMap } from 'rxjs';
+import { switchMap, concatMap } from 'rxjs';
 
 @Injectable({
 	providedIn: 'root',
@@ -63,7 +66,7 @@ export class StateService {
 			setState,
 			setParam,
 			getParam,
-			finishState,
+			completeState,
 		} = store;
 		const { data$, pagination$, meta$, isCharging$ } = params;
 
@@ -72,6 +75,9 @@ export class StateService {
 		});
 		meta$.subscribe((meta) => {
 			console.log('META-->', meta);
+		});
+		pagination$.subscribe((pagination) => {
+			console.log('PAGINATION-->', pagination);
 		});
 
 		isCharging$.subscribe({
@@ -134,10 +140,18 @@ export class StateService {
 			page: 2,
 			limit: 10,
 		});
+		setParam('pagination', {
+			page: 2,
+			limit: 10,
+		});
+		setParam('pagination', {
+			page: 4,
+			limit: 10,
+		});
 		console.log('BEFORE RESET PAGINATION', { ...getState() });
 		store.resetParam('pagination');
 		console.log('AFTER RESET PAGINATION', { ...getState() });
-		finishState();
+		completeState();
 		observer.next({
 			...getState(),
 			isCharging: true,
@@ -215,28 +229,27 @@ export class StateService {
 			[key in keyof T & string as `${key}$`]: Observable<T[key]>;
 		};
 
-		const allowedObservable = <V>(value: V): Observable<V> =>
-			of(value).pipe(distinctUntilChanged(isEqual));
-		const notAllowedObservable = <V>(value: V): Observable<V> =>
-			of(value).pipe(distinctUntilChanged());
 
-		for (let key of Object.keys(state)) {
+
+		for (let keyString of Object.keys(state)) {
+			const key = keyString as keyof T;
+			
+			//* Funcion que verifica si se permite comparaciones profundas en un parametro
+			const isAllowedParam = (key: keyof T) => {
+				if (!allowDeepChanges || !allowDeepChangesInParams) return false;
+				if (Array.isArray(allowDeepChangesInParams)) {
+					return allowDeepChangesInParams.includes(key);
+				}
+				return true;
+			};
 			params = {
 				...params,
-				[`${key}$`]: observer.pipe(
-					map((obj) => obj[key as keyof T]),
-					switchMap((value) => {
-						//* Solo permitimos comparaciones profundas en los parametros que se especifiquen o si se especifica que se permitan en todos
-						if (allowDeepChanges && !!allowDeepChangesInParams) {
-							if (Array.isArray(allowDeepChangesInParams)) {
-								if (allowDeepChangesInParams.includes(key as keyof T))
-									return allowedObservable(value);
-								else return notAllowedObservable(value);
-							} else if (!!allowDeepChangesInParams)
-								return allowedObservable(value);
-							else return notAllowedObservable(value);
-						} else return notAllowedObservable(value);
-					})
+				[`${keyString}$`]: observable.pipe(
+					map((obj) => obj[key]),
+					//*  Solo permitimos comparaciones profundas en los parametros que se especifiquen o si se especifica que se permitan en todos
+					distinctUntilChanged(
+						isAllowedParam(key) ? isEqual : (x, y) => x === y
+					)
 				),
 			};
 		}
@@ -244,12 +257,11 @@ export class StateService {
 		const firstState = observer.value;
 
 		const state$ = observable.pipe(
-			switchMap((state) => {
-				//* Solo permitimos comparaciones profundas en el estado si se especifica que se permitan
-				if (allowDeepChanges && allowDeepChangesInState)
-					return allowedObservable(state);
-				else return notAllowedObservable(state);
-			})
+			distinctUntilChanged(
+				allowDeepChanges && allowDeepChangesInState
+					? isEqual
+					: (x, y) => x === y
+			)
 		);
 
 		return {
