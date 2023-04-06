@@ -3,6 +3,14 @@ import { Router } from '@angular/router';
 import { paths } from '../../constants/paths.constant';
 import { StorageService } from './storage.service';
 import { User, UserProps } from '../../models/mongo-models/user.model';
+import {
+	Observer,
+	Observable,
+	BehaviorSubject,
+	of,
+	map,
+	distinctUntilChanged,
+} from 'rxjs';
 
 @Injectable({
 	providedIn: 'root',
@@ -26,9 +34,107 @@ export class StateService {
 	}
 
 	// ANCHOR : Constructor
-	constructor(private _storageSvc: StorageService, private _router: Router) {}
+	constructor(private _storageSvc: StorageService, private _router: Router) {
+		const algo = {
+			isCharging: false,
+			data: [],
+			meta: {
+				total: 0,
+				pages: 0,
+				page: 0,
+			},
+			pagination: {
+				page: 0,
+				limit: 0,
+			},
+		};
+
+		const store = this.createStore(algo);
+		const { observer, observable$, state, params, getState } = store;
+		const { data$, pagination$, meta$ } = params;
+
+		meta$.subscribe((meta) => {
+			console.log(meta);
+		});
+
+		observer.next({
+			...getState(),
+			meta: {
+				...state.meta,
+				total: 100,
+			},
+		});
+
+		observer.next({
+			...getState(),
+			meta: {
+				...state.meta,
+				pages: 10,
+			},
+		});
+		observer.next({
+			...getState(),
+			meta: {
+				...state.meta,
+				pages: 10,
+			},
+		});
+		observer.next({
+			...getState(),
+			isCharging: true,
+		});
+		observer.next({
+			...getState(),
+			isCharging: true,
+		});
+		observer.next({
+			...getState(),
+			isCharging: true,
+		});
+		observer.next({
+			...getState(),
+			isCharging: true,
+		});
+	}
 
 	// ANCHOR : Methods
+	public createStore<T extends { [key in K]: T[key] }, K extends keyof T>(
+		obj: T
+	): {
+		observer: Observer<T>;
+		observable$: Observable<T>;
+		state: T;
+		params: { [key in keyof T & string as `${key}$`]: Observable<T[key]> };
+		getState: () => T;
+	} {
+		const observer = new BehaviorSubject(obj);
+
+		//* Creamos un observable para cada propiedad del objeto
+		let params = {} as {
+			[K in keyof T & string as `${K}$`]: Observable<T[K]>;
+		};
+
+		for (let key of Object.keys(obj)) {
+			params = {
+				...params,
+				[`${key}$`]: observer.pipe(
+					map((obj) => obj[key as K]),
+					distinctUntilChanged()
+				),
+			};
+		}
+
+		return {
+			observer,
+			observable$: observer.asObservable(),
+			get state() {
+				return observer.value;
+			},
+			params,
+			getState: () => observer.value,
+		};
+	}
+
 	/**
 	 * ? Elimina el token del storage y cambia el estado de autenticacion a deslogueado
 	 * @public
