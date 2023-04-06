@@ -10,6 +10,8 @@ import {
 	of,
 	map,
 	distinctUntilChanged,
+	first,
+	firstValueFrom,
 } from 'rxjs';
 import { isEqual } from '../../helpers/object.helper';
 
@@ -38,7 +40,7 @@ export class StateService {
 	constructor(private _storageSvc: StorageService, private _router: Router) {
 		const algo = {
 			isCharging: false,
-			data: [],
+			data: [] as boolean[],
 			meta: {
 				total: 0,
 				pages: 0,
@@ -51,7 +53,16 @@ export class StateService {
 		};
 
 		const store = this.createStore(algo);
-		const { observer, state$, state, params, getState } = store;
+		const {
+			observer,
+			state$,
+			firstState,
+			params,
+			getState,
+			setState,
+			setParam,
+			getParam,
+		} = store;
 		const { data$, pagination$, meta$, isCharging$ } = params;
 
 		state$.subscribe((state) => {
@@ -67,7 +78,7 @@ export class StateService {
 		observer.next({
 			...getState(),
 			meta: {
-				...state.meta,
+				...getState().meta,
 				total: 100,
 			},
 		});
@@ -75,14 +86,14 @@ export class StateService {
 		observer.next({
 			...getState(),
 			meta: {
-				...state.meta,
+				...getState().meta,
 				pages: 10,
 			},
 		});
 		observer.next({
 			...getState(),
 			meta: {
-				...state.meta,
+				...getState().meta,
 				pages: 10,
 			},
 		});
@@ -106,6 +117,21 @@ export class StateService {
 			...getState(),
 			isCharging: true,
 		});
+		// setState({
+		// 	...getState(),
+		// 	pagination: {
+		// 		...getState().pagination,
+		// 		page: 2,
+		// 	},
+		// });
+		setParam('pagination', {
+			...getParam('pagination'),
+			page: 2,
+			limit: 10,
+		});
+		console.log('BEFORE RESET PAGINATION', { ...getState() });
+		store.resetParam('pagination');
+		console.log('AFTER RESET PAGINATION', { ...getState() });
 	}
 
 	// ANCHOR : Methods
@@ -125,15 +151,29 @@ export class StateService {
 	}	}}
 	 */
 	public createStore<T extends { [key in keyof T]: T[key] }>(
-		obj: T
+		obj: T,
+		options?: {
+			allowDeepChanges?: boolean;
+			allowDeepChangesInParams?: (keyof T)[] | boolean;
+			allowDeepChangesInState?: boolean;
+		}
 	): {
 		observer: Observer<T>;
 		state$: Observable<T>;
-		state: T;
+		firstState: T;
 		params: { [key in keyof T & string as `${key}$`]: Observable<T[key]> };
 		getState: () => T;
 		setState: (newState: T) => void;
+		resetState: () => void;
+		getParam: <P extends keyof T>(param: P) => T[P];
+		setParam: <P extends keyof T>(param: P, value: T[P]) => void;
+		resetParam: (param: keyof T) => void;
 	} {
+		const {
+			allowDeepChanges = true,
+			allowDeepChangesInParams = true,
+			allowDeepChangesInState = true,
+		} = options || {};
 		const observer = new BehaviorSubject(obj);
 
 		//* Creamos un observable para cada propiedad del objeto
@@ -151,15 +191,29 @@ export class StateService {
 			};
 		}
 
+		const firstState = observer.value;
+
 		return {
 			observer,
 			state$: observer.asObservable().pipe(distinctUntilChanged(isEqual)),
-			get state() {
-				return observer.value;
-			},
+			firstState: observer.value,
 			params,
 			getState: () => observer.value,
 			setState: (newState: T) => observer.next(newState),
+			resetState: () => observer.next(firstState),
+			getParam: <P extends keyof T>(param: P) => observer.value[param],
+			setParam: <P extends keyof T>(param: P, value: T[P]) => {
+				observer.next({
+					...observer.value,
+					[param]: value,
+				});
+			},
+			resetParam: (param: keyof T) => {
+				observer.next({
+					...observer.value,
+					[param]: firstState[param],
+				});
+			},
 		};
 	}
 
