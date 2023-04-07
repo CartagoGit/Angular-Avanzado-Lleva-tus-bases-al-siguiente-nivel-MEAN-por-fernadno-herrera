@@ -6,7 +6,6 @@ import {
 	takeUntil,
 	Subject,
 	finalize,
-	tap,
 } from 'rxjs';
 import { isEqual } from '../../helpers/object.helper';
 import {
@@ -66,10 +65,11 @@ export class Store<T extends { [key in keyof T]: T[key] }> {
 		const state$: Observable<T> = observable.pipe(
 			distinctUntilChanged((x, y) => {
 				if (this._resendState) return false;
-				else
+				else {
 					return allowDeepChanges && allowDeepChangesInState
 						? isEqual(x, y)
 						: x === y;
+				}
 			})
 		);
 
@@ -81,6 +81,8 @@ export class Store<T extends { [key in keyof T]: T[key] }> {
 		});
 		this.firstState = this.observer.value;
 	}
+
+	// ANCHOR : Metodos publicos
 
 	/**
 	 * ? Metodo que retorna el estado actual
@@ -181,6 +183,8 @@ export class Store<T extends { [key in keyof T]: T[key] }> {
 	 */
 	public isClosed = (): boolean => this.observer.closed;
 
+	// ANCHOR PRIVATE METHODS
+
 	/**
 	 * ? Metodo que crea un observable para cada parametro del estado
 	 * @param {{
@@ -196,30 +200,12 @@ export class Store<T extends { [key in keyof T]: T[key] }> {
 		state$: Observable<T>;
 	}): StoreParams<T> => {
 		const { state, options, state$ } = data;
-		const { allowDeepChanges, allowDeepChangesInParams } = options;
+
 		//* Creamos un observable para cada propiedad del objeto
 		let params = {} as StoreParams<T>;
 
 		for (let keyString of Object.keys(state)) {
 			const key = keyString as keyof T;
-
-			//* Funcion que verifica si se permite comparaciones profundas en un parametro
-			const isAllowedDeepParam = (key: keyof T) => {
-				if (!allowDeepChanges || !allowDeepChangesInParams) return false;
-				if (Array.isArray(allowDeepChangesInParams)) {
-					return allowDeepChangesInParams.includes(key);
-				}
-				return true;
-			};
-
-			const isForceResendParam = (key: keyof T) => {
-				if (!this._resendState) return false;
-				if (Array.isArray(this._resendParams)) {
-					return this._resendParams.includes(key);
-				}
-				return this._resendParams;
-			};
-
 			params = {
 				...params,
 				[`${keyString}$`]: state$.pipe(
@@ -227,12 +213,47 @@ export class Store<T extends { [key in keyof T]: T[key] }> {
 					map((obj) => obj[key]),
 					//*  Solo permitimos comparaciones profundas en los parametros que se especifiquen o si se especifica que se permitan en todos
 					distinctUntilChanged((x, y) => {
-						if (isForceResendParam(key)) return false;
-						else return isAllowedDeepParam(key) ? isEqual(x, y) : x === y;
+						if (this._isForceResendParam(key)) return false;
+						else {
+							return this._isAllowedDeepParam(key, options)
+								? isEqual(x, y)
+								: x === y;
+						}
 					})
 				),
 			};
 		}
 		return params;
+	};
+
+	/**
+	 * ? Metodo que verifica si se debe reenviar el estado obligatoriamente
+	 * @param {keyof T} key
+	 * @returns {boolean}
+	 */
+	private _isForceResendParam = (key: keyof T): boolean => {
+		if (!this._resendState) return false;
+		if (Array.isArray(this._resendParams)) {
+			return this._resendParams.includes(key);
+		}
+		return this._resendParams;
+	};
+
+	/**
+	 * ? Metodo que verifica si se permite comparaciones profundas en un parametro
+	 * @param {keyof T} key
+	 * @param {StoreOptions<T>} options
+	 * @returns {boolean}
+	 */
+	private _isAllowedDeepParam = (
+		key: keyof T,
+		options: StoreOptions<T>
+	): boolean => {
+		const { allowDeepChanges, allowDeepChangesInParams } = options;
+		if (!allowDeepChanges || !allowDeepChangesInParams) return false;
+		if (Array.isArray(allowDeepChangesInParams)) {
+			return allowDeepChangesInParams.includes(key);
+		}
+		return true;
 	};
 }
