@@ -10,7 +10,7 @@ import { minTimeBeforeLoader } from '../../../shared/constants/time.constants';
 import { StateService } from '../../../shared/services/settings/state.service';
 import { DefaultErrorResponse } from '../../../shared/interfaces/http/response.interfaces';
 import { ModalService } from '../../../shared/services/settings/modal.service';
-import { ModalImageComponent } from '../../../shared/components/modal-image/modal-image.component';
+import { ModalComponent } from '../../../shared/components/modal/modal.component';
 
 @Component({
 	selector: 'page-users',
@@ -171,6 +171,6 @@ export class UsersComponent {
 	 * @param {User} user
 	 */
 	public clickImage(user: User) {
-		this._modalSvc.open(ModalImageComponent, {data: user});
+		// this._modalSvc.open(ModalImageComponent, {data: user});
 	}
 }

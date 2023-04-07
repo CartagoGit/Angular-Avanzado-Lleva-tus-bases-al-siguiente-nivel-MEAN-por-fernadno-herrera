@@ -1,4 +1,5 @@
 import { Injectable, Type } from '@angular/core';
+import { createStore } from '../../helpers/store.helper';
 
 @Injectable({
 	providedIn: 'root',
@@ -30,7 +31,10 @@ export class ModalService {
 	 */
 	public open<T>(component: Type<T>, options?: { data?: any }): void {
 		const { data } = options || {};
-		console.log(component, data); 
+		const componentState = createStore(component.arguments)
+		componentState.params
+
+		console.log(component, data);
 		this._isOpen = true;
 	}
 
