@@ -57,7 +57,7 @@ export class StateService {
 			setState: (newState: T) => void;
 			resetState: () => void;
 			getParam: <P extends keyof T>(param: P) => T[P];
-			setParam: <P extends keyof T>(param: P, value: T[P]) => void;
+			setParam: <P extends keyof T>(param: P, newValue: T[P]) => void;
 			resetParam: (param: keyof T) => void;
 			completeState: () => void;
 		}}
@@ -87,7 +87,7 @@ export class StateService {
 		/** Metodo que retorna el valor de un parametro del estado */
 		getParam: <P extends keyof T>(param: P) => T[P];
 		/** Metodo que establece un nuevo valor a un parametro del estado */
-		setParam: <P extends keyof T>(param: P, value: T[P]) => void;
+		setParam: <P extends keyof T>(param: P, newValue: T[P]) => void;
 		/** Metodo que resetea el valor de un parametro del estado a su estado inicial */
 		resetParam: (param: keyof T) => void;
 		/** Metodo que completa los Observables del estado */
