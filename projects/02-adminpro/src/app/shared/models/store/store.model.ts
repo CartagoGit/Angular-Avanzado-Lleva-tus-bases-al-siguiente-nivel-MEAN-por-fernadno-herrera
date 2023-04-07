@@ -6,6 +6,7 @@ import {
 	takeUntil,
 	Subject,
 	finalize,
+	tap,
 } from 'rxjs';
 import { isEqual } from '../../helpers/object.helper';
 import {
@@ -34,7 +35,12 @@ export class Store<T extends { [key in keyof T]: T[key] }> {
 	/** Opciones del store - Readonly */
 	public readonly options: StoreOptions<T>;
 
+	// * Observable que emite cuando se destruye el store cancelando las subscripciones que dependan de ella
 	private readonly _destroyState$ = new Subject<void>();
+
+	//* Propiedades para obligar a reenviar el estado aunque no haya cambios
+	private _resendState: boolean = false;
+	private _resendParams: boolean | (keyof T)[] = false;
 
 	// ANCHOR : Constructor
 	constructor(state: T, options?: StoreOptions<T>) {
@@ -50,20 +56,23 @@ export class Store<T extends { [key in keyof T]: T[key] }> {
 		};
 
 		this.observer = new BehaviorSubject<T>(state);
-		const observable = this.observer.asObservable().pipe(
+		const observable: Observable<T> = this.observer.asObservable().pipe(
 			finalize(() => {
 				this._destroyState$.complete();
+			}),
+			takeUntil(this._destroyState$)
+		);
+
+		const state$: Observable<T> = observable.pipe(
+			distinctUntilChanged((x, y) => {
+				if (this._resendState) return false;
+				else
+					return allowDeepChanges && allowDeepChangesInState
+						? isEqual(x, y)
+						: x === y;
 			})
 		);
 
-		const state$ = observable.pipe(
-			takeUntil(this._destroyState$),
-			distinctUntilChanged(
-				allowDeepChanges && allowDeepChangesInState
-					? isEqual
-					: (x, y) => x === y
-			)
-		);
 		this.state$ = state$;
 		this.params = this._makeParamsObservables({
 			state,
@@ -89,6 +98,34 @@ export class Store<T extends { [key in keyof T]: T[key] }> {
 	 * ? Metodo que resetea el estado a su estado inicial
 	 */
 	public resetState = (): void => this.observer.next(this.firstState);
+
+	/**
+	 * ? Metodo que obliga a recargar el estado aunque no haya cambiado
+	 */
+	public reloadState = (): void => {
+		this._resendState = true;
+		this.observer.next(this.getState());
+		this._resendState = false;
+	};
+
+	/**
+	 * ? Metodo que obliga a recargar los parametros del estado aunque no hayan cambiado
+	 * * Se puede pasar un array de parametros para reenviar solo esos parametros
+	 * * Se puede pasar true para reenviar todos los parametros
+	 * @param {?(keyof T)[] | boolean} [params]
+	 */
+	public reloadParams = (params?: (keyof T)[] | boolean): void => {
+		this._resendParams = params || true;
+		this.reloadState();
+		this._resendParams = false;
+	};
+
+	/**
+	 * ? Metodo que obliga a recargar todos los parametros del estado aunque no hayan cambiado
+	 */
+	public reloadFull = (): void => {
+		this.reloadParams(true);
+	};
 
 	/**
 	 * ? Metodo que retorna el valor de un parametro del estado
@@ -148,8 +185,8 @@ export class Store<T extends { [key in keyof T]: T[key] }> {
 	 * ? Metodo que crea un observable para cada parametro del estado
 	 * @param {{
 			state: T;
-			options?: StoreOptions<T>;
-			observable: Observable<T>;
+			options: StoreOptions<T>;
+			state$: Observable<T>;
 		}} data
 	 * @returns {StoreParams<T>}
 	 */
@@ -174,15 +211,25 @@ export class Store<T extends { [key in keyof T]: T[key] }> {
 				}
 				return true;
 			};
+
+			const isForceResendParam = (key: keyof T) => {
+				if (!this._resendState) return false;
+				if (Array.isArray(this._resendParams)) {
+					return this._resendParams.includes(key);
+				}
+				return this._resendParams;
+			};
+
 			params = {
 				...params,
 				[`${keyString}$`]: state$.pipe(
 					takeUntil(this._destroyState$),
 					map((obj) => obj[key]),
 					//*  Solo permitimos comparaciones profundas en los parametros que se especifiquen o si se especifica que se permitan en todos
-					distinctUntilChanged(
-						isAllowedDeepParam(key) ? isEqual : (x, y) => x === y
-					)
+					distinctUntilChanged((x, y) => {
+						if (isForceResendParam(key)) return false;
+						else return isAllowedDeepParam(key) ? isEqual(x, y) : x === y;
+					})
 				),
 			};
 		}

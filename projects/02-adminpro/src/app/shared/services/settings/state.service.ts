@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { paths } from '../../constants/paths.constant';
 import { StorageService } from './storage.service';
 import { User, UserProps } from '../../models/mongo-models/user.model';
-import { Store } from '../../models/state/store.model';
+import { Store } from '../../models/store/store.model';
 @Injectable({
 	providedIn: 'root',
 })
@@ -26,17 +26,9 @@ export class StateService {
 	}
 
 	// ANCHOR : Constructor
-	constructor(private _storageSvc: StorageService, private _router: Router) {
-		const algo = new Store({
-			isAuthenticated: false,
-			user: undefined,
-		})
-		
-	}
+	constructor(private _storageSvc: StorageService, private _router: Router) {}
 
 	// ANCHOR : Methods
-
-
 
 	/**
 	 * ? Elimina el token del storage y cambia el estado de autenticacion a deslogueado

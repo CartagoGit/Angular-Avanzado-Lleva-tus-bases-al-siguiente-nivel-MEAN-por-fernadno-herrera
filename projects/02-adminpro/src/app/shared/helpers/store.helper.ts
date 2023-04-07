@@ -1,4 +1,4 @@
-import { Store } from '../models/state/store.model';
+import { Store } from '../models/store/store.model';
 import { StoreOptions } from '../interfaces/models/store.interface';
 
 
