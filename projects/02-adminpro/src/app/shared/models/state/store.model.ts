@@ -6,7 +6,6 @@ import {
 	takeUntil,
 	Subject,
 	finalize,
-	tap,
 } from 'rxjs';
 import { isEqual } from '../../helpers/object.helper';
 import {
@@ -53,7 +52,6 @@ export class Store<T extends { [key in keyof T]: T[key] }> {
 		this.observer = new BehaviorSubject<T>(state);
 		const observable = this.observer.asObservable().pipe(
 			finalize(() => {
-				console.log('finalize');
 				this._destroyState$.complete();
 			})
 		);
@@ -126,19 +124,11 @@ export class Store<T extends { [key in keyof T]: T[key] }> {
 	};
 
 	/**
-	 * ? Metodo que completa los Observables del estado
+	 * ? Metodo que completa, cierra y termina todas las subscripciones a los Observables que dependan del estado
+	 * * A tener en cuenta que esto ocurre por el pipe finalize del observable del estado que triggerea el complete del destroyState$
 	 */
-	public completeState = (): void => this.observer.complete();
-
-	/**
-	 * ? Metodo para desuscribirse al observable del sujeto
-	 * * Hay que tener en cuenta que esto no cierra el resto de subscripciones que dependan de este subject, solo cierra la subscripcion del subject
-	 */
-	public unsuscribeState = (): void => {
-		this._destroyState$.next();
-		this._destroyState$.complete();
-		this._destroyState$.unsubscribe();
-		console.log({destroyClosed: this._destroyState$.closed, destroyObserved: this._destroyState$.observed});
+	public endState = (): void => {
+		this.observer.complete();
 		this.observer.unsubscribe();
 	};
 
@@ -199,119 +189,3 @@ export class Store<T extends { [key in keyof T]: T[key] }> {
 		return params;
 	};
 }
-
-const otroEstado = new Store(
-	{
-		prueba: 'mundo',
-		idea: {
-			idea1: 'idea1',
-			isAlgo: true,
-		},
-	},
-	{
-		allowDeepChangesInState: true,
-		allowDeepChangesInParams: ['prueba', 'idea'],
-	}
-);
-
-const { idea$, prueba$ } = otroEstado.params;
-const {
-	isObserved,
-	firstState,
-	completeState,
-	getState,
-	getParam,
-	isClosed,
-	options,
-	state$,
-	resetState,
-	setParam,
-	setState,
-	unsuscribeState,
-} = otroEstado;
-
-const estado = { isObserved: isObserved(), isClosed: isClosed() };
-console.log(estado);
-
-const subState = state$.subscribe((state) => console.log('ESTADO-->', state));
-const subIdea = idea$.subscribe((idea) => console.log('IDEA-->', idea));
-const subPrueba = prueba$.subscribe((prueba) =>
-	console.log('PRUEBA-->', prueba)
-);
-console.log({
-	subState: subState.closed,
-	subIdea: subIdea.closed,
-	subPrueba: subPrueba.closed,
-});
-
-console.log({ isObserved: isObserved(), isClosed: isClosed(), options });
-
-console.log('---------------------> NEXT');
-setState({ prueba: 'tiroriori', idea: { idea1: 'idea1', isAlgo: true } });
-console.log('---------------------> NEXT');
-setState({
-	prueba: 'tiroriori',
-	idea: { idea1: 'po no se si es ideal', isAlgo: true },
-});
-console.log('---------------------> NEXT');
-setState({
-	prueba: 'tiroriori2',
-	idea: { idea1: 'po no se si es ideal', isAlgo: true },
-});
-console.log('---------------------> NEXT');
-setState({
-	prueba: 'tiroriori2',
-	idea: { idea1: 'po no se si es ideal', isAlgo: true },
-});
-console.log('---------------------> NEXT');
-setState({
-	prueba: 'tiroriori2',
-	idea: { idea1: 'po no se si es ideal', isAlgo: true },
-});
-console.log('---------------------> RESET');
-resetState();
-
-console.log({ isObserved: isObserved(), isClosed: isClosed(), options });
-// completeState();
-console.log({ isObserved: isObserved(), isClosed: isClosed(), options });
-console.log({
-	subState: subState.closed,
-	subIdea: subIdea.closed,
-	subPrueba: subPrueba.closed,
-});
-unsuscribeState();
-console.log({ isObserved: isObserved(), isClosed: isClosed(), options });
-console.log({
-	subState: subState.closed,
-	subIdea: subIdea.closed,
-	subPrueba: subPrueba.closed,
-});
-// console.log('---------------------> NEXT');
-// setParam('idea', {
-// 	idea1: 'po no se si es ideal',
-// 	isAlgo: true,
-// });
-// console.log({ isObserved: isObserved(), isClosed: isClosed(), options });
-// console.log({
-// 	subState: subState.closed,
-// 	subIdea: subIdea.closed,
-// 	subPrueba: subPrueba.closed,
-// });
-//
-
-// const mySubject = new Subject<number>();
-
-// const mySubscription = mySubject
-// 	.pipe(
-// 		//   tap(value => console.log(`Received value: ${value}`)),
-// 		tap({
-// 			complete: () => console.log('Source completed prueba'),
-// 			unsubscribe: () => console.log('Subscription unsubscribed prueba'),
-// 		})
-// 	)
-// 	.subscribe();
-
-// mySubject.next(1); // Output: Received value: 1
-// mySubject.next(2); // Output: Received value: 2
-
-// mySubscription.unsubscribe(); // Output: Subscription unsubscribed
