@@ -74,8 +74,9 @@ export class Store<T extends { [key in keyof T]: T[key] }> {
 				else if (allowDeepChanges && allowDeepChangesInState) {
 					return isEqual(x, y);
 				} else if (Array.isArray(x) && Array.isArray(y)) {
-					return (x as T[keyof T][]).sort().every((xItem, index) => {
-						const yItem = (y as T[keyof T][]).sort()[index];
+					if (x.length !== y.length) return false;
+					return (x as T[]).sort().every((xItem, index) => {
+						const yItem = (y as T[]).sort()[index];
 						return xItem === yItem;
 					});
 				} else return x === y;
@@ -225,6 +226,11 @@ export class Store<T extends { [key in keyof T]: T[key] }> {
 						else if (this._isAllowedDeepParam(key, options)) {
 							return isEqual(x, y);
 						} else if (Array.isArray(x) && Array.isArray(y)) {
+							if (
+								(x as T[keyof T][]).length !==
+								(y as T[keyof T][]).length
+							)
+								return false;
 							return (x as T[keyof T][]).sort().every((xItem, index) => {
 								const yItem = (y as T[keyof T][]).sort()[index];
 								return xItem === yItem;

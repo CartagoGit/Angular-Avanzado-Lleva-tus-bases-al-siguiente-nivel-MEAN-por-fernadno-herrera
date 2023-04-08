@@ -91,13 +91,17 @@ export class ModalService {
 			data,
 		});
 
-		const algo = this.stackStores.getState();
-		
-		this.stackStores.setState([...this.stackStores.getState(), modalStore]);
+		const state = this.stackStores.getState();
+		console.log(this.stackStores.params);
+		console.log('❗1state ➽ ⏩', state);
 
-		console.log('❗stack ➽ ⏩', this.stackStores.getState(), this.stackStores.isObserved());
-		this.stackStores.setState([...this.stackStores.getState(), modalStore]);
+		this.stackStores.setState([...state, modalStore]);
+		console.log('❗2state ➽ ⏩', state);
 
+		console.log('❗stack ➽ ⏩', state, this.stackStores.isObserved());
+		this.stackStores.setState([...state, modalStore]);
+
+		console.log('❗3state ➽ ⏩', state);
 		console.log(this.stackStores.getState());
 		// this.stackStores.reloadState();
 		return modalStore;
