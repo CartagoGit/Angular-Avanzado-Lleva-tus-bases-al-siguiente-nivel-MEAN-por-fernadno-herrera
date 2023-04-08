@@ -45,8 +45,7 @@ export class Store<T extends { [key in keyof T]: T[key] }> {
 	private _resendParams: boolean | (keyof T)[] = false;
 
 	// ANCHOR : Constructor
-	constructor(state: NonArrayType<T>, options?: StoreOptions<T>) {
-		console.log("❗constructor  ➽ state ➽ ⏩" , state);
+	constructor(state: T, options?: StoreOptions<T>) {
 		const {
 			allowDeepChanges = true,
 			allowDeepChangesInState = true,
@@ -71,21 +70,16 @@ export class Store<T extends { [key in keyof T]: T[key] }> {
 
 		const state$: Observable<T> = observable.pipe(
 			distinctUntilChanged((x, y) => {
-				console.log(
-					x,
-					y,
-					x === y,
-					allowDeepChanges,
-					allowDeepChangesInState
-				);
 				if (this._resendState) return false;
-				else {
-					return allowDeepChanges && allowDeepChangesInState
-						? isEqual(x, y)
-						: x === y;
-				}
-			}),
-			tap((value) => console.log(value))
+				else if (allowDeepChanges && allowDeepChangesInState) {
+					return isEqual(x, y);
+				} else if (Array.isArray(x) && Array.isArray(y)) {
+					return (x as T[keyof T][]).sort().every((xItem, index) => {
+						const yItem = (y as T[keyof T][]).sort()[index];
+						return xItem === yItem;
+					});
+				} else return x === y;
+			})
 		);
 
 		this.state$ = state$;
@@ -103,8 +97,7 @@ export class Store<T extends { [key in keyof T]: T[key] }> {
 	 * ? Metodo que retorna el estado actual
 	 * @returns {T}
 	 */
-	public getState = (): T => ({ ...this.observer.value });
-
+	public getState = (): Readonly<T> => this.observer.value;
 	/**
 	 * ? Metodo que establece un nuevo estado
 	 * @param {T} newState
@@ -150,9 +143,8 @@ export class Store<T extends { [key in keyof T]: T[key] }> {
 	 * @param {P} param
 	 * @returns {T[P]}
 	 */
-	public getParam = <P extends keyof T>(param: P): T[P] => ({
-		...this.observer.value[param],
-	});
+	public getParam = <P extends keyof T>(param: P): Readonly<T[P]> =>
+		this.observer.value[param];
 
 	/**
 	 * ? Metodo que establece un nuevo valor a un parametro del estado
@@ -230,11 +222,14 @@ export class Store<T extends { [key in keyof T]: T[key] }> {
 					//*  Solo permitimos comparaciones profundas en los parametros que se especifiquen o si se especifica que se permitan en todos
 					distinctUntilChanged((x, y) => {
 						if (this._isForceResendParam(key)) return false;
-						else {
-							return this._isAllowedDeepParam(key, options)
-								? isEqual(x, y)
-								: x === y;
-						}
+						else if (this._isAllowedDeepParam(key, options)) {
+							return isEqual(x, y);
+						} else if (Array.isArray(x) && Array.isArray(y)) {
+							return (x as T[keyof T][]).sort().every((xItem, index) => {
+								const yItem = (y as T[keyof T][]).sort()[index];
+								return xItem === yItem;
+							});
+						} else return x === y;
 					})
 				),
 			};

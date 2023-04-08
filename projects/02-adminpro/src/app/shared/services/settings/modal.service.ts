@@ -25,14 +25,9 @@ export class ModalService {
 	// get stackStores() : Store<ModalState>[] {
 	// 	return this._stackStores;
 	// };
-	public readonly stackStores = createStore<{ stack: Store<ModalState>[] }>(
-		{
-			stack: [],
-		},
-		{
-			allowDeepChangesInState: false,
-		}
-	);
+	public readonly stackStores = createStore<Store<ModalState>[]>([], {
+		allowDeepChanges: false,
+	});
 
 	private _activeModals: number = 0;
 	get activeModals(): number {
@@ -47,16 +42,10 @@ export class ModalService {
 	// ANCHOR : Constructor
 	constructor() {
 		// console.log(this.modalStore);
-		const {
-			state$,
-			params: { stack$ },
-		} = this.stackStores;
+		const { state$ } = this.stackStores;
 
 		state$.subscribe((stack) => {
 			console.log('subscribe ➽ ⏩', stack);
-		});
-		stack$.subscribe((stack) => {
-			console.log('subscribe stack$➽ ⏩', stack);
 		});
 	}
 
@@ -102,13 +91,12 @@ export class ModalService {
 			data,
 		});
 
-		const stack = this.stackStores.getState().stack;
-		stack.push(modalStore);
-		console.log('❗stack ➽ ⏩', stack);
-		this.stackStores.setState({ stack });
-		stack.push(modalStore);
-		console.log('❗stack ➽ ⏩', stack, this.stackStores.isObserved());
-		this.stackStores.setState({ stack });
+		const algo = this.stackStores.getState();
+		
+		this.stackStores.setState([...this.stackStores.getState(), modalStore]);
+
+		console.log('❗stack ➽ ⏩', this.stackStores.getState(), this.stackStores.isObserved());
+		this.stackStores.setState([...this.stackStores.getState(), modalStore]);
 
 		console.log(this.stackStores.getState());
 		// this.stackStores.reloadState();

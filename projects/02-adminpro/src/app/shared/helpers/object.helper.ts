@@ -5,6 +5,7 @@
  * @returns {boolean}
  */
 export const isEqual = (x: any, y: any): boolean => {
+	console.log('ISEQUAL', x, y);
 	if (x === undefined || y === undefined || x === null || y === null) {
 		if (y !== x) return false;
 		else return true;
