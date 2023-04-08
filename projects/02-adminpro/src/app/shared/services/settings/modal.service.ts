@@ -27,8 +27,9 @@ export class ModalService {
 			Store<ModalState>[]
 		>;
 	}
-	get actualModal(): Store<ModalState> {
-		return this._activeModals[this._activeModals.length - 1];
+	private _actualModalStore?: Store<ModalState>;
+	get actualModal(): Store<ModalState> | undefined {
+		return this._actualModalStore;
 	}
 	get isOpen(): boolean {
 		return this.numActiveModals > 0;
@@ -53,7 +54,7 @@ export class ModalService {
 		options?: { data?: D }
 	): typeof ModalComponent {
 		const { data } = options || {};
-		this._createModalStore(component, data || {});
+		this._actualModalStore = this._createModalStore(component, data || {});
 		return this.modal;
 	}
 
@@ -61,23 +62,29 @@ export class ModalService {
 	 * ? Metodo para crear un nuevo modal y añadirlo a la pila del store
 	 * @public
 	 */
-	public close(): void {}
+	public close(): void {
+		this._deleteLastModal();
+	}
 
 	private _createModalStore<C, D>(
 		component: Type<C>,
 		data: D
 	): Store<ModalState<C, D>> {
-		const modalStore = createStore<ModalState<C, D>>(
+		const newModalStore = createStore<ModalState<C, D>>(
 			{
-				isOpen: true,
+				// isOpen: true,
 				component,
 				data,
 			},
 			this._modalStoreOptions
 		);
-		this.stackStores.setState([...this.stackStores.getState(), modalStore]);
+		this.stackStores.setState([
+			...this.stackStores.getState(),
+			newModalStore,
+		]);
+		newModalStore.params.data$;
 
-		return modalStore;
+		return newModalStore;
 	}
 
 	/**
@@ -85,10 +92,15 @@ export class ModalService {
 	 * @private
 	 */
 	private _deleteLastModal(): void {
-		const state = this.stackStores.getState();
+		if (this.numActiveModals === 0) return;
+		const { getState, setState } = this.stackStores;
+		const state = getState();
 		const lastState = state[state.length - 1];
 		lastState.endState();
 		state.pop();
-		this.stackStores.setState(state);
+		setState(state);
+		const finalState = getState();
+		if (finalState.length === 0) this._actualModalStore = undefined;
+		else this._actualModalStore = finalState[finalState.length - 1];
 	}
 }
