@@ -1,11 +1,23 @@
 import { Injectable, Type } from '@angular/core';
 import { createStore } from '../../helpers/store.helper';
+import { ModalComponent } from '../../components/modal/modal.component';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class ModalService {
 	// ANCHOR : Variables
+
+	public modal = ModalComponent;
+
+	private readonly _modalState = {
+		component: null as Type<any> | null,
+	};
+
+	public modalStore = createStore(this._modalState, {
+		allowDeepChangesInParams: ['component'],
+	});
+
 	private _isOpen: boolean = false;
 
 	get isOpen(): boolean {
@@ -29,13 +41,16 @@ export class ModalService {
 	 * ? Method to open the modal
 	 * @public
 	 */
-	public open<T>(component: Type<T>, options?: { data?: any }): void {
+	public open<T, K>(
+		component: Type<T>,
+		options?: { data?: K }
+	): typeof ModalComponent {
 		const { data } = options || {};
-		const componentState = createStore(component.arguments)
-		componentState.params
 
 		console.log(component, data);
 		this._isOpen = true;
+
+		return this.modal;
 	}
 
 	/**

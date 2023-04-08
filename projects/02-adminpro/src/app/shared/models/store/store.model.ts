@@ -47,11 +47,13 @@ export class Store<T extends { [key in keyof T]: T[key] }> {
 			allowDeepChanges = true,
 			allowDeepChangesInState = true,
 			allowDeepChangesInParams = true,
+			denyDeepChangesInParams = [],
 		} = options || {};
 		this.options = {
 			allowDeepChanges,
 			allowDeepChangesInState,
 			allowDeepChangesInParams,
+			denyDeepChangesInParams,
 		};
 
 		this.observer = new BehaviorSubject<T>(state);
@@ -249,8 +251,17 @@ export class Store<T extends { [key in keyof T]: T[key] }> {
 		key: keyof T,
 		options: StoreOptions<T>
 	): boolean => {
-		const { allowDeepChanges, allowDeepChangesInParams } = options;
-		if (!allowDeepChanges || !allowDeepChangesInParams) return false;
+		const {
+			allowDeepChanges,
+			allowDeepChangesInParams,
+			denyDeepChangesInParams,
+		} = options;
+		if (
+			!allowDeepChanges ||
+			!allowDeepChangesInParams ||
+			denyDeepChangesInParams?.includes(key)
+		)
+			return false;
 		if (Array.isArray(allowDeepChangesInParams)) {
 			return allowDeepChangesInParams.includes(key);
 		}
