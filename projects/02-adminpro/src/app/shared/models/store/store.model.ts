@@ -98,7 +98,7 @@ export class Store<T extends { [key in keyof T]: T[key] }> {
 	 * ? Metodo que retorna el estado actual
 	 * @returns {T}
 	 */
-	public getState = (): Readonly<T> => this.observer.value;
+	public getState = (): T => this.observer.value;
 	/**
 	 * ? Metodo que establece un nuevo estado
 	 * @param {T} newState

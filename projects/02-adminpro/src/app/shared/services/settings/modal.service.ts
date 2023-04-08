@@ -68,7 +68,7 @@ export class ModalService {
 		options?: { data?: D }
 	): typeof ModalComponent {
 		const { data } = options || {};
-		this._createNewModal(component, data);
+		this._createNewModal(component, data || {});
 
 		// this._isOpen = true;
 
@@ -76,7 +76,7 @@ export class ModalService {
 	}
 
 	/**
-	 * ? Method to close the modal
+	 * ? Metodo para crear un nuevo modal y añadirlo a la pila
 	 * @public
 	 */
 	public close(): void {}
@@ -90,20 +90,20 @@ export class ModalService {
 			component,
 			data,
 		});
+		this.stackStores.setState([...this.stackStores.getState(), modalStore]);
 
-		const state = this.stackStores.getState();
-		console.log(this.stackStores.params);
-		console.log('❗1state ➽ ⏩', state);
-
-		this.stackStores.setState([...state, modalStore]);
-		console.log('❗2state ➽ ⏩', state);
-
-		console.log('❗stack ➽ ⏩', state, this.stackStores.isObserved());
-		this.stackStores.setState([...state, modalStore]);
-
-		console.log('❗3state ➽ ⏩', state);
-		console.log(this.stackStores.getState());
-		// this.stackStores.reloadState();
 		return modalStore;
+	}
+
+	/**
+	 * ? Metodo para eliminar el ultimo modal de la pila y terminar sus subscripciones
+	 * @private
+	 */
+	private _deleteLastModal(): void {
+		const state = this.stackStores.getState();
+		const lastState = state[state.length - 1];
+		lastState.endState();
+		state.pop();
+		this.stackStores.setState(state);
 	}
 }
