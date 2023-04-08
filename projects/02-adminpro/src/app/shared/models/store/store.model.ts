@@ -8,6 +8,7 @@ import {
 	finalize,
 } from 'rxjs';
 import { isEqual } from '../../helpers/object.helper';
+import { basicLogError, basicThrowError } from '../../helpers/log.helper';
 import {
 	StoreOptions,
 	StoreParams,
@@ -55,10 +56,20 @@ export class Store<T extends { [key in keyof T]: T[key] }> {
 			allowDeepChangesInParams,
 			denyDeepChangesInParams,
 		};
-		if (this._isOkAllowedOptions(this.options)) {
-			throw new Error(
-				'Error: Cannot denny and allow deep changes in the same params'
-			);
+		if (!this._isOkAllowedOptions(this.options)) {
+			basicLogError({
+				className: 'Store',
+				methodName: 'constructor',
+				message:
+					'Allows and deny deep changes in params are not compatible',
+				reason: 'allow and deny cannot be the same',
+				line: 61,
+				file: 'store.model.ts',
+				infoObject: {
+					allowDeepChangesInParams,
+					denyDeepChangesInParams,
+				},
+			});
 		}
 
 		this.observer = new BehaviorSubject<T>(state);

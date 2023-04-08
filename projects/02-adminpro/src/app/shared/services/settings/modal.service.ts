@@ -26,7 +26,9 @@ export class ModalService {
 	}
 
 	// ANCHOR : Constructor
-	constructor() {}
+	constructor() {
+		// console.log(this.modalStore);
+	}
 
 	// ANCHOR : Methods
 
