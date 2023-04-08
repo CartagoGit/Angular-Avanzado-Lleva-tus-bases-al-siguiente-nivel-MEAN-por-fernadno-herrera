@@ -15,7 +15,8 @@ export class ModalService {
 	};
 
 	public modalStore = createStore(this._modalState, {
-		allowDeepChangesInParams: ['component'],
+		denyDeepChangesInParams: ['component'],
+		allowDeepChangesInParams: ['component']
 	});
 
 	private _isOpen: boolean = false;

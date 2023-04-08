@@ -1,4 +1,4 @@
-import { Observable } from "rxjs";
+import { Observable } from 'rxjs';
 
 //* Tipado de las propiedades del modelo Store
 export interface StoreProps<T> {

@@ -55,6 +55,11 @@ export class Store<T extends { [key in keyof T]: T[key] }> {
 			allowDeepChangesInParams,
 			denyDeepChangesInParams,
 		};
+		if (this._isOkAllowedOptions(this.options)) {
+			throw new Error(
+				'Error: Cannot denny and allow deep changes in the same params'
+			);
+		}
 
 		this.observer = new BehaviorSubject<T>(state);
 		const observable: Observable<T> = this.observer.asObservable().pipe(
@@ -267,4 +272,24 @@ export class Store<T extends { [key in keyof T]: T[key] }> {
 		}
 		return true;
 	};
+
+	/**
+	 * ? Comprueba que no se denieguen los mismos parametros que se estan permitiendo
+	 * @private
+	 * @param {StoreOptions<T>} options
+	 * @returns {boolean}
+	 */
+	private _isOkAllowedOptions(options: StoreOptions<T>): boolean {
+		const { allowDeepChangesInParams, denyDeepChangesInParams } = options;
+		if (!Array.isArray(allowDeepChangesInParams)) return true;
+		if (
+			denyDeepChangesInParams?.some((deniedParam) =>
+				allowDeepChangesInParams.includes(deniedParam)
+			)
+		) {
+			return false;
+		}
+
+		return true;
+	}
 }
