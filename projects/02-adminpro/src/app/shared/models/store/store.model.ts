@@ -6,13 +6,15 @@ import {
 	takeUntil,
 	Subject,
 	finalize,
+	tap,
 } from 'rxjs';
 import { isEqual } from '../../helpers/object.helper';
-import { basicLogError, basicThrowError } from '../../helpers/log.helper';
+import { basicLogError } from '../../helpers/log.helper';
 import {
 	StoreOptions,
 	StoreParams,
 } from '../../interfaces/models/store.interface';
+import { NonArrayType } from '../../interfaces/common/utils.interface';
 
 /**
  * ? Clase store de donde observar los cambios en cualquier estado que se pase en el constructor
@@ -43,7 +45,8 @@ export class Store<T extends { [key in keyof T]: T[key] }> {
 	private _resendParams: boolean | (keyof T)[] = false;
 
 	// ANCHOR : Constructor
-	constructor(state: T, options?: StoreOptions<T>) {
+	constructor(state: NonArrayType<T>, options?: StoreOptions<T>) {
+		console.log("❗constructor  ➽ state ➽ ⏩" , state);
 		const {
 			allowDeepChanges = true,
 			allowDeepChangesInState = true,
@@ -56,21 +59,7 @@ export class Store<T extends { [key in keyof T]: T[key] }> {
 			allowDeepChangesInParams,
 			denyDeepChangesInParams,
 		};
-		if (!this._isOkAllowedOptions(this.options)) {
-			basicLogError({
-				className: 'Store',
-				methodName: 'constructor',
-				message:
-					'Allows and deny deep changes in params are not compatible',
-				reason: 'allow and deny cannot be the same',
-				line: 61,
-				file: 'store.model.ts',
-				infoObject: {
-					allowDeepChangesInParams,
-					denyDeepChangesInParams,
-				},
-			});
-		}
+		this._isOkAllowedOptions(this.options);
 
 		this.observer = new BehaviorSubject<T>(state);
 		const observable: Observable<T> = this.observer.asObservable().pipe(
@@ -82,13 +71,21 @@ export class Store<T extends { [key in keyof T]: T[key] }> {
 
 		const state$: Observable<T> = observable.pipe(
 			distinctUntilChanged((x, y) => {
+				console.log(
+					x,
+					y,
+					x === y,
+					allowDeepChanges,
+					allowDeepChangesInState
+				);
 				if (this._resendState) return false;
 				else {
 					return allowDeepChanges && allowDeepChangesInState
 						? isEqual(x, y)
 						: x === y;
 				}
-			})
+			}),
+			tap((value) => console.log(value))
 		);
 
 		this.state$ = state$;
@@ -106,7 +103,7 @@ export class Store<T extends { [key in keyof T]: T[key] }> {
 	 * ? Metodo que retorna el estado actual
 	 * @returns {T}
 	 */
-	public getState = (): T => this.observer.value;
+	public getState = (): T => ({ ...this.observer.value });
 
 	/**
 	 * ? Metodo que establece un nuevo estado
@@ -153,8 +150,9 @@ export class Store<T extends { [key in keyof T]: T[key] }> {
 	 * @param {P} param
 	 * @returns {T[P]}
 	 */
-	public getParam = <P extends keyof T>(param: P): T[P] =>
-		this.observer.value[param];
+	public getParam = <P extends keyof T>(param: P): T[P] => ({
+		...this.observer.value[param],
+	});
 
 	/**
 	 * ? Metodo que establece un nuevo valor a un parametro del estado
@@ -292,15 +290,30 @@ export class Store<T extends { [key in keyof T]: T[key] }> {
 	 */
 	private _isOkAllowedOptions(options: StoreOptions<T>): boolean {
 		const { allowDeepChangesInParams, denyDeepChangesInParams } = options;
-		if (!Array.isArray(allowDeepChangesInParams)) return true;
-		if (
+		let isOk: boolean = true;
+		if (!Array.isArray(allowDeepChangesInParams)) isOk = true;
+		else if (
 			denyDeepChangesInParams?.some((deniedParam) =>
 				allowDeepChangesInParams.includes(deniedParam)
 			)
 		) {
-			return false;
+			isOk = false;
 		}
-
-		return true;
+		if (!isOk) {
+			basicLogError({
+				className: 'Store',
+				methodName: 'constructor',
+				message:
+					'Allows and deny deep changes in params are not compatible',
+				reason: 'allow and deny cannot be the same',
+				line: 61,
+				file: 'store.model.ts',
+				infoObject: {
+					allowDeepChangesInParams,
+					denyDeepChangesInParams,
+				},
+			});
+		}
+		return isOk;
 	}
 }
