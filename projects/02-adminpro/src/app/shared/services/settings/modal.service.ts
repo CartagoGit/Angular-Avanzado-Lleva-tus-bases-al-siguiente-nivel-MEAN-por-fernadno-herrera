@@ -12,39 +12,32 @@ export class ModalService {
 	// ANCHOR : Variables
 
 	public modal = ModalComponent;
-
-	// private readonly _modalState: ModalState;
-
 	private readonly _modalStoreOptions: StoreOptions<ModalState> = {
 		denyDeepChangesInParams: ['component'],
 	};
-
-	// public modalStore: Store<ModalState>;
-
-	// private _stackStores: Store<ModalState>[] = [];
-	// get stackStores() : Store<ModalState>[] {
-	// 	return this._stackStores;
-	// };
 	public readonly stackStores = createStore<Store<ModalState>[]>([], {
 		allowDeepChanges: false,
 	});
-
-	private _activeModals: number = 0;
-	get activeModals(): number {
-		return this._activeModals;
+	get numActiveModals(): number {
+		return this._activeModals.length;
 	}
-
-	private _isOpen: boolean = false;
+	private _activeModals: Store<ModalState>[] = [];
+	get activeModals(): ReadonlyArray<Store<ModalState>[]> {
+		return this._activeModals as unknown as ReadonlyArray<
+			Store<ModalState>[]
+		>;
+	}
+	get actualModal(): Store<ModalState> {
+		return this._activeModals[this._activeModals.length - 1];
+	}
 	get isOpen(): boolean {
-		return this._isOpen;
+		return this.numActiveModals > 0;
 	}
 
 	// ANCHOR : Constructor
 	constructor() {
-		// console.log(this.modalStore);
-		const { state$ } = this.stackStores;
-
-		state$.subscribe((stack) => {
+		this.stackStores.state$.subscribe((stack) => {
+			this._activeModals = stack;
 			console.log('subscribe ➽ ⏩', stack);
 		});
 	}
@@ -52,15 +45,7 @@ export class ModalService {
 	// ANCHOR : Methods
 
 	/**
-	 * ? Method to toggle the modal
-	 * @public
-	 */
-	public toggle(): void {
-		this._isOpen = !this._isOpen;
-	}
-
-	/**
-	 * ? Method to open the modal
+	 * ? Metodo para abrir un nueo modal
 	 * @public
 	 */
 	public open<C, D>(
@@ -68,28 +53,28 @@ export class ModalService {
 		options?: { data?: D }
 	): typeof ModalComponent {
 		const { data } = options || {};
-		this._createNewModal(component, data || {});
-
-		// this._isOpen = true;
-
+		this._createModalStore(component, data || {});
 		return this.modal;
 	}
 
 	/**
-	 * ? Metodo para crear un nuevo modal y añadirlo a la pila
+	 * ? Metodo para crear un nuevo modal y añadirlo a la pila del store
 	 * @public
 	 */
 	public close(): void {}
 
-	private _createNewModal<C, D>(
+	private _createModalStore<C, D>(
 		component: Type<C>,
 		data: D
 	): Store<ModalState<C, D>> {
-		const modalStore = createStore<ModalState<C, D>>({
-			isOpen: true,
-			component,
-			data,
-		});
+		const modalStore = createStore<ModalState<C, D>>(
+			{
+				isOpen: true,
+				component,
+				data,
+			},
+			this._modalStoreOptions
+		);
 		this.stackStores.setState([...this.stackStores.getState(), modalStore]);
 
 		return modalStore;
