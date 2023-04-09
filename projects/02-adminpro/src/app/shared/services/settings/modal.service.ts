@@ -1,4 +1,4 @@
-import { Injectable, Type } from '@angular/core';
+import { Injectable, Type, ViewChild, ElementRef } from '@angular/core';
 import { createStore } from '../../helpers/store.helper';
 import { ModalComponent } from '../../components/modal/modal.component';
 import { StoreOptions } from '../../interfaces/models/store.interface';
@@ -10,8 +10,7 @@ import { ModalState } from '../../interfaces/models/modal.interface';
 })
 export class ModalService {
 	// ANCHOR : Variables
-
-	public modal = ModalComponent;
+	public modal!: ModalComponent;
 	private readonly _modalStoreOptions: StoreOptions<ModalState> = {
 		denyDeepChangesInParams: ['component'],
 	};
@@ -43,7 +42,15 @@ export class ModalService {
 		});
 	}
 
+	ngAfterViewInit(): void {
+		// this.modal = new ModalComponent(this);
+	}
+
 	// ANCHOR : Methods
+
+	public assignContainerModal(container: ModalComponent): void {
+		this.modal = container;
+	}
 
 	/**
 	 * ? Metodo para abrir un nueo modal
@@ -52,7 +59,7 @@ export class ModalService {
 	public open<C, D>(
 		component: Type<C>,
 		options?: { data?: D }
-	): typeof ModalComponent {
+	): ModalComponent {
 		const { data } = options || {};
 		this._actualModalStore = this._createModalStore(component, data || {});
 		return this.modal;
@@ -63,27 +70,38 @@ export class ModalService {
 	 * @public
 	 */
 	public close(): void {
-		this._deleteLastModal();
+		this._actualModalStore?.setParam('isOpen', false);
 	}
 
 	private _createModalStore<C, D>(
 		component: Type<C>,
 		data: D
 	): Store<ModalState<C, D>> {
+		const newModalState: ModalState<C, D> = {
+			isOpen: true,
+			component,
+			data,
+		};
 		const newModalStore = createStore<ModalState<C, D>>(
-			{
-				// isOpen: true,
-				component,
-				data,
-			},
+			newModalState,
 			this._modalStoreOptions
 		);
 		this.stackStores.setState([
 			...this.stackStores.getState(),
 			newModalStore,
 		]);
-		newModalStore.params.data$;
 
+		const {
+			params: { isOpen$ },
+		} = newModalStore;
+
+		isOpen$.subscribe({
+			next: (isOpen) => {
+				if (!isOpen) this._deleteLastModal();
+			},
+		});
+
+		this.modal.createChildComponent(newModalState);
 		return newModalStore;
 	}
 

@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
  * @template D
  */
 export interface ModalState<C = any, D = any> {
-	// isOpen: boolean;
+	isOpen: boolean;
 	component: Type<C>;
 	data: D;
 	// afterClosed: Observable<any>;

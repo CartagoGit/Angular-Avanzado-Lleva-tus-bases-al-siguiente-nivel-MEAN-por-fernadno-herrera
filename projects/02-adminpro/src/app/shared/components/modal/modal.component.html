@@ -1,4 +1,5 @@
 <div
+	#modal
 	class="modal fade show modal-background animated fadeIn fast"
 	[class.hide]="!modalSvc.isOpen"
 	id="modal-image"
@@ -9,36 +10,36 @@
 >
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
-			<ng-template #modalContent></ng-template>
+			<div class="modal-header">
+				<h4 class="modal-title" id="Modal label">Load image</h4>
+				<button
+					type="button"
+					class="close pointer"
+					data-dismiss="modal"
+					aria-label="Close"
+					(click)="modalSvc.close()"
+				>
+					<span aria-hidden="true">×</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<!-- <div class="form-group">
+				<label for="image">Image</label>
+				<input type="file" class="form-control" id="image" />
+			</div> -->
+				<ng-template #modalContent></ng-template>
+			</div>
+			<div class="modal-footer">
+				<button
+					type="button"
+					class="btn btn-default"
+					data-dismiss="modal"
+					(click)="modalSvc.close()"
+				>
+					Close
+				</button>
+				<button type="button" class="btn btn-primary">Load</button>
+			</div>
 		</div>
 	</div>
 </div>
-<!-- <div class="modal-header">
-	<h4 class="modal-title" id="Modal label">Load image</h4>
-	<button
-		type="button"
-		class="close pointer"
-		data-dismiss="modal"
-		aria-label="Close"
-		(click)="modalSvc.close()"
-	>
-		<span aria-hidden="true">×</span>
-	</button>
-</div>
-<div class="modal-body">
-	<div class="form-group">
-		<label for="image">Image</label>
-		<input type="file" class="form-control" id="image" />
-	</div>
-</div>
-<div class="modal-footer">
-	<button
-		type="button"
-		class="btn btn-default"
-		data-dismiss="modal"
-		(click)="modalSvc.close()"
-	>
-		Close
-	</button>
-	<button type="button" class="btn btn-primary">Load</button>
-</div> -->
