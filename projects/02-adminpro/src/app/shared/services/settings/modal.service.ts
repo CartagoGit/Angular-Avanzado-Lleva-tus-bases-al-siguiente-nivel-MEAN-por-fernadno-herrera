@@ -1,12 +1,14 @@
-import { Injectable, Type, ViewChild, ElementRef } from '@angular/core';
+import { Injectable, Type } from '@angular/core';
 import { createStore } from '../../helpers/store.helper';
 import { ModalComponent } from '../../components/modal/modal.component';
 import { StoreOptions } from '../../interfaces/models/store.interface';
 import { Store } from '../../models/store/store.model';
+import { ModalReturnedAtOpen } from '../../interfaces/models/modal.interface';
 import {
 	ModalOptions,
 	ModalState,
 } from '../../interfaces/models/modal.interface';
+import { Subject } from 'rxjs';
 
 @Injectable({
 	providedIn: 'root',
@@ -49,10 +51,6 @@ export class ModalService {
 		});
 	}
 
-	ngAfterViewInit(): void {
-		// this.modal = new ModalComponent(this);
-	}
-
 	// ANCHOR : Methods
 
 	public assignContainerModal(container: ModalComponent): void {
@@ -66,9 +64,14 @@ export class ModalService {
 	public open<C, D>(
 		component: Type<C>,
 		options?: { data?: D; modalOptions?: ModalOptions }
-	): ModalComponent {
-		this._actualModalStore = this._createModalStore(component, options || {});
-		return this.modal;
+	): ModalReturnedAtOpen {
+		this._createModalStore(component, options || {});
+		const { afterClosedSubject } = this._actualModalState!;
+		return {
+			afterClosed$: afterClosedSubject.asObservable(),
+			close: () => this.close(),
+			modalContainer: this.modal,
+		};
 	}
 
 	/**
@@ -76,6 +79,12 @@ export class ModalService {
 	 * @public
 	 */
 	public close(returnedData?: any): void {
+		if (returnedData) {
+			const { afterClosedSubject } = this._actualModalState!;
+			afterClosedSubject.next(returnedData);
+			afterClosedSubject.complete();
+		}
+		//* Al cerrarse se triggera el observable de isOpen$ y se elimina el modal de la pila
 		this._actualModalStore?.setParam('isOpen', false);
 	}
 
@@ -99,6 +108,7 @@ export class ModalService {
 			component,
 			data,
 			options: modalOptions,
+			afterClosedSubject: new Subject<ModalReturnedAtOpen>(),
 		};
 		const newModalStore = createStore<ModalState<C, D>>(
 			newModalState,

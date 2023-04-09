@@ -19,3 +19,7 @@
 .modal-body {
 	overflow: hidden;
 }
+
+button:focus {
+	outline: none;
+}
