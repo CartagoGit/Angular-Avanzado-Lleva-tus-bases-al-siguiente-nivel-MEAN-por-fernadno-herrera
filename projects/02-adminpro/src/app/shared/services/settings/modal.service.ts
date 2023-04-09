@@ -33,6 +33,10 @@ export class ModalService {
 	get actualModal(): Store<ModalState> | undefined {
 		return this._actualModalStore;
 	}
+	private _actualModalState?: ModalState;
+	get actualModalState(): Readonly<ModalState | undefined> {
+		return this._actualModalState;
+	}
 	get isOpen(): boolean {
 		return this.numActiveModals > 0;
 	}
@@ -71,10 +75,19 @@ export class ModalService {
 	 * ? Metodo para crear un nuevo modal y añadirlo a la pila del store
 	 * @public
 	 */
-	public close(): void {
+	public close(returnedData?: any): void {
 		this._actualModalStore?.setParam('isOpen', false);
 	}
 
+	/**
+	 * ? Metodo para crear un nuevo modal y añadirlo a la pila del store
+	 * @private
+	 * @template C
+	 * @template D
+	 * @param {Type<C>} component
+	 * @param {?{ data?: D; modalOptions?: ModalOptions }} [options]
+	 * @returns {Store<ModalState<C, D>>}
+	 */
 	private _createModalStore<C, D>(
 		component: Type<C>,
 		options?: { data?: D; modalOptions?: ModalOptions }
@@ -91,6 +104,9 @@ export class ModalService {
 			newModalState,
 			this._modalStoreOptions
 		);
+		this._actualModalState = newModalState;
+		this._actualModalStore = newModalStore;
+
 		this.stackStores.setState([
 			...this.stackStores.getState(),
 			newModalStore,
@@ -123,8 +139,13 @@ export class ModalService {
 		state.pop();
 		setState(state);
 		const finalState = getState();
-		if (finalState.length === 0) this._actualModalStore = undefined;
-		else this._actualModalStore = finalState[finalState.length - 1];
+		if (finalState.length === 0) {
+			this._actualModalStore = undefined;
+			this._actualModalState = undefined;
+		} else {
+			this._actualModalStore = finalState[finalState.length - 1];
+			this._actualModalState = this._actualModalStore.getState();
+		}
 	}
 
 	/**
@@ -134,12 +155,10 @@ export class ModalService {
 	 */
 	private _getDefaultModalOptions(): ModalOptions {
 		return {
-
 			hasDefaultHeader: true,
 
 			hasDefaultFooter: false,
 			closeOnOutsideClick: true,
-
 		};
 	}
 }

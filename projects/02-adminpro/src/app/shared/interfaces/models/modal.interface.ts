@@ -14,6 +14,7 @@ export interface ModalState<C = any, D = any> {
 	component: Type<C>;
 	data: D;
 	options: ModalOptions;
+	
 	// afterClosed: Observable<any>;
 }
 

@@ -62,9 +62,10 @@ export class ModalComponent {
 	 * @public
 	 */
 	public close(): void {
-		this.modalSvc.close();
+		if (this.componentRef?.instance?.close)
+			this.componentRef.instance.close();
+		else this.modalSvc.close();
 	}
-
 
 	/**
 	 * ? Cierra el modal al hacer click fuera del modal si la opcion esta activada
