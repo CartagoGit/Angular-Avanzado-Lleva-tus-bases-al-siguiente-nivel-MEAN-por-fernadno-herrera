@@ -1,8 +1,6 @@
 import {
 	Component,
-	ComponentFactoryResolver,
 	ComponentRef,
-	Type,
 	ViewChild,
 	ViewContainerRef,
 } from '@angular/core';
@@ -25,6 +23,7 @@ export class ModalComponent {
 	constructor(public modalSvc: ModalService) {}
 
 	ngAfterViewInit(): void {
+		// * Asigna el contenedor del modal al servicio
 		this.modalSvc.assignContainerModal(this);
 	}
 

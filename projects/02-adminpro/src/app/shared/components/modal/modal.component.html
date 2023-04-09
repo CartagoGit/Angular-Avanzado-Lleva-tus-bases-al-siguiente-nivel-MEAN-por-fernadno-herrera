@@ -2,7 +2,7 @@
 	#modal
 	class="modal fade show modal-background animated fadeIn fast"
 	[class.hide]="!modalSvc.isOpen"
-	id="modal-image"
+	id="modal"
 	tabindex="-1"
 	role="dialog"
 	aria-labelledby="Modal label"
@@ -23,10 +23,6 @@
 				</button>
 			</div>
 			<div class="modal-body">
-				<!-- <div class="form-group">
-				<label for="image">Image</label>
-				<input type="file" class="form-control" id="image" />
-			</div> -->
 				<ng-template #modalContent></ng-template>
 			</div>
 			<div class="modal-footer">

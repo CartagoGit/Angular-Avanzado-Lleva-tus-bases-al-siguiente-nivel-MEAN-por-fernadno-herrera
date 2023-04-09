@@ -1,8 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
-
-
 /**
  * ? Sanitiza una url para rutas de imagenes
  * @export
@@ -15,9 +13,8 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 })
 export class SanitizerPipe implements PipeTransform {
 	constructor(private _sanitized: DomSanitizer) {}
-	transform(value: string): SafeUrl | string {
-		if (!value) return value;
-		
+	transform(value?: string): SafeUrl | string {
+		if (!value) return '';
 		return this._sanitized.bypassSecurityTrustUrl(value);
 	}
 }

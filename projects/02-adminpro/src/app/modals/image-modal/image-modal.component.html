@@ -1,1 +1,9 @@
-<p>image-modal works!</p>
+<div class="form-group">
+	<div class="image-modal">
+		<img [src]="data.dataImages?.defaultImgSrc | safe" alt="image selected" />
+	</div>
+	<div class="input-image-modal">
+		<label for="image">Image</label>
+		<input type="file" class="form-control" id="image" />
+	</div>
+</div>

@@ -8,8 +8,18 @@ import { FooterTableComponent } from './footer-table/footer-table.component';
 import { ModalComponent } from './modal/modal.component';
 
 @NgModule({
-  declarations: [IncrementInputComponent, DonaComponent, FooterTableComponent, ModalComponent ],
-  imports: [CommonModule, FormsModule , NgChartsModule],
-  exports: [IncrementInputComponent, DonaComponent, FooterTableComponent, ModalComponent ],
+	declarations: [
+		IncrementInputComponent,
+		DonaComponent,
+		FooterTableComponent,
+		ModalComponent,
+	],
+	imports: [CommonModule, FormsModule, NgChartsModule],
+	exports: [
+		IncrementInputComponent,
+		DonaComponent,
+		FooterTableComponent,
+		ModalComponent,
+	],
 })
 export class ComponentsModule {}
