@@ -13,7 +13,19 @@ export interface ModalState<C = any, D = any> {
 	isOpen: boolean;
 	component: Type<C>;
 	data: D;
+	options: ModalOptions;
 	// afterClosed: Observable<any>;
 }
+
+export interface ModalOptions {
+	hasDefaultHeader?: boolean;
+	hasDefaultFooter?: boolean;
+	closeOnOutsideClick?: boolean;
+	defaultButtons? : ModalButton[];
+}
+
+export interface ModalButton {
+}
+
 
 //

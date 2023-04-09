@@ -10,7 +10,6 @@ import { minTimeBeforeLoader } from '../../../shared/constants/time.constants';
 import { StateService } from '../../../shared/services/settings/state.service';
 import { DefaultErrorResponse } from '../../../shared/interfaces/http/response.interfaces';
 import { ModalService } from '../../../shared/services/settings/modal.service';
-import { ModalComponent } from '../../../shared/components/modal/modal.component';
 import { ImageModalComponent } from '../../../modals/image-modal/image-modal.component';
 
 @Component({

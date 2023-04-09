@@ -3,7 +3,10 @@ import { createStore } from '../../helpers/store.helper';
 import { ModalComponent } from '../../components/modal/modal.component';
 import { StoreOptions } from '../../interfaces/models/store.interface';
 import { Store } from '../../models/store/store.model';
-import { ModalState } from '../../interfaces/models/modal.interface';
+import {
+	ModalOptions,
+	ModalState,
+} from '../../interfaces/models/modal.interface';
 
 @Injectable({
 	providedIn: 'root',
@@ -58,10 +61,9 @@ export class ModalService {
 	 */
 	public open<C, D>(
 		component: Type<C>,
-		options?: { data?: D }
+		options?: { data?: D; modalOptions?: ModalOptions }
 	): ModalComponent {
-		const { data } = options || {};
-		this._actualModalStore = this._createModalStore(component, data || {});
+		this._actualModalStore = this._createModalStore(component, options || {});
 		return this.modal;
 	}
 
@@ -75,12 +77,15 @@ export class ModalService {
 
 	private _createModalStore<C, D>(
 		component: Type<C>,
-		data: D
+		options?: { data?: D; modalOptions?: ModalOptions }
 	): Store<ModalState<C, D>> {
+		const { data = {} as D, modalOptions = this._getDefaultModalOptions() } =
+			options || {};
 		const newModalState: ModalState<C, D> = {
 			isOpen: true,
 			component,
 			data,
+			options: modalOptions,
 		};
 		const newModalStore = createStore<ModalState<C, D>>(
 			newModalState,
@@ -120,5 +125,21 @@ export class ModalService {
 		const finalState = getState();
 		if (finalState.length === 0) this._actualModalStore = undefined;
 		else this._actualModalStore = finalState[finalState.length - 1];
+	}
+
+	/**
+	 * ? Metodo para obtener las opciones por defecto del modal
+	 * @private
+	 * @returns {ModalOptions}
+	 */
+	private _getDefaultModalOptions(): ModalOptions {
+		return {
+
+			hasDefaultHeader: true,
+
+			hasDefaultFooter: false,
+			closeOnOutsideClick: true,
+
+		};
 	}
 }
