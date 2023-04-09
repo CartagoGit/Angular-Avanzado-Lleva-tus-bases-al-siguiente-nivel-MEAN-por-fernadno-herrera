@@ -11,21 +11,16 @@ import { ModalService } from '../../shared/services/settings/modal.service';
 	imports: [PipesModule],
 })
 export class ImageModalComponent {
+	//* se recupera al crear la instancia del modal
 	public data: User = {} as User;
-	constructor(private modalSvc: ModalService) {
-		console.log(0, this.data);
-	}
+	constructor(private _modalSvc: ModalService) {}
+
 	ngOnInit(): void {
-		console.log(1, this.data);
-	}
-	ngAfterViewInit(): void {
-		console.log(2, this.data);
+
+
 	}
 
 	public close(): void {
-		console.log(3, this.data);
-		console.log('jauri');
-		this.modalSvc.close();
-
+		this._modalSvc.close({ jauri: 'kiki' });
 	}
 }

@@ -137,13 +137,12 @@ export class UsersComponent {
 						);
 						this.loadUsers({ obleyLoad: true });
 					},
-					error: (err : DefaultErrorResponse) => {
+					error: (err: DefaultErrorResponse) => {
 						this._sweetAlertService.alertError(err.error_message);
 					},
 				});
 			});
 	}
-
 
 	/**
 	 * ? Cambia el rol de un usuario
@@ -164,13 +163,15 @@ export class UsersComponent {
 		});
 	}
 
-
 	/**
 	 * ? Abre el modal para ver la imagen de un usuario
 	 * @public
 	 * @param {User} user
 	 */
 	public clickImage(user: User) {
-		this._modalSvc.open(ImageModalComponent, {data: user});
+		const modalRef = this._modalSvc.open(ImageModalComponent, { data: user });
+		modalRef.afterClosed$.subscribe((res) => {
+			console.log(res);
+		});
 	}
 }
