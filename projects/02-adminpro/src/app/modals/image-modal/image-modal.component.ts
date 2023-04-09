@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { User } from '../../shared/models/mongo-models/user.model';
 import { PipesModule } from '../../shared/pipes/pipes.module';
+import { ModalService } from '../../shared/services/settings/modal.service';
 
 @Component({
 	selector: 'app-image-modal',
@@ -11,7 +12,7 @@ import { PipesModule } from '../../shared/pipes/pipes.module';
 })
 export class ImageModalComponent {
 	public data: User = {} as User;
-	constructor() {
+	constructor(private modalSvc: ModalService) {
 		console.log(0, this.data);
 	}
 	ngOnInit(): void {
@@ -24,5 +25,7 @@ export class ImageModalComponent {
 	public close(): void {
 		console.log(3, this.data);
 		console.log('jauri');
+		this.modalSvc.close();
+
 	}
 }

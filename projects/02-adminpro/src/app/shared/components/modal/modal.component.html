@@ -1,5 +1,5 @@
 <div
-	#backdrop
+	#modal
 	class="modal fade show modal-background animated fadeIn fast"
 	[class.hide]="!modalSvc.isOpen"
 	id="modal"
@@ -7,12 +7,16 @@
 	role="dialog"
 	aria-labelledby="Modal label"
 	style="display: block"
-	(click)="options?.closeOnOutsideClick ? clickBackdrop($event) : null"
-	>
+>
 	<!-- (click)="prueba($event)" -->
-	<div class="modal-container" role="document">
+	<div
+		#backdrop
+		class="modal-container"
+		role="document"
+		(click)="options?.closeOnOutsideClick ? clickBackdrop($event) : null"
+	>
 		<div class="modal-content">
-			<div class="modal-header"  *ngIf="options?.hasDefaultHeader">
+			<div class="modal-header" *ngIf="options?.hasDefaultHeader">
 				<h4 class="modal-title" id="Modal label">Load image</h4>
 				<button
 					type="button"

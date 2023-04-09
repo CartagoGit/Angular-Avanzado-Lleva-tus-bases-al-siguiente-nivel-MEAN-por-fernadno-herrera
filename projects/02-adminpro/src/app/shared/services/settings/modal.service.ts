@@ -157,7 +157,7 @@ export class ModalService {
 		return {
 			hasDefaultHeader: true,
 
-			hasDefaultFooter: false,
+			hasDefaultFooter: true,
 			closeOnOutsideClick: true,
 		};
 	}
