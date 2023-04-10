@@ -1,4 +1,5 @@
 import { ImageAdd } from './images.model';
+import { ModelClassMongo } from '../../../interfaces/models.interface';
 
 /**
  * ? Props base que reciben todos los modelos de mongo
@@ -12,7 +13,7 @@ export interface BaseModelsProps {
 	id: string;
 	user_creator: string;
 	user_modifier: string;
-	typeModel: 'User' | 'Hospital' | 'Doctor';
+	typeModel: ModelClassMongo;
 }
 
 /**
