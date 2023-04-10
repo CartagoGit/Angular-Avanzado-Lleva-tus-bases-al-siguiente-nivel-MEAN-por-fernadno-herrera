@@ -169,7 +169,10 @@ export class UsersComponent {
 	 * @param {User} user
 	 */
 	public clickImage(user: User) {
-		const modalRef = this._modalSvc.open(ImageModalComponent, { data: user });
+		const modalRef = this._modalSvc.open(ImageModalComponent, {
+			data: user,
+			modalOptions: { hasDefaultFooter: false, closeOnOutsideClick: false },
+		});
 		modalRef.afterClosed$.subscribe((res) => {
 			console.log(res);
 		});

@@ -101,8 +101,12 @@ export class ModalService {
 		component: Type<C>,
 		options?: { data?: D; modalOptions?: ModalOptions }
 	): Store<ModalState<C, D>> {
-		const { data = {} as D, modalOptions = this._getDefaultModalOptions() } =
-			options || {};
+		let { data = {} as D, modalOptions = {} } = options || {};
+		modalOptions = {
+			...this._getDefaultModalOptions(),
+			...modalOptions,
+		};
+		console.log('❗modalOptions ➽ ⏩', modalOptions);
 		const newModalState: ModalState<C, D> = {
 			isOpen: true,
 			component,
@@ -166,7 +170,6 @@ export class ModalService {
 	private _getDefaultModalOptions(): ModalOptions {
 		return {
 			hasDefaultHeader: true,
-
 			hasDefaultFooter: true,
 			closeOnOutsideClick: true,
 		};

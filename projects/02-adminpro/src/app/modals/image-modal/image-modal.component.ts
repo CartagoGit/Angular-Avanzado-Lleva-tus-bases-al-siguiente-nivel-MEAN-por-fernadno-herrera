@@ -15,10 +15,7 @@ export class ImageModalComponent {
 	public data: User = {} as User;
 	constructor(private _modalSvc: ModalService) {}
 
-	ngOnInit(): void {
-
-
-	}
+	ngOnInit(): void {}
 
 	public close(): void {
 		this._modalSvc.close({ jauri: 'kiki' });
