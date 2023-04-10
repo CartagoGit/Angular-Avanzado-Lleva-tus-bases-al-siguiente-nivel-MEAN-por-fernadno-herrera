@@ -50,6 +50,12 @@
 			'btn-danger': isUserAndGoogle
 		}"
 	>
-		{{ isUserAndGoogle ? 'Google user' : 'Change' }}
+		{{
+			isUserAndGoogle
+				? 'Google user'
+				: !image.url
+				? 'Select an Image'
+				: 'Change'
+		}}
 	</button>
 </div>
