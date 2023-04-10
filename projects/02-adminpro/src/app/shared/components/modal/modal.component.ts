@@ -48,7 +48,6 @@ export class ModalComponent {
 		if (!this.content) return false;
 		const { component, data, options } = state;
 		this.options = options;
-		console.log("❗options ➽ ⏩" , options);
 		this.content.clear();
 		this.componentRef = this.content.createComponent(component);
 		if (this.componentRef?.instance?.data)
@@ -74,7 +73,7 @@ export class ModalComponent {
 	 * @param {MouseEvent} event
 	 */
 	public clickBackdrop(event: MouseEvent): void {
-		console.log("❗clickBackdrop  ➽ clickBackdrop ➽ ⏩" );
+		console.log('❗clickBackdrop  ➽ clickBackdrop ➽ ⏩');
 		const clickedElement = event.target as HTMLElement;
 		const closestDiv = clickedElement.closest('div');
 		const containerDiv = this.backdrop?.nativeElement;

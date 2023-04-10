@@ -171,7 +171,10 @@ export class UsersComponent {
 	public clickImage(user: User) {
 		const modalRef = this._modalSvc.open(ImageModalComponent, {
 			data: user,
-			modalOptions: { hasDefaultFooter: false, closeOnOutsideClick: false },
+			modalOptions: {
+				// hasDefaultFooter: false,
+				title: 'Choose an image to change it',
+			},
 		});
 		modalRef.afterClosed$.subscribe((res) => {
 			console.log(res);

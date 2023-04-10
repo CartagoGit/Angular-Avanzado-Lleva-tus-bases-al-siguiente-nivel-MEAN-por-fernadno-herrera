@@ -23,13 +23,11 @@ export class ModalService {
 		allowDeepChanges: false,
 	});
 	get numActiveModals(): number {
-		return this._activeModals.length;
+		return this._stackModals.length;
 	}
-	private _activeModals: Store<ModalState>[] = [];
-	get activeModals(): ReadonlyArray<Store<ModalState>[]> {
-		return this._activeModals as unknown as ReadonlyArray<
-			Store<ModalState>[]
-		>;
+	private _stackModals: Store<ModalState>[] = [];
+	get stackModals(): ReadonlyArray<Store<ModalState>[]> {
+		return this._stackModals as unknown as ReadonlyArray<Store<ModalState>[]>;
 	}
 	private _actualModalStore?: Store<ModalState>;
 	get actualModal(): Store<ModalState> | undefined {
@@ -46,13 +44,17 @@ export class ModalService {
 	// ANCHOR : Constructor
 	constructor() {
 		this.stackStores.state$.subscribe((stack) => {
-			this._activeModals = stack;
-			console.log('subscribe ➽ ⏩', stack);
+			this._stackModals = stack;
 		});
 	}
 
 	// ANCHOR : Methods
 
+	/**
+	 * ? Asigna el componente que es el contenedor del modal
+	 * @public
+	 * @param {ModalComponent} container
+	 */
 	public assignContainerModal(container: ModalComponent): void {
 		this.modal = container;
 	}
@@ -106,7 +108,7 @@ export class ModalService {
 			...this._getDefaultModalOptions(),
 			...modalOptions,
 		};
-		console.log('❗modalOptions ➽ ⏩', modalOptions);
+
 		const newModalState: ModalState<C, D> = {
 			isOpen: true,
 			component,
@@ -172,6 +174,7 @@ export class ModalService {
 			hasDefaultHeader: true,
 			hasDefaultFooter: true,
 			closeOnOutsideClick: true,
+			title: '',
 		};
 	}
 }

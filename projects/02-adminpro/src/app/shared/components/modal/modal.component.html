@@ -1,6 +1,6 @@
 <div
 	#modal
-	class="modal fade show modal-background animated fadeIn fast"
+	class="modal fade show modal__background animated fadeIn fast"
 	[class.hide]="!modalSvc.isOpen"
 	id="modal"
 	tabindex="-1"
@@ -11,13 +11,13 @@
 	<!-- (click)="prueba($event)" -->
 	<div
 		#backdrop
-		class="modal-container"
+		class="modal__container"
 		role="document"
 		(click)="options?.closeOnOutsideClick ? clickBackdrop($event) : null"
 	>
-		<div class="modal-content">
-			<div class="modal-header" *ngIf="options?.hasDefaultHeader">
-				<h4 class="modal-title" id="Modal label">Load image</h4>
+		<div class="modal__content">
+			<div class="modal__default--header" *ngIf="options?.hasDefaultHeader">
+				<h4 class="modal-title" id="Modal label">{{ options?.title }}</h4>
 				<button
 					type="button"
 					class="close pointer"
@@ -28,10 +28,16 @@
 					<span aria-hidden="true">×</span>
 				</button>
 			</div>
-			<div class="modal-body">
+			<div
+				class="modal__default--body"
+				[ngClass]="{
+					'modal__component-container':
+						!options?.hasDefaultFooter || !options?.hasDefaultHeader
+				}"
+			>
 				<ng-template #modalContent></ng-template>
 			</div>
-			<div class="modal-footer" *ngIf="options?.hasDefaultFooter">
+			<div class="modal__default--footer" *ngIf="options?.hasDefaultFooter">
 				<button
 					type="button"
 					class="btn btn-default"

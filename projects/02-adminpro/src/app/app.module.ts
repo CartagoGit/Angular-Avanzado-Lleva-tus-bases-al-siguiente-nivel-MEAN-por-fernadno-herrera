@@ -17,6 +17,7 @@ import { SharedModule } from './shared/shared.module';
 
 // Componentes
 import { AppComponent } from './app.component';
+import { ModalsModule } from './modals/modals.module';
 
 @NgModule({
 	declarations: [AppComponent],
@@ -26,6 +27,7 @@ import { AppComponent } from './app.component';
 		HttpClientModule,
 		CoreModule,
 		SharedModule,
+		ModalsModule
 	],
 	providers: [
 		{

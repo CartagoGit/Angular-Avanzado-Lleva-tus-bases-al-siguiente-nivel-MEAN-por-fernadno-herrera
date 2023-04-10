@@ -25,6 +25,7 @@ export interface ModalState<C = any, D = any> {
  * @typedef {ModalOptions}
  */
 export interface ModalOptions {
+	title?: string;
 	hasDefaultHeader?: boolean;
 	hasDefaultFooter?: boolean;
 	closeOnOutsideClick?: boolean;
