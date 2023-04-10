@@ -172,7 +172,7 @@ export class UsersComponent {
 		const modalRef = this._modalSvc.open(ImageModalComponent, {
 			data: user,
 			modalOptions: {
-				// hasDefaultFooter: false,
+				hasDefaultFooter: false,
 				title: 'Choose an image to change it',
 			},
 		});

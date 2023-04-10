@@ -62,6 +62,7 @@ Global Styles
 @import url(./global/global.css);
 @import url(./global/modal.css);
 @import url(./global/table.css);
+@import url(./global/input-file.css);
 
 * {
 	outline: none;

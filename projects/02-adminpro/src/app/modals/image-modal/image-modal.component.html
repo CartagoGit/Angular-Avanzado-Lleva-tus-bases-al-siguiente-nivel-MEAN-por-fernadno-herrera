@@ -1,9 +1,54 @@
-<div class="form-group">
-	<div class="image-modal">
-		<img [src]="data.dataImages?.defaultImgSrc | safe" alt="image selected" />
+<div class="modal__body">
+	<div class="form-group">
+		<div class="image-modal">
+			<img
+				[src]="image.url || user.dataImages?.defaultImgSrc | safe"
+				alt="image selected"
+			/>
+		</div>
+		<div
+			class="input-file"
+			[title]="image.name"
+			[ngClass]="{ disabled: user.google }"
+		>
+			<input
+				#inputHiddenFile
+				type="file"
+				(change)="changeImage($event)"
+				accept=".jpg, .jpeg, .png, .gif, .bmp, .tif, .tiff|images/*"
+				class="pointer"
+				hidden="true"
+			/>
+
+			<button
+				[disabled]="user.google"
+				type="button"
+				class="btn btn-inverse fake-image-button"
+				(click)="inputHiddenFile.click()"
+			>
+				<i class="fa fa-upload"></i><span class="m-l-5">Upload</span>
+			</button>
+			<div
+				class="file-name form-control ellipsis pointer"
+				(click)="!user.google && inputHiddenFile.click()"
+			>
+				{{ image.name || 'Actual profile image' }}
+			</div>
+		</div>
 	</div>
-	<div class="input-image-modal">
-		<label for="image">Image</label>
-		<input type="file" class="form-control" id="image" />
-	</div>
+</div>
+<div class="modal__footer">
+	<button type="button" class="btn btn-default" (click)="close()">
+		Close
+	</button>
+	<button
+		type="button"
+		class="btn btn-primary"
+		[ngClass]="{
+			disabled: !image.url || user.google,
+			'btn-danger': user.google
+		}"
+	>
+		{{ user.google ? 'Google user' : 'Change' }}
+	</button>
 </div>
