@@ -37,6 +37,8 @@ export class User extends BaseModels<UserProps> implements UserProps {
 	//* Para usar desde el front
 	public password?: string;
 
+	public readonly typeModel = 'User';
+
 	// ANCHOR - Constructor
 	constructor(props: UserProps) {
 		super(props);

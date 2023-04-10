@@ -2,14 +2,14 @@
 	<div class="form-group">
 		<div class="image-modal">
 			<img
-				[src]="image.url || user.dataImages?.defaultImgSrc | safe"
+				[src]="image.url || data.dataImages?.defaultImgSrc | safe"
 				alt="image selected"
 			/>
 		</div>
 		<div
 			class="input-file"
 			[title]="image.name"
-			[ngClass]="{ disabled: user.google }"
+			[ngClass]="{ disabled: isUserAndGoogle }"
 		>
 			<input
 				#inputHiddenFile
@@ -21,7 +21,7 @@
 			/>
 
 			<button
-				[disabled]="user.google"
+				[disabled]="isUserAndGoogle"
 				type="button"
 				class="btn btn-inverse fake-image-button"
 				(click)="inputHiddenFile.click()"
@@ -30,7 +30,7 @@
 			</button>
 			<div
 				class="file-name form-control ellipsis pointer"
-				(click)="!user.google && inputHiddenFile.click()"
+				(click)="!isUserAndGoogle && inputHiddenFile.click()"
 			>
 				{{ image.name || 'Actual profile image' }}
 			</div>
@@ -44,12 +44,12 @@
 	<button
 		type="button"
 		class="btn btn-primary"
-		(click)="image.url && !user.google && updateImageProfile()"
+		(click)="image.url && !isUserAndGoogle && updateImage()"
 		[ngClass]="{
-			disabled: !image.url || user.google,
-			'btn-danger': user.google
+			disabled: !image.url || isUserAndGoogle,
+			'btn-danger': isUserAndGoogle
 		}"
 	>
-		{{ user.google ? 'Google user' : 'Change' }}
+		{{ isUserAndGoogle ? 'Google user' : 'Change' }}
 	</button>
 </div>

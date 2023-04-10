@@ -1,6 +1,5 @@
 import { BaseModels, BaseModelsProps } from './adds/base-models.model';
 
-
 /**
  * ? Propiedades que recibe el Modelo de Hospitales a recibir desde el back
  * @export
@@ -27,6 +26,7 @@ export class Hospital
 	// ANCHOR : Variables
 	public images!: string[];
 	public name!: string;
+	public readonly typeModel = 'Hospital';
 
 	// ANCHOR : Constructor
 	constructor(props: HospitalProps) {

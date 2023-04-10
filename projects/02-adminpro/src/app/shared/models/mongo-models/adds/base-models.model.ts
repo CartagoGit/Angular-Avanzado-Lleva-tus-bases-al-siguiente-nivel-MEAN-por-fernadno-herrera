@@ -12,6 +12,7 @@ export interface BaseModelsProps {
 	id: string;
 	user_creator: string;
 	user_modifier: string;
+	typeModel: 'User' | 'Hospital' | 'Doctor';
 }
 
 /**
@@ -21,7 +22,9 @@ export interface BaseModelsProps {
  * @typedef {BaseModels}
  * @template ModelProps
  */
-export class BaseModels<ModelProps extends {}> implements BaseModelsProps {
+export class BaseModels<ModelProps extends {} = {}>
+	implements Omit<BaseModelsProps, 'typeModel'>
+{
 	// ANCHOR : Variables
 	//* Desde el back
 	public readonly id!: string;

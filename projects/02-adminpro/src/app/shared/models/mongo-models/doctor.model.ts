@@ -31,6 +31,8 @@ export class Doctor extends BaseModels<DoctorProps> implements DoctorProps {
 	public hospitals!: Hospital[];
 	public patients!: User[];
 
+	public readonly typeModel = 'Doctor';
+
 
 	// ANCHOR : Constructor
 	constructor(props: DoctorProps) {

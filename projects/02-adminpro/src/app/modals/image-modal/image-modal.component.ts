@@ -1,9 +1,17 @@
 import { Component } from '@angular/core';
 import { DefaultErrorResponse } from '../../shared/interfaces/http/response.interfaces';
-import { User } from '../../shared/models/mongo-models/user.model';
 import { ModalService } from '../../shared/services/settings/modal.service';
 import { FilesService } from '../../shared/services/http/files.service';
 import { SweetAlertService } from '../../shared/services/helpers/sweet-alert.service';
+import { BaseModels } from '../../shared/models/mongo-models/adds/base-models.model';
+import { User } from '../../shared/models/mongo-models/user.model';
+import { isUser } from '../../shared/helpers/models.helpers';
+import { Hospital } from '../../shared/models/mongo-models/hospital.model';
+import { Doctor } from '../../shared/models/mongo-models/doctor.model';
+import {
+	ModelsMongo,
+	ModelClassMongo,
+} from '../../shared/interfaces/models.interface';
 
 @Component({
 	selector: 'app-image-modal',
@@ -12,11 +20,12 @@ import { SweetAlertService } from '../../shared/services/helpers/sweet-alert.ser
 	// standalone: true,
 	// imports: [PipesModule],
 })
-export class ImageModalComponent {
+export class ImageModalComponent<Model extends User | Hospital | Doctor> {
 	// ANCHOR : Variables
 	//!! La data se recupera y es un parametro exclusivo al crear la instancia del modal
-	public data: User = {} as User;
-	public user: User = {} as User;
+	public data = {} as Model;
+
+	public isUserAndGoogle: boolean = false;
 
 	public image: { name: string; file?: File; url?: string } = {
 		name: '',
@@ -31,7 +40,9 @@ export class ImageModalComponent {
 	) {}
 
 	ngOnInit(): void {
-		this.user = this.data;
+		// !! Aqui ya habria entrado la data
+		// this.user = this.data;
+		this.isUserAndGoogle = isUser(this.data) && this.data.google;
 	}
 
 	// ANCHOR : Methods
@@ -72,21 +83,34 @@ export class ImageModalComponent {
 	 * ? Actualiza la imagen del perfil
 	 * @public
 	 */
-	public updateImageProfile(): void {
-		if (!this.image.name || this.user.google) return;
+	public updateImage(): void {
+		if (!this.image.name || this.isUserAndGoogle) return;
+
+		const typeModels: Record<ModelClassMongo, ModelsMongo> = {
+			User: 'users',
+			Hospital: 'hospitals',
+			Doctor: 'doctors',
+		};
+
+		if (!typeModels[this.data.typeModel]) {
+			return console.error(
+				'No se encontro el tipo de modelo en el objeto typeModels'
+			);
+		}
+		const typeModel = typeModels[this.data.typeModel];
 
 		const images = this._images;
 		if (!images || !Array.isArray(images) || images.length === 0) return;
 		this._filesSvc
 			.uploadFile({
 				filesToUpload: images!,
-				id: this.user.id,
+				id: this.data.id,
 				typeFile: 'images',
-				typeModel: 'users',
+				typeModel,
 			})
 			.subscribe({
 				next: (resp) => {
-					this.user.updateOnlyImages({ images: resp.filesRoute });
+					this.data.updateOnlyImages({ images: resp.filesRoute });
 					this._sweetAlertSvc.alertSuccess('Image updated');
 					this.image = { name: '' };
 					this._images = [];

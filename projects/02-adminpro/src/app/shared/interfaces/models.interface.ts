@@ -4,6 +4,9 @@ export const modelMongo = ['user', 'hospital', 'doctor'] as const;
 //* Tipado de los modelos de la base de datos
 export type ModelMongo = (typeof modelMongo)[number];
 
+//* Tipado de las clases de los modelos de la base de datos
+export type ModelClassMongo = Capitalize<ModelMongo>
+
 //* Array con los posibles modelos de la base de datos en plural
 export const modelsMongo: `${ModelMongo}s`[] = modelMongo.map(
 	(model) => `${model}s` as `${ModelMongo}s`
