@@ -23,9 +23,7 @@ export interface BaseModelsProps {
  * @typedef {BaseModels}
  * @template ModelProps
  */
-export class BaseModels<ModelProps extends {} = {}>
-	implements Omit<BaseModelsProps, 'typeModel'>
-{
+export class BaseModels<ModelProps extends {} = {}> implements BaseModelsProps {
 	// ANCHOR : Variables
 	//* Desde el back
 	public readonly id!: string;
@@ -33,6 +31,7 @@ export class BaseModels<ModelProps extends {} = {}>
 	public readonly user_modifier!: string;
 	public readonly createdAt!: Date;
 	public readonly updatedAt!: Date;
+	public readonly typeModel!: ModelClassMongo;
 
 	//* Para usar desde el front
 	protected _dataImages?: ImageAdd;

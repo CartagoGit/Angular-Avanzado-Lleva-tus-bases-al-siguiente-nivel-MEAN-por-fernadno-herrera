@@ -1,4 +1,3 @@
-
 import { BaseModels, BaseModelsProps } from './adds/base-models.model';
 import { Hospital } from './hospital.model';
 import { User } from './user.model';
@@ -24,18 +23,14 @@ export interface DoctorProps extends BaseModelsProps {
  * @implements {DoctorProps}
  */
 export class Doctor extends BaseModels<DoctorProps> implements DoctorProps {
-
 	// ANCHOR : Variables
 	public images!: string[];
 	public user!: User;
 	public hospitals!: Hospital[];
 	public patients!: User[];
 
-	public readonly typeModel = 'Doctor';
-
-
 	// ANCHOR : Constructor
 	constructor(props: DoctorProps) {
-		super(props)
+		super({ ...props, typeModel: 'Doctor' });
 	}
 }

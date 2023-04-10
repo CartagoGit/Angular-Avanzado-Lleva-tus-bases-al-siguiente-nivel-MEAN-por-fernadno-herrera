@@ -26,10 +26,10 @@ export class Hospital
 	// ANCHOR : Variables
 	public images!: string[];
 	public name!: string;
-	public readonly typeModel = 'Hospital';
+
 
 	// ANCHOR : Constructor
 	constructor(props: HospitalProps) {
-		super(props);
+		super({...props, typeModel: 'Hospital'});
 	}
 }
