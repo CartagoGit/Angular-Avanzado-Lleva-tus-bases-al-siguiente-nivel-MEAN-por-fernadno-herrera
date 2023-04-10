@@ -44,6 +44,7 @@
 	<button
 		type="button"
 		class="btn btn-primary"
+		(click)="image.url && !user.google && updateImageProfile()"
 		[ngClass]="{
 			disabled: !image.url || user.google,
 			'btn-danger': user.google

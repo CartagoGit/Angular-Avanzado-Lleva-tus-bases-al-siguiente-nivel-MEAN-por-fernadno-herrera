@@ -121,6 +121,7 @@ export class ProfileComponent {
 			.files;
 		if (!filesList || !filesList[0]) {
 			this.image = { name: '' };
+			this.profileForm.get('images')!.setValue(Array.from([]));
 			return;
 		}
 

@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
+import { DefaultErrorResponse } from '../../shared/interfaces/http/response.interfaces';
 import { User } from '../../shared/models/mongo-models/user.model';
 import { ModalService } from '../../shared/services/settings/modal.service';
+import { FilesService } from '../../shared/services/http/files.service';
+import { SweetAlertService } from '../../shared/services/helpers/sweet-alert.service';
 
 @Component({
 	selector: 'app-image-modal',
@@ -18,9 +21,14 @@ export class ImageModalComponent {
 	public image: { name: string; file?: File; url?: string } = {
 		name: '',
 	};
+	private _images: File[] = [];
 
 	// ANCHOR : Constructor
-	constructor(private _modalSvc: ModalService) {}
+	constructor(
+		private _modalSvc: ModalService,
+		private _filesSvc: FilesService,
+		private _sweetAlertSvc: SweetAlertService
+	) {}
 
 	ngOnInit(): void {
 		this.user = this.data;
@@ -47,6 +55,7 @@ export class ImageModalComponent {
 			.files;
 		if (!filesList || !filesList[0]) {
 			this.image = { name: '' };
+			this._images = [];
 			return;
 		}
 
@@ -56,5 +65,35 @@ export class ImageModalComponent {
 			name: filesList[0].name,
 			url: URL.createObjectURL(filesList[0]),
 		};
+		this._images = Array.from(filesList);
+	}
+
+	/**
+	 * ? Actualiza la imagen del perfil
+	 * @public
+	 */
+	public updateImageProfile(): void {
+		if (!this.image.name || this.user.google) return;
+
+		const images = this._images;
+		if (!images || !Array.isArray(images) || images.length === 0) return;
+		this._filesSvc
+			.uploadFile({
+				filesToUpload: images!,
+				id: this.user.id,
+				typeFile: 'images',
+				typeModel: 'users',
+			})
+			.subscribe({
+				next: (resp) => {
+					this.user.updateOnlyImages({ images: resp.filesRoute });
+					this._sweetAlertSvc.alertSuccess('Image updated');
+					this.image = { name: '' };
+					this._images = [];
+				},
+				error: (error: DefaultErrorResponse) => {
+					this._sweetAlertSvc.alertError(error.error_message);
+				},
+			});
 	}
 }
