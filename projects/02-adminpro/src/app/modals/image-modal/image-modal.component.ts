@@ -14,7 +14,7 @@ import { SweetAlertService } from '../../shared/services/helpers/sweet-alert.ser
 })
 export class ImageModalComponent {
 	// ANCHOR : Variables
-	//* se recupera al crear la instancia del modal
+	//!! La data se recupera y es un parametro exclusivo al crear la instancia del modal
 	public data: User = {} as User;
 	public user: User = {} as User;
 
@@ -40,9 +40,9 @@ export class ImageModalComponent {
 	 * ? Cierra el modal
 	 * @public
 	 */
-	public close(): void {
+	public close(data?: any): void {
 		// this._modalSvc.close({ algo: 'de vuelta' });
-		this._modalSvc.close();
+		this._modalSvc.close(data);
 	}
 
 	/**
@@ -90,6 +90,7 @@ export class ImageModalComponent {
 					this._sweetAlertSvc.alertSuccess('Image updated');
 					this.image = { name: '' };
 					this._images = [];
+					this.close();
 				},
 				error: (error: DefaultErrorResponse) => {
 					this._sweetAlertSvc.alertError(error.error_message);

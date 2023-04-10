@@ -156,6 +156,7 @@ export class ModalService {
 		setState(state);
 		const finalState = getState();
 		if (finalState.length === 0) {
+			this.modal.removeChildComponent();
 			this._actualModalStore = undefined;
 			this._actualModalState = undefined;
 		} else {

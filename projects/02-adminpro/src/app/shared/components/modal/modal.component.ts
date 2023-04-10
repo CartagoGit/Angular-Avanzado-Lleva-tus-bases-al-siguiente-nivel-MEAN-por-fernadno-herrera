@@ -50,11 +50,21 @@ export class ModalComponent {
 		this.options = options;
 		this.content.clear();
 		this.componentRef = this.content.createComponent(component);
+		//!! La data se recupera y es un parametro exclusivo al crear la instancia del modal
 		if (this.componentRef?.instance?.data)
 			this.componentRef.instance.data = data;
 
 		this.content.insert(this.componentRef.hostView);
 		return true;
+	}
+
+	/**
+	 * ? Elimina el componente hijo del modal
+	 * @public
+	 */
+	public removeChildComponent(): void {
+		if (!this.content) return;
+		this.content.clear();
 	}
 
 	/**
