@@ -1,1 +1,153 @@
-<p>hospitals works!</p>
+<div class="row animated fadeIn fast">
+	<div class="col-12">
+		<div class="card">
+			<div class="card-body">
+				<div class="input-group">
+					<span class="input-group-addon pointer" (click)="loadUsers()">
+						<i class="ti-search"></i>
+					</span>
+
+					<input
+						type="text"
+						class="form-control"
+						placeholder="Search user..."
+						[(ngModel)]="searchText"
+						(keyup.enter)="loadUsers()"
+					/>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row animated fadeIn fast" *ngIf="isLoading">
+	<div class="col-12">
+		<div class="card">
+			<div class="card-body">
+				<div class="alert alert-info text-center">
+					<h4 class="alert-heading">Searching...</h4>
+					<i class="fa fa-spin fa-refresh fa-2x"></i>
+					<p class="mb-0">Please wait</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row animated fadeIn fast" *ngIf="!isLoading">
+	<div class="col-12">
+		<div class="card">
+			<div class="card-body">
+				<h4 class="card-title">Hospitals</h4>
+				<h6 class="card-subtitle">Hospitals in the app</h6>
+				<div class="table-grid table-ellipsis table-hopitals">
+					<div class="table-grid__header table-grid__row">
+						<div class="table-grid__field center-items">Img</div>
+						<div class="table-grid__field">Email</div>
+						<div class="table-grid__field">Name</div>
+						<div class="table-grid__field">Role</div>
+						<div class="table-grid__field">Auth</div>
+
+						<div class="table-grid__field">Registered</div>
+						<div class="table-grid__field d-center">Actions</div>
+					</div>
+					<div class="table-grid__body">
+						<div *ngFor="let user of users" class="table-grid__row">
+							<div class="table-grid__field center-items pointer" (click)="clickImage(user)">
+								<img
+									[src]="user.dataImages?.defaultImgSrc! | safe"
+									alt="profile image user"
+									class="portrait"
+								/>
+							</div>
+							<div class="table-grid__field" [title]="user.email">
+								<span>{{ user.email }}</span>
+							</div>
+							<div class="table-grid__field" [title]="user.name">
+								<span>
+									{{ user.name }}
+								</span>
+							</div>
+							<div
+								class="table-grid__field d-center"
+								[title]="rolesData[user.role].text"
+							>
+								<span
+									[class]="
+										'label pointer ' + rolesData[user.role].typeLabel
+									"
+									(click)="
+										actualUser.role === 'ADMIN_ROLE' &&
+											user.id !== actualUser.id &&
+											changeRole(user)
+									"
+									[ngClass]="{ disabled: user.id === actualUser.id }"
+								>
+									{{ rolesData[user.role].text }}
+								</span>
+							</div>
+							<div
+								class="table-grid__field d-center"
+								[title]="
+									googleUserData[user.google ? 'true' : 'false'].text
+								"
+							>
+								<span
+									class="label"
+									[ngClass]="
+										googleUserData[user.google ? 'true' : 'false']
+											.typeLabel
+									"
+								>
+									{{
+										googleUserData[user.google ? 'true' : 'false']
+											.text
+									}}
+								</span>
+							</div>
+							<div
+								class="table-grid__field d-center"
+								[title]="user.createdAt | date : 'dd-MMM-yyyy'"
+							>
+								<span>
+									{{ user.createdAt | date : 'dd-MMM-yyyy' }}
+								</span>
+							</div>
+							<div class="table-grid__field text-nowrap d-center">
+								<!-- <div
+									class="pointer"
+									data-toggle="tooltip"
+									data-original-title="Edit"
+								>
+									<i class="fa fa-pencil text-inverse m-r-10"></i>
+								</div> -->
+								<div
+									class="pointer"
+									[ngClass]="{
+										disabled:
+											user.role === 'ADMIN_ROLE' ||
+											actualUser.id === user.id
+									}"
+									(click)="
+										user.role !== 'ADMIN_ROLE' &&
+											actualUser.id !== user.id &&
+											deleteUser(user)
+									"
+									data-toggle="tooltip"
+									data-original-title="remove"
+								>
+									<i class="fa fa-close text-danger"></i>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<app-footer-table
+					[pagination]="pagination"
+					(pageChanged)="changePage($event)"
+				></app-footer-table>
+			</div>
+		</div>
+	</div>
+</div>

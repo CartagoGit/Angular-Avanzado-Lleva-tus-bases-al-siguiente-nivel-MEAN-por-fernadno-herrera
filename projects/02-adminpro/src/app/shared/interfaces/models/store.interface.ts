@@ -1,4 +1,6 @@
 import { Observable } from 'rxjs';
+import { Pagination } from '../http/pagination.interface';
+import { PaginationData } from '../http/request.interface';
 
 //* Tipado de las propiedades del modelo Store
 export interface StoreProps<T> {
@@ -18,3 +20,16 @@ export interface StoreOptions<T> {
 export type StoreParams<T> = {
 	[key in keyof T & string as `${key}$`]: Observable<T[key]>;
 };
+
+/**
+ * ? Modelo predefinido para estados
+ * @export
+ * @interface DefaultState
+ * @typedef {DefaultState}
+ */
+export interface DefaultState<Model extends any> {
+	isLoading: boolean;
+	data: Model[];
+	meta: Pagination;
+	pagination: PaginationData;
+}
