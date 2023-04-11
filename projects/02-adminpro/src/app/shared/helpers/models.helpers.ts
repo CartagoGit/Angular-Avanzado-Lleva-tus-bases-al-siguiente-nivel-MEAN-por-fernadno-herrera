@@ -7,20 +7,20 @@ import { ModelClassMongo, ModelsMongo } from '../interfaces/models.interface';
  * * Comprueba si un objeto es de tipo usuario
  */
 export const isUser = (user: any): user is User => {
-	return (user as User).classModel === 'User';
+	return (user as User)?.classModel === 'User';
 };
 
 /**
  * * Comprueba si un objeto es de tipo hospital
  */
 export const isHospital = (hospital: any): hospital is Hospital => {
-	return (hospital as Hospital).classModel === 'Hospital';
+	return (hospital as Hospital)?.classModel === 'Hospital';
 };
 /**
  * * Comprueba si un objeto es de tipo Doctor
  */
 export const isDoctor = (doctor: any): doctor is Doctor => {
-	return (doctor as Doctor).classModel === 'Doctor';
+	return (doctor as Doctor)?.classModel === 'Doctor';
 };
 
 /**
