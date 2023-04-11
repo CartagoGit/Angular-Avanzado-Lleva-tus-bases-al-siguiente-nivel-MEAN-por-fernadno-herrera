@@ -5,7 +5,7 @@ import { FilesService } from '../../shared/services/http/files.service';
 import { SweetAlertService } from '../../shared/services/helpers/sweet-alert.service';
 import { BaseModels } from '../../shared/models/mongo-models/adds/base-models.model';
 import { User } from '../../shared/models/mongo-models/user.model';
-import { isUser } from '../../shared/helpers/models.helpers';
+import { isUser, getTypeModel } from '../../shared/helpers/models.helpers';
 import { Hospital } from '../../shared/models/mongo-models/hospital.model';
 import { Doctor } from '../../shared/models/mongo-models/doctor.model';
 import {
@@ -85,19 +85,15 @@ export class ImageModalComponent<Model extends User | Hospital | Doctor> {
 	 */
 	public updateImage(): void {
 		if (!this.image.name || this.isUserAndGoogle) return;
+		const { classModel } = this.data;
 
-		const typeModels: Record<ModelClassMongo, ModelsMongo> = {
-			User: 'users',
-			Hospital: 'hospitals',
-			Doctor: 'doctors',
-		};
+		const typeModel = getTypeModel(classModel);
 
-		if (!typeModels[this.data.typeModel]) {
+		if (!typeModel) {
 			return console.error(
 				'No se encontro el tipo de modelo en el objeto typeModels'
 			);
 		}
-		const typeModel = typeModels[this.data.typeModel];
 
 		const images = this._images;
 		if (!images || !Array.isArray(images) || images.length === 0) return;

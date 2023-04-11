@@ -31,6 +31,6 @@ export class Doctor extends BaseModels<DoctorProps> implements DoctorProps {
 
 	// ANCHOR : Constructor
 	constructor(props: DoctorProps) {
-		super({ ...props, typeModel: 'Doctor' });
+		super({ ...props, classModel: 'Doctor' });
 	}
 }

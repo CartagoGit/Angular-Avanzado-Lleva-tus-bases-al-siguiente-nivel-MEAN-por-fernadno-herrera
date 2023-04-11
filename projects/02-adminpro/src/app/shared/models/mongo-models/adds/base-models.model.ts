@@ -13,7 +13,7 @@ export interface BaseModelsProps {
 	id: string;
 	user_creator: string;
 	user_modifier: string;
-	typeModel: ModelClassMongo;
+	classModel: ModelClassMongo;
 }
 
 /**
@@ -31,7 +31,7 @@ export class BaseModels<ModelProps extends {} = {}> implements BaseModelsProps {
 	public readonly user_modifier!: string;
 	public readonly createdAt!: Date;
 	public readonly updatedAt!: Date;
-	public readonly typeModel!: ModelClassMongo;
+	public readonly classModel!: ModelClassMongo;
 
 	//* Para usar desde el front
 	protected _dataImages?: ImageAdd;

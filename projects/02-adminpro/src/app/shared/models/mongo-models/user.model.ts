@@ -36,11 +36,11 @@ export class User extends BaseModels<UserProps> implements UserProps {
 
 	//* Para usar desde el front
 	public password?: string;
-	
+
 
 	// ANCHOR - Constructor
 	constructor(props: UserProps) {
-		super({...props, typeModel: 'User'});
+		super({...props, classModel: 'User'});
 	}
 
 	// ANCHOR - Métodos

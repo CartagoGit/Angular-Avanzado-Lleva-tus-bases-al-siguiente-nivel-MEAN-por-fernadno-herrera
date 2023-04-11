@@ -30,6 +30,6 @@ export class Hospital
 
 	// ANCHOR : Constructor
 	constructor(props: HospitalProps) {
-		super({...props, typeModel: 'Hospital'});
+		super({...props, classModel: 'Hospital'});
 	}
 }
