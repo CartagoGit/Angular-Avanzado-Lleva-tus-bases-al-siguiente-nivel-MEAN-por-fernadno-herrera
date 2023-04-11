@@ -22,6 +22,11 @@ export class HospitalsComponent {
 		pagination: { limit: 5, page: 1 } as PaginationData,
 	};
 
+	// TODO BORRAR, se coloca para evitar errores por ahora
+	public isLoading: boolean = false;
+	public pagination = undefined;
+	public changePage = (page: number) => {};
+
 	public storeHospitals = new Store(this._initState);
 
 	// ANCHOR : Constructor
