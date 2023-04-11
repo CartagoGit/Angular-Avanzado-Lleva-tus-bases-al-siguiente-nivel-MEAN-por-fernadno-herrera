@@ -1,3 +1,6 @@
+import { Doctor } from '../models/mongo-models/doctor.model';
+import { Hospital } from '../models/mongo-models/hospital.model';
+import { User } from '../models/mongo-models/user.model';
 //* Array con los posibles modelos de la base de datos
 export const modelMongo = ['user', 'hospital', 'doctor'] as const;
 
@@ -11,6 +14,12 @@ export type ModelClassMongo = Capitalize<ModelMongo>
 export const modelsMongo: `${ModelMongo}s`[] = modelMongo.map(
 	(model) => `${model}s` as `${ModelMongo}s`
 );
+
+//* Array con los posibles modelos de la base de datos
+export const models = [User, Hospital, Doctor] as const;
+
+//* Tipado de los modelos de la base de datos
+export type Models = (typeof models)[number];
 
 //* Tipado de los modelos de la base de datos en plural
 export type ModelsMongo = (typeof modelsMongo)[number];

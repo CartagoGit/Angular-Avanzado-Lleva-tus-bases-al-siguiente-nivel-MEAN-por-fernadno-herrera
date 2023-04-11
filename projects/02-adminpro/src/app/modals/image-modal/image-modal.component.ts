@@ -3,15 +3,13 @@ import { DefaultErrorResponse } from '../../shared/interfaces/http/response.inte
 import { ModalService } from '../../shared/services/settings/modal.service';
 import { FilesService } from '../../shared/services/http/files.service';
 import { SweetAlertService } from '../../shared/services/helpers/sweet-alert.service';
-import { BaseModels } from '../../shared/models/mongo-models/adds/base-models.model';
-import { User } from '../../shared/models/mongo-models/user.model';
-import { isUser, getTypeModel } from '../../shared/helpers/models.helpers';
-import { Hospital } from '../../shared/models/mongo-models/hospital.model';
-import { Doctor } from '../../shared/models/mongo-models/doctor.model';
 import {
-	ModelsMongo,
-	ModelClassMongo,
-} from '../../shared/interfaces/models.interface';
+	isUser,
+	getTypeModel,
+	isModel,
+} from '../../shared/helpers/models.helpers';
+import { Models } from '../../shared/interfaces/models.interface';
+import { BaseModels } from '../../shared/models/mongo-models/adds/base-models.model';
 
 @Component({
 	selector: 'app-image-modal',
@@ -20,7 +18,7 @@ import {
 	// standalone: true,
 	// imports: [PipesModule],
 })
-export class ImageModalComponent<Model extends User | Hospital | Doctor> {
+export class ImageModalComponent<Model extends BaseModels<Models>> {
 	// ANCHOR : Variables
 	//!! La data se recupera y es un parametro exclusivo al crear la instancia del modal
 	public data = {} as Model;
@@ -42,6 +40,12 @@ export class ImageModalComponent<Model extends User | Hospital | Doctor> {
 	ngOnInit(): void {
 		// !! Aqui ya habria entrado la data
 		// this.user = this.data;
+		if (!this.data || !isModel(this.data) || !this.data.dataImages) {
+			this._sweetAlertSvc.alertError(
+				"To update the image, the data must be sent correctly, with image's data and a valid model"
+			);
+			this._modalSvc.close();
+		}
 		this.isUserAndGoogle = isUser(this.data) && this.data.google;
 	}
 
