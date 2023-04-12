@@ -80,7 +80,8 @@ export class Store<T extends { [key in keyof T]: T[key] }> {
 						return xItem === yItem;
 					});
 				} else return x === y;
-			})
+			}),
+			tap(() => (this._resendState = false))
 		);
 
 		this.state$ = state$;
@@ -236,7 +237,8 @@ export class Store<T extends { [key in keyof T]: T[key] }> {
 								return xItem === yItem;
 							});
 						} else return x === y;
-					})
+					}),
+					// tap((value) => console.warn('PARAMS', key, value, 'CAMBIADO'))
 				),
 			};
 		}
@@ -249,7 +251,7 @@ export class Store<T extends { [key in keyof T]: T[key] }> {
 	 * @returns {boolean}
 	 */
 	private _isForceResendParam = (key: keyof T): boolean => {
-		if (!this._resendState) return false;
+		// if (!this._resendState) return false;
 		if (Array.isArray(this._resendParams)) {
 			return this._resendParams.includes(key);
 		}

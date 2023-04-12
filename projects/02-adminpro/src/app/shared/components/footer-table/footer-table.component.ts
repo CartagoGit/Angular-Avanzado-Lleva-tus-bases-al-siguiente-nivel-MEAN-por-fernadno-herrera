@@ -16,7 +16,7 @@ export class FooterTableComponent {
 	// ANCHOR : Variables
 	private _pagination?: Pagination;
 	@Input('pagination') set pagination(value: Pagination ) {
-		// if (!value) return;
+		if (!value) return;
 		this._pagination = value;
 		this.pagesShowed = this._calculatePagesShowed();
 	}

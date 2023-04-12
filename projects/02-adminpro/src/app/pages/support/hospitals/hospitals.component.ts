@@ -5,7 +5,8 @@ import { HospitalsService } from '../../../shared/services/http/models/hospitals
 import { Pagination } from '../../../shared/interfaces/http/pagination.interface';
 import { PaginationData } from '../../../shared/interfaces/http/request.interface';
 import { DefaultState } from '../../../shared/interfaces/models/store.interface';
-import { finalize, Subscription, tap } from 'rxjs';
+import { debounceTime, delay, finalize, Subscription, tap } from 'rxjs';
+import { minTimeBeforeLoader } from '../../../shared/constants/time.constants';
 
 @Component({
 	selector: 'page-hospitals',
@@ -23,6 +24,7 @@ export class HospitalsComponent {
 		pagination: { limit: 5, page: 1 } as PaginationData,
 		search: '',
 	};
+	private subscriptions: Subscription[] = [];
 
 	public store = new Store(this._initState);
 
@@ -30,10 +32,12 @@ export class HospitalsComponent {
 	public hospitals$ = this.store.params.data$;
 	public pagination$ = this.store.params.pagination$;
 	public meta$ = this.store.params.meta$;
-	public search$ = this.store.params.search$;
-	public isLoading$ = this.store.params.isLoading$;
-
-	private subscriptions : Subscription[] = []
+	public search$ = this.store.params.search$.pipe(debounceTime(500));
+	// public search$ = this.store.params.search$;
+	public isLoading$ = this.store.params.isLoading$.pipe(
+		debounceTime(minTimeBeforeLoader)
+		// debounceTime(5000)
+	);
 
 	// ANCHOR : Constructor
 	constructor(private _hospitalsSvc: HospitalsService) {
@@ -42,43 +46,63 @@ export class HospitalsComponent {
 
 	ngOnDestroy(): void {
 		this.subscriptions.forEach((sub) => sub.unsubscribe());
+		this.store.endState();
 	}
 
 	// ANCHOR : Methods
 	private _createSubscriptions() {
 		const paginationSub = this.pagination$.subscribe((pagination) => {
-			this._search();
+			if (!pagination) return;
+			console.log('❗paginationSub  ➽ pagination ➽ ⏩', pagination);
+			// this._search();
 		});
 		const searchSub = this.search$.subscribe((search) => {
-			this._search();
+			this.search();
+			// console.log('cambio el texto', search);
 		});
 
-		this.subscriptions.push(paginationSub, searchSub);
+		const stateSub = this.state$.subscribe((state) => {
+			console.log(state);
+			if (!state) return;
+		});
 
+		this.subscriptions.push(paginationSub, searchSub, stateSub);
 	}
 
-	private _search() {
+	/**
+	 * ? Busca en la base de datos
+	 * @private
+	 */
+	public search() {
+		this.store.setParam('isLoading', true);
 		this._hospitalsSvc
-			.getByQuery({})
+			.getByQuery(
+				{ name: this.store.getParam('search') },
+				this.store.getParam('pagination')
+			)
 			.pipe(
-				tap(() => {
-					this.store.setParam('isLoading', true);
-				}),
+				// delay(1000),
 				finalize(() => {
 					this.store.setParam('isLoading', false);
 				})
 			)
 			.subscribe((resp) => {
-				const { data } = resp;
-				if (!data) return;
+				const { data, pagination } = resp;
+				if (!data || !pagination) return;
 				this.store.setState({
 					...this.store.getState(),
 					data,
+					meta: pagination,
 					isLoading: false,
 				});
 			});
 	}
 
+	/**
+	 * ? Cambia la pagina de la paginacion
+	 * @public
+	 * @param {number} page
+	 */
 	public changePage(page: number) {
 		this.store.setParam('pagination', {
 			...this.store.getParam('pagination'),

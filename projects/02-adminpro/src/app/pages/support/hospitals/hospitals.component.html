@@ -4,7 +4,8 @@
 			<div class="card-body">
 				<div class="input-group">
 					<!-- <span class="input-group-addon pointer" (click)="search()"> -->
-					<span class="input-group-addon pointer">
+					<span class="input-group-addon pointer"
+					(click)="search()">
 						<i class="ti-search"></i>
 					</span>
 
@@ -13,6 +14,7 @@
 						type="text"
 						class="form-control"
 						placeholder="Search user..."
+						(input)="store.setParam('search', inputSearch.value)"
 					/>
 					<!-- (keyup.enter)="search()" -->
 				</div>
@@ -41,10 +43,9 @@
 				<div class="card-body">
 					<h4 class="card-title">Hospitals</h4>
 					<h6 class="card-subtitle">Hospitals in the app</h6>
-					<!-- <div class="table-grid table-ellipsis table-hopitals">
+					<div class="table-grid table-ellipsis table-hopitals">
 						<div class="table-grid__header table-grid__row">
 							<div class="table-grid__field center-items">Img</div>
-							<div class="table-grid__field">Email</div>
 							<div class="table-grid__field">Name</div>
 							<div class="table-grid__field">Role</div>
 							<div class="table-grid__field">Auth</div>
@@ -53,18 +54,22 @@
 							<div class="table-grid__field d-center">Actions</div>
 						</div>
 						<div class="table-grid__body">
-							<div *ngFor="let user of users" class="table-grid__row">
-								<div class="table-grid__field center-items pointer" (click)="clickImage(user)">
+							<div
+								*ngFor="let hospital of hospitals$ | async"
+								class="table-grid__row"
+							>
+								<div class="table-grid__field center-items pointer">
+									<!-- (click)="clickImage(hospital) -->
 									<img
-										[src]="user.dataImages?.defaultImgSrc! | safe"
+										[src]="hospital.dataImages?.defaultImgSrc! | safe"
 										alt="profile image user"
 										class="portrait"
 									/>
 								</div>
-								<div class="table-grid__field" [title]="user.email">
-									<span>{{ user.email }}</span>
+								<div class="table-grid__field" [title]="hospital.name">
+									<span>{{ hospital.name }}</span>
 								</div>
-								<div class="table-grid__field" [title]="user.name">
+								<!-- <div class="table-grid__field" [title]="user.name">
 									<span>
 										{{ user.name }}
 									</span>
@@ -133,15 +138,15 @@
 									>
 										<i class="fa fa-close text-danger"></i>
 									</div>
-								</div>
+								</div> -->
 							</div>
 						</div>
-					</div> -->
+					</div>
 
 					<app-footer-table
 						[pagination]="(meta$ | async)!"
 						(pageChanged)="changePage($event)"
-						></app-footer-table>
+					></app-footer-table>
 				</div>
 			</div>
 		</div>

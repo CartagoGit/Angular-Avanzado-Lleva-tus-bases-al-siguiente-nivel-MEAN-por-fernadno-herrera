@@ -17,7 +17,7 @@ export const isEqual = (x: any, y: any): boolean => {
 		if (x.length !== y.length) return false;
 		return x.sort().every((xItem, index) => {
 			const yItem = y.sort()[index];
-			return xItem === yItem;
+			return isEqual(xItem, yItem);
 		});
 	}
 
