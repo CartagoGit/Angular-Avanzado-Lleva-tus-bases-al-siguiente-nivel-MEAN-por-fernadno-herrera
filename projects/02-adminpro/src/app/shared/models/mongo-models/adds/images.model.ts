@@ -1,6 +1,7 @@
 import { Injector } from '@angular/core';
 import { FilesService } from '../../../services/http/files.service';
 import { pathDefaultImage } from '../../../constants/strings.constants';
+import { Observable, Observer, Subject, finalize } from 'rxjs';
 
 /**
  * ? Clase que permite agregar imagenes a un modelo
@@ -15,6 +16,10 @@ export class ImageAdd {
 	public defaultImg: string;
 	public defaultImgSrc!: string;
 
+	private _defaultImgSrcObserver: Subject<string> = new Subject<string>();
+	public defaultImgSrc$: Observable<string> =
+		this._defaultImgSrcObserver.asObservable();
+
 	private _filesSvc: FilesService;
 	private _hasImages: boolean;
 	// private _defaultNoImageSrc: string = 'assets/images/no-image.jpg';
@@ -26,7 +31,7 @@ export class ImageAdd {
 			google: false,
 		}
 	) {
-		const { images, google } = props;
+		const { images, google = false } = props;
 
 		//* Injecta el servicio de archivos para poder descargar las imagenes
 		const injector = Injector.create({
@@ -44,13 +49,22 @@ export class ImageAdd {
 
 		if (!this._hasImages || google) this.defaultImgSrc = this.defaultImg;
 		else {
-			this._filesSvc.downloadFileFullPath(this.defaultImg).subscribe({
-				next: (source) => {
-					this.defaultImgSrc = source;
-				},
-				error: () => (this.defaultImgSrc = ''),
-				// error: () => (this.defaultImgSrc = this._defaultNoImageSrc),
-			});
+			this._filesSvc
+				.downloadFileFullPath(this.defaultImg)
+				.pipe(
+					finalize(() => {
+						this._defaultImgSrcObserver.complete();
+					})
+				)
+				.subscribe({
+					next: (source) => {
+						this.defaultImgSrc = source;
+						this._defaultImgSrcObserver.next(this.defaultImgSrc);
+						this._defaultImgSrcObserver.complete();
+					},
+					error: () => (this.defaultImgSrc = ''),
+					// error: () => (this.defaultImgSrc = this._defaultNoImageSrc),
+				});
 		}
 	}
 }

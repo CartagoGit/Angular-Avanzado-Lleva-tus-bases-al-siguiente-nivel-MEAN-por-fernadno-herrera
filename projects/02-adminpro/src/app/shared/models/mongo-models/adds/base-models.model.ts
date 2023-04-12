@@ -82,5 +82,6 @@ export class BaseModels<ModelProps extends {} = {}> implements BaseModelsProps {
 	public updateOnlyImages(props: { google?: boolean; images?: string[] }) {
 		if (!this._hasImages) throw new Error('This model does not have images');
 		this._dataImages = new ImageAdd({ ...props })!;
+		
 	}
 }

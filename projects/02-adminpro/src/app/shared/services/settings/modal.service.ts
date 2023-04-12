@@ -81,11 +81,11 @@ export class ModalService {
 	 * @public
 	 */
 	public close(returnedData?: any): void {
-		if (returnedData) {
-			const { afterClosedSubject } = this._actualModalState!;
-			afterClosedSubject.next(returnedData);
-			afterClosedSubject.complete();
-		}
+		// if (returnedData) {
+		const { afterClosedSubject } = this._actualModalState!;
+		afterClosedSubject.next(returnedData);
+		afterClosedSubject.complete();
+		// }
 		//* Al cerrarse se triggera el observable de isOpen$ y se elimina el modal de la pila
 		this._actualModalStore?.setParam('isOpen', false);
 	}

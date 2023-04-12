@@ -46,7 +46,7 @@ export class ImageModalComponent<Model extends BaseModels<Models>> {
 			);
 			this._modalSvc.close();
 		}
-		this.isUserAndGoogle = isUser(this.data) && this.data.google;
+		this.isUserAndGoogle = (isUser(this.data) && this.data.google) || false;
 	}
 
 	// ANCHOR : Methods

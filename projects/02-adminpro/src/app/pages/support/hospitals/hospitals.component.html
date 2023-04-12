@@ -66,9 +66,13 @@
 								class="table-grid__row"
 							>
 								<div class="table-grid__field center-items pointer">
-									<!-- (click)="clickImage(hospital) -->
+									<!-- [src]="
+										(hospital.dataImages?.defaultImgSrc$ | async)!
+										| safe
+										" -->
 									<img
 										[src]="hospital.dataImages?.defaultImgSrc! | safe"
+										(click)="clickImage(hospital)"
 										alt="profile image user"
 										class="portrait"
 									/>
@@ -79,48 +83,7 @@
 								<div class="table-grid__field" [title]="hospital.name">
 									<span>{{ hospital.address }}</span>
 								</div>
-								<!-- <div class="table-grid__field" [title]="user.name">
-									<span>
-										{{ user.name }}
-									</span>
-								</div>
-								<div
-									class="table-grid__field d-center"
-									[title]="rolesData[user.role].text"
-								>
-									<span
-										[class]="
-											'label pointer ' + rolesData[user.role].typeLabel
-										"
-										(click)="
-											actualUser.role === 'ADMIN_ROLE' &&
-												user.id !== actualUser.id &&
-												changeRole(user)
-										"
-										[ngClass]="{ disabled: user.id === actualUser.id }"
-									>
-										{{ rolesData[user.role].text }}
-									</span>
-								</div>
-								<div
-									class="table-grid__field d-center"
-									[title]="
-										googleUserData[user.google ? 'true' : 'false'].text
-									"
-								>
-									<span
-										class="label"
-										[ngClass]="
-											googleUserData[user.google ? 'true' : 'false']
-												.typeLabel
-										"
-									>
-										{{
-											googleUserData[user.google ? 'true' : 'false']
-												.text
-										}}
-									</span>
-								</div>-->
+
 								<div
 									class="table-grid__field d-center"
 									[title]="hospital.createdAt | date : 'dd-MMM-yyyy'"

@@ -1,14 +1,30 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+} from '@angular/core';
 import { Hospital } from '../../../shared/models/mongo-models/hospital.model';
 import { Store } from '../../../shared/models/store/store.model';
 import { HospitalsService } from '../../../shared/services/http/models/hospitals.service';
 import { Pagination } from '../../../shared/interfaces/http/pagination.interface';
 import { PaginationData } from '../../../shared/interfaces/http/request.interface';
 import { DefaultState } from '../../../shared/interfaces/models/store.interface';
-import { debounceTime, delay, finalize, skip, Subscription, tap } from 'rxjs';
+import {
+	debounceTime,
+	delay,
+	finalize,
+	from,
+	Observable,
+	skip,
+	Subscription,
+	take,
+	tap,
+} from 'rxjs';
 import { minTimeBeforeLoader } from '../../../shared/constants/time.constants';
 import { SweetAlertService } from '../../../shared/services/helpers/sweet-alert.service';
 import { DefaultErrorResponse } from '../../../shared/interfaces/http/response.interfaces';
+import { ModalService } from '../../../shared/services/settings/modal.service';
+import { ImageModalComponent } from '../../../modals/image-modal/image-modal.component';
 
 @Component({
 	selector: 'page-hospitals',
@@ -28,8 +44,9 @@ export class HospitalsComponent {
 	};
 	private subscriptions: Subscription[] = [];
 
+	// GROUP Store
 	public store = new Store(this._initState);
-
+	//* Observables
 	public state$ = this.store.state$;
 	public hospitals$ = this.store.params.data$;
 	public pagination$ = this.store.params.pagination$.pipe(skip(1));
@@ -39,10 +56,14 @@ export class HospitalsComponent {
 		debounceTime(minTimeBeforeLoader)
 	);
 
+	//!GROUP Store
+
 	// ANCHOR : Constructor
 	constructor(
 		private _hospitalsSvc: HospitalsService,
-		private _sweetAlertSvc: SweetAlertService
+		private _sweetAlertSvc: SweetAlertService,
+		private _modalSvc: ModalService,
+		private _cd: ChangeDetectorRef
 	) {
 		this.search();
 		this._createSubscriptions();
@@ -96,7 +117,7 @@ export class HospitalsComponent {
 				if (!data || !pagination) return;
 				this.store.setState({
 					...this.store.getState(),
-					data,
+					data: data.map((hospital) => new Hospital(hospital)),
 					meta: pagination,
 					isLoading: false,
 				});
@@ -139,5 +160,25 @@ export class HospitalsComponent {
 					},
 				});
 			});
+	}
+
+	/**
+	 * ? Abre el modal para ver la imagen de un hospital
+	 * @public
+	 * @param {Hospital} hospital
+	 */
+	public clickImage(hospital: Hospital) {
+		const modalRef = this._modalSvc.open(ImageModalComponent, {
+			data: hospital,
+			modalOptions: {
+				hasDefaultFooter: false,
+				title: 'Choose an image to change it',
+			},
+		});
+		modalRef.afterClosed$.subscribe((_res) => {
+			hospital.dataImages?.defaultImgSrc$.pipe(take(1)).subscribe((_res) => {
+				this._cd.markForCheck();
+			});
+		});
 	}
 }
