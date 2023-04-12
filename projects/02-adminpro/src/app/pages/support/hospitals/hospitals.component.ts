@@ -181,4 +181,6 @@ export class HospitalsComponent {
 			});
 		});
 	}
+
+	public edit(hospital: Hospital){}
 }

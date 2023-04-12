@@ -51,13 +51,16 @@
 	text-overflow: ellipsis;
 }
 
-.table-grid__section-header{
+.table-grid__section-header {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 }
 
-
+.table-grid__icons {
+	display: flex;
+	gap: 8px;
+}
 /*
 .table-ellipsis .table-grid__field {
 	white-space: nowrap;

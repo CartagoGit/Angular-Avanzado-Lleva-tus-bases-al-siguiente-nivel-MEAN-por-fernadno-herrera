@@ -100,7 +100,20 @@
 										{{ hospital.updatedAt | date : 'dd-MMM-yyyy' }}
 									</span>
 								</div>
-								<div class="table-grid__field text-nowrap d-center">
+								<div
+									class="table-grid__field text-nowrap d-center table-grid__icons"
+								>
+									<div
+										class="pointer"
+										(click)="edit(hospital)"
+										data-toggle="tooltip"
+										data-original-title="edit"
+									>
+										<i
+											class="fa fa-pencil text-success"
+											aria-hidden="true"
+										></i>
+									</div>
 									<div
 										class="pointer"
 										(click)="delete(hospital)"
