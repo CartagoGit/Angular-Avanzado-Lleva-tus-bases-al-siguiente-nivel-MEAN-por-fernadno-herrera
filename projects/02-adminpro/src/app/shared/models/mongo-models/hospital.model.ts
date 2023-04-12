@@ -10,6 +10,7 @@ import { BaseModels, BaseModelsProps } from './adds/base-models.model';
 export interface HospitalProps extends BaseModelsProps {
 	images: string[];
 	name: string;
+	address: string;
 }
 
 /**
@@ -26,6 +27,7 @@ export class Hospital
 	// ANCHOR : Variables
 	public images!: string[];
 	public name!: string;
+	public address!: string;
 
 
 	// ANCHOR : Constructor

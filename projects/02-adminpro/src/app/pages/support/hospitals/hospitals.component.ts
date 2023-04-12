@@ -5,8 +5,10 @@ import { HospitalsService } from '../../../shared/services/http/models/hospitals
 import { Pagination } from '../../../shared/interfaces/http/pagination.interface';
 import { PaginationData } from '../../../shared/interfaces/http/request.interface';
 import { DefaultState } from '../../../shared/interfaces/models/store.interface';
-import { debounceTime, delay, finalize, Subscription, tap } from 'rxjs';
+import { debounceTime, delay, finalize, skip, Subscription, tap } from 'rxjs';
 import { minTimeBeforeLoader } from '../../../shared/constants/time.constants';
+import { SweetAlertService } from '../../../shared/services/helpers/sweet-alert.service';
+import { DefaultErrorResponse } from '../../../shared/interfaces/http/response.interfaces';
 
 @Component({
 	selector: 'page-hospitals',
@@ -30,17 +32,19 @@ export class HospitalsComponent {
 
 	public state$ = this.store.state$;
 	public hospitals$ = this.store.params.data$;
-	public pagination$ = this.store.params.pagination$;
+	public pagination$ = this.store.params.pagination$.pipe(skip(1));
 	public meta$ = this.store.params.meta$;
-	public search$ = this.store.params.search$.pipe(debounceTime(500));
-	// public search$ = this.store.params.search$;
+	public search$ = this.store.params.search$.pipe(skip(1), debounceTime(500));
 	public isLoading$ = this.store.params.isLoading$.pipe(
 		debounceTime(minTimeBeforeLoader)
-		// debounceTime(5000)
 	);
 
 	// ANCHOR : Constructor
-	constructor(private _hospitalsSvc: HospitalsService) {
+	constructor(
+		private _hospitalsSvc: HospitalsService,
+		private _sweetAlertSvc: SweetAlertService
+	) {
+		this.search();
 		this._createSubscriptions();
 	}
 
@@ -52,21 +56,22 @@ export class HospitalsComponent {
 	// ANCHOR : Methods
 	private _createSubscriptions() {
 		const paginationSub = this.pagination$.subscribe((pagination) => {
-			if (!pagination) return;
-			console.log('❗paginationSub  ➽ pagination ➽ ⏩', pagination);
-			// this._search();
+			this.search();
 		});
 		const searchSub = this.search$.subscribe((search) => {
 			this.search();
-			// console.log('cambio el texto', search);
 		});
 
-		const stateSub = this.state$.subscribe((state) => {
-			console.log(state);
-			if (!state) return;
-		});
+		// const stateSub = this.state$.subscribe((state) => {
+		// 	console.log(state);
+		// 	if (!state) return;
+		// });
 
-		this.subscriptions.push(paginationSub, searchSub, stateSub);
+		this.subscriptions.push(
+			paginationSub,
+			searchSub
+			// stateSub
+		);
 	}
 
 	/**
@@ -75,13 +80,13 @@ export class HospitalsComponent {
 	 */
 	public search() {
 		this.store.setParam('isLoading', true);
+		const search = this.store.getParam('search');
 		this._hospitalsSvc
 			.getByQuery(
-				{ name: this.store.getParam('search') },
-				this.store.getParam('pagination')
+				{ name: search, address: search },
+				{ ...this.store.getParam('pagination'), someQuery: true }
 			)
 			.pipe(
-				// delay(1000),
 				finalize(() => {
 					this.store.setParam('isLoading', false);
 				})
@@ -108,5 +113,31 @@ export class HospitalsComponent {
 			...this.store.getParam('pagination'),
 			page,
 		});
+	}
+
+	/**
+	 * ? Elimina un hospital
+	 * @public
+	 * @param {Hospital} hospital
+	 */
+	public delete(hospital: Hospital) {
+		this._sweetAlertSvc
+			.confirmDeleteModal({
+				title: 'Delete hospital',
+				text: `Are you sure you want to delete the hospital '${hospital.name}'?`,
+				icon: 'warning',
+			})
+			.then((result) => {
+				if (!result.isConfirmed) return;
+				this._hospitalsSvc.delete(hospital.id).subscribe({
+					next: () => {
+						this._sweetAlertSvc.alertSuccess('User deleted correctly');
+						this.search();
+					},
+					error: (err: DefaultErrorResponse) => {
+						this._sweetAlertSvc.alertError(err.error_message);
+					},
+				});
+			});
 	}
 }

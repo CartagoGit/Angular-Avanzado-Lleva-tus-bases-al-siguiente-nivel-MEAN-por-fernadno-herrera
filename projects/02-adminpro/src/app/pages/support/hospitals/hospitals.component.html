@@ -4,8 +4,7 @@
 			<div class="card-body">
 				<div class="input-group">
 					<!-- <span class="input-group-addon pointer" (click)="search()"> -->
-					<span class="input-group-addon pointer"
-					(click)="search()">
+					<span class="input-group-addon pointer" (click)="search()">
 						<i class="ti-search"></i>
 					</span>
 
@@ -41,16 +40,24 @@
 		<div class="col-12">
 			<div class="card">
 				<div class="card-body">
-					<h4 class="card-title">Hospitals</h4>
-					<h6 class="card-subtitle">Hospitals in the app</h6>
-					<div class="table-grid table-ellipsis table-hopitals">
+					<div class="table-grid__section-header">
+						<div class="table-grid__title">
+							<h4 class="card-title">Hospitals</h4>
+							<h6 class="card-subtitle">Hospitals in the app</h6>
+						</div>
+						<div class="table-grid__buttons">
+							<button class="btn btn-primary btn-sm">
+								Add new hospital
+							</button>
+						</div>
+					</div>
+					<div class="table-grid table-ellipsis table-hospitals">
 						<div class="table-grid__header table-grid__row">
 							<div class="table-grid__field center-items">Img</div>
 							<div class="table-grid__field">Name</div>
-							<div class="table-grid__field">Role</div>
-							<div class="table-grid__field">Auth</div>
-
-							<div class="table-grid__field">Registered</div>
+							<div class="table-grid__field">Address</div>
+							<div class="table-grid__field">Created</div>
+							<div class="table-grid__field">Updated</div>
 							<div class="table-grid__field d-center">Actions</div>
 						</div>
 						<div class="table-grid__body">
@@ -68,6 +75,9 @@
 								</div>
 								<div class="table-grid__field" [title]="hospital.name">
 									<span>{{ hospital.name }}</span>
+								</div>
+								<div class="table-grid__field" [title]="hospital.name">
+									<span>{{ hospital.address }}</span>
 								</div>
 								<!-- <div class="table-grid__field" [title]="user.name">
 									<span>
@@ -110,35 +120,33 @@
 												.text
 										}}
 									</span>
+								</div>-->
+								<div
+									class="table-grid__field d-center"
+									[title]="hospital.createdAt | date : 'dd-MMM-yyyy'"
+								>
+									<span>
+										{{ hospital.createdAt | date : 'dd-MMM-yyyy' }}
+									</span>
 								</div>
 								<div
 									class="table-grid__field d-center"
-									[title]="user.createdAt | date : 'dd-MMM-yyyy'"
+									[title]="hospital.updatedAt | date : 'dd-MMM-yyyy'"
 								>
 									<span>
-										{{ user.createdAt | date : 'dd-MMM-yyyy' }}
+										{{ hospital.updatedAt | date : 'dd-MMM-yyyy' }}
 									</span>
 								</div>
 								<div class="table-grid__field text-nowrap d-center">
-
 									<div
 										class="pointer"
-										[ngClass]="{
-											disabled:
-												user.role === 'ADMIN_ROLE' ||
-												actualUser.id === user.id
-										}"
-										(click)="
-											user.role !== 'ADMIN_ROLE' &&
-												actualUser.id !== user.id &&
-												deleteUser(user)
-										"
+										(click)="delete(hospital)"
 										data-toggle="tooltip"
 										data-original-title="remove"
 									>
 										<i class="fa fa-close text-danger"></i>
 									</div>
-								</div> -->
+								</div>
 							</div>
 						</div>
 					</div>

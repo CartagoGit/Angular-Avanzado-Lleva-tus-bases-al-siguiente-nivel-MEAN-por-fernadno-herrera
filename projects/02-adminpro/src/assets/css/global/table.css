@@ -50,6 +50,14 @@
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
+
+.table-grid__section-header{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+
 /*
 .table-ellipsis .table-grid__field {
 	white-space: nowrap;
