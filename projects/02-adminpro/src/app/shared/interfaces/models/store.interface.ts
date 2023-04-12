@@ -32,4 +32,5 @@ export interface DefaultState<Model extends any> {
 	data: Model[];
 	meta: Pagination;
 	pagination: PaginationData;
+	search?: string;
 }

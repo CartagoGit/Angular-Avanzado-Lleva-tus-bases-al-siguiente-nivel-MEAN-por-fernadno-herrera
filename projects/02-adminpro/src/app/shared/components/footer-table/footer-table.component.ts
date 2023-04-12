@@ -15,13 +15,13 @@ interface Result {
 export class FooterTableComponent {
 	// ANCHOR : Variables
 	private _pagination?: Pagination;
-	@Input('pagination') set pagination(value: Pagination | undefined) {
-		if (!value) return;
+	@Input('pagination') set pagination(value: Pagination ) {
+		// if (!value) return;
 		this._pagination = value;
 		this.pagesShowed = this._calculatePagesShowed();
 	}
-	get pagination(): Pagination | undefined {
-		return this._pagination;
+	get pagination(): Pagination {
+		return this._pagination!;
 	}
 
 	@Input('showTotal') showTotal: boolean = true;
