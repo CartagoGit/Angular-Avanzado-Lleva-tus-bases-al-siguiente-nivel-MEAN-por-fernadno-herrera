@@ -35,7 +35,7 @@ export class BaseModels<ModelProps extends {} = {}> implements BaseModelsProps {
 
 	//* Para usar desde el front
 	protected _dataImages?: ImageAdd;
-	public get dataImages(): ImageAdd | undefined {
+	public get dataImages(): ImageAdd | undefined  {
 		return this._dataImages;
 	}
 
@@ -82,6 +82,5 @@ export class BaseModels<ModelProps extends {} = {}> implements BaseModelsProps {
 	public updateOnlyImages(props: { google?: boolean; images?: string[] }) {
 		if (!this._hasImages) throw new Error('This model does not have images');
 		this._dataImages = new ImageAdd({ ...props })!;
-		
 	}
 }
