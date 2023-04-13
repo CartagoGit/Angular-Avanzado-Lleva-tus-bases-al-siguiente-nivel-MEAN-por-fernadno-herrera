@@ -16,6 +16,7 @@ export interface BaseModelsProps {
 	classModel: ModelClassMongo;
 }
 
+
 /**
  * ? Modelo base para los modelos de la base de datos
  * @export

@@ -14,6 +14,7 @@ export interface StoreOptions<T> {
 	allowDeepChangesInParams?: (keyof T)[] | boolean;
 	allowDeepChangesInState?: boolean;
 	denyDeepChangesInParams?: (keyof T)[];
+	skipFirst?: boolean;
 }
 
 //* Tipado de Objeto que contiene los observables de cada parametro del estado

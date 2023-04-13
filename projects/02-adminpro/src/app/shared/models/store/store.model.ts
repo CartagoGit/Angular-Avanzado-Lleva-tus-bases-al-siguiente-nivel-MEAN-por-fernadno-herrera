@@ -7,6 +7,7 @@ import {
 	Subject,
 	finalize,
 	tap,
+	skip,
 } from 'rxjs';
 import { isEqual } from '../../helpers/object.helper';
 import { basicLogError } from '../../helpers/log.helper';
@@ -51,6 +52,7 @@ export class Store<T extends { [key in keyof T]: T[key] }> {
 			allowDeepChangesInState = true,
 			allowDeepChangesInParams = true,
 			denyDeepChangesInParams = [],
+			skipFirst = false,
 		} = options || {};
 		this.options = {
 			allowDeepChanges,
@@ -69,6 +71,7 @@ export class Store<T extends { [key in keyof T]: T[key] }> {
 		);
 
 		const state$: Observable<T> = observable.pipe(
+			skip(skipFirst ? 1 : 0),
 			distinctUntilChanged((x, y) => {
 				if (this._resendState) return false;
 				else if (allowDeepChanges && allowDeepChangesInState) {
