@@ -32,6 +32,7 @@ export const typeFile = [
 	'video',
 	'audio',
 	'icon',
+	'all'
 ] as const;
 
 //* Tipado de los posibles archivos desde el back

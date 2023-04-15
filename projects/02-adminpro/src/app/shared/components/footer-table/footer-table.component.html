@@ -3,7 +3,7 @@
 		<div class="footer-result" *ngIf="showTotal">
 			<span class="footer-total-label">Total:</span>
 			<span class="footer-total-result">
-				{{ pagination.totalDocs || 0 }}</span
+				{{ pagination?.totalDocs || 0 }}</span
 			>
 		</div>
 		<div class="footer-result" *ngFor="let result of results">
@@ -15,8 +15,8 @@
 		<ul class="pagination">
 			<li
 				class="page-item"
-				(click)="pagination.hasPrevPage && changePage(1)"
-				[ngClass]="{ disabled: !pagination.hasPrevPage }"
+				(click)="pagination?.hasPrevPage && changePage(1)"
+				[ngClass]="{ disabled: !pagination?.hasPrevPage }"
 			>
 				<div class="page-link">
 					<i class="fa fa-angle-double-left"></i>
@@ -24,8 +24,8 @@
 			</li>
 			<li
 				class="page-item"
-				(click)="pagination.hasPrevPage && changePage(pagination.page! - 1)"
-				[ngClass]="{ disabled: !pagination.hasPrevPage }"
+				(click)="pagination?.hasPrevPage && changePage(pagination?.page! - 1)"
+				[ngClass]="{ disabled: !pagination?.hasPrevPage }"
 			>
 				<div class="page-link">
 					<i class="fa fa-angle-left"></i>
@@ -38,15 +38,15 @@
 			>
 				<div
 					class="page-link"
-					[ngClass]="{ 'selected-page': pagination.page === numPage }"
+					[ngClass]="{ 'selected-page': pagination?.page === numPage }"
 				>
 					{{ numPage }}
 				</div>
 			</li>
 			<li
 				class="page-item"
-				(click)="pagination.hasNextPage && changePage(pagination.page! + 1)"
-				[ngClass]="{ disabled: !pagination.hasNextPage }"
+				(click)="pagination?.hasNextPage && changePage(pagination?.page! + 1)"
+				[ngClass]="{ disabled: !pagination?.hasNextPage }"
 			>
 				<div class="page-link">
 					<i class="fa fa-angle-right"></i>
@@ -54,8 +54,8 @@
 			</li>
 			<li
 				class="page-item"
-				(click)="pagination.hasNextPage && changePage(pagination.totalPages!)"
-				[ngClass]="{ disabled: !pagination.hasNextPage }"
+				(click)="pagination?.hasNextPage && changePage(pagination?.totalPages!)"
+				[ngClass]="{ disabled: !pagination?.hasNextPage }"
 			>
 				<div class="page-link">
 					<i class="fa fa-angle-double-right"></i>
