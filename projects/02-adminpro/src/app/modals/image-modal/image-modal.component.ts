@@ -10,7 +10,8 @@ import {
 } from '../../shared/helpers/models.helpers';
 import { Models } from '../../shared/interfaces/models.interface';
 import { BaseModels } from '../../shared/models/mongo-models/adds/base-models.model';
-import { ImageFiles } from '../../shared/models/common/images-model';
+import { FileModel } from '../../shared/models/common/file-model';
+
 
 @Component({
 	selector: 'app-image-modal',
@@ -26,7 +27,7 @@ export class ImageModalComponent<Model extends BaseModels<Models>> {
 
 	public isUserAndGoogle: boolean = false;
 
-	public image: ImageFiles = new ImageFiles();
+	public image: FileModel = new FileModel();
 
 	// ANCHOR : Constructor
 	constructor(
@@ -62,9 +63,9 @@ export class ImageModalComponent<Model extends BaseModels<Models>> {
 	/**
 	 * ? Cambia la imagen recibida desde el input
 	 * @public
-	 * @param {ImageFiles} image
+	 * @param {FileModel} image
 	 */
-	public imageChanged(image: ImageFiles): void {
+	public imageChanged(image: FileModel): void {
 		this.image = image;
 	}
 
@@ -97,7 +98,7 @@ export class ImageModalComponent<Model extends BaseModels<Models>> {
 				next: (resp) => {
 					this.data.updateOnlyImages({ images: resp.filesRoute });
 					this._sweetAlertSvc.alertSuccess('Image updated');
-					this.image = new ImageFiles();
+					this.image = new FileModel();
 					this.close();
 				},
 				error: (error: DefaultErrorResponse) => {

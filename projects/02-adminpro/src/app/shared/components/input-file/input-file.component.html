@@ -1,12 +1,12 @@
 <div
 	class="input-file"
-	[title]="image.name"
+	[title]="file.name"
 	[ngClass]="{ disabled: isDisabled }"
 >
 	<input
 		#inputHiddenFile
 		type="file"
-		(change)="changeImage($event)"
+		(change)="changeFile($event)"
 		[accept]="fileFormat"
 		class="pointer"
 		hidden="true"
@@ -24,6 +24,6 @@
 		class="file-name form-control ellipsis pointer"
 		(click)="!isDisabled && inputHiddenFile.click()"
 	>
-		{{ image.name || 'Actual file' }}
+		{{ file.name || 'Actual file' }}
 	</div>
 </div>

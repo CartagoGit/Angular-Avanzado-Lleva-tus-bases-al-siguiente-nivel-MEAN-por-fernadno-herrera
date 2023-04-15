@@ -4,7 +4,7 @@
  * @interface ImageFiles
  * @typedef {ImageFiles}
  */
-export interface ImageFilesProps {
+export interface FileModelProps {
 	filesArray: File[];
 	readonly name: string;
 	readonly file: File | undefined;
@@ -17,7 +17,7 @@ export interface ImageFilesProps {
  * @class ImageFiles
  * @typedef {ImageFiles}
  */
-export class ImageFiles implements ImageFilesProps {
+export class FileModel implements FileModelProps {
 	// ANCHOR : Variables
 	public filesArray: File[] = [];
 	get name(): string {

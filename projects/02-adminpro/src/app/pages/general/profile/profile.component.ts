@@ -16,7 +16,7 @@ import { SweetAlertService } from '../../../shared/services/helpers/sweet-alert.
 import { ModelPropsAndId } from '../../../shared/interfaces/models/base-model-utils.interface';
 import { FilesService } from '../../../shared/services/http/files.service';
 import { DefaultErrorResponse } from '../../../shared/interfaces/http/response.interfaces';
-import { ImageFiles } from '../../../shared/models/common/images-model';
+import { FileModel } from '../../../shared/models/common/file-model';
 
 @Component({
 	selector: 'app-profile',
@@ -27,7 +27,7 @@ export class ProfileComponent {
 	// ANCHOR : Variables
 	public showPassword: boolean = false;
 	public isSubmited: boolean = false;
-	public image: ImageFiles = new ImageFiles();
+	public image: FileModel = new FileModel();
 
 	public user: User;
 
@@ -101,7 +101,7 @@ export class ProfileComponent {
 				next: (resp) => {
 					this.user.updateOnlyImages({ images: resp.filesRoute });
 					this._sweetAlertSvc.alertSuccess('Image updated');
-					this.image = new ImageFiles();
+					this.image = new FileModel();
 					this.profileForm.get('images')?.setValue([]);
 				},
 				error: (error: DefaultErrorResponse) => {
@@ -110,15 +110,15 @@ export class ProfileComponent {
 			});
 	}
 
-	
+
 
 
 	/**
 	 * ? Cambia la imagen seleccionada en el input
 	 * @public
-	 * @param {ImageFiles} image
+	 * @param {FileModel} image
 	 */
-	public imageChanged(image: ImageFiles): void {
+	public imageChanged(image: FileModel): void {
 		this.image = image;
 		this.profileForm.get('images')!.setValue(image.filesArray);
 	}

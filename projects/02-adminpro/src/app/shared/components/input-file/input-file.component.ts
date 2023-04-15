@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ImageFiles } from '../../models/common/images-model';
+import { FileModel } from '../../models/common/file-model';
 import { TypeFile } from '../../interfaces/models.interface';
 import { SweetAlertService } from '../../services/helpers/sweet-alert.service';
 
@@ -10,12 +10,12 @@ import { SweetAlertService } from '../../services/helpers/sweet-alert.service';
 })
 export class InputFileComponent {
 	// ANCHOR : Variables
-	@Input('image') image: ImageFiles = new ImageFiles();
+	@Input('file') file: FileModel = new FileModel();
 	@Input('isDisabled') isDisabled: boolean = false;
 	@Input('format') format: TypeFile = 'all';
 
-	@Output() imageChanged: EventEmitter<ImageFiles> =
-		new EventEmitter<ImageFiles>();
+	@Output() fileChanged: EventEmitter<FileModel> =
+		new EventEmitter<FileModel>();
 
 	public filesFormat: Omit<Record<TypeFile, string>, 'all'> = {
 		image: '.jpg, .jpeg, .png, .gif, .bmp, .tif, .tiff|images/*',
@@ -44,12 +44,12 @@ export class InputFileComponent {
 	 * @public
 	 * @param {Event} event
 	 */
-	public changeImage(event: Event): void {
+	public changeFile(event: Event): void {
 		const filesList: FileList | null = (event.target as HTMLInputElement)
 			.files;
 
 		if (!filesList || !filesList[0]) {
-			this.image = new ImageFiles();
+			this.file = new FileModel();
 		} else {
 			const filesArray: File[] = Array.from(filesList);
 			const isImage: boolean = filesArray.every((file) =>
@@ -57,9 +57,9 @@ export class InputFileComponent {
 			);
 			if (!isImage) {
 				this._sweetAlertSvc.alertError('Just allow images');
-				this.image = new ImageFiles();
-			} else this.image = new ImageFiles({ filesArray });
+				this.file = new FileModel();
+			} else this.file = new FileModel({ filesArray });
 		}
-		this.imageChanged.emit(this.image);
+		this.fileChanged.emit(this.file);
 	}
 }

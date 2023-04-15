@@ -8,8 +8,8 @@
 		</div>
 		<app-input-file
 			class="app-input-file"
-			(imageChanged)="imageChanged($event)"
-			[image]="image"
+			(fileChanged)="imageChanged($event)"
+			[file]="image"
 			[isDisabled]="isUserAndGoogle"
 			[format]="'image'"
 		>
