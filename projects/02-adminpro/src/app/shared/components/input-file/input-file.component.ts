@@ -40,7 +40,7 @@ export class InputFileComponent {
 
 	// ANCHOR : Methods
 	/**
-	 * ? Cambia la imagen seleccionada que se actualizara en el perfil
+	 * ? Cambia el archivo seleccionado en el input
 	 * @public
 	 * @param {Event} event
 	 */
@@ -52,11 +52,13 @@ export class InputFileComponent {
 			this.file = new FileModel();
 		} else {
 			const filesArray: File[] = Array.from(filesList);
-			const isImage: boolean = filesArray.every((file) =>
-				file.type.includes('image')
-			);
-			if (!isImage) {
-				this._sweetAlertSvc.alertError('Just allow images');
+			const isKindFile: boolean = filesArray.every((file) => {
+				return file.type.includes(this.format);
+			});
+			if (!isKindFile) {
+				this._sweetAlertSvc.alertError(
+					`Just allowed ${this.format} files`
+				);
 				this.file = new FileModel();
 			} else this.file = new FileModel({ filesArray });
 		}
