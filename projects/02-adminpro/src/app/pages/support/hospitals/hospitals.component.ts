@@ -9,22 +9,13 @@ import { HospitalsService } from '../../../shared/services/http/models/hospitals
 import { Pagination } from '../../../shared/interfaces/http/pagination.interface';
 import { PaginationData } from '../../../shared/interfaces/http/request.interface';
 import { DefaultState } from '../../../shared/interfaces/models/store.interface';
-import {
-	debounceTime,
-	delay,
-	finalize,
-	from,
-	Observable,
-	skip,
-	Subscription,
-	take,
-	tap,
-} from 'rxjs';
+import { debounceTime, finalize, skip, Subscription, take } from 'rxjs';
 import { minTimeBeforeLoader } from '../../../shared/constants/time.constants';
 import { SweetAlertService } from '../../../shared/services/helpers/sweet-alert.service';
 import { DefaultErrorResponse } from '../../../shared/interfaces/http/response.interfaces';
 import { ModalService } from '../../../shared/services/settings/modal.service';
 import { ImageModalComponent } from '../../../modals/image-modal/image-modal.component';
+import { NewHospitalModalComponent } from '../../../modals/new-hospital-modal/new-hospital-modal.component';
 
 @Component({
 	selector: 'page-hospitals',
@@ -182,5 +173,18 @@ export class HospitalsComponent {
 		});
 	}
 
-	public edit(hospital: Hospital){}
+	/**
+	 * ? Abre el modal para crear un nuevo hospital
+	 * @public
+	 */
+	public clickNewHospital() {
+		const modalRef = this._modalSvc.open(NewHospitalModalComponent, {
+			modalOptions: {
+				hasDefaultFooter: false,
+				title: 'Add new hospital',
+			},
+		});
+	}
+
+	public edit(hospital: Hospital) {}
 }

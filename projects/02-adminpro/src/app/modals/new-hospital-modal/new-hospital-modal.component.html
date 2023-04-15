@@ -1,0 +1,16 @@
+<div class="modal__body" [formGroup]="newHospitalForm"></div>
+<div class="modal__footer">
+	<button type="button" class="btn btn-default" (click)="close()">
+		Close
+	</button>
+	<button
+		type="button"
+		class="btn btn-primary"
+		(click)="newHospitalForm.valid && createHospital()"
+		[ngClass]="{
+			disabled: newHospitalForm.valid
+		}"
+	>
+		Create new hospital
+	</button>
+</div>
