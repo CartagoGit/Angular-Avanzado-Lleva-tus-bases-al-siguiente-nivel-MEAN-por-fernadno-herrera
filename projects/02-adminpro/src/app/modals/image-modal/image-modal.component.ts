@@ -10,6 +10,7 @@ import {
 } from '../../shared/helpers/models.helpers';
 import { Models } from '../../shared/interfaces/models.interface';
 import { BaseModels } from '../../shared/models/mongo-models/adds/base-models.model';
+import { ImageFiles } from '../../shared/models/common/images-model';
 
 @Component({
 	selector: 'app-image-modal',
@@ -25,10 +26,7 @@ export class ImageModalComponent<Model extends BaseModels<Models>> {
 
 	public isUserAndGoogle: boolean = false;
 
-	public image: { name: string; file?: File; url?: string } = {
-		name: '',
-	};
-	private _images: File[] = [];
+	public image: ImageFiles = new ImageFiles();
 
 	// ANCHOR : Constructor
 	constructor(
@@ -60,27 +58,14 @@ export class ImageModalComponent<Model extends BaseModels<Models>> {
 		this._modalSvc.close(data);
 	}
 
-	/**
-	 * ? Cambia la imagen seleccionada que se actualizara en el perfil
-	 * @public
-	 * @param {Event} event
-	 */
-	public changeImage(event: Event): void {
-		const filesList: FileList | null = (event.target as HTMLInputElement)
-			.files;
-		if (!filesList || !filesList[0]) {
-			this.image = { name: '' };
-			this._images = [];
-			return;
-		}
 
-		this.image = {
-			...this.image,
-			file: filesList[0],
-			name: filesList[0].name,
-			url: URL.createObjectURL(filesList[0]),
-		};
-		this._images = Array.from(filesList);
+	/**
+	 * ? Cambia la imagen recibida desde el input
+	 * @public
+	 * @param {ImageFiles} image
+	 */
+	public imageChanged(image: ImageFiles): void {
+		this.image = image;
 	}
 
 	/**
@@ -99,7 +84,7 @@ export class ImageModalComponent<Model extends BaseModels<Models>> {
 			);
 		}
 
-		const images = this._images;
+		const images = this.image.filesArray;
 		if (!images || !Array.isArray(images) || images.length === 0) return;
 		this._filesSvc
 			.uploadFile({
@@ -112,8 +97,7 @@ export class ImageModalComponent<Model extends BaseModels<Models>> {
 				next: (resp) => {
 					this.data.updateOnlyImages({ images: resp.filesRoute });
 					this._sweetAlertSvc.alertSuccess('Image updated');
-					this.image = { name: '' };
-					this._images = [];
+					this.image = new ImageFiles();
 					this.close();
 				},
 				error: (error: DefaultErrorResponse) => {

@@ -6,6 +6,7 @@ import { DonaComponent } from './dona/dona.component';
 import { NgChartsModule } from 'ng2-charts';
 import { FooterTableComponent } from './footer-table/footer-table.component';
 import { ModalComponent } from './modal/modal.component';
+import { InputFileComponent } from './input-file/input-file.component';
 
 @NgModule({
 	declarations: [
@@ -13,6 +14,7 @@ import { ModalComponent } from './modal/modal.component';
 		DonaComponent,
 		FooterTableComponent,
 		ModalComponent,
+		InputFileComponent,
 	],
 	imports: [CommonModule, FormsModule, NgChartsModule],
 	exports: [
@@ -20,6 +22,7 @@ import { ModalComponent } from './modal/modal.component';
 		DonaComponent,
 		FooterTableComponent,
 		ModalComponent,
+		InputFileComponent
 	],
 })
 export class ComponentsModule {}
