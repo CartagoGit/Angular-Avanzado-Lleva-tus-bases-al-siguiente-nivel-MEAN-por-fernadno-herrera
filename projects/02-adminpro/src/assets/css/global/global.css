@@ -101,3 +101,7 @@ img.portrait {
 }
 
 
+.animated.bounceIn {
+	animation-iteration-count: 1;
+ }
+

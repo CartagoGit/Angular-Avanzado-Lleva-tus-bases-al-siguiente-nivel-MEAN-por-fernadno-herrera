@@ -1,6 +1,6 @@
 <div
 	#modal
-	class="modal fade show modal__background animated fadeIn fast"
+	class="modal fade show modal__background"
 	[class.hide]="!modalSvc.isOpen"
 	id="modal"
 	tabindex="-1"
@@ -11,7 +11,7 @@
 	<!-- (click)="prueba($event)" -->
 	<div
 		#backdrop
-		class="modal__container"
+		class="modal__container animated zoomIn fast"
 		role="document"
 		(click)="options?.closeOnOutsideClick ? clickBackdrop($event) : null"
 	>
