@@ -12,7 +12,7 @@
 						#inputSearch
 						type="text"
 						class="form-control"
-						placeholder="Search user..."
+						placeholder="Search hospital..."
 						(input)="store.setParam('search', inputSearch.value)"
 					/>
 					<!-- (keyup.enter)="search()" -->
@@ -85,7 +85,7 @@
 								<div class="table-grid__field" [title]="hospital.address">
 									<span>{{ hospital.address }}</span>
 								</div>
-								<div class="table-grid__field" [title]="hospital.phone">
+								<div class="table-grid__field d-end" [title]="hospital.phone">
 									<span>{{ hospital.phone }}</span>
 								</div>
 
