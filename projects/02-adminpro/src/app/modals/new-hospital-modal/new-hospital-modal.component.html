@@ -1,48 +1,46 @@
-<div class="modal__body" [formGroup]="newHospitalForm">
-	<div class="form-group">
-		<label for="name">Name</label>
-		<input
-			type="text"
-			class="form-control"
-			id="name"
-			placeholder="Name"
-			formControlName="name"
-		/>
+<div class="modal__body row" [formGroup]="newHospitalForm">
+	<div class="col-6">
+		<div class="form-group">
+			<label for="name">Name</label>
+			<input
+				type="text"
+				class="form-control"
+				id="name"
+				placeholder="Name"
+				formControlName="name"
+			/>
+		</div>
+		<div class="form-group">
+			<label for="address">Address</label>
+			<input
+				type="text"
+				class="form-control"
+				id="address"
+				placeholder="Address"
+				formControlName="address"
+			/>
+		</div>
+		<div class="form-group">
+			<label for="phone">Phone</label>
+			<input
+				type="text"
+				class="form-control"
+				id="phone"
+				placeholder="Hospital phone"
+				formControlName="phone"
+			/>
+		</div>
 	</div>
-	<div class="form-group">
-		<label for="address">Address</label>
-		<input
-			type="text"
-			class="form-control"
-			id="address"
-			placeholder="Address"
-			formControlName="address"
-		/>
-	</div>
-	<div class="form-group">
-		<label for="phone">Phone</label>
-		<input
-			type="text"
-			class="form-control"
-			id="phone"
-			placeholder="Hospital phone"
-			formControlName="phone"
-		/>
-	</div>
-	<div class="form-group">
-		<label for="logo">Image</label>
-		<input
-			type="text"
-			class="form-control"
-			placeholder="Image"
-			formControlName="image"
-		/>
+	<div class="col-6 d-flex">
+		<div class="form-group image-field">
+			<label for="logo">Image</label>
+			<app-input-file>
+
+			</app-input-file>
+		</div>
 	</div>
 </div>
 <div class="modal__footer">
-	<button type="button" class="btn btn-default" (click)="close()">
-		Close
-	</button>
 	<button
 		type="button"
 		class="btn btn-primary"
@@ -52,5 +50,8 @@
 		}"
 	>
 		Create new hospital
+	</button>
+	<button type="button" class="btn btn-default" (click)="close()">
+		Close
 	</button>
 </div>

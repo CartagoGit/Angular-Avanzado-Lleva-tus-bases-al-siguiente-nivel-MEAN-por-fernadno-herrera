@@ -13,28 +13,25 @@ export class NewHospitalModalComponent {
 		name: [''],
 		address: [''],
 		images: [[]],
+		phone: [''],
 	});
 
 	// ANCHOR : Constructor
-	constructor(private _fb: FormBuilder, private _modalSvc :ModalService) {}
+	constructor(private _fb: FormBuilder, private _modalSvc: ModalService) {}
 
 	// ANCHOR : Methods
-
 
 	/**
 	 * ? Crea un nuevo hospital
 	 * @public
 	 */
-	public createHospital(){
-
-	}
-
+	public createHospital() {}
 
 	/**
 	 * ? Cierra el modal
 	 * @public
 	 */
-	public close(){
+	public close() {
 		this._modalSvc.close();
 	}
 }

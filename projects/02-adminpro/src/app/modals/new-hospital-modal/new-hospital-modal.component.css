@@ -1,0 +1,8 @@
+.image-field{
+	display: flex;
+	flex-direction: column;
+}
+
+app-input-file{
+	margin-top: auto;
+}
