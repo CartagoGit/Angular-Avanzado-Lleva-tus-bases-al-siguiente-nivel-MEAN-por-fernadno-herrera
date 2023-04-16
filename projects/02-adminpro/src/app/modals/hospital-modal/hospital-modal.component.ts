@@ -44,7 +44,6 @@ export class HospitalModalComponent {
 
 	ngOnInit(): void {
 		//* Si llegan datos, es porque es un update
-		console.log("❗ngOnInit  ➽ data ➽ ⏩" , this.data);
 		if (this.data && isHospital(this.data)) {
 			this.kindModal = 'update';
 			const { address, name, phone, dataImages } = this.data;
@@ -123,14 +122,14 @@ export class HospitalModalComponent {
 			.put({ ...hospitalParams, id: this.data!.id })
 			.pipe(
 				switchMap((resp) => {
-					const { model } = resp;
-					if (!resp || !model) throw 'Could not update the hospital';
+					const { data } = resp;
+					if (!resp || !data) throw 'Could not update the hospital';
 					if (!images || !images.length) return of(resp);
 					return this._filesSvc
 						.uploadFile(
 							{
 								filesToUpload: images.map((img) => img.file!),
-								id: model.id,
+								id: data.id,
 								typeFile: 'images',
 								typeModel: 'hospitals',
 							},
@@ -141,11 +140,11 @@ export class HospitalModalComponent {
 			)
 			.subscribe({
 				next: (resp) => {
-					const { model } = resp;
+					const { data } = resp;
 					this._sweetAlertSvc.alertSuccess(
 						'Hospital updated successfully'
 					);
-					this.close(model);
+					this.close(data);
 				},
 				error: (err: DefaultErrorResponse) => {
 					this._sweetAlertSvc.alertError(err.error_message);

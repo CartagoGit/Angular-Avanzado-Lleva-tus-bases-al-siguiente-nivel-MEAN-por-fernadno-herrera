@@ -51,8 +51,8 @@ export class ModalComponent {
 		this.content.clear();
 		this.componentRef = this.content.createComponent(component);
 		//!! La data se recupera y es un parametro exclusivo al crear la instancia del modal
-		if (this.componentRef?.instance?.data)
-			this.componentRef.instance.data = data;
+		// if (this.componentRef?.instance?.data)
+		if (data) this.componentRef.instance.data = data;
 
 		this.content.insert(this.componentRef.hostView);
 		return true;
