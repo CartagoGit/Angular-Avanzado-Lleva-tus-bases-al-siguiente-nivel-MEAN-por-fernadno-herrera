@@ -1,4 +1,4 @@
-<div class="modal__body row" [formGroup]="newHospitalForm">
+<div class="modal__body row" [formGroup]="hospitalForm">
 	<div class="col-6">
 		<div class="form-group">
 			<label for="name">Name</label>
@@ -37,7 +37,12 @@
 			<div class="modal__image-container">
 				<img
 					class="modal__image"
-					[src]="image.url || defaultImage | safe"
+					[src]="
+						(!!hospitalForm.get('images')?.value?.length &&
+							hospitalForm.get('images')!.value![0].url) ||
+							data?.dataImages?.defaultImgSrc ||
+							defaultImage | safe
+					"
 					alt="image selected"
 				/>
 			</div>
@@ -51,16 +56,31 @@
 	</div>
 </div>
 <div class="modal__footer">
-	<button
-		type="button"
-		class="btn btn-primary"
-		(click)="newHospitalForm.valid && createHospital()"
-		[ngClass]="{
-			disabled: newHospitalForm.invalid
-		}"
-	>
-		Create new hospital
-	</button>
+	<ng-container [ngSwitch]="kindModal">
+		<button
+			*ngSwitchCase="'create'"
+			type="button"
+			class="btn btn-primary"
+			(click)="hospitalForm.valid && createHospital()"
+			[ngClass]="{
+				disabled: hospitalForm.invalid
+			}"
+		>
+			Create new hospital
+		</button>
+		<button
+			*ngSwitchCase="'update'"
+			type="button"
+			class="btn btn-secondary"
+			(click)="hospitalForm.valid && updateHospital()"
+			[ngClass]="{
+				disabled: hospitalForm.invalid
+			}"
+		>
+			Update hospital
+		</button>
+	</ng-container>
+
 	<button type="button" class="btn btn-default" (click)="close()">
 		Close
 	</button>

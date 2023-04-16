@@ -15,7 +15,7 @@ import { SweetAlertService } from '../../../shared/services/helpers/sweet-alert.
 import { DefaultErrorResponse } from '../../../shared/interfaces/http/response.interfaces';
 import { ModalService } from '../../../shared/services/settings/modal.service';
 import { ImageModalComponent } from '../../../modals/image-modal/image-modal.component';
-import { NewHospitalModalComponent } from '../../../modals/new-hospital-modal/new-hospital-modal.component';
+import { HospitalModalComponent } from '../../../modals/hospital-modal/hospital-modal.component';
 
 @Component({
 	selector: 'page-hospitals',
@@ -179,7 +179,7 @@ export class HospitalsComponent {
 	 * @public
 	 */
 	public clickNewHospital() {
-		const modalRef = this._modalSvc.open(NewHospitalModalComponent, {
+		const modalRef = this._modalSvc.open(HospitalModalComponent, {
 			modalOptions: {
 				hasDefaultFooter: false,
 				title: 'Add new hospital',
@@ -196,7 +196,19 @@ export class HospitalsComponent {
 	 * @public
 	 * @param {Hospital} hospital
 	 */
-	public clickEdit(hospital: Hospital) {}
+	public clickEdit(hospital: Hospital) {
+		const modalRef = this._modalSvc.open(HospitalModalComponent, {
+			modalOptions: {
+				hasDefaultFooter: false,
+				title: 'Edit hospital',
+			},
+			data: hospital,
+		});
+		modalRef.afterClosed$.subscribe((res) => {
+			if (!res || !res.isOk) return;
+			this.search();
+		});
+	}
 
 	/**
 	 * ? Abre el modal para ver los doctores de un hospital
