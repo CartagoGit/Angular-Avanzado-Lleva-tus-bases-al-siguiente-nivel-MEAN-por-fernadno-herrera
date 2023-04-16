@@ -1,7 +1,8 @@
 <div class="modal__body">
 	<div class="form-group">
-		<div class="image-modal">
+		<div class="modal__image-container">
 			<img
+			class="modal__image"
 				[src]="image.url || data.dataImages?.defaultImgSrc | safe"
 				alt="image selected"
 			/>

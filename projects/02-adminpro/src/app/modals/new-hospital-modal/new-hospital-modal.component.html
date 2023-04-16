@@ -34,8 +34,18 @@
 	<div class="col-6 d-flex">
 		<div class="form-group image-field">
 			<label for="logo">Image</label>
-			<app-input-file>
-
+			<div class="modal__image-container">
+				<img
+					class="modal__image"
+					[src]="image.url || defaultImage | safe"
+					alt="image selected"
+				/>
+			</div>
+			<app-input-file
+				[file]="image"
+				(fileChanged)="imageChanged($event)"
+				[format]="'image'"
+			>
 			</app-input-file>
 		</div>
 	</div>

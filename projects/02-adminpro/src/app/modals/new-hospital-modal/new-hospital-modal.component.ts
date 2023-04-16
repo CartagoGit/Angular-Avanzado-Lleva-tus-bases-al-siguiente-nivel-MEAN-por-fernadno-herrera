@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { ModalService } from '../../shared/services/settings/modal.service';
+import { pathNoImage } from '../../shared/constants/strings.constants';
+import { FileModel } from '../../shared/models/common/file-model';
+import { Hospital } from '../../shared/models/mongo-models/hospital.model';
 
 @Component({
 	selector: 'app-new-hospital-modal',
@@ -10,11 +13,15 @@ import { ModalService } from '../../shared/services/settings/modal.service';
 export class NewHospitalModalComponent {
 	// ANCHOR : Variables
 	public newHospitalForm = this._fb.group({
-		name: [''],
-		address: [''],
+		name: ['', Validators.required],
+		address: ['', Validators.required],
 		images: [[]],
 		phone: [''],
 	});
+
+	public image = new FileModel();
+
+	public defaultImage = pathNoImage;
 
 	// ANCHOR : Constructor
 	constructor(private _fb: FormBuilder, private _modalSvc: ModalService) {}
@@ -31,7 +38,19 @@ export class NewHospitalModalComponent {
 	 * ? Cierra el modal
 	 * @public
 	 */
-	public close() {
-		this._modalSvc.close();
+	public close(data?: Hospital) {
+		const response ={ data } || { isOk: false };
+		this._modalSvc.close(response);
 	}
+
+
+	/**
+	 * ? Evento cuando la imagen cambia en el input file
+	 * @public
+	 */
+	public imageChanged(image: FileModel) {
+		this.image = image;
+	}
+
+
 }

@@ -1,8 +1,21 @@
-.image-field{
+.image-field {
 	display: flex;
 	flex-direction: column;
+	width: 100%;
+	max-width: 300px;
 }
 
-app-input-file{
+app-input-file {
 	margin-top: auto;
+}
+
+.modal__image {
+	max-width: fit-content;
+	max-height: inherit;
+	object-fit: scale-down;
+}
+
+.modal__image-container {
+	max-height: 160px;
+	height: 100%;
 }
