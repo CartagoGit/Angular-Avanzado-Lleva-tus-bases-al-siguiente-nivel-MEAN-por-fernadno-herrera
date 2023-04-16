@@ -1,4 +1,10 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	Component,
+	EventEmitter,
+	Input,
+	Output,
+} from '@angular/core';
 import { FileModel } from '../../models/common/file-model';
 import { TypeFile } from '../../interfaces/models.interface';
 import { SweetAlertService } from '../../services/helpers/sweet-alert.service';
@@ -56,9 +62,7 @@ export class InputFileComponent {
 				return file.type.includes(this.format);
 			});
 			if (!isKindFile) {
-				this._sweetAlertSvc.alertError(
-					`Just allowed ${this.format} files`
-				);
+				this._sweetAlertSvc.alertError(`Just allowed ${this.format} files`);
 				this.file = new FileModel();
 			} else this.file = new FileModel({ filesArray });
 		}

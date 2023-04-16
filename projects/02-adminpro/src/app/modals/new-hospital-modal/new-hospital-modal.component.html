@@ -26,7 +26,7 @@
 				type="text"
 				class="form-control"
 				id="phone"
-				placeholder="Hospital phone"
+				placeholder="Phone"
 				formControlName="phone"
 			/>
 		</div>
@@ -56,7 +56,7 @@
 		class="btn btn-primary"
 		(click)="newHospitalForm.valid && createHospital()"
 		[ngClass]="{
-			disabled: newHospitalForm.valid
+			disabled: newHospitalForm.invalid
 		}"
 	>
 		Create new hospital

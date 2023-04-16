@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ModalService } from '../../shared/services/settings/modal.service';
 import { pathNoImage } from '../../shared/constants/strings.constants';
@@ -24,7 +24,7 @@ export class NewHospitalModalComponent {
 	public defaultImage = pathNoImage;
 
 	// ANCHOR : Constructor
-	constructor(private _fb: FormBuilder, private _modalSvc: ModalService) {}
+	constructor(private _fb: FormBuilder, private _modalSvc: ModalService, private _cd: ChangeDetectorRef) {}
 
 	// ANCHOR : Methods
 
@@ -32,7 +32,9 @@ export class NewHospitalModalComponent {
 	 * ? Crea un nuevo hospital
 	 * @public
 	 */
-	public createHospital() {}
+	public createHospital() {
+		console.log('entra');
+	}
 
 	/**
 	 * ? Cierra el modal
@@ -50,6 +52,7 @@ export class NewHospitalModalComponent {
 	 */
 	public imageChanged(image: FileModel) {
 		this.image = image;
+		this._cd.detectChanges();
 	}
 
 

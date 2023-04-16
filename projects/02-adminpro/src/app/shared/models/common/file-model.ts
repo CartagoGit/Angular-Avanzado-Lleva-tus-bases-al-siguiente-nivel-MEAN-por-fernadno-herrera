@@ -20,18 +20,15 @@ export interface FileModelProps {
 export class FileModel implements FileModelProps {
 	// ANCHOR : Variables
 	public filesArray: File[] = [];
-	get name(): string {
-		return this.filesArray.length > 0 ? this.filesArray[0].name : '';
-	}
-	get file(): File | undefined {
-		return this.filesArray.length > 0 ? this.filesArray[0] : undefined;
-	}
-	get url(): string | undefined {
-		return this.file ? URL.createObjectURL(this.file) : undefined;
-	}
+	public readonly name: string = '';
+	public readonly file: File | undefined;
+	public readonly url: string | undefined;
 
 	// ANCHOR : Constructor
 	constructor(data?: { filesArray: File[] }) {
 		this.filesArray = data?.filesArray || [];
+		this.name = this.filesArray.length > 0 ? this.filesArray[0].name : '';
+		this.file = this.filesArray.length > 0 ? this.filesArray[0] : undefined;
+		this.url = this.file ? URL.createObjectURL(this.file) : undefined;
 	}
 }
