@@ -132,7 +132,7 @@ export class HospitalsComponent {
 	 * @public
 	 * @param {Hospital} hospital
 	 */
-	public delete(hospital: Hospital) {
+	public clickDelete(hospital: Hospital) {
 		this._sweetAlertSvc
 			.confirmDeleteModal({
 				title: 'Delete hospital',
@@ -166,7 +166,8 @@ export class HospitalsComponent {
 				title: 'Choose an image to change it',
 			},
 		});
-		modalRef.afterClosed$.subscribe((_res) => {
+		modalRef.afterClosed$.subscribe((res) => {
+			if (!res || !res.isOk) return;
 			hospital.dataImages?.defaultImgSrc$.pipe(take(1)).subscribe((_res) => {
 				this._cd.markForCheck();
 			});
@@ -184,7 +185,25 @@ export class HospitalsComponent {
 				title: 'Add new hospital',
 			},
 		});
+		modalRef.afterClosed$.subscribe((res) => {
+			if (!res || !res.isOk) return;
+			this.search();
+		});
 	}
 
-	public edit(hospital: Hospital) {}
+	/**
+	 * ? Abre el modal para editar un hospital
+	 * @public
+	 * @param {Hospital} hospital
+	 */
+	public clickEdit(hospital: Hospital) {}
+
+	/**
+	 * ? Abre el modal para ver los doctores de un hospital
+	 * @public
+	 * @param {Hospital} hospital
+	 */
+	public clickDoctors(hospital: Hospital) {
+		console.log(hospital);
+	}
 }

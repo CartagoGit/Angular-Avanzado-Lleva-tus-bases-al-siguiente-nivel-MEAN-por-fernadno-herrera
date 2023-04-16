@@ -12,7 +12,6 @@ import { Models } from '../../shared/interfaces/models.interface';
 import { BaseModels } from '../../shared/models/mongo-models/adds/base-models.model';
 import { FileModel } from '../../shared/models/common/file-model';
 
-
 @Component({
 	selector: 'app-image-modal',
 	templateUrl: './image-modal.component.html',
@@ -56,9 +55,8 @@ export class ImageModalComponent<Model extends BaseModels<Models>> {
 	 */
 	public close(data?: any): void {
 		// this._modalSvc.close({ algo: 'de vuelta' });
-		this._modalSvc.close(data);
+		this._modalSvc.close(data || { isOk: false });
 	}
-
 
 	/**
 	 * ? Cambia la imagen recibida desde el input
@@ -99,7 +97,7 @@ export class ImageModalComponent<Model extends BaseModels<Models>> {
 					this.data.updateOnlyImages({ images: resp.filesRoute });
 					this._sweetAlertSvc.alertSuccess('Image updated');
 					this.image = new FileModel();
-					this.close();
+					this.close({ isOk: true });
 				},
 				error: (error: DefaultErrorResponse) => {
 					this._sweetAlertSvc.alertError(error.error_message);

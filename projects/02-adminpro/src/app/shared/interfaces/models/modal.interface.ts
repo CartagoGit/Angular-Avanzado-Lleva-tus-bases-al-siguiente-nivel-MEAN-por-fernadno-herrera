@@ -10,12 +10,12 @@ import { ModalComponent } from '../../components/modal/modal.component';
  * @template T
  * @template D
  */
-export interface ModalState<C = any, D = any> {
+export interface ModalState<Returned = any, C = any, D = any> {
 	isOpen: boolean;
 	component: Type<C>;
 	data: D;
 	options: ModalOptions;
-	afterClosedSubject: Subject<ModalReturnedAtOpen>;
+	afterClosedSubject: Subject<Returned>;
 }
 
 /**
@@ -38,8 +38,8 @@ export interface ModalOptions {
  * @interface ModalReturnedAtOpen
  * @typedef {ModalReturnedAtOpen}
  */
-export interface ModalReturnedAtOpen {
-	afterClosed$: Observable<any>;
+export interface ModalReturnedAtOpen<T = any> {
+	afterClosed$: Observable<T>;
 	close: () => void;
 	modalContainer: ModalComponent;
 }

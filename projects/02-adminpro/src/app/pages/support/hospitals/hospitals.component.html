@@ -57,6 +57,7 @@
 							<div class="table-grid__field center-items">Img</div>
 							<div class="table-grid__field">Name</div>
 							<div class="table-grid__field">Address</div>
+							<div class="table-grid__field">Phone</div>
 							<div class="table-grid__field">Created</div>
 							<div class="table-grid__field">Updated</div>
 							<div class="table-grid__field d-center">Actions</div>
@@ -81,8 +82,11 @@
 								<div class="table-grid__field" [title]="hospital.name">
 									<span>{{ hospital.name }}</span>
 								</div>
-								<div class="table-grid__field" [title]="hospital.name">
+								<div class="table-grid__field" [title]="hospital.address">
 									<span>{{ hospital.address }}</span>
+								</div>
+								<div class="table-grid__field" [title]="hospital.phone">
+									<span>{{ hospital.phone }}</span>
 								</div>
 
 								<div
@@ -104,9 +108,20 @@
 								<div
 									class="table-grid__field text-nowrap d-center table-grid__icons"
 								>
+								<div
+										class="pointer"
+										(click)="clickDoctors(hospital)"
+										data-toggle="tooltip"
+										data-original-title="see doctors"
+									>
+										<i
+											class="fa fa-pencil text-success"
+											aria-hidden="true"
+										></i>
+									</div>
 									<div
 										class="pointer"
-										(click)="edit(hospital)"
+										(click)="clickEdit(hospital)"
 										data-toggle="tooltip"
 										data-original-title="edit"
 									>
@@ -117,7 +132,7 @@
 									</div>
 									<div
 										class="pointer"
-										(click)="delete(hospital)"
+										(click)="clickDelete(hospital)"
 										data-toggle="tooltip"
 										data-original-title="remove"
 									>

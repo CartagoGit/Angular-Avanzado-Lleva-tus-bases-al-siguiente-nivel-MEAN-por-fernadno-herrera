@@ -63,12 +63,16 @@ export class ModalService {
 	 * ? Metodo para abrir un nueo modal
 	 * @public
 	 */
-	public open<C, D>(
+	public open<Returned = { isOk: boolean }, C = any, D = any>(
 		component: Type<C>,
 		options?: { data?: D; modalOptions?: ModalOptions }
-	): ModalReturnedAtOpen {
-		this._createModalStore(component, options || {});
-		const { afterClosedSubject } = this._actualModalState!;
+	): ModalReturnedAtOpen<Returned> {
+		const newStore = this._createModalStore<Returned, C, D>(
+			component,
+			options || {}
+		);
+		const actualState = newStore.getState();
+		const { afterClosedSubject } = actualState!;
 		return {
 			afterClosed$: afterClosedSubject.asObservable(),
 			close: () => this.close(),
@@ -80,7 +84,7 @@ export class ModalService {
 	 * ? Metodo para crear un nuevo modal y añadirlo a la pila del store
 	 * @public
 	 */
-	public close(returnedData?: any): void {
+	public close(returnedData: any = { isOk: false }): void {
 		// if (returnedData) {
 		const { afterClosedSubject } = this._actualModalState!;
 		afterClosedSubject.next(returnedData);
@@ -93,30 +97,31 @@ export class ModalService {
 	/**
 	 * ? Metodo para crear un nuevo modal y añadirlo a la pila del store
 	 * @private
+	 * @template Returned
 	 * @template C
 	 * @template D
 	 * @param {Type<C>} component
 	 * @param {?{ data?: D; modalOptions?: ModalOptions }} [options]
-	 * @returns {Store<ModalState<C, D>>}
+	 * @returns {Store<ModalState<Returned, C, D>>}
 	 */
-	private _createModalStore<C, D>(
+	private _createModalStore<Returned, C, D>(
 		component: Type<C>,
 		options?: { data?: D; modalOptions?: ModalOptions }
-	): Store<ModalState<C, D>> {
+	): Store<ModalState<Returned, C, D>> {
 		let { data = {} as D, modalOptions = {} } = options || {};
 		modalOptions = {
 			...this._getDefaultModalOptions(),
 			...modalOptions,
 		};
 
-		const newModalState: ModalState<C, D> = {
+		const newModalState: ModalState<Returned, C, D> = {
 			isOpen: true,
 			component,
 			data,
 			options: modalOptions,
-			afterClosedSubject: new Subject<ModalReturnedAtOpen>(),
+			afterClosedSubject: new Subject<Returned>(),
 		};
-		const newModalStore = createStore<ModalState<C, D>>(
+		const newModalStore = createStore<ModalState<Returned, C, D>>(
 			newModalState,
 			this._modalStoreOptions
 		);
