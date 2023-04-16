@@ -11,11 +11,7 @@ export const DoctorSchema: Schema<any> = new Schema(
 				type: String,
 			},
 		],
-		// user_creator: {
-		// 	type: Schema.Types.ObjectId,
-		// 	ref: 'User',
-		// 	required: true,
-		// },
+		
 		user: {
 			type: Schema.Types.ObjectId,
 			unique: true,

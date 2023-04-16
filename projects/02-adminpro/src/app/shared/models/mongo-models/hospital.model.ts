@@ -11,6 +11,7 @@ export interface HospitalProps extends BaseModelsProps {
 	images: string[];
 	name: string;
 	address: string;
+	phone?: string;
 }
 
 /**
@@ -28,6 +29,7 @@ export class Hospital
 	public images!: string[];
 	public name!: string;
 	public address!: string;
+	public phone?: string;
 
 
 	// ANCHOR : Constructor

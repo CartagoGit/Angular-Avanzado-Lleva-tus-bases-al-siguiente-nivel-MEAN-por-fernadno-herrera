@@ -16,11 +16,15 @@ export const HospitalSchema: Schema<any> = new Schema(
 				type: String,
 			},
 		],
-		user_creator: {
-			type: Schema.Types.ObjectId,
-			ref: 'User',
+		address:{
+			type: String,
 			required: true,
 		},
+		phone: {
+			type: String,
+			required: false,
+		},
+		
 	},
 	// { timestamps: true }
 	//* Si quisieramos cambiar "hospitals" por "hospitales" al crearse el modelo en mongoDb
