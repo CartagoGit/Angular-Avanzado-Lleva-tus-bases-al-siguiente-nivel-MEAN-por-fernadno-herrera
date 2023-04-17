@@ -1,15 +1,36 @@
 <div class="modal__body">
 	<div class="row">
-		<div class="col-6 without-hospital">
+		<div class="col-md-12 col-lg-6 without-hospital column">
 			<label>Doctors not assigned in any hospital</label>
 			<ul class="list-group">
-				<li *ngFor="let doctorWithout of doctorsWithoutHospital"></li>
+				<!-- <li *ngFor="let doctor of doctorsWithoutHospital"> -->
+				<!-- {{ doctor.user.name }} -->
+				<li
+					*ngFor="
+						let doctor of [
+							0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14
+						]
+					"
+				>
+					<!-- {{ doctor.user.name }} -->
+					{{ doctor }}
+				</li>
 			</ul>
 		</div>
-		<div class="col-6 in-hospital">
+		<div class="col-md-12 col-lg-6 in-hospital column">
 			<label>Doctors working in {{ this.data.name }}</label>
 			<ul class="list-group">
-				<li *ngFor="let doctor of doctorsOfHospital"></li>
+				<!-- <li *ngFor="let doctor of doctorsOfHospital"> -->
+				<li
+					*ngFor="
+						let doctor of [
+							0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14
+						]
+					"
+				>
+					<!-- {{ doctor.user.name }} -->
+					{{ doctor }}
+				</li>
 			</ul>
 		</div>
 	</div>

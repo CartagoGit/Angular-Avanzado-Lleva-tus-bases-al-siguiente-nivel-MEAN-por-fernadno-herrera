@@ -1,0 +1,34 @@
+.column {
+	min-width: 400px;
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+}
+
+.list-group {
+	width: 100%;
+	height: 200px;
+	overflow: auto;
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	border-radius: 10px;
+}
+li {
+	list-style: none;
+	padding: 10px;
+	cursor: pointer;
+}
+li:nth-child(odd) {
+	background-color: #f4f6f9;
+}
+li:nth-child(even) {
+	background-color: white;
+}
+li:hover {
+	background-color: #f3f1f1;
+}
+/*
+:host {
+	min-width: 70%;
+	display:flex;
+	flex-direction: column;
+} */

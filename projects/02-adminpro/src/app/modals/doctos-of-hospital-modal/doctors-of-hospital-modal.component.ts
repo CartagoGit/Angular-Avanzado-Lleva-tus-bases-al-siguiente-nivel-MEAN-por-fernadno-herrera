@@ -61,6 +61,7 @@ export class DoctorsOfHospitalModalComponent {
 				this.doctorsOfHospital = doctors.map(
 					(doctor) => new Doctor(doctor)
 				);
+				console.log("❗this._hospitalsSvc.getDoctors  ➽ doctorsOfHospital ➽ ⏩" , this.doctorsOfHospital);
 			},
 			error: (error: DefaultErrorResponse) => {
 				this._sweerAlertSvc.alertError(error.error_message);
@@ -87,6 +88,7 @@ export class DoctorsOfHospitalModalComponent {
 				this.doctorsWithoutHospital = doctors.map(
 					(doctor) => new Doctor(doctor)
 				);
+				console.log("❗this._doctorsSvc.getByQuery  ➽ doctorsWithoutHospital ➽ ⏩" , this.doctorsWithoutHospital);
 			},
 			error: (error: DefaultErrorResponse) => {
 				this._sweerAlertSvc.alertError(error.error_message);
