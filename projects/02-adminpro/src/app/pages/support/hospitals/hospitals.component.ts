@@ -16,6 +16,7 @@ import { DefaultErrorResponse } from '../../../shared/interfaces/http/response.i
 import { ModalService } from '../../../shared/services/settings/modal.service';
 import { ImageModalComponent } from '../../../modals/image-modal/image-modal.component';
 import { HospitalModalComponent } from '../../../modals/hospital-modal/hospital-modal.component';
+import { DoctorsOfHospitalModalComponent } from '../../../modals/doctos-of-hospital-modal/doctors-of-hospital-modal.component';
 
 @Component({
 	selector: 'page-hospitals',
@@ -216,6 +217,13 @@ export class HospitalsComponent {
 	 * @param {Hospital} hospital
 	 */
 	public clickDoctors(hospital: Hospital) {
-		console.log(hospital);
+		const modalRef = this._modalSvc.open(DoctorsOfHospitalModalComponent, {
+			modalOptions: {
+				hasDefaultFooter: false,
+				title: 'Doctors of hospital',
+			},
+			data: hospital,
+		});
+
 	}
 }
