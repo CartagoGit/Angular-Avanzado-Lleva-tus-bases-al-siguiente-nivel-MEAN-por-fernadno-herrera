@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { DefaultResponse } from '../../../interfaces/http/response.interfaces';
 import { CrudHttp } from '../../../models/http/crud-http.model';
+import { DoctorProps } from '../../../models/mongo-models/doctor.model';
+import { TypeId } from '../../../interfaces/models/base-model-utils.interface';
 import {
 	Hospital,
 	HospitalProps,
 } from '../../../models/mongo-models/hospital.model';
-
 
 /**
  * ? Rutas popias del modelo de Usuarios
@@ -47,4 +50,29 @@ export class HospitalsService extends CrudHttp<
 	}
 
 	// ANCHOR : Métodos
+
+	/**
+	 * ? Obtiene los doctores de un hospital
+	 * @public
+	 * @param {string} id
+	 * @returns {*}
+	 */
+	public getDoctors(id: TypeId): Observable<DefaultResponse<DoctorProps[]>> {
+		return this._http.get<DefaultResponse<DoctorProps[]>>(
+			this.getUrlEndpoint('getDoctors', id)
+		);
+	}
+
+
+	/**
+	 * ? Obtiene los pacientes de un hospital
+	 * @public
+	 * @param {TypeId} id
+	 * @returns {Observable<DefaultResponse<DoctorProps[]>>}
+	 */
+	public getPatients(id: TypeId): Observable<DefaultResponse<DoctorProps[]>> {
+		return this._http.get<DefaultResponse<DoctorProps[]>>(
+			this.getUrlEndpoint('getPatients', id)
+		);
+	}
 }
