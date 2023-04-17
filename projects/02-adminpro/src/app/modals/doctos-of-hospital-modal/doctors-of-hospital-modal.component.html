@@ -1,4 +1,19 @@
-<div class="modal__body"></div>
+<div class="modal__body">
+	<div class="row">
+		<div class="col-6 without-hospital">
+			<label>Doctors not assigned in any hospital</label>
+			<ul class="list-group">
+				<li *ngFor="let doctorWithout of doctorsWithoutHospital"></li>
+			</ul>
+		</div>
+		<div class="col-6 in-hospital">
+			<label>Doctors working in {{ this.data.name }}</label>
+			<ul class="list-group">
+				<li *ngFor="let doctor of doctorsOfHospital"></li>
+			</ul>
+		</div>
+	</div>
+</div>
 <div class="modal__footer">
 	<button
 		class="btn btn-info"

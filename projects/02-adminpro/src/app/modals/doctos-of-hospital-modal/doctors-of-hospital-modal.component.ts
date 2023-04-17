@@ -6,6 +6,7 @@ import { isHospital } from '../../shared/helpers/models.helpers';
 import { HospitalsService } from '../../shared/services/http/models/hospitals.service';
 import { DoctorsService } from '../../shared/services/http/models/doctors.service';
 import { Doctor } from '../../shared/models/mongo-models/doctor.model';
+import { DefaultErrorResponse } from '../../shared/interfaces/http/response.interfaces';
 
 @Component({
 	selector: 'app-doctors-of-hospital-modal',
@@ -16,9 +17,10 @@ export class DoctorsOfHospitalModalComponent {
 	// ANCHOR : Variables
 	public data!: Hospital;
 
-	public doctorsOfHospital: any[] = [];
+	public doctorsOfHospital: Doctor[] = [];
+	public doctorsWithoutHospital: Doctor[] = [];
 
-	public areDoctorsChanged : boolean = false;
+	public areDoctorsChanged: boolean = false;
 
 	// ANCHOR : Constructor
 	constructor(
@@ -36,6 +38,7 @@ export class DoctorsOfHospitalModalComponent {
 			this.close();
 		}
 		this._getDoctorsOfHospital();
+		this._getDoctorsWithoutHospital();
 	}
 
 	// ANCHOR : Methods
@@ -45,29 +48,50 @@ export class DoctorsOfHospitalModalComponent {
 	 * @public
 	 */
 	public _getDoctorsOfHospital() {
-		this._hospitalsSvc
-			.getDoctors(this.data.id)
-			.subscribe((res) => {
-				const {data:doctors} = res;
-				if(!res || !doctors) {
-					this._sweerAlertSvc.alertError('Some error ocurred getting doctors of hospital');
+		this._hospitalsSvc.getDoctors(this.data.id).subscribe({
+			next: (res) => {
+				const { data: doctors } = res;
+				if (!res || !doctors) {
+					this._sweerAlertSvc.alertError(
+						'Some error ocurred getting doctors of hospital'
+					);
 					this.close();
 					return;
 				}
-				this.doctorsOfHospital = doctors.map((doctor) => new Doctor(doctor));
-				console.log(res);
-			});
+				this.doctorsOfHospital = doctors.map(
+					(doctor) => new Doctor(doctor)
+				);
+			},
+			error: (error: DefaultErrorResponse) => {
+				this._sweerAlertSvc.alertError(error.error_message);
+				this.close();
+			},
+		});
 	}
-
 
 	/**
 	 * ? Obtiene los doctores sin hospital
 	 * @public
 	 */
 	public _getDoctorsWithoutHospital() {
-		// TODO
-		this._doctorsSvc.getByQuery({  }).subscribe((res) => {
-			console.log(res);
+		this._doctorsSvc.getByQuery({ hospitals: [] }).subscribe({
+			next: (res) => {
+				const { data: doctors } = res;
+				if (!res || !doctors) {
+					this._sweerAlertSvc.alertError(
+						'Some error ocurred getting doctors without hospital'
+					);
+					this.close();
+					return;
+				}
+				this.doctorsWithoutHospital = doctors.map(
+					(doctor) => new Doctor(doctor)
+				);
+			},
+			error: (error: DefaultErrorResponse) => {
+				this._sweerAlertSvc.alertError(error.error_message);
+				this.close();
+			},
 		});
 	}
 
