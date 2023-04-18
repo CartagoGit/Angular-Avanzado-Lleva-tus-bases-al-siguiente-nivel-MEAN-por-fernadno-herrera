@@ -109,4 +109,24 @@ export class DoctorsOfHospitalModalComponent {
 		// TODO
 		console.log(this.doctorsOfHospital);
 	}
+
+
+	public onDragStart(event: DragEvent): void {
+		console.log("❗onDragStart  ➽ event ➽ ⏩" , event);
+		event.dataTransfer?.setData('text/plain', (event.target as HTMLElement)?.textContent!);
+	 }
+
+	 public onDragOver(event: DragEvent): void {
+		console.log("❗onDragOver  ➽ event ➽ ⏩" , event);
+		event.preventDefault();
+	 }
+
+	 public onDrop(event: DragEvent): void {
+		console.log("❗onDrop  ➽ event ➽ ⏩" , event);
+		if(!event || !event.target) return;
+		const text = event.dataTransfer?.getData('text/plain');
+		const li = document.createElement('li');
+		li.textContent = text || 'no existe';
+		(event.target as HTMLElement).appendChild(li);
+	 }
 }
