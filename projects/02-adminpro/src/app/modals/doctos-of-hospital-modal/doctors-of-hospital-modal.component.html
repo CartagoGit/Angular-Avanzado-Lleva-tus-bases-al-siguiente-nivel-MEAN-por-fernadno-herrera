@@ -5,22 +5,17 @@
 			<ul
 				class="list-group"
 				(dragover)="onDragOver($event)"
-				(drop)="onDrop($event)"
+				(drop)="onDrop($event, { destination: 'without-hospital'})"
 			>
 				<!-- <li *ngFor="let doctor of doctorsWithoutHospital"> -->
 				<!-- {{ doctor.user.name }} -->
 				<li
-					*ngFor="
-						let doctor of [
-							0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14
-						]
-					"
+					*ngFor="let doctor of array1"
 					[draggable]="true"
-
-					(dragstart)="onDragStart($event)"
+					(dragstart)="onDragStart($event, doctor, 'without-hospital')"
 				>
 					<!-- {{ doctor.user.name }} -->
-					{{ doctor }}
+					{{ doctor.name }}
 				</li>
 			</ul>
 		</div>
@@ -29,20 +24,16 @@
 			<ul
 				class="list-group"
 				(dragover)="onDragOver($event)"
-				(drop)="onDrop($event)"
+				(drop)="onDrop($event, { destination: 'of-hospital' })"
 			>
 				<!-- <li *ngFor="let doctor of doctorsOfHospital"> -->
 				<li
-					*ngFor="
-						let doctor of [
-							0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14
-						]
-					"
+					*ngFor="let doctor of array2"
 					[draggable]="true"
-					(dragstart)="onDragStart($event)"
+					(dragstart)="onDragStart($event, doctor, 'of-hospital')"
 				>
 					<!-- {{ doctor.user.name }} -->
-					{{ doctor }}
+					{{ doctor.name }}
 				</li>
 			</ul>
 		</div>

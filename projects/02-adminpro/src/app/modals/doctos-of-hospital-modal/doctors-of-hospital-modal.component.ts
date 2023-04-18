@@ -8,6 +8,9 @@ import { DoctorsService } from '../../shared/services/http/models/doctors.servic
 import { Doctor } from '../../shared/models/mongo-models/doctor.model';
 import { DefaultErrorResponse } from '../../shared/interfaces/http/response.interfaces';
 
+//* Tipo para saber de que lista viene el doctor a mover
+type fromTo = 'of-hospital' | 'without-hospital';
+
 @Component({
 	selector: 'app-doctors-of-hospital-modal',
 	templateUrl: './doctors-of-hospital-modal.component.html',
@@ -49,6 +52,11 @@ export class DoctorsOfHospitalModalComponent {
 		{ id: 6, name: 'Teruelita' },
 		{ id: 7, name: 'Teruelito' },
 	];
+
+	public relation: Record<fromTo, { id: number; name: string }[]> = {
+		'without-hospital': this.array1,
+		'of-hospital': this.array2,
+	};
 
 	// ANCHOR : Constructor
 	constructor(
@@ -149,12 +157,13 @@ export class DoctorsOfHospitalModalComponent {
 	 * @public
 	 * @param {DragEvent} event
 	 */
-	public onDragStart(event: DragEvent): void {
-		console.log('❗onDragStart  ➽ event ➽ ⏩', event);
-		event.dataTransfer?.setData(
-			'text/plain',
-			(event.target as HTMLElement)?.textContent!
-		);
+	public onDragStart(
+		event: DragEvent,
+		data: { id: number; name: string },
+		from: fromTo
+	): void {
+		const stringObject = JSON.stringify({ ...data, from });
+		event.dataTransfer?.setData('object', stringObject);
 	}
 
 	/**
@@ -171,12 +180,23 @@ export class DoctorsOfHospitalModalComponent {
 	 * @public
 	 * @param {DragEvent} event
 	 */
-	public onDrop(event: DragEvent): void {
-		console.log('❗onDrop  ➽ event ➽ ⏩', event);
+	public onDrop(event: DragEvent, data: { destination: fromTo }): void {
 		if (!event || !event.target) return;
-		const text = event.dataTransfer?.getData('text/plain');
-		const li = document.createElement('li');
-		li.textContent = text || 'no existe';
-		(event.target as HTMLElement).appendChild(li);
+		const { destination } = data;
+		const stringObject = event.dataTransfer?.getData('object')!;
+		const { from, ...doctor } = JSON.parse(stringObject);
+		console.log("❗onDrop  ➽ from ➽ ⏩" , from);
+		if(from === destination) return;
+		if (destination === 'of-hospital') {
+			this.array2.push(doctor);
+			this.array1 = this.array1.filter(
+				(doctorOrigin) => doctorOrigin.id !== doctor.id
+			);
+		} else {
+			this.array1.push(doctor);
+			this.array2 = this.array2.filter(
+				(doctorOrigin) => doctorOrigin.id !== doctor.id
+			);
+		}
 	}
 }
