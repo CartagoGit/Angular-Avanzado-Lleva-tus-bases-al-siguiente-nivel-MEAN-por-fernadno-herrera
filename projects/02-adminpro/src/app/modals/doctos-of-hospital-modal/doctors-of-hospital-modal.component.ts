@@ -143,13 +143,18 @@ export class DoctorsOfHospitalModalComponent {
 	 * ? Cierra el modal
 	 * @public
 	 */
-	public close() {
+	public close():void {
 		this._modalSvc.close();
 	}
 
-	public updateHospital() {
+	public updateHospital():void {
 		// TODO
 		console.log(this.doctorsOfHospital);
+	}
+
+	public search():void{
+		
+
 	}
 
 	/**

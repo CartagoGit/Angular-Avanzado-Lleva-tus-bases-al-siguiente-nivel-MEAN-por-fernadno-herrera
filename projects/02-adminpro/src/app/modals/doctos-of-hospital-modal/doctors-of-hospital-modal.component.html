@@ -2,6 +2,24 @@
 	<h3 class="w-100 text-center">
 		Drag doctors between list, and update when you will finish
 	</h3>
+	<div class="search">
+
+		<div class="input-group">
+			<!-- <span class="input-group-addon pointer" (click)="search()"> -->
+			<span class="input-group-addon pointer" (click)="search()">
+				<i class="ti-search"></i>
+			</span>
+
+			<input
+				#inputSearch
+				type="text"
+				class="form-control"
+				placeholder="Search doctor..."
+				/>
+				<!-- (input)="store.setParam('search', inputSearch.value)" -->
+			<!-- (keyup.enter)="search()" -->
+		</div>
+	</div>
 	<div class="row list-container">
 		<div class="col-sm-12 col-lg-5 without-hospital column list">
 			<label>Doctors not assigned in any hospital</label>
