@@ -103,13 +103,6 @@ export class DoctorsOfHospitalModalComponent {
 				this.doctorsOfHospital = doctors.map(
 					(doctor) => new Doctor(doctor)
 				);
-				this.doctorsOfHospitalFiltered = this.doctorsOfHospital.map(
-					(doctor) => new Doctor(doctor)
-				);
-				console.log(
-					'❗this._hospitalsSvc.getDoctors  ➽ doctorsOfHospital ➽ ⏩',
-					this.doctorsOfHospital
-				);
 			},
 			error: (error: DefaultErrorResponse) => {
 				this._sweerAlertSvc.alertError(error.error_message);
@@ -136,12 +129,7 @@ export class DoctorsOfHospitalModalComponent {
 				this.doctorsWithoutHospital = doctors.map(
 					(doctor) => new Doctor(doctor)
 				);
-				this.doctorsWithoutHospitalFiltered =
-					this.doctorsWithoutHospital.map((doctor) => new Doctor(doctor));
-				console.log(
-					'❗this._doctorsSvc.getByQuery  ➽ doctorsWithoutHospital ➽ ⏩',
-					this.doctorsWithoutHospital
-				);
+
 			},
 			error: (error: DefaultErrorResponse) => {
 				this._sweerAlertSvc.alertError(error.error_message);
@@ -172,10 +160,6 @@ export class DoctorsOfHospitalModalComponent {
 		);
 	}
 
-	// private _reloadFiltered(): void {
-	// 	this.array1Filtered = this.array1.map((item) => item);
-	// 	this.array2Filtered = this.array2.map((item) => item);
-	// }
 
 	/**
 	 * ? Elemento que se esta arrastrando
