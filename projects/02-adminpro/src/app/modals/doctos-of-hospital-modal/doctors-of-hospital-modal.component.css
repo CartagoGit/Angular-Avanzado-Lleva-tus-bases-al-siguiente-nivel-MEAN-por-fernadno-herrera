@@ -8,14 +8,18 @@
 .list-group {
 	width: 100%;
 	min-height: 200px;
+	max-height: 60vh;
+	height: 100%;
 	overflow: auto;
 	border: 1px solid rgba(0, 0, 0, 0.15);
 	border-radius: 10px;
+	width: 100%;
 }
 li {
 	list-style: none;
 	/* padding: 10px; */
 	cursor: pointer;
+	height: 50px;
 }
 li:nth-child(odd) {
 	background-color: #f4f6f9;
@@ -35,7 +39,9 @@ li:hover {
 /* .table-grid {
 	max-width: 300px;
 } */
-
+.table-grid {
+	grid-template-rows: repeat(auto-fit, 50px);
+}
 .table-grid__row {
 	grid-template-columns: 60px repeat(2, minmax(0, 1fr));
 }
