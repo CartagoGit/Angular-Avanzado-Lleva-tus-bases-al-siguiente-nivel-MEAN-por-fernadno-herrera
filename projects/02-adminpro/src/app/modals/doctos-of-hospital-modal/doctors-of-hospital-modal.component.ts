@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ModalService } from '../../shared/services/settings/modal.service';
 import { Hospital } from '../../shared/models/mongo-models/hospital.model';
 import { SweetAlertService } from '../../shared/services/helpers/sweet-alert.service';
@@ -18,10 +18,14 @@ type fromTo = 'of-hospital' | 'without-hospital';
 })
 export class DoctorsOfHospitalModalComponent {
 	// ANCHOR : Variables
+	@ViewChild('inputSearch') inputSearch!: ElementRef<HTMLInputElement>;
 	public data!: Hospital;
 
 	public doctorsOfHospital: Doctor[] = [];
+	public doctorsOfHospitalFiltered: Doctor[] = [];
+
 	public doctorsWithoutHospital: Doctor[] = [];
+	public doctorsWithoutHospitalFiltered: Doctor[] = [];
 
 	public areDoctorsChanged: boolean = false;
 
@@ -42,6 +46,7 @@ export class DoctorsOfHospitalModalComponent {
 		{ id: 14, name: 'Anibalito' },
 		{ id: 15, name: 'Anibalina' },
 	];
+	public array1Filtered = this.array1.map((item) => item);
 
 	public array2 = [
 		{ id: 1, name: 'Urraca' },
@@ -52,6 +57,7 @@ export class DoctorsOfHospitalModalComponent {
 		{ id: 6, name: 'Teruelita' },
 		{ id: 7, name: 'Teruelito' },
 	];
+	public array2Filtered = this.array2.map((item) => item);
 
 	public relation: Record<fromTo, { id: number; name: string }[]> = {
 		'without-hospital': this.array1,
@@ -97,6 +103,9 @@ export class DoctorsOfHospitalModalComponent {
 				this.doctorsOfHospital = doctors.map(
 					(doctor) => new Doctor(doctor)
 				);
+				this.doctorsOfHospitalFiltered = this.doctorsOfHospital.map(
+					(doctor) => new Doctor(doctor)
+				);
 				console.log(
 					'❗this._hospitalsSvc.getDoctors  ➽ doctorsOfHospital ➽ ⏩',
 					this.doctorsOfHospital
@@ -127,6 +136,8 @@ export class DoctorsOfHospitalModalComponent {
 				this.doctorsWithoutHospital = doctors.map(
 					(doctor) => new Doctor(doctor)
 				);
+				this.doctorsWithoutHospitalFiltered =
+					this.doctorsWithoutHospital.map((doctor) => new Doctor(doctor));
 				console.log(
 					'❗this._doctorsSvc.getByQuery  ➽ doctorsWithoutHospital ➽ ⏩',
 					this.doctorsWithoutHospital
@@ -143,19 +154,28 @@ export class DoctorsOfHospitalModalComponent {
 	 * ? Cierra el modal
 	 * @public
 	 */
-	public close():void {
+	public close(): void {
 		this._modalSvc.close();
 	}
 
-	public updateHospital():void {
+	public updateHospital(): void {
 		// TODO
 		console.log(this.doctorsOfHospital);
 	}
 
-	public search():void{
-		
-
+	public search(text: string): void {
+		this.array1Filtered = this.array1.filter((item) =>
+			item.name.toLowerCase().includes(text.toLowerCase())
+		);
+		this.array2Filtered = this.array2.filter((item) =>
+			item.name.toLowerCase().includes(text.toLowerCase())
+		);
 	}
+
+	// private _reloadFiltered(): void {
+	// 	this.array1Filtered = this.array1.map((item) => item);
+	// 	this.array2Filtered = this.array2.map((item) => item);
+	// }
 
 	/**
 	 * ? Elemento que se esta arrastrando
@@ -190,8 +210,8 @@ export class DoctorsOfHospitalModalComponent {
 		const { destination } = data;
 		const stringObject = event.dataTransfer?.getData('object')!;
 		const { from, ...doctor } = JSON.parse(stringObject);
-		console.log("❗onDrop  ➽ from ➽ ⏩" , from);
-		if(from === destination) return;
+		console.log('❗onDrop  ➽ from ➽ ⏩', from);
+		if (from === destination) return;
 		if (destination === 'of-hospital') {
 			this.array2.push(doctor);
 			this.array1 = this.array1.filter(
@@ -203,5 +223,6 @@ export class DoctorsOfHospitalModalComponent {
 				(doctorOrigin) => doctorOrigin.id !== doctor.id
 			);
 		}
+		this.search(this.inputSearch.nativeElement.value);
 	}
 }

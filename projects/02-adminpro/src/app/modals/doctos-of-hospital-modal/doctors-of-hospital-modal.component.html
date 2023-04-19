@@ -6,7 +6,7 @@
 
 		<div class="input-group">
 			<!-- <span class="input-group-addon pointer" (click)="search()"> -->
-			<span class="input-group-addon pointer" (click)="search()">
+			<span class="input-group-addon pointer" (click)="search(inputSearch.value)">
 				<i class="ti-search"></i>
 			</span>
 
@@ -15,8 +15,8 @@
 				type="text"
 				class="form-control"
 				placeholder="Search doctor..."
+				(input)="search(inputSearch.value)"
 				/>
-				<!-- (input)="store.setParam('search', inputSearch.value)" -->
 			<!-- (keyup.enter)="search()" -->
 		</div>
 	</div>
@@ -31,7 +31,7 @@
 				<!-- <li *ngFor="let doctor of doctorsWithoutHospital"> -->
 				<!-- {{ doctor.user.name }} -->
 				<li
-					*ngFor="let doctor of array1"
+					*ngFor="let doctor of array1Filtered"
 					[draggable]="true"
 					(dragstart)="onDragStart($event, doctor, 'without-hospital')"
 					class="table-grid__row"
@@ -59,7 +59,7 @@
 			>
 				<!-- <li *ngFor="let doctor of doctorsOfHospital"> -->
 				<li
-					*ngFor="let doctor of array2"
+					*ngFor="let doctor of array2Filtered"
 					[draggable]="true"
 					(dragstart)="onDragStart($event, doctor, 'of-hospital')"
 					class="table-grid__row"
