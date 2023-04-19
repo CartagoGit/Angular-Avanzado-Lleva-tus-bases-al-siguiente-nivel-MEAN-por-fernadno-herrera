@@ -3,9 +3,9 @@
 		<div class="col-md-12 col-lg-6 without-hospital column">
 			<label>Doctors not assigned in any hospital</label>
 			<ul
-				class="list-group"
+				class="list-group table-grid"
 				(dragover)="onDragOver($event)"
-				(drop)="onDrop($event, { destination: 'without-hospital'})"
+				(drop)="onDrop($event, { destination: 'without-hospital' })"
 			>
 				<!-- <li *ngFor="let doctor of doctorsWithoutHospital"> -->
 				<!-- {{ doctor.user.name }} -->
@@ -13,16 +13,25 @@
 					*ngFor="let doctor of array1"
 					[draggable]="true"
 					(dragstart)="onDragStart($event, doctor, 'without-hospital')"
+					class="table-grid__row"
 				>
 					<!-- {{ doctor.user.name }} -->
-					{{ doctor.name }}
+					<div class="table-grid__field center-items">
+						<img class="portrait" src="" alt="doctor image" />
+					</div>
+					<div class="table-grid__field ellipsis" [title]="doctor.name">
+						{{ doctor.name }}
+					</div>
+					<div class="table-grid__field ellipsis" [title]="doctor.name">
+						email
+					</div>
 				</li>
 			</ul>
 		</div>
 		<div class="col-md-12 col-lg-6 in-hospital column">
 			<label>Doctors working in {{ this.data.name }}</label>
 			<ul
-				class="list-group"
+				class="list-group table-grid"
 				(dragover)="onDragOver($event)"
 				(drop)="onDrop($event, { destination: 'of-hospital' })"
 			>
@@ -31,9 +40,21 @@
 					*ngFor="let doctor of array2"
 					[draggable]="true"
 					(dragstart)="onDragStart($event, doctor, 'of-hospital')"
+					class="table-grid__row"
 				>
 					<!-- {{ doctor.user.name }} -->
-					{{ doctor.name }}
+					<!-- {{ doctor.user.email }} -->
+					<div class="table-grid__field center-items">
+						<img class="portrait" src="" alt="doctor image" />
+					</div>
+					<div class="table-grid__field ellipsis" [title]="doctor.name">
+						{{ doctor.name }}
+					</div>
+					<div class="table-grid__field ellipsis" [title]="doctor.name">
+						//
+						<!-- TODO cambiar el title por el email del doctor -->
+						email
+					</div>
 				</li>
 			</ul>
 		</div>
