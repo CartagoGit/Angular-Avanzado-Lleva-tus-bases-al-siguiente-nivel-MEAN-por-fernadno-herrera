@@ -1,6 +1,8 @@
 <div class="modal__body">
-	<h3 class="w-100 text-center">Drag doctors between list, and update when you will finish</h3>
-	<div class="row">
+	<h3 class="w-100 text-center">
+		Drag doctors between list, and update when you will finish
+	</h3>
+	<div class="row list-container">
 		<div class="col-sm-12 col-lg-5 without-hospital column list">
 			<label>Doctors not assigned in any hospital</label>
 			<ul
@@ -21,10 +23,11 @@
 						<img class="portrait" src="" alt="doctor image" />
 					</div>
 					<div class="table-grid__field ellipsis" [title]="doctor.name">
-						{{ doctor.name }}
+						<span class="ellipsis">{{ doctor.name }}</span>
 					</div>
 					<div class="table-grid__field ellipsis" [title]="doctor.name">
-						email
+						<!-- TODO cambiar el title por el email del doctor -->
+						<span class="ellipsis">email</span>
 					</div>
 				</li>
 			</ul>
@@ -49,12 +52,11 @@
 						<img class="portrait" src="" alt="doctor image" />
 					</div>
 					<div class="table-grid__field ellipsis" [title]="doctor.name">
-						{{ doctor.name }}
+						<span class="ellipsis">{{ doctor.name }}</span>
 					</div>
 					<div class="table-grid__field ellipsis" [title]="doctor.name">
-						//
 						<!-- TODO cambiar el title por el email del doctor -->
-						email
+						<span class="ellipsis">email</span>
 					</div>
 				</li>
 			</ul>
