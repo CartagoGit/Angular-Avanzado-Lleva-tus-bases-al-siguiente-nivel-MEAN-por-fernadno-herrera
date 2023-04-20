@@ -7,6 +7,7 @@ import { Subscription, skip, debounceTime, finalize } from 'rxjs';
 import { minTimeBeforeLoader } from '../../../shared/constants/time.constants';
 import { Pagination } from '../../../shared/interfaces/http/pagination.interface';
 import { PaginationData } from '../../../shared/interfaces/http/request.interface';
+import { DefaultErrorResponse } from '../../../shared/interfaces/http/response.interfaces';
 import { DefaultState } from '../../../shared/interfaces/models/store.interface';
 import { Doctor } from '../../../shared/models/mongo-models/doctor.model';
 import { Store } from '../../../shared/models/store/store.model';
@@ -99,6 +100,32 @@ export class DoctorsComponent {
 					data: data.map((doctor) => new Doctor(doctor)),
 					meta: pagination,
 					isLoading: false,
+				});
+			});
+	}
+
+	/**
+	 * ? Elimina un doctor
+	 * @public
+	 * @param {Doctor} doctor
+	 */
+	public clickDelete(doctor: Doctor) {
+		this._sweetAlertSvc
+			.confirmDeleteModal({
+				title: 'Delete doctor',
+				text: `Are you sure you want to delete the doctor '${doctor.user.name}'?`,
+				icon: 'warning',
+			})
+			.then((result) => {
+				if (!result.isConfirmed) return;
+				this._doctorsSvc.delete(doctor.id).subscribe({
+					next: () => {
+						this._sweetAlertSvc.alertSuccess('User deleted correctly');
+						this.search();
+					},
+					error: (err: DefaultErrorResponse) => {
+						this._sweetAlertSvc.alertError(err.error_message);
+					},
 				});
 			});
 	}
