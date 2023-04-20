@@ -25,7 +25,7 @@ import { DoctorsOfHospitalModalComponent } from '../../../modals/doctos-of-hospi
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HospitalsComponent {
-	//!! Podriamos copiar exactamente lo mismo que hicimos en el componente de usuarios, pero en este caso lo haremos con un stopre y onPush para aprender nuevas técnicas
+	//!! Podriamos copiar exactamente lo mismo que hicimos en el componente de usuarios, pero en este caso lo haremos con un store y onPush para aprender nuevas técnicas
 	// ANCHOR : Variables
 	private _initState: DefaultState<Hospital> = {
 		isLoading: false,
@@ -67,6 +67,11 @@ export class HospitalsComponent {
 	}
 
 	// ANCHOR : Methods
+
+	/**
+	 * ? Crea las subscripciones al store
+	 * @private
+	 */
 	private _createSubscriptions() {
 		const paginationSub = this.pagination$.subscribe((pagination) => {
 			this.search();
