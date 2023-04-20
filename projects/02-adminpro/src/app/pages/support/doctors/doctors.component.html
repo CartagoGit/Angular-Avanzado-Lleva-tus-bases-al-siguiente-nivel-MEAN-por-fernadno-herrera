@@ -46,11 +46,10 @@
 							<h6 class="card-subtitle">Doctors in the app</h6>
 						</div>
 						<div class="table-grid__buttons">
-							<button class="btn btn-primary btn-sm"
-							>
-							<!-- (click)="clickNewDoctor()" -->
-							Add new doctor
-						</button>
+							<button class="btn btn-primary btn-sm">
+								<!-- (click)="clickNewDoctor()" -->
+								Add new doctor
+							</button>
 						</div>
 					</div>
 					<div class="table-grid table-ellipsis table-doctors">
@@ -77,13 +76,19 @@
 										[src]="doctor.dataImages?.defaultImgSrc! | safe"
 										alt="profile image user"
 										class="portrait"
-										/>
-										<!-- (click)="clickImage(doctor)" -->
+									/>
+									<!-- (click)="clickImage(doctor)" -->
 								</div>
-								<div class="table-grid__field" [title]="doctor.user.name">
+								<div
+									class="table-grid__field"
+									[title]="doctor.user.name"
+								>
 									<span>{{ doctor.user.name }}</span>
 								</div>
-								<div class="table-grid__field" [title]="doctor.user.email">
+								<div
+									class="table-grid__field"
+									[title]="doctor.user.email"
+								>
 									<span>{{ doctor.user.email }}</span>
 								</div>
 								<!-- <div class="table-grid__field d-end" [title]="doctor.phone">
@@ -109,15 +114,27 @@
 								<div
 									class="table-grid__field text-nowrap d-center table-grid__icons"
 								>
-								<div
+									<div
 										class="pointer"
 										data-toggle="tooltip"
-										data-original-title="see doctors"
-										title="See doctors"
-										>
+										data-original-title="see patients"
+										title="See patients"
+									>
 										<!-- (click)="clickDoctors(doctor)" -->
 										<i
-											class="fa fa-user-md text-info"
+											class="fa fa-users text-megna"
+											aria-hidden="true"
+										></i>
+									</div>
+									<div
+										class="pointer"
+										data-toggle="tooltip"
+										data-original-title="see hospitals"
+										title="See hospitals"
+									>
+										<!-- (click)="clickDoctors(doctor)" -->
+										<i
+											class="fa fa-hospital-o text-primary"
 											aria-hidden="true"
 										></i>
 									</div>
@@ -126,7 +143,7 @@
 										data-toggle="tooltip"
 										data-original-title="edit"
 										title="Edit"
-										>
+									>
 										<!-- (click)="clickEdit(doctor)" -->
 										<i
 											class="fa fa-pencil text-success"
@@ -139,7 +156,7 @@
 										data-original-title="remove"
 										title="Remove"
 										(click)="clickDelete(doctor)"
-										>
+									>
 										<i class="fa fa-close text-danger"></i>
 									</div>
 								</div>
@@ -150,7 +167,7 @@
 					<app-footer-table
 						[pagination]="(meta$ | async)!"
 						(pageChanged)="changePage($event)"
-						></app-footer-table>
+					></app-footer-table>
 				</div>
 			</div>
 		</div>
