@@ -129,4 +129,16 @@ export class DoctorsComponent {
 				});
 			});
 	}
+
+	/**
+	 * ? Cambia la pagina de la paginacion
+	 * @public
+	 * @param {number} page
+	 */
+	public changePage(page: number) {
+		this.store.setParam('pagination', {
+			...this.store.getParam('pagination'),
+			page,
+		});
+	}
 }

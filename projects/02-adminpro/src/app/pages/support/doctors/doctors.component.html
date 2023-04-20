@@ -149,8 +149,8 @@
 
 					<app-footer-table
 						[pagination]="(meta$ | async)!"
+						(pageChanged)="changePage($event)"
 						></app-footer-table>
-						<!-- (pageChanged)="changePage($event)" -->
 				</div>
 			</div>
 		</div>
