@@ -1,6 +1,7 @@
 import { Routes } from '../models/routes.model';
 import { coreRoutes } from './core.routes';
 import { doctorsMiddlewares } from '../middlewares/doctors.middleware';
+import { doctorsController } from '../controllers/doctor.controller';
 
 /**
  * * /api/doctors
@@ -23,5 +24,11 @@ export const doctorsRoutes: Routes = new Routes({
 	removeFromList: {
 		...coreRoutes.routes['removeFromList'],
 		middlewares: doctorsMiddlewares.removeFromList
+	},
+	getDoctorsByName:{
+		route: '/get-doctors-by-name',
+		type: 'get',
+		modelController: doctorsController.getDoctorsByName,
+		hasAdminValidator: false,
 	}
 });

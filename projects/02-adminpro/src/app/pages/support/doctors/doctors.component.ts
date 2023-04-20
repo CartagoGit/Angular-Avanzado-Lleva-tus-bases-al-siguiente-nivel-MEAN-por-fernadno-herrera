@@ -79,10 +79,15 @@ export class DoctorsComponent {
 	 */
 	public search() {
 		this.store.setParam('isLoading', true);
-		const search = this.store.getParam('search');
+		const search = this.store.getParam('search')!;
 		this._doctorsSvc
 			.getByQuery(
-				{},
+				{
+					user: JSON.stringify({ name: search }),
+					// patients: { name: search,  },
+					// hospitals: { name: search },
+				 } as any
+				,
 				{ ...this.store.getParam('pagination'), someQuery: true }
 			)
 			.pipe(
