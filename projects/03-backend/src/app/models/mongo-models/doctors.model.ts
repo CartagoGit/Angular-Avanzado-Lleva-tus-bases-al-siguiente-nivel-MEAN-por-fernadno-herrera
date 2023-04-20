@@ -11,7 +11,7 @@ export const DoctorSchema: Schema<any> = new Schema(
 				type: String,
 			},
 		],
-		
+
 		user: {
 			type: Schema.Types.ObjectId,
 			unique: true,
@@ -26,6 +26,7 @@ export const DoctorSchema: Schema<any> = new Schema(
 				required: true,
 				unique: true,
 				autopopulate: true,
+				
 			},
 		],
 		patients: [
