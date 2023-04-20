@@ -81,21 +81,17 @@ export class DoctorsComponent {
 		this.store.setParam('isLoading', true);
 		const search = this.store.getParam('search')!;
 		this._doctorsSvc
-			.getByQuery(
-				{
-					user: JSON.stringify({ name: search }),
-					// patients: { name: search,  },
-					// hospitals: { name: search },
-				 } as any
-				,
-				{ ...this.store.getParam('pagination'), someQuery: true }
-			)
+			.getDoctorsByName(search, {
+				...this.store.getParam('pagination'),
+				someQuery: true,
+			})
 			.pipe(
 				finalize(() => {
 					this.store.setParam('isLoading', false);
 				})
 			)
 			.subscribe((resp) => {
+				console.log('❗.subscribe  ➽ resp ➽ ⏩', resp);
 				const { data, pagination } = resp;
 				if (!data || !pagination) return;
 				this.store.setState({

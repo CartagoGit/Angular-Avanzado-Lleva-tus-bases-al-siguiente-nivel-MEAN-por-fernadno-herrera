@@ -1,0 +1,3 @@
+.table-grid .table-grid__row {
+	grid-template-columns: 60px repeat(4, minmax(100px,1fr)) 100px
+}

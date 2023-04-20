@@ -1,1 +1,158 @@
-<p>doctors works!</p>
+<div class="row animated fadeIn fast">
+	<div class="col-12">
+		<div class="card">
+			<div class="card-body">
+				<div class="input-group">
+					<!-- <span class="input-group-addon pointer" (click)="search()"> -->
+					<span class="input-group-addon pointer" (click)="search()">
+						<i class="ti-search"></i>
+					</span>
+
+					<input
+						#inputSearch
+						type="text"
+						class="form-control"
+						placeholder="Search doctor..."
+						(input)="store.setParam('search', inputSearch.value)"
+					/>
+					<!-- (keyup.enter)="search()" -->
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row animated fadeIn fast" *ngIf="isLoading$ | async; else table">
+	<div class="col-12">
+		<div class="card">
+			<div class="card-body">
+				<div class="alert alert-info text-center">
+					<h4 class="alert-heading">Searching...</h4>
+					<i class="fa fa-spin fa-refresh fa-2x"></i>
+					<p class="mb-0">Please wait</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<ng-template #table>
+	<div class="row animated fadeIn fast">
+		<div class="col-12">
+			<div class="card">
+				<div class="card-body">
+					<div class="table-grid__section-header">
+						<div class="table-grid__title">
+							<h4 class="card-title">Doctors</h4>
+							<h6 class="card-subtitle">Doctors in the app</h6>
+						</div>
+						<div class="table-grid__buttons">
+							<button class="btn btn-primary btn-sm"
+							>
+							<!-- (click)="clickNewDoctor()" -->
+							Add new doctor
+						</button>
+						</div>
+					</div>
+					<div class="table-grid table-ellipsis table-doctors">
+						<div class="table-grid__header table-grid__row">
+							<div class="table-grid__field center-items">Img</div>
+							<div class="table-grid__field">Name</div>
+							<div class="table-grid__field">Email</div>
+							<!-- <div class="table-grid__field">Phone</div> -->
+							<div class="table-grid__field">Created</div>
+							<div class="table-grid__field">Updated</div>
+							<div class="table-grid__field d-center">Actions</div>
+						</div>
+						<div class="table-grid__body">
+							<div
+								*ngFor="let doctor of doctors$ | async"
+								class="table-grid__row"
+							>
+								<div class="table-grid__field center-items pointer">
+									<!-- [src]="
+										(doctor.dataImages?.defaultImgSrc$ | async)!
+										| safe
+										" -->
+									<img
+										[src]="doctor.dataImages?.defaultImgSrc! | safe"
+										alt="profile image user"
+										class="portrait"
+										/>
+										<!-- (click)="clickImage(doctor)" -->
+								</div>
+								<div class="table-grid__field" [title]="doctor.user.name">
+									<span>{{ doctor.user.name }}</span>
+								</div>
+								<div class="table-grid__field" [title]="doctor.user.email">
+									<span>{{ doctor.user.email }}</span>
+								</div>
+								<!-- <div class="table-grid__field d-end" [title]="doctor.phone">
+									<span>{{ doctor. }}</span>
+								</div> -->
+
+								<div
+									class="table-grid__field d-center"
+									[title]="doctor.createdAt | date : 'dd-MMM-yyyy'"
+								>
+									<span>
+										{{ doctor.createdAt | date : 'dd-MMM-yyyy' }}
+									</span>
+								</div>
+								<div
+									class="table-grid__field d-center"
+									[title]="doctor.updatedAt | date : 'dd-MMM-yyyy'"
+								>
+									<span>
+										{{ doctor.updatedAt | date : 'dd-MMM-yyyy' }}
+									</span>
+								</div>
+								<div
+									class="table-grid__field text-nowrap d-center table-grid__icons"
+								>
+								<div
+										class="pointer"
+										data-toggle="tooltip"
+										data-original-title="see doctors"
+										title="See doctors"
+										>
+										<!-- (click)="clickDoctors(doctor)" -->
+										<i
+											class="fa fa-user-md text-info"
+											aria-hidden="true"
+										></i>
+									</div>
+									<div
+										class="pointer"
+										data-toggle="tooltip"
+										data-original-title="edit"
+										title="Edit"
+										>
+										<!-- (click)="clickEdit(doctor)" -->
+										<i
+											class="fa fa-pencil text-success"
+											aria-hidden="true"
+										></i>
+									</div>
+									<div
+										class="pointer"
+										data-toggle="tooltip"
+										data-original-title="remove"
+										title="Remove"
+										>
+										<i class="fa fa-close text-danger"></i>
+									</div>
+									<!-- (click)="clickDelete(doctor)" -->
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<app-footer-table
+						[pagination]="(meta$ | async)!"
+						></app-footer-table>
+						<!-- (pageChanged)="changePage($event)" -->
+				</div>
+			</div>
+		</div>
+	</div>
+</ng-template>
