@@ -10,7 +10,7 @@ import {
 } from '../../../models/mongo-models/hospital.model';
 
 /**
- * ? Rutas popias del modelo de Usuarios
+ * ? Rutas popias del modelo de Hospitales
  * @type {{
 	getPatients: string;
 	getDoctors: string;

@@ -35,8 +35,7 @@ export const doctorsController: {
 		const { data, pagination } = await (DoctorModel as any).paginate(
 			{ user: { $in: userIds } },
 			{
-				page: 1,
-				limit: 10,
+				...optionsFromQuery,
 				populate: { path: 'user' },
 			}
 		);
