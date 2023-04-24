@@ -14,6 +14,7 @@ import { Store } from '../../../shared/models/store/store.model';
 import { SweetAlertService } from '../../../shared/services/helpers/sweet-alert.service';
 import { DoctorsService } from '../../../shared/services/http/models/doctors.service';
 import { ModalService } from '../../../shared/services/settings/modal.service';
+import { DoctorModalComponent } from './../../../modals/doctor-modal/doctor-modal.component';
 
 @Component({
 	selector: 'page-doctors',
@@ -140,5 +141,9 @@ export class DoctorsComponent {
 			...this.store.getParam('pagination'),
 			page,
 		});
+	}
+
+	public clickNewDoctor() :void {
+		this._modalSvc.open(DoctorModalComponent);
 	}
 }

@@ -6,12 +6,14 @@ import { HospitalModalComponent } from './hospital-modal/hospital-modal.componen
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { DoctorsOfHospitalModalComponent } from './doctos-of-hospital-modal/doctors-of-hospital-modal.component';
+import { DoctorModalComponent } from './doctor-modal/doctor-modal.component';
 
 @NgModule({
 	declarations: [
 		ImageModalComponent,
 		HospitalModalComponent,
 		DoctorsOfHospitalModalComponent,
+		DoctorModalComponent,
 	],
 	imports: [CommonModule, ReactiveFormsModule, SharedModule],
 	exports: [
