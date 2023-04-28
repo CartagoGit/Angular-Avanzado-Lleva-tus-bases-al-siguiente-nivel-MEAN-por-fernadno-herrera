@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { paths } from '../shared/constants/paths.constant';
 import { PagesComponent } from './pages.component';
+import { AdminGuard } from '../shared/guards/admin.guard';
 
 const dashboardPath = paths.getPath('dashboard');
 const generalPath = paths.getPath('general');
@@ -30,6 +31,7 @@ const routes: Routes = [
 				path: supportPath?.name,
 				loadChildren: () =>
 					import('./support/support.module').then((m) => m.SupportModule),
+				canMatch: [AdminGuard],
 			},
 		],
 	},
