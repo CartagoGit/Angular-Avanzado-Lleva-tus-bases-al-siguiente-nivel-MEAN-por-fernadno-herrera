@@ -9,12 +9,7 @@ export interface IHospital extends IBase {
 }
 /**
  * ? Crea el esquema del modelo de Hospitales en MongoDb
- * @type {Schema<{
-	name: string;
-	images: string[];
-	address: string;
-	phone: string;
-} & IBase>}
+ * @type {Schema<IHospital>}
  */
 export const HospitalSchema: Schema<IHospital> = new Schema(
 	{
