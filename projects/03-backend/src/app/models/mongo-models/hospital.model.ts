@@ -43,10 +43,9 @@ export const HospitalSchema: Schema<IHospital> = new Schema(
 
 /**
  * ? Exporta el modelo de Mongoose
- * @type {Model<any>}
+ * @type {Model<IHospital>}
  */
-// export const HospitalModel: Model<any> = model('Hospital', HospitalSchema);
-export const HospitalModel: Model<any> = model(
+export const HospitalModel: Model<IHospital> = model<IHospital>(
 	'Hospital',
 	new Schema(Object.assign({}, BaseModel.schema.obj, HospitalSchema.obj), {
 		timestamps: true,

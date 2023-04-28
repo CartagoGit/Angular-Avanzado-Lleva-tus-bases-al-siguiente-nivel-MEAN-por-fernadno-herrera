@@ -57,10 +57,9 @@ export const UserSchema: Schema<IUser> = new Schema(
 
 /**
  * ? Exporta el modelo de Mongoose
- * @type {Model<any>}
+ * @type {Model<IUser>}
  */
-
-export const UserModel: Model<any> = model(
+export const UserModel: Model<IUser> = model<IUser>(
 	'User',
 	new Schema(Object.assign({}, BaseModel.schema.obj, UserSchema.obj), {
 		timestamps: true,

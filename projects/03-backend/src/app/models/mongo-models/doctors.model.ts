@@ -69,9 +69,9 @@ export const DoctorSchema: Schema<IDoctor> = new Schema(
 
 /**
  * ? Exporta el modelo de Mongoose
- * @type {Model<any>}
+ * @type {Model<IDoctor>}
  */
-export const DoctorModel: Model<any> = model(
+export const DoctorModel: Model<IDoctor> = model<IDoctor>(
 	'Doctor',
 	new Schema(Object.assign({}, BaseModel.schema.obj, DoctorSchema.obj), {
 		timestamps: true,

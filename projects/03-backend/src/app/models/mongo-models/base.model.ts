@@ -29,6 +29,6 @@ export const BaseSchema: Schema<IBase> = new Schema(
 
 /**
  * ? Exporta el modelo de Mongoose
- * @type {Model<any>}
+ * @type {Model<IBase>}
  */
-export const BaseModel: Model<any> = model('Base', BaseSchema);
+export const BaseModel: Model<IBase> = model<IBase>('Base', BaseSchema);
