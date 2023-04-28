@@ -46,7 +46,7 @@
 					</ul>
 				</li>
 				<li class="nav-devider"></li>
-				<li class="nav-small-cap">PERSONAL</li>
+				<li class="nav-small-cap">Sections</li>
 				<ng-container *ngFor="let item of menuItems">
 					<li
 						*ngIf="
@@ -54,6 +54,7 @@
 							!item.needAdmin
 						"
 					>
+					<div *ngIf="item.needAdmin" class="badge admin">Admin</div>
 						<a
 							class="has-arrow waves-effect waves-dark"
 							href="#"

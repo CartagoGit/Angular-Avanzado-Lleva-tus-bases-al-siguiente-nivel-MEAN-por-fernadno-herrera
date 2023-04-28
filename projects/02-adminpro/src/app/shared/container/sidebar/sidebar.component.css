@@ -1,0 +1,20 @@
+li {
+	position: relative;
+}
+
+li .badge {
+	position: absolute;
+	top: 0px;
+	left: 8px;
+	/* background-color: #398bf7; */
+	/* border: 1px solid #398bf7; */
+	color: #7f848d;
+	font-size: 10px;
+	z-index: 10;
+	padding: 2px 3px;
+}
+li:hover .badge,
+li.active .badge {
+	color: white;
+	/* color: #398bf7; */
+}

@@ -1,13 +1,16 @@
 import { Component } from '@angular/core';
 import { paths } from '../../constants/paths.constant';
 import { User } from '../../models/mongo-models/user.model';
-import { MenuRoutes, SidebarService } from '../../services/settings/sidebar.service';
+import {
+	MenuRoutes,
+	SidebarService,
+} from '../../services/settings/sidebar.service';
 import { StateService } from '../../services/settings/state.service';
 
 @Component({
 	selector: 'app-sidebar',
 	templateUrl: './sidebar.component.html',
-	styles: [],
+	styleUrls: ['./sidebar.component.css'],
 })
 export class SidebarComponent {
 	// ANCHOR : Variables
@@ -28,7 +31,6 @@ export class SidebarComponent {
 	}
 
 	// ANCHOR : Methods
-
 
 	/**
 	 * ? Cierra la sesión
