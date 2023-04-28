@@ -1,13 +1,11 @@
 import { Model, model, ObjectId, Schema } from 'mongoose';
 import { BaseModel, IBase } from './base.model';
-import { HospitalModel, HospitalSchema } from './hospital.model';
-import { UserModel } from './user.model';
 
 export interface IDoctor extends IBase {
 	images: string;
-	user: typeof UserModel;
-	hospitals: (typeof HospitalModel)[];
-	patients: (typeof UserModel)[];
+	user: Schema.Types.ObjectId;
+	hospitals: Schema.Types.ObjectId[];
+	patients: Schema.Types.ObjectId[];
 }
 /**
  * ? Crea el esquema del modelo de Doctores en MongoDb
@@ -35,22 +33,23 @@ export const DoctorSchema: Schema<IDoctor> = new Schema(
 				required: true,
 				// unique: true,
 				autopopulate: true,
-				validate: {
-					validator: async function (hospitalId: ObjectId) {
-						const doctor = this as IDoctor;
-						// const hospitals = doctor.user. ;
+				// validate: {
+				// 	validator: async function (hospitalId: ObjectId) {
+				// 		console.log('HOLAAA');
+				// 		const doctor = this as IDoctor;
+				// 		// const hospitals = doctor.user. ;
 
-						console.log('❗doctor ➽ ⏩', doctor);
-						// const hospitals =
-						// 	doctor.hospitals as (typeof HospitalSchema.obj)[];
-						return false;
-						// return !hospitals.some((hospital) =>
-						//   hospital.equals(hospitalId)
-						// );
-					},
-					message: (props: typeof HospitalSchema.obj) =>
-						`Hospital '${props['name']}' is already assigned to this doctor.`,
-				},
+				// 		console.log('❗doctor ➽ ⏩', doctor);
+				// 		// const hospitals =
+				// 		// 	doctor.hospitals as (typeof HospitalSchema.obj)[];
+				// 		return false;
+				// 		// return !hospitals.some((hospital) =>
+				// 		//   hospital.equals(hospitalId)
+				// 		// );
+				// 	},
+				// 	message: (props: typeof HospitalSchema.obj) =>
+				// 		`Hospital '${props['name']}' is already assigned to this doctor.`,
+				// },
 			},
 		],
 		patients: [

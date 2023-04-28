@@ -117,11 +117,8 @@ export const coreController: {
 		req.body['user_modifier'] = getPayloadFromJwtWithoutVerifiy(req).id;
 
 		const data_before = await model.findById(id);
-		const data = await model.findByIdAndUpdate(
-			id,
-			{ ...data_before?.toJSON(), ...req.body },
-			{ new: true }
-		);
+		// const newData = { ...data_before?.toObject(), ...req.body };
+		const data = await model.findByIdAndUpdate(id, req.body, { new: true });
 		return {
 			data_before,
 			data,

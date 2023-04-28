@@ -1,9 +1,9 @@
-import { Model, model, Schema } from 'mongoose';
+import { Model, model, Schema, ObjectId } from 'mongoose';
 import { UserModel } from './user.model';
 
 export interface IBase {
-	user_creator: typeof UserModel;
-	user_modifier: typeof UserModel;
+	user_creator: Schema.Types.ObjectId;
+	user_modifier: Schema.Types.ObjectId;
 }
 /**
  * ? Crea el esquema del modelo Base en MongoDb
