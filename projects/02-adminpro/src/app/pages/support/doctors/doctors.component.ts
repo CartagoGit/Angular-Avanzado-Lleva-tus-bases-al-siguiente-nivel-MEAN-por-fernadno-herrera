@@ -121,7 +121,7 @@ export class DoctorsComponent {
 				if (!result.isConfirmed) return;
 				this._doctorsSvc.delete(doctor.id).subscribe({
 					next: () => {
-						this._sweetAlertSvc.alertSuccess('User deleted correctly');
+						this._sweetAlertSvc.alertSuccess('Doctor deleted correctly');
 						this.search();
 					},
 					error: (err: DefaultErrorResponse) => {
@@ -143,7 +143,11 @@ export class DoctorsComponent {
 		});
 	}
 
-	public clickNewDoctor() :void {
+	public clickNew(): void {
 		this._modalSvc.open(DoctorModalComponent);
+	}
+
+	public clickEdit(doctor: Doctor): void {
+		console.log('edit doctor');
 	}
 }

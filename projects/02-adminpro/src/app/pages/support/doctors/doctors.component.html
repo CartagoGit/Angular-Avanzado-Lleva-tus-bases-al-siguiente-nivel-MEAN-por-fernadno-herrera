@@ -48,7 +48,7 @@
 						<div class="table-grid__buttons">
 							<button
 								class="btn btn-primary btn-sm"
-								(click)="clickNewDoctor()"
+								(click)="clickNew()"
 							>
 								Add new doctor
 							</button>
@@ -131,8 +131,8 @@
 									<div
 										class="pointer"
 										data-toggle="tooltip"
-										data-original-title="see hospitals"
-										title="See hospitals"
+										data-original-title="see doctors"
+										title="See doctors"
 									>
 										<!-- (click)="clickDoctors(doctor)" -->
 										<i
@@ -143,11 +143,11 @@
 									<div
 										class="pointer"
 										data-toggle="tooltip"
-										data-original-title="edit"
-										title="Edit"
+										data-original-title="edit doctor"
+										title="Edit doctor"
 									>
-										<!-- (click)="clickEdit(doctor)" -->
 										<i
+											(click)="clickEdit(doctor)"
 											class="fa fa-pencil text-success"
 											aria-hidden="true"
 										></i>
