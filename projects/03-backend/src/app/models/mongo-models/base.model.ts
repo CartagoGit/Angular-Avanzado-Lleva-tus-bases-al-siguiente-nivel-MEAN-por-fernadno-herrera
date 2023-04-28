@@ -1,13 +1,15 @@
 import { Model, model, Schema } from 'mongoose';
-import { UserModel } from './user.model';
+import { UserSchema } from './user.model';
+
+export interface IBase {
+	user_creator: typeof UserSchema;
+	user_modifier: typeof UserSchema;
+}
 /**
  * ? Crea el esquema del modelo Base en MongoDb
- * @type {Schema<any>}
+ * @type {Schema<IBase>}
  */
-export const BaseSchema: Schema<{
-	user_creator: typeof UserModel;
-	user_modifier: typeof UserModel;
-}> = new Schema(
+export const BaseSchema: Schema<IBase> = new Schema(
 	{
 		user_creator: {
 			type: Schema.Types.ObjectId,

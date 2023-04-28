@@ -1,18 +1,19 @@
 import { Model, model, ObjectId, Schema } from 'mongoose';
-import { BaseModel } from './base.model';
+import { BaseModel, IBase } from './base.model';
 import { HospitalModel, HospitalSchema } from './hospital.model';
-import { UserModel } from './user.model';
+import { UserSchema } from './user.model';
 
+export interface IDoctor extends IBase {
+	images: string;
+	user: typeof UserSchema;
+	hospitals: (typeof HospitalSchema)[];
+	patients: (typeof UserSchema)[];
+}
 /**
  * ? Crea el esquema del modelo de Doctores en MongoDb
- * @type {Schema<any>}
+ * @type {Schema< IDoctor>}
  */
-export const DoctorSchema: Schema<{
-	images: string;
-	user: typeof UserModel;
-	hospitals: (typeof HospitalModel)[];
-	patients: (typeof UserModel)[];
-}> = new Schema(
+export const DoctorSchema: Schema<IDoctor> = new Schema(
 	{
 		images: [
 			{
@@ -37,8 +38,7 @@ export const DoctorSchema: Schema<{
 				validate: {
 					validator: async function (hospitalId: ObjectId) {
 						const doctor = this as typeof DoctorSchema.obj;
-						const hospitals =
-							doctor.hospitals as (typeof HospitalModel)[];
+						const hospitals = doctor.user as (typeof HospitalModel)[];
 
 						console.log('❗doctor ➽ ⏩', doctor);
 						// const hospitals =

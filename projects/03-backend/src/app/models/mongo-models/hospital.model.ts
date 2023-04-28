@@ -1,16 +1,22 @@
 import { Model, model, Schema } from 'mongoose';
-import { BaseModel } from './base.model';
+import { BaseModel, IBase } from './base.model';
 
-/**
- * ? Crea el esquema del modelo de Hospitales en MongoDb
- * @type {Schema<any>}
- */
-export const HospitalSchema: Schema<{
+export interface IHospital extends IBase {
 	name: string;
 	images: string[];
 	address: string;
 	phone: string;
-}> = new Schema(
+}
+/**
+ * ? Crea el esquema del modelo de Hospitales en MongoDb
+ * @type {Schema<{
+	name: string;
+	images: string[];
+	address: string;
+	phone: string;
+} & IBase>}
+ */
+export const HospitalSchema: Schema<IHospital> = new Schema(
 	{
 		name: {
 			type: String,

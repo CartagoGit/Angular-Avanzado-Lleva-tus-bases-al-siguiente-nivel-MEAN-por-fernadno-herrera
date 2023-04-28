@@ -1,19 +1,20 @@
 import { Model, model, Schema } from 'mongoose';
 import { Role } from '../../interfaces/roles.interface';
-import { BaseModel } from './base.model';
+import { BaseModel, IBase } from './base.model';
 
-/**
- * ? Crea el esquema del modelo de Usuarios en MongoDb
- * @type {Schema}
- */
-export const UserSchema: Schema<{
+export interface IUser extends IBase {
 	name: string;
 	email: string;
 	password: string;
 	images: string[];
 	role: Role;
 	google: boolean;
-}> = new Schema(
+}
+/**
+ * ? Crea el esquema del modelo de Usuarios en MongoDb
+ * @type {Schema<IUser>}
+ */
+export const UserSchema: Schema<IUser> = new Schema(
 	{
 		name: {
 			type: String,
