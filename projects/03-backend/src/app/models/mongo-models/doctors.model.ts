@@ -1,10 +1,18 @@
-import { Model, model, Schema } from 'mongoose';
+import { Model, model, ObjectId, Schema } from 'mongoose';
 import { BaseModel } from './base.model';
+import { HospitalModel, HospitalSchema } from './hospital.model';
+import { UserModel } from './user.model';
+
 /**
  * ? Crea el esquema del modelo de Doctores en MongoDb
  * @type {Schema<any>}
  */
-export const DoctorSchema: Schema<any> = new Schema(
+export const DoctorSchema: Schema<{
+	images: string;
+	user: typeof UserModel;
+	hospitals: (typeof HospitalModel)[];
+	patients: (typeof UserModel)[];
+}> = new Schema(
 	{
 		images: [
 			{
@@ -24,9 +32,25 @@ export const DoctorSchema: Schema<any> = new Schema(
 				type: Schema.Types.ObjectId,
 				ref: 'Hospital',
 				required: true,
-				unique: true,
+				// unique: true,
 				autopopulate: true,
-				
+				validate: {
+					validator: async function (hospitalId: ObjectId) {
+						const doctor = this as typeof DoctorSchema.obj;
+						const hospitals =
+							doctor.hospitals as (typeof HospitalModel)[];
+
+						console.log('❗doctor ➽ ⏩', doctor);
+						// const hospitals =
+						// 	doctor.hospitals as (typeof HospitalSchema.obj)[];
+						return false;
+						// return !hospitals.some((hospital) =>
+						//   hospital.equals(hospitalId)
+						// );
+					},
+					message: (props: typeof HospitalSchema.obj) =>
+						`Hospital '${props['name']}' is already assigned to this doctor.`,
+				},
 			},
 		],
 		patients: [

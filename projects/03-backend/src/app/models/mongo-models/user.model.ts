@@ -6,7 +6,14 @@ import { BaseModel } from './base.model';
  * ? Crea el esquema del modelo de Usuarios en MongoDb
  * @type {Schema}
  */
-export const UserSchema: Schema = new Schema(
+export const UserSchema: Schema<{
+	name: string;
+	email: string;
+	password: string;
+	images: string[];
+	role: Role;
+	google: boolean;
+}> = new Schema(
 	{
 		name: {
 			type: String,
@@ -35,7 +42,7 @@ export const UserSchema: Schema = new Schema(
 			type: Boolean,
 			default: false,
 		},
-	},
+	}
 	// { timestamps: true } //* Añade createdAt y updatedAt
 );
 

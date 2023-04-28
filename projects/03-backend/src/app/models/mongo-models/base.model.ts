@@ -1,9 +1,13 @@
 import { Model, model, Schema } from 'mongoose';
+import { UserModel } from './user.model';
 /**
  * ? Crea el esquema del modelo Base en MongoDb
  * @type {Schema<any>}
  */
-export const BaseSchema: Schema<any> = new Schema(
+export const BaseSchema: Schema<{
+	user_creator: typeof UserModel;
+	user_modifier: typeof UserModel;
+}> = new Schema(
 	{
 		user_creator: {
 			type: Schema.Types.ObjectId,
@@ -15,7 +19,7 @@ export const BaseSchema: Schema<any> = new Schema(
 			ref: 'User',
 			required: true,
 		},
-	},
+	}
 	// { timestamps: true }
 	//* Si quisieramos cambiar "Bases" por "Basees" al crearse el modelo en mongoDb
 	// , { collection :'Basees'}

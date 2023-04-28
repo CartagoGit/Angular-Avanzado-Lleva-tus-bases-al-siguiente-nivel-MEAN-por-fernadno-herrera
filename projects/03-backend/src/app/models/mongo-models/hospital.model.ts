@@ -5,7 +5,12 @@ import { BaseModel } from './base.model';
  * ? Crea el esquema del modelo de Hospitales en MongoDb
  * @type {Schema<any>}
  */
-export const HospitalSchema: Schema<any> = new Schema(
+export const HospitalSchema: Schema<{
+	name: string;
+	images: string[];
+	address: string;
+	phone: string;
+}> = new Schema(
 	{
 		name: {
 			type: String,
@@ -16,7 +21,7 @@ export const HospitalSchema: Schema<any> = new Schema(
 				type: String,
 			},
 		],
-		address:{
+		address: {
 			type: String,
 			required: true,
 		},
@@ -24,8 +29,7 @@ export const HospitalSchema: Schema<any> = new Schema(
 			type: String,
 			required: false,
 		},
-		
-	},
+	}
 	// { timestamps: true }
 	//* Si quisieramos cambiar "hospitals" por "hospitales" al crearse el modelo en mongoDb
 	// , { collection :'hospitales'}
