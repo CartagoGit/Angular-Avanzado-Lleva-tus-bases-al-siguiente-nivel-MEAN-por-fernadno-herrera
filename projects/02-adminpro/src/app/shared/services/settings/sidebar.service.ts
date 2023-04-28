@@ -2,15 +2,17 @@ import { Injectable } from '@angular/core';
 import { paths } from '../../constants/paths.constant';
 
 //* Interface de las rutas de los subemus
-interface SubmenuRoutes {
+export interface SubmenuRoutes {
 	title: string;
 	url: string;
+	needAdmin?: boolean;
 }
 
 //* Interface de las rutas del menu principal
-interface MenuRoutes {
+export interface MenuRoutes {
 	title: string;
 	icon: string;
+	needAdmin?: boolean;
 	submenu: SubmenuRoutes[];
 }
 
@@ -37,6 +39,7 @@ export class SidebarService {
 		{
 			title: this._dashboardPath?.title!,
 			icon: this._dashboardPath?.icon!,
+			needAdmin: false,
 			submenu: [
 				{
 					title: 'Main',
@@ -63,6 +66,7 @@ export class SidebarService {
 		{
 			title: this._supportPath?.title!,
 			icon: this._supportPath?.icon!,
+			needAdmin: true,
 			submenu: [
 				{
 					title: 'Users',
