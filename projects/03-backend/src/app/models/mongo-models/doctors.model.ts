@@ -1,11 +1,13 @@
 import { Model, model, ObjectId, Schema } from 'mongoose';
 import { BaseModel, IBase } from './base.model';
+import { HospitalSchema } from './hospital.model';
+import { UserSchema } from './user.model';
 
 export interface IDoctor extends IBase {
 	images: string;
-	user: Schema.Types.ObjectId;
-	hospitals: Schema.Types.ObjectId[];
-	patients: Schema.Types.ObjectId[];
+	user: typeof UserSchema.obj;
+	hospitals: (typeof HospitalSchema.obj)[];
+	patients: (typeof UserSchema.obj)[];
 }
 /**
  * ? Crea el esquema del modelo de Doctores en MongoDb
@@ -33,23 +35,6 @@ export const DoctorSchema: Schema<IDoctor> = new Schema(
 				required: true,
 				// unique: true,
 				autopopulate: true,
-				// validate: {
-				// 	validator: async function (hospitalId: ObjectId) {
-				// 		console.log('HOLAAA');
-				// 		const doctor = this as IDoctor;
-				// 		// const hospitals = doctor.user. ;
-
-				// 		console.log('❗doctor ➽ ⏩', doctor);
-				// 		// const hospitals =
-				// 		// 	doctor.hospitals as (typeof HospitalSchema.obj)[];
-				// 		return false;
-				// 		// return !hospitals.some((hospital) =>
-				// 		//   hospital.equals(hospitalId)
-				// 		// );
-				// 	},
-				// 	message: (props: typeof HospitalSchema.obj) =>
-				// 		`Hospital '${props['name']}' is already assigned to this doctor.`,
-				// },
 			},
 		],
 		patients: [
