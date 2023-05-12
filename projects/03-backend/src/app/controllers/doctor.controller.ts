@@ -3,8 +3,7 @@ import { QueryOptions } from 'mongoose';
 import { PaginationParameters } from 'mongoose-paginate-v2';
 import {
 	DoctorModel,
-	DoctorSchema,
-} from '../models/mongo-models/doctors.model';
+	} from '../models/mongo-models/doctors.model';
 import { UserModel } from '../models/mongo-models/user.model';
 
 /**

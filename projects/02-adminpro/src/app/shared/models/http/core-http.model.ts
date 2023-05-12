@@ -1,4 +1,4 @@
-import { config } from 'projects/02-adminpro/src/environments/environment';
+import { config } from '../../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable, timer } from 'rxjs';
 

@@ -11,7 +11,6 @@ import { Role } from '../interfaces/roles.interface';
 import { getPayloadFromJwtWithoutVerifiy } from '../helpers/json-web-token.helper';
 import { basicError } from '../models/error-data.model';
 import { DoctorModel } from '../models/mongo-models/doctors.model';
-import { Hospital } from '../../../../02-adminpro/src/app/shared/models/mongo-models/hospital.model';
 import { HospitalSchema } from '../models/mongo-models/hospital.model';
 
 /**

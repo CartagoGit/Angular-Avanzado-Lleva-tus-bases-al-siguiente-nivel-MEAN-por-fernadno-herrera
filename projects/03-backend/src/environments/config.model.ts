@@ -1,4 +1,4 @@
-import { hide_environments } from 'global/hide_environments';
+import { hide_environments } from '../../../../global/hide_environments';
 import { getSha256 } from '../app/helpers/encrypt.helper';
 import { OAuth2Client } from 'google-auth-library';
 
