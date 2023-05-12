@@ -1,57 +1,71 @@
 {
-	"affected": {
-		"defaultBase": "main"
-	},
-	"tasksRunnerOptions": {
-		"default": {
-			"runner": "@nrwl/nx-cloud",
-			"options": {
-				"cacheableOperations": ["build", "test"],
-				"accessToken": "MWIxZDMwOTgtYTBiYi00ZjA2LTllMTYtNTFiYjY4MDgzYWNmfHJlYWQtd3JpdGU="
-			}
-		}
-	},
-	"namedInputs": {
-		"sharedGlobals": [],
-		"default": ["{projectRoot}/**/*", "sharedGlobals"],
-		"production": [
-			"default",
-			"!{projectRoot}/tsconfig.spec.json",
-			"!{projectRoot}/**/*.spec.[jt]s",
-			"!{projectRoot}/karma.conf.js",
-			"!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
-			"!{projectRoot}/jest.config.[jt]s"
-
-		]
-	},
-	"targetDefaults": {
-		"build": {
-			"dependsOn": ["^build"],
-			"inputs": ["production", "^production"]
-		},
-		"test": {
-			"inputs": [
-				"default",
-				"^production",
-				"{workspaceRoot}/karma.conf.js",
-				"{workspaceRoot}/jest.preset.js"
-			]
-		},
-		"e2e": {
-			"inputs": ["default", "^production"]
-		}
-	},
-	"generators": {
-		"@nrwl/angular:application": {
-			"style": "css",
-			"unitTestRunner": "jest",
-			"e2eTestRunner": "cypress"
-		},
-		"@nrwl/angular:library": {
-			"unitTestRunner": "jest"
-		},
-		"@nrwl/angular:component": {
-			"style": "css"
-		}
-	}
+  "affected": {
+    "defaultBase": "main"
+  },
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "nx-cloud",
+      "options": {
+        "cacheableOperations": [
+          "build",
+          "test"
+        ],
+        "accessToken": "MWIxZDMwOTgtYTBiYi00ZjA2LTllMTYtNTFiYjY4MDgzYWNmfHJlYWQtd3JpdGU="
+      }
+    }
+  },
+  "namedInputs": {
+    "sharedGlobals": [],
+    "default": [
+      "{projectRoot}/**/*",
+      "sharedGlobals"
+    ],
+    "production": [
+      "default",
+      "!{projectRoot}/tsconfig.spec.json",
+      "!{projectRoot}/**/*.spec.[jt]s",
+      "!{projectRoot}/karma.conf.js",
+      "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
+      "!{projectRoot}/jest.config.[jt]s"
+    ]
+  },
+  "targetDefaults": {
+    "build": {
+      "dependsOn": [
+        "^build"
+      ],
+      "inputs": [
+        "production",
+        "^production"
+      ]
+    },
+    "test": {
+      "inputs": [
+        "default",
+        "^production",
+        "{workspaceRoot}/karma.conf.js",
+        "{workspaceRoot}/jest.preset.js"
+      ]
+    },
+    "e2e": {
+      "inputs": [
+        "default",
+        "^production"
+      ]
+    }
+  },
+  "generators": {
+    "@nrwl/angular:application": {
+      "style": "css",
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress"
+    },
+    "@nrwl/angular:library": {
+      "unitTestRunner": "jest"
+    },
+    "@nrwl/angular:component": {
+      "style": "css"
+    }
+  },
+  "$schema": "./node_modules/nx/schemas/nx-schema.json"
 }

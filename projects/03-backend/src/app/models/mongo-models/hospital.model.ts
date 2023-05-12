@@ -1,4 +1,4 @@
-import { Model, model, Schema } from 'mongoose';
+import { Model, model, ObjectId, Schema } from 'mongoose';
 import { BaseModel, IBase } from './base.model';
 
 export interface IHospital extends IBase {

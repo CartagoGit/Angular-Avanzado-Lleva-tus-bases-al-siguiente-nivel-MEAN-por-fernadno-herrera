@@ -7,13 +7,11 @@
 		"build": {
 			"executor": "@nrwl/node:webpack",
 			"outputs": ["{options.outputPath}"],
-
 			"options": {
-				"outputPath": "dist/projects/03-backend",
+				"outputPath": "build/projects/03-backend",
 				"main": "projects/03-backend/src/main.ts",
 				"tsConfig": "projects/03-backend/tsconfig.app.json",
 				"assets": [
-				
 					{
 						"input": "projects/03-backend/src/assets",
 						"output": "public/assets",
@@ -28,7 +26,7 @@
 			}
 		},
 		"serve": {
-			"executor": "@nrwl/js:node",
+			"executor": "@nx/js:node",
 			"options": {
 				"buildTarget": "03-backend:build"
 			},

@@ -5,18 +5,17 @@
  * @returns {boolean}
  */
 export const isEqual = (x: any, y: any): boolean => {
-	if (x === undefined || y === undefined || x === null || y === null) {
-		if (y !== x) return false;
-		else return true;
-	}
+	if (x === undefined || y === undefined || x === null || y === null)
+		return y !== x;
+
 	const type = typeof x;
 	const areSameType: boolean = type === typeof y;
 	if (!areSameType) return false;
 	if (type !== 'object') return x === y;
 	if (Array.isArray(x) && Array.isArray(y)) {
 		if (x.length !== y.length) return false;
-		return x.sort().every((xItem, index) => {
-			const yItem = y.sort()[index];
+		return [...x].sort().every((xItem, index) => {
+			const yItem = [...y].sort()[index];
 			return isEqual(xItem, yItem);
 		});
 	}

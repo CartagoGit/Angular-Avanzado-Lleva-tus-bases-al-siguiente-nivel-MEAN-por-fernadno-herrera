@@ -59,7 +59,8 @@ export const authController: {
 	},
 	renewToken: async (req) => {
 		const { token: lastToken, id } = await validateJWT(req);
-		const userDB = await UserModel.findById(id);
+		const userDB = (await UserModel.findById(id))!;
+
 		const { ok, token = '' } = await createJWT({ id });
 		return {
 			status_code: 200,

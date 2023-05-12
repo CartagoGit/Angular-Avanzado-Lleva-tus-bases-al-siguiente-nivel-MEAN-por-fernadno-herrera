@@ -2,6 +2,7 @@ import { Model, model, Schema, ObjectId } from 'mongoose';
 import { UserModel } from './user.model';
 
 export interface IBase {
+	id: ObjectId;
 	user_creator: Schema.Types.ObjectId;
 	user_modifier: Schema.Types.ObjectId;
 }

@@ -11,6 +11,8 @@ import { Role } from '../interfaces/roles.interface';
 import { getPayloadFromJwtWithoutVerifiy } from '../helpers/json-web-token.helper';
 import { basicError } from '../models/error-data.model';
 import { DoctorModel } from '../models/mongo-models/doctors.model';
+import { Hospital } from '../../../../02-adminpro/src/app/shared/models/mongo-models/hospital.model';
+import { HospitalSchema } from '../models/mongo-models/hospital.model';
 
 /**
  * ? Controladores especificos de los metodos para el modelo de usuarios
@@ -48,7 +50,7 @@ export const usersController: {
 				reason: 'not found id in model',
 			} as basicError;
 		const { id: idModifier } = getPayloadFromJwtWithoutVerifiy(req);
-		const userModifierDB = await UserModel.findById(idModifier);
+		const userModifierDB = (await UserModel.findById(idModifier))!;
 		req.body['model'] = userDB;
 
 		if (!!userDB.google) {
@@ -97,7 +99,7 @@ export const usersController: {
 		const doctorsBD = await DoctorModel.find({
 			patients: req.params['id'],
 		});
-		const hospitalsFromUser: any[] = [];
+		const hospitalsFromUser: (typeof HospitalSchema.obj)[] = [];
 		for (let doctor of doctorsBD) {
 			for (let hospital of doctor.hospitals) {
 				const isHospitalAdded = hospitalsFromUser.some(
