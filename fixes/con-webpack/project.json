@@ -1,5 +1,5 @@
 {
-	"name": "03-backend-webpack",
+	"name": "03-backend",
 	"$schema": "../../node_modules/nx/schemas/project-schema.json",
 	"sourceRoot": "projects/03-backend/src",
 	"projectType": "application",
@@ -9,12 +9,8 @@
 			"outputs": ["{options.outputPath}"],
 			"defaultConfiguration": "production",
 			"options": {
-				"external": ["*"],
-				"thirdParty": true,
 				"target": "node",
 				"compiler": "tsc",
-				"deleteOutputPath": true,
-				"outputPath": "dist/projects/03-backend",
 				"main": "projects/03-backend/src/main.ts",
 				"tsConfig": "projects/03-backend/tsconfig.app.json",
 				"isolatedConfig": true,
@@ -34,12 +30,18 @@
 			},
 			"configurations": {
 				"production": {
+					"outputPath": "build/projects/03-backend",
 					"minify": true,
-					"sourcemap": false
+					"sourcemap": false,
+					"progress": false,
+					"deleteOutputPath": true
 				},
 				"development": {
+					"outputPath": "dist/projects/03-backend",
 					"minify": false,
-					"sourcemap": true
+					"sourcemap": true,
+					"progress": true,
+					"deleteOutputPath": false
 				}
 			}
 		},
@@ -61,14 +63,14 @@
 			}
 		},
 		"lint": {
-			"executor": "@nrwl/linter:eslint",
+			"executor": "@nx/linter:eslint",
 			"outputs": ["{options.outputFile}"],
 			"options": {
 				"lintFilePatterns": ["projects/03-backend/**/*.ts"]
 			}
 		},
 		"test": {
-			"executor": "@nrwl/jest:jest",
+			"executor": "@nx/jest:jest",
 			"outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
 			"options": {
 				"jestConfig": "projects/03-backend/jest.config.ts",
