@@ -59,7 +59,7 @@ export const getQueryIncludeAndPaginate = (
 		// 	objectQuery = { ...objectQuery, ...keyValue };
 		// }
 
-		if (!!wantSomeQuery) objectQuery = { $or: arrayQuery };
+		if (!!wantSomeQuery && arrayQuery.length !== 0) objectQuery = { $or: arrayQuery };
 		else {
 			for (const keyValue of arrayQuery) {
 				objectQuery = { ...objectQuery, ...keyValue };
