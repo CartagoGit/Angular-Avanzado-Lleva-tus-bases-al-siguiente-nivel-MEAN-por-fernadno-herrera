@@ -5,17 +5,20 @@
 	"projectType": "application",
 	"targets": {
 		"build": {
-			"executor": "@nx/esbuild:esbuild",
+			"executor": "@nx/webpack:webpack",
 			"outputs": ["{options.outputPath}"],
+			"defaultConfiguration": "production",
 			"options": {
-
-				"tsConfig": "projects/03-backend/tsconfig.app.json",
-				"bundle": true,
 				"external": ["*"],
 				"thirdParty": true,
+				"target": "node",
+				"compiler": "tsc",
 				"deleteOutputPath": true,
 				"outputPath": "dist/projects/03-backend",
-				"main": "projects/03-backend/src/prueba.ts",
+				"main": "projects/03-backend/src/main.ts",
+				"tsConfig": "projects/03-backend/tsconfig.app.json",
+				"isolatedConfig": true,
+				"webpackConfig": "projects/03-backend/webpack.config.js",
 				"assets": [
 					{
 						"input": "projects/03-backend/src/assets",
@@ -33,22 +36,27 @@
 				"production": {
 					"minify": true,
 					"sourcemap": false
+				},
+				"development": {
+					"minify": false,
+					"sourcemap": true
 				}
 			}
 		},
 		"serve": {
-			"executor": "@nx/node:node",
+			"executor": "@nx/js:node",
+			"defaultConfiguration": "development",
 			"options": {
 				"watch": true,
 				"buildTarget": "03-backend:build",
-				"buildTargetOptions": {
-				},
-				"port": 5000,
-				"host": "localhost"
+				"buildTargetOptions": {}
 			},
 			"configurations": {
 				"production": {
 					"buildTarget": "03-backend:build:production"
+				},
+				"development": {
+					"buildTarget": "03-backend:build:development"
 				}
 			}
 		},
