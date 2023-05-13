@@ -1,0 +1,85 @@
+{
+	"name": "03-backend",
+	"$schema": "../../node_modules/nx/schemas/project-schema.json",
+	"sourceRoot": "projects/03-backend/src",
+	"projectType": "application",
+	"targets": {
+		"build": {
+			"executor": "@nx/esbuild:esbuild",
+			"outputs": ["{options.outputPath}"],
+			"defaultConfiguration": "production",
+			"options": {
+				"external": ["*"],
+				"thirdParty": true,
+				"compiler": "tsc",
+				"deleteOutputPath": true,
+				"outputPath": "dist/projects/03-backend",
+				"main": "projects/03-backend/src/main.ts",
+				"tsConfig": "projects/03-backend/tsconfig.app.json",
+				"isolatedConfig": true,
+				"assets": [
+					{
+						"input": "projects/03-backend/src/assets",
+						"output": "public/assets",
+						"glob": "**/*"
+					},
+					{
+						"input": "projects/03-backend/src/public",
+						"output": "public",
+						"glob": "**/*"
+					}
+				]
+			},
+			"configurations": {
+				"production": {
+					"minify": true,
+					"sourcemap": false
+				},
+				"development": {
+					"minify": false,
+					"sourcemap": true
+				}
+			}
+		},
+		"serve": {
+			"executor": "@nx/node:node",
+			"options": {
+				"watch": true,
+				"buildTarget": "03-backend:build",
+				"buildTargetOptions": {},
+				"port": 5000,
+				"host": "localhost"
+			},
+			"configurations": {
+				"production": {
+					"buildTarget": "03-backend:build:production"
+				},
+				"development": {
+					"buildTarget": "03-backend:build:development"
+				}
+			}
+		},
+		"lint": {
+			"executor": "@nx/linter:eslint",
+			"outputs": ["{options.outputFile}"],
+			"options": {
+				"lintFilePatterns": ["projects/03-backend/**/*.ts"]
+			}
+		},
+		"test": {
+			"executor": "@nx/jest:jest",
+			"outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+			"options": {
+				"jestConfig": "projects/03-backend/jest.config.ts",
+				"passWithNoTests": true
+			},
+			"configurations": {
+				"ci": {
+					"ci": true,
+					"codeCoverage": true
+				}
+			}
+		}
+	},
+	"tags": []
+}
