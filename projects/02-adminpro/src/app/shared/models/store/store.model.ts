@@ -1,4 +1,4 @@
-import { inject, NgZone } from '@angular/core';
+import { Inject, inject, NgZone } from '@angular/core';
 import {
 	Observable,
 	BehaviorSubject,
@@ -47,7 +47,7 @@ export class Store<T extends { [key in keyof T]: T[key] }> {
 
 	//* NgZone para ejecutar los metodos en la zona de angular
 	// se injecta en la clase al ser un servicio
-	private _zone = inject(NgZone);
+	private _zone: NgZone = new NgZone({});
 
 	// ANCHOR : Constructor
 	constructor(state: T, options?: StoreOptions<T>) {

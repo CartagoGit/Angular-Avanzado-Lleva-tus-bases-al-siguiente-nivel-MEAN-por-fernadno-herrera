@@ -93,7 +93,6 @@ export class DoctorsComponent {
 				})
 			)
 			.subscribe((resp) => {
-				console.log('❗.subscribe  ➽ resp ➽ ⏩', resp);
 				const { data, pagination } = resp;
 				if (!data || !pagination) return;
 				this.store.setState({
