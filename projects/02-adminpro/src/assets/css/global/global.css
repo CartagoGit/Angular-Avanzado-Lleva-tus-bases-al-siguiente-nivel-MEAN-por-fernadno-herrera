@@ -96,12 +96,10 @@ img.portrait {
 	cursor: not-allowed !important;
 }
 
-.hide{
+.hide {
 	display: none !important;
 }
 
-
 .animated.bounceIn {
 	animation-iteration-count: 1;
- }
-
+}
