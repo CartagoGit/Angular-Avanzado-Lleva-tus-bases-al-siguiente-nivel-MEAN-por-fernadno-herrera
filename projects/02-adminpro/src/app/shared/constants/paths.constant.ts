@@ -64,6 +64,11 @@ class PathConstants {
 					title: 'Promises',
 					name: 'promises',
 				},
+				standalone: {
+					title: 'Standalone',
+					name: 'standalone',
+				}
+
 			}),
 			support: new Path({
 				name: 'support',

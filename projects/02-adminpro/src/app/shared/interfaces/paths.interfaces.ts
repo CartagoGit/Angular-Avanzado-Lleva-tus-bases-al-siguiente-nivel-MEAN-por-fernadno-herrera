@@ -19,7 +19,8 @@ export type DashboardSections =
 	| 'progressBar'
 	| 'graphic01'
 	| 'promises'
-	| 'rxjs';
+	| 'rxjs'
+	| 'standalone';
 
 export type SupportSections = 'users' | 'hospitals' | 'doctors';
 

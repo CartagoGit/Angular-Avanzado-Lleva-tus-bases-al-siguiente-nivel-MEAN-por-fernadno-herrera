@@ -6,12 +6,14 @@ import { MainDashboardComponent } from './main-dashboard/main-dashboard.componen
 import { ProgressComponent } from './progress/progress.component';
 import { PromisesComponent } from './promises/promises.component';
 import { RxjsComponent } from './rxjs/rxjs.component';
+import { StandaloneComponent } from './standalone/standalone.component';
 
 const dashboardPath = paths.getPath('dashboard');
 const progressBarPath = paths.getPath('progressBar');
 const graphic01Path = paths.getPath('graphic01');
 const promisesPath = paths.getPath('promises');
 const rxjsPath = paths.getPath('rxjs');
+const standalonePath = paths.getPath('standalone');
 const routes: Routes = [
 	{
 		path: '',
@@ -39,6 +41,11 @@ const routes: Routes = [
 		component: RxjsComponent,
 		data: { titulo: rxjsPath?.title },
 	},
+	{
+		path: standalonePath?.name,
+		component: StandaloneComponent,
+		data: { titulo: standalonePath?.title },
+	}
 ];
 
 @NgModule({
