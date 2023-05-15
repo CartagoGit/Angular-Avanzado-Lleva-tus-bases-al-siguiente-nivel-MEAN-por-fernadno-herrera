@@ -11,7 +11,13 @@
 	</div>
 </div>
 
-<header>Counter Standalone</header>
+<header>Counter Standalone {{ counterChanged }}</header>
 <div class="container">
-	<counter-alone></counter-alone>
+	<counter-alone
+		[title]="'Better counter'"
+		[startIn]="15"
+		(counterChanged)="
+			counterChanged = $event
+		"
+	></counter-alone>
 </div>

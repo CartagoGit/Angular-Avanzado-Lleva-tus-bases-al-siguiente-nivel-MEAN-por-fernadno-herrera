@@ -24,6 +24,7 @@ export class StandaloneComponent {
 	@ViewChild('map') mapElement!: ElementRef<HTMLDivElement>;
 
 	private _map!: mapboxgl.Map;
+	public counterChanged : string = 'Not Changed'
 
 	// ANCHOR : Constructor
 	constructor() {}
