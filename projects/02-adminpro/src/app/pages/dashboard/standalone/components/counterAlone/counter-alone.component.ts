@@ -14,6 +14,11 @@ import { CommonModule } from '@angular/common';
 	`,
 	styles: [
 		`
+			:host {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+			}
 			.buttons {
 				display: flex;
 				gap: 10px;
