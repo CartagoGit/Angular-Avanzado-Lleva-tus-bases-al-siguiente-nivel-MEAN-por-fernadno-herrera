@@ -11,6 +11,7 @@ interface ConfigProps {
 	API_PORT: number;
 	API_URL_BASE: string;
 	GOOGLE_ID: string;
+	MAPBOX_KEY: string;
 }
 
 /**
@@ -27,6 +28,7 @@ export class Config implements ConfigProps {
 	public API_URL_BASE!: string;
 	public GOOGLE_ID!: string;
 	public API_PORT!: number;
+	public MAPBOX_KEY: string;
 
 	get API_URL() {
 		return this.API_URL_BASE + this.API_PORT;
@@ -35,7 +37,7 @@ export class Config implements ConfigProps {
 	get API_ENDPOINT() {
 		return this.API_URL + '/api';
 	}
-	
+
 
 	// ANCHOR : Constructor
 	constructor(data: ConfigProps) {
@@ -43,6 +45,7 @@ export class Config implements ConfigProps {
 		this.API_PORT = data.API_PORT;
 		this.API_URL_BASE = data.API_URL_BASE;
 		this.GOOGLE_ID = data.GOOGLE_ID;
+		this.MAPBOX_KEY = data.MAPBOX_KEY;
 	}
 
 	// ANCHOR : Methods

@@ -5,6 +5,7 @@ export const environment: Config = new Config({
 	MODE: 'production',
 	API_URL_BASE: '',
 	GOOGLE_ID: '',
+	MAPBOX_KEY:''
 });
 
 

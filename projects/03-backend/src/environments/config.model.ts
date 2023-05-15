@@ -11,6 +11,7 @@ import { OAuth2Client } from 'google-auth-library';
 //    MONGO_DB?: string;
 //    JWT_SECRET: string;
 //		GOOGLE_SECRET: string;
+//    MAPBOX_KEY: string;
 // }
 // export const hide_environments = {
 // 	MONGO_CLUSTER : 'backend-angular-avanzad.pei57e6',
@@ -23,6 +24,7 @@ import { OAuth2Client } from 'google-auth-library';
 //    MONGO_DB: 'hospitalApp',
 //    JWT_SECRET: 'una_clave_secreta_oculta"
 // 	GOOGLE_SECRET: 'la_clave_secreta_de_google'
+//    MAPBOX_KEY: 'el token de map box
 // }
 
 //* Posibles modos o estado de la aplicacion
