@@ -13,6 +13,7 @@ const graphic01Path = paths.getPath('graphic01');
 const promisesPath = paths.getPath('promises');
 const rxjsPath = paths.getPath('rxjs');
 const standalonePath = paths.getPath('standalone');
+const signalsPath = paths.getPath('signals');
 const routes: Routes = [
 	{
 		path: '',
@@ -47,6 +48,14 @@ const routes: Routes = [
 				(module) => module.StandaloneComponent
 			),
 		data: { titulo: standalonePath?.title },
+	},
+	{
+		path: signalsPath?.name,
+		loadComponent: () =>
+			import('./signals/signals.component').then(
+				(module) => module.SignalsComponent
+			),
+		data: { titulo: signalsPath?.title },
 	},
 ];
 

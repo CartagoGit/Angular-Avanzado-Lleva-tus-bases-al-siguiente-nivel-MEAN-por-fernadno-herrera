@@ -67,6 +67,10 @@ class PathConstants {
 				standalone: {
 					title: 'Standalone',
 					name: 'standalone',
+				},
+				signals: {
+					title: 'Signals',
+					name: 'signals',
 				}
 
 			}),

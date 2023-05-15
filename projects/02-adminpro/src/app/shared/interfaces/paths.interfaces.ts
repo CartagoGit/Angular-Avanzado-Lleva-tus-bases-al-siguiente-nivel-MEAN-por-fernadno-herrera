@@ -20,7 +20,8 @@ export type DashboardSections =
 	| 'graphic01'
 	| 'promises'
 	| 'rxjs'
-	| 'standalone';
+	| 'standalone'
+	| 'signals';
 
 export type SupportSections = 'users' | 'hospitals' | 'doctors';
 

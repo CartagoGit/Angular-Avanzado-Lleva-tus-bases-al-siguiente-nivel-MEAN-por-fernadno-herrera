@@ -29,6 +29,7 @@ export class SidebarService {
 	private _promisesPath = paths.getPath('promises');
 	private _rxjsPath = paths.getPath('rxjs');
 	private _standalonePath = paths.getPath('standalone');
+	private _signalsPath = paths.getPath('signals');
 
 	//* Support
 	private _supportPath = paths.getPath('support');
@@ -65,6 +66,10 @@ export class SidebarService {
 				{
 					title: this._standalonePath?.title!,
 					url: this._standalonePath?.fullPath!,
+				},
+				{
+					title: this._signalsPath?.title!,
+					url: this._signalsPath?.fullPath!,
 				},
 			],
 		},
