@@ -6,7 +6,6 @@ import { MainDashboardComponent } from './main-dashboard/main-dashboard.componen
 import { ProgressComponent } from './progress/progress.component';
 import { PromisesComponent } from './promises/promises.component';
 import { RxjsComponent } from './rxjs/rxjs.component';
-import { StandaloneComponent } from './standalone/standalone.component';
 
 const dashboardPath = paths.getPath('dashboard');
 const progressBarPath = paths.getPath('progressBar');
@@ -43,9 +42,12 @@ const routes: Routes = [
 	},
 	{
 		path: standalonePath?.name,
-		loadComponent: () => import('./standalone/standalone.component').then(module => module.StandaloneComponent),
+		loadComponent: () =>
+			import('./standalone/standalone.component').then(
+				(module) => module.StandaloneComponent
+			),
 		data: { titulo: standalonePath?.title },
-	}
+	},
 ];
 
 @NgModule({

@@ -2,16 +2,17 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
 import { environment } from 'projects/02-adminpro/src/environments/environment';
+import { CounterAloneComponent } from './components/counterAlone/counter-alone.component';
 
 @Component({
 	selector: 'app-standalone',
 	standalone: true,
-	imports: [CommonModule],
+	imports: [CommonModule, CounterAloneComponent],
 	templateUrl: './standalone.component.html',
 	styles: [
 		`
 			.map {
-				min-height: 500px;
+				min-height: 400px;
 				height: 100%;
 			}
 		`,
