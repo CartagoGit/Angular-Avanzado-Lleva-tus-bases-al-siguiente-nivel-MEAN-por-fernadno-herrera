@@ -6,7 +6,7 @@ import { SignalsRoutingModule } from './signals.routing';
 @Component({
 	selector: 'app-signals',
 	standalone: true,
-	imports: [CommonModule, RouterModule, SignalsRoutingModule],
+	imports: [CommonModule, SignalsRoutingModule, RouterModule],
 	template: `<p>signals works!</p>
 		<router-outlet /> `,
 	styles: [],
