@@ -8,12 +8,14 @@ import { environment } from 'projects/02-adminpro/src/environments/environment';
 	standalone: true,
 	imports: [CommonModule],
 	templateUrl: './standalone.component.html',
-	styles: [`
-	.map {
-		min-height : 500px;
-		height: 100%;
-	}
-	`],
+	styles: [
+		`
+			.map {
+				min-height: 500px;
+				height: 100%;
+			}
+		`,
+	],
 })
 export class StandaloneComponent {
 	// ANCHOR : Variables
@@ -21,18 +23,25 @@ export class StandaloneComponent {
 	@ViewChild('map') mapElement!: ElementRef<HTMLDivElement>;
 
 	private _map!: mapboxgl.Map;
-	// private mapBoxToken =
 
 	// ANCHOR : Constructor
 	constructor() {}
 
 	ngAfterViewInit(): void {
+		this._loadMap();
+	}
+
+	// ANCHOR : Methods
+
+	/**
+	 * ? Precarga del mapa
+	 * @private
+	 */
+	private _loadMap(): void {
 		this._map = new mapboxgl.Map({
 			accessToken: environment.MAPBOX_KEY,
 			container: this.mapElement.nativeElement,
 			style: 'mapbox://styles/mapbox/streets-v11',
 		});
 	}
-
-	// ANCHOR : Methods
 }

@@ -43,7 +43,7 @@ const routes: Routes = [
 	},
 	{
 		path: standalonePath?.name,
-		component: StandaloneComponent,
+		loadComponent: () => import('./standalone/standalone.component').then(module => module.StandaloneComponent),
 		data: { titulo: standalonePath?.title },
 	}
 ];
