@@ -6,18 +6,41 @@ import { RouterModule } from '@angular/router';
 	selector: 'app-nav-menu',
 	standalone: true,
 	imports: [CommonModule, NgFor, RouterModule],
-	template: `<div class="buttons ">
-		<span
-			*ngFor="let route of menuRoutes"
-			class="pointer btn btn-outline-secondary mr-2"
-			[routerLink]="route.path"
+	template: ` <div class="d-flex justify-content-around mb-3">
+		<div class="buttons ">
+			<span
+				*ngFor="let route of menuRoutes"
+				class="pointer btn btn-outline-secondary mr-2"
+				[routerLink]="route.path"
+				routerLinkActive="active"
+			>
+				{{ route.name }}
+			</span>
+		</div>
+		<code
+			class="pointer"
+			routerLink="./"
+			routerLinkActive="active"
+			[routerLinkActiveOptions]="{ exact: true }"
 		>
-			{{ route.name }}
-		</span>
+			{{ phrase }}
+		</code>
 	</div>`,
-	styles: [],
+	styles: [
+		`
+			code {
+				padding: 0 10px;
+				display: grid;
+				place-items: center;
+			}
+			code.active {
+				outline: 2px dashed grey;
+			}
+		`,
+	],
 })
 export class NavMenuComponent {
+	public phrase = 'The signals are strange tonight!';
 	public menuRoutes: { name: string; path: string }[] = [
 		{ name: 'Counter', path: './counter' },
 		{ name: 'Info', path: './info' },

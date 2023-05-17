@@ -15,12 +15,8 @@ import { ContainerComponent } from './components/container.component';
 	],
 
 	template: ` <div class="container">
-		<div class="d-flex justify-content-around mb-3">
-			<app-nav-menu />
-			<code class="pointer" routerLink="./">
-				{{ phrase }}
-			</code>
-		</div>
+		<app-nav-menu />
+
 		<app-container>
 			<router-outlet />
 		</app-container>
@@ -28,6 +24,4 @@ import { ContainerComponent } from './components/container.component';
 
 	styles: [],
 })
-export class SignalsComponent {
-	public phrase = 'The signals are strange tonight!';
-}
+export class SignalsComponent {}
