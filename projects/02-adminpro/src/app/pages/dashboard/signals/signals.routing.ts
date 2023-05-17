@@ -5,7 +5,7 @@ const routes: Route[] = [
 	{
 		path: '',
 		loadComponent: () =>
-			import('./pages/signals-page/signals-page.component').then(
+			import('./pages/signals-page.component').then(
 				(module) => module.SignalsPageComponent
 			),
 		pathMatch: 'full',
@@ -13,23 +13,27 @@ const routes: Route[] = [
 	{
 		path: 'counter',
 		loadComponent: () =>
-			import('./pages/counter-page/counter-page.component').then(
+			import('./pages/counter-page.component').then(
 				(module) => module.CounterPageComponent
 			),
 	},
 	{
 		path: 'info',
 		loadComponent: () =>
-			import('./pages/user-info-page/user-info-page.component').then(
+			import('./pages/user-info-page.component').then(
 				(module) => module.UserInfoPageComponent
 			),
 	},
 	{
 		path: 'properties',
 		loadComponent: () =>
-			import('./pages/properties-page/properties-page.component').then(
+			import('./pages/properties-page.component').then(
 				(module) => module.PropertiesPageComponent
 			),
+	},
+	{
+		path: '**',
+		redirectTo: '',
 	},
 ];
 

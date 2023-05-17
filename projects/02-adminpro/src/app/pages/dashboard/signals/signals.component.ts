@@ -1,41 +1,38 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgFor } from '@angular/common';
 import { SignalsRoutingModule } from './signals.routing';
 
 @Component({
 	selector: 'app-signals',
 	standalone: true,
-	imports: [CommonModule, SignalsRoutingModule],
+	imports: [CommonModule, SignalsRoutingModule, NgFor],
 
 	template: ` <div class="container">
 		<div class="d-flex justify-content-around mb-3">
 			<div class="buttons ">
 				<span
-					class="pointer btn btn-outline-primary mr-2"
-					routerLink="./counter"
+					*ngFor="let route of menuRoutes"
+					class="pointer btn btn-outline-secondary mr-2"
+					[routerLink]="route.path"
 				>
-					Counter
-				</span>
-				<span class="pointer btn btn-outline-primary mr-2" routerLink="./info">
-					Info
-				</span>
-				<span
-					class="pointer btn btn-outline-primary"
-					routerLink="./properties"
+					{{ route.name }}</span
 				>
-					Properties
-				</span>
 			</div>
-
-			<code class="pointer" routerLink="./"
-				>The signals are strange tonight!</code
-			>
+			<code class="pointer" routerLink="./">
+				{{ phrase }}
+			</code>
 		</div>
 		<div class="row">
 			<div class="col-12">
 				<div class="card">
 					<div class="card-body">
-						<router-outlet />
+						<div class="row">
+							<div class="col-12">
+								<div class="card">
+									<router-outlet />
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -43,4 +40,12 @@ import { SignalsRoutingModule } from './signals.routing';
 	</div>`,
 	styles: [],
 })
-export class SignalsComponent {}
+export class SignalsComponent {
+	public menuRoutes: { name: string; path: string }[] = [
+		{ name: 'Counter', path: './counter' },
+		{ name: 'Info', path: './info' },
+		{ name: 'Properties', path: './properties' },
+	];
+
+	public phrase = 'The signals are strange tonight!';
+}
