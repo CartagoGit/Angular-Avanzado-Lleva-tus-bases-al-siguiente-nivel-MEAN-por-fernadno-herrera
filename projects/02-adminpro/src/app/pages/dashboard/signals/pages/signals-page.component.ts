@@ -14,6 +14,4 @@ import { CommonModule } from '@angular/common';
 			</p>
 		</div>`,
 })
-export class SignalsPageComponent {
-
-}
+export class SignalsPageComponent {}

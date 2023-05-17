@@ -103,3 +103,19 @@ img.portrait {
 .animated.bounceIn {
 	animation-iteration-count: 1;
 }
+
+.g-5 {
+	gap: 5px !important;
+}
+
+.g-10 {
+	gap: 10px !important;
+}
+
+.g-15 {
+	gap: 15px !important;
+}
+
+.w-auto {
+	width: auto !important;
+}

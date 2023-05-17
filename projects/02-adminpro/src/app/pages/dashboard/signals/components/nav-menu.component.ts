@@ -1,4 +1,4 @@
-import { Component, Signal, signal } from '@angular/core';
+import { Component,  WritableSignal, signal } from '@angular/core';
 import { CommonModule, NgFor } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MenuRoutes } from '../interfaces/menu-routes.interface';
@@ -8,10 +8,10 @@ import { MenuRoutes } from '../interfaces/menu-routes.interface';
 	standalone: true,
 	imports: [CommonModule, NgFor, RouterModule],
 	template: ` <div class="d-flex justify-content-around mb-3">
-		<div class="buttons ">
+		<div class="buttons d-flex g-10">
 			<span
 				*ngFor="let route of menuRoutes()"
-				class="pointer btn btn-outline-secondary mr-2"
+				class="pointer btn btn-outline-secondary"
 				[routerLink]="route.path"
 				routerLinkActive="active"
 			>
@@ -41,9 +41,9 @@ import { MenuRoutes } from '../interfaces/menu-routes.interface';
 	],
 })
 export class NavMenuComponent {
-	public phrase: Signal<string> = signal('The signals are strange tonight!');
+	public phrase: WritableSignal<string> = signal('The signals are strange tonight!');
 	// public phrase = 'The signals are strange tonight!';
-	public menuRoutes: Signal<MenuRoutes[]> = signal([
+	public menuRoutes: WritableSignal<MenuRoutes[]> = signal([
 		{ name: 'Counter', path: './counter' },
 		{ name: 'Info', path: './info' },
 		{ name: 'Properties', path: './properties' },
