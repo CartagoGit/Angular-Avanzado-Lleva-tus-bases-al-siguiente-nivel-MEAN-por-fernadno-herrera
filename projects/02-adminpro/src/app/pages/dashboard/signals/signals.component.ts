@@ -8,7 +8,29 @@ import { SignalsRoutingModule } from './signals.routing';
 	imports: [CommonModule, SignalsRoutingModule],
 
 	template: ` <div class="container">
-		<h2>Signals</h2>
+		<div class="d-flex justify-content-around mb-3">
+			<div class="buttons ">
+				<span
+					class="pointer btn btn-outline-primary mr-2"
+					routerLink="./counter"
+				>
+					Counter
+				</span>
+				<span class="pointer btn btn-outline-primary mr-2" routerLink="./info">
+					Info
+				</span>
+				<span
+					class="pointer btn btn-outline-primary"
+					routerLink="./properties"
+				>
+					Properties
+				</span>
+			</div>
+
+			<code class="pointer" routerLink="./"
+				>The signals are strange tonight!</code
+			>
+		</div>
 		<div class="row">
 			<div class="col-12">
 				<div class="card">
@@ -18,9 +40,6 @@ import { SignalsRoutingModule } from './signals.routing';
 				</div>
 			</div>
 		</div>
-		<code class="d-flex justify-content-center">
-			The signals are strange tonight!
-		</code>
 	</div>`,
 	styles: [],
 })
