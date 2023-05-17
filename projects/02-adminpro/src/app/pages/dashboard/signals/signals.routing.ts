@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Route, RouterModule } from '@angular/router';
 
-const routes = [
+const routes: Route[] = [
 	{
 		path: '',
 		loadComponent: () =>
-			import('./layout/signals-layout/signals-layout.component').then(
-				(m) => m.SignalsLayoutComponent
-			),
+			import(
+				'./components/test-standalone-route/test-standalone-route.component'
+			).then((m) => m.TestStandaloneRouteComponent),
 	},
 ];
 
