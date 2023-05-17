@@ -17,7 +17,7 @@ import { InfoSignalsService } from '../services/info-signals.service';
 		</div>
 		<div class="card-body d-flex flex-column align-items-center">
 			<h3>Actual user : {{ actualUser() }}</h3>
-			<div class="buttons d-flex g-10">
+			<div class="buttons d-flex g-10 mb-5">
 				<button
 					class="btn btn-primary"
 					(click)="changeUser(actualUser() - 1)"
@@ -37,8 +37,28 @@ import { InfoSignalsService } from '../services/info-signals.service';
 					Next
 				</button>
 			</div>
+
+			<h4 class="mb-2">User</h4>
+			<div class="user d-flex flex-column">
+				<p>Email:</p>
+				<p>Name:</p>
+				<img src="..." alt="Avatar" />
+			</div>
+			<div class="error">
+				<h4 class="text-danger">User not found</h4>
+			</div>
 		</div>`,
-	styles: [],
+	styles: [
+		`
+			.user {
+				width: 350px;
+				padding: 25px;
+				border: 1px solid #ccc;
+				border-radius: 5px;
+				box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+			}
+		`,
+	],
 })
 export class UserInfoPageComponent {
 	// ANCHOR Variables
