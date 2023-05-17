@@ -86,9 +86,14 @@ import { User } from '../interfaces/user-request.interface';
 export class UserInfoPageComponent {
 	// ANCHOR Variables
 	public initialUser: Signal<number> = signal(1);
-	public isUserFound: WritableSignal<boolean> = signal(true);
 	public currentUserId: WritableSignal<number> = signal(this.initialUser());
 	public currentUser: WritableSignal<User | undefined> = signal(undefined);
+	// public currentUser: Signal<User | undefined> = computed(()=> {
+	// 	this._infoSignalsSvc.getUserById(this.currentUserId().toString());
+	// });
+	public isUserFound: Signal<boolean> = computed(
+		() => this.currentUser() !== undefined
+	);
 	public fullName: Signal<string> = computed(
 		() => `${this.currentUser()?.first_name} ${this.currentUser()?.last_name}`
 	);
@@ -108,11 +113,9 @@ export class UserInfoPageComponent {
 		this._infoSignalsSvc.getUserById(id.toString()).subscribe({
 			next: (user) => {
 				this.currentUser.set(user);
-				this.isUserFound.set(true);
 			},
 			error: () => {
 				this.currentUser.set(undefined);
-				this.isUserFound.set(false);
 			},
 		});
 	}
