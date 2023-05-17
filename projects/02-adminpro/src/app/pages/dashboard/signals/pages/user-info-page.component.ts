@@ -1,4 +1,5 @@
 import {
+	ChangeDetectionStrategy,
 	Component,
 	Signal,
 	WritableSignal,
@@ -12,17 +13,18 @@ import { User } from '../interfaces/user-request.interface';
 
 @Component({
 	selector: 'app-user-info-page',
+	changeDetection: ChangeDetectionStrategy.OnPush,
 	standalone: true,
 	imports: [CommonModule],
 	template: `<div class="card-header d-flex justify-content-center">
 			<h2>Info with signals and services</h2>
 		</div>
 		<div class="card-body d-flex flex-column align-items-center">
-			<h3>Actual user Id: {{ actualUserId() }}</h3>
+			<h3>Actual user Id: {{ currentUserId() }}</h3>
 			<div class="buttons d-flex g-10 mb-5">
 				<button
 					class="btn btn-primary"
-					(click)="changeUser(actualUserId() - 1)"
+					(click)="changeUser(currentUserId() - 1)"
 				>
 					Previous
 				</button>
@@ -34,18 +36,22 @@ import { User } from '../interfaces/user-request.interface';
 				</button>
 				<button
 					class="btn btn-primary"
-					(click)="changeUser(actualUserId() + 1)"
+					(click)="changeUser(currentUserId() + 1)"
 				>
 					Next
 				</button>
 			</div>
 
-			<div class="user" *ngIf="actualUser(); else error">
+			<div class="user" *ngIf="isUserFound(); else error">
 				<h4 class="mb-2">User</h4>
 				<div class="user-info d-flex flex-column">
-					<p>Email: {{ actualUser()?.email }}</p>
+					<p>Email: {{ currentUser()?.email }}</p>
 					<p>Name: {{ fullName() }}</p>
-					<img [src]="actualUser()?.avatar" alt="Avatar" />
+					<img
+						[src]="currentUser()?.avatar"
+						alt="Avatar"
+						class="rounded"
+					/>
 				</div>
 			</div>
 			<ng-template #error>
@@ -80,28 +86,33 @@ import { User } from '../interfaces/user-request.interface';
 export class UserInfoPageComponent {
 	// ANCHOR Variables
 	public initialUser: Signal<number> = signal(1);
-	public actualUserId: WritableSignal<number> = signal(this.initialUser());
-	public actualUser: WritableSignal<User | undefined> = signal(undefined);
+	public isUserFound: WritableSignal<boolean> = signal(true);
+	public currentUserId: WritableSignal<number> = signal(this.initialUser());
+	public currentUser: WritableSignal<User | undefined> = signal(undefined);
 	public fullName: Signal<string> = computed(
-		() => `${this.actualUser()?.first_name} ${this.actualUser()?.last_name}`
+		() => `${this.currentUser()?.first_name} ${this.currentUser()?.last_name}`
 	);
 
 	private _infoSignalsSvc: InfoSignalsService = inject(InfoSignalsService);
 
 	// ANCHOR Constructor
-	constructor() {
-		this.changeUser(this.actualUserId());
+	constructor() {}
+
+	ngOnInit(): void {
+		this.changeUser(this.currentUserId());
 	}
 
 	// ANCHOR Methods
 	public changeUser(id: number): void {
-		this.actualUserId.set(id);
+		this.currentUserId.set(id);
 		this._infoSignalsSvc.getUserById(id.toString()).subscribe({
 			next: (user) => {
-				this.actualUser.set(user);
+				this.currentUser.set(user);
+				this.isUserFound.set(true);
 			},
 			error: () => {
-				this.actualUser.set(undefined);
+				this.currentUser.set(undefined);
+				this.isUserFound.set(false);
 			},
 		});
 	}
