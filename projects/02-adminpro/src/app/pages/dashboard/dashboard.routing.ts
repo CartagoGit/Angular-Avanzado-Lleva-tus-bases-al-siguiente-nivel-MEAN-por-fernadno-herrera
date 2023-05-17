@@ -56,6 +56,10 @@ const routes: Routes = [
 				(module) => module.SignalsComponent
 			),
 		data: { titulo: signalsPath?.title },
+		loadChildren: () =>
+			import('./signals/signals.routing').then(
+				(m) => m.SignalsRoutingModule
+			),
 	},
 ];
 

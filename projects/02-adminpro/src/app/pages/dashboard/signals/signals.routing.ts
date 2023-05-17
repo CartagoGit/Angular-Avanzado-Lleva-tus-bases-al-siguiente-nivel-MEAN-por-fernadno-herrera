@@ -4,10 +4,12 @@ import { Route, RouterModule } from '@angular/router';
 const routes: Route[] = [
 	{
 		path: '',
-		loadComponent: () =>
-			import(
-				'./components/test-standalone-route/test-standalone-route.component'
-			).then((m) => m.TestStandaloneRouteComponent),
+		// loadComponent: () =>
+		// 	import('./signals.component').then(
+		// 		(module) => module.SignalsComponent
+		// 	),
+		pathMatch: 'full',
+		children: [],
 	},
 ];
 
