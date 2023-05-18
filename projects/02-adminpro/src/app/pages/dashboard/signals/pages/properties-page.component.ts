@@ -3,6 +3,7 @@ import {
 	Component,
 	WritableSignal,
 	computed,
+	effect,
 	signal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -73,21 +74,37 @@ export class PropertiesPageComponent {
 		return `${this.user().first_name} ${this.user().last_name}`;
 	});
 
+	public signalCounter = signal(0);
+
+	public counter = 0;
+	public userChangedEffect = effect(
+		() => {
+			this.counter++;
+			this.signalCounter.update((current) => current + 1);
+			console.log(`User changed ${this.counter} times`, this.user());
+			console.log(`Signal modified inside effect ${this.signalCounter()}`);
+		},
+		{ allowSignalWrites: true }
+	);
+
 	// ANCHOR : Constructor
 	constructor() {}
 
+	ngOnDestroy(): void {
+		// * Se pueden destruir los efectos manualmente aunque por si mismos se destruyen al destruir el componente
+		// this.userChangedEffect.destroy();
+	}
+
 	// ANCHOR : Methods
 	public onFieldUpdated(field: keyof User, value: string): void {
-		console.log(field, value);
+		// console.log(field, value);
 		this.user.update((user) => ({ ...user, [field]: value }));
 		// this.user.mutate((current) => {
-			// current.email = value;
-			// console.log(current, value, field);
-			// current = { ...current, [field]: value };
-			// current[field] = value as any;
+		// current.email = value;
+		// console.log(current, value, field);
+		// current = { ...current, [field]: value };
+		// current[field] = value as any;
 
 		// });
-
-
 	}
 }
