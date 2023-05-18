@@ -1,4 +1,10 @@
-import { Component, WritableSignal, computed, signal } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	Component,
+	WritableSignal,
+	computed,
+	signal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { User } from '../interfaces/user-request.interface';
 
@@ -6,6 +12,7 @@ import { User } from '../interfaces/user-request.interface';
 	selector: 'app-properties-page',
 	standalone: true,
 	imports: [CommonModule],
+	changeDetection: ChangeDetectionStrategy.OnPush,
 	template: ` <div class="card-header d-flex justify-content-center">
 			<h2>Properties and mutations with signals</h2>
 		</div>
@@ -73,5 +80,14 @@ export class PropertiesPageComponent {
 	public onFieldUpdated(field: keyof User, value: string): void {
 		console.log(field, value);
 		this.user.update((user) => ({ ...user, [field]: value }));
+		// this.user.mutate((current) => {
+			// current.email = value;
+			// console.log(current, value, field);
+			// current = { ...current, [field]: value };
+			// current[field] = value as any;
+
+		// });
+
+
 	}
 }
