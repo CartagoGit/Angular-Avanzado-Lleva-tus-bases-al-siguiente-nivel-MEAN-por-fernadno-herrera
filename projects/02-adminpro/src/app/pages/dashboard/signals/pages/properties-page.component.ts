@@ -10,17 +10,29 @@ import { CommonModule } from '@angular/common';
 		</div>
 		<div class="card-body d-flex flex-column align-items-center">
 			<div class="row">
-				<div class="col-6">
+				<div class="col-6 d-flex flex-column g-15">
 					<input
 						#txtEmail
 						type="text"
 						class="form-control"
 						(input)="onFieldUpdated('email', txtEmail.value)"
 					/>
+					<input
+						#txtFirstName
+						type="text"
+						class="form-control"
+						(input)="onFieldUpdated('firstName', txtFirstName.value)"
+					/>
+					<input
+						#txtLastName
+						type="text"
+						class="form-control"
+						(input)="onFieldUpdated('lastName', txtLastName.value)"
+					/>
 				</div>
 
 				<div class="col-6">
-					<h3>Mutations</h3>
+					<pre>{{ 0 }}</pre>
 				</div>
 			</div>
 		</div>`,
@@ -33,7 +45,10 @@ export class PropertiesPageComponent {
 	constructor() {}
 
 	// ANCHOR : Methods
-	public onFieldUpdated(field: string, value: string): void {
+	public onFieldUpdated(
+		field: 'email' | 'firstName' | 'lastName',
+		value: string
+	): void {
 		console.log(field, value);
 	}
 }
