@@ -60,6 +60,7 @@ export class DoctorsComponent {
 		this._createSubscriptions();
 		effect(() => {
 			const { success } = this._doctorSignals.closeModal();
+			console.log("❗effect  ➽ success ➽ ⏩" , success);
 			if (!success) return;
 			this.search();
 		});

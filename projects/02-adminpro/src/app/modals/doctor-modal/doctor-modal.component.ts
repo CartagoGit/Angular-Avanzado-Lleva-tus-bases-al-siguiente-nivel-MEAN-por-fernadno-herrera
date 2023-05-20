@@ -7,6 +7,7 @@ import { User } from '../../shared/models/mongo-models/user.model';
 import { Hospital } from '../../shared/models/mongo-models/hospital.model';
 import { pathNoImage } from '../../shared/constants/strings.constants';
 import { ModalService } from '../../shared/services/settings/modal.service';
+import { DoctorSignalsService } from '../../pages/support/doctors/services/doctor-signals.service';
 
 @Component({
 	selector: 'app-doctor-modal',
@@ -17,7 +18,7 @@ export class DoctorModalComponent {
 	// ANCHOR : Variables
 	public doctorForm = this._fb.group({
 		user: [undefined as User | undefined, Validators.required],
-		hospitals: [[] as Hospital[], Validators.required],
+		hospitals: [[] as Hospital[], Validators.minLength(1)], //REVIEW  NO FUNCIONA
 		patients: [[] as User[]],
 		images: [[] as FileModel[]],
 	});
@@ -28,7 +29,11 @@ export class DoctorModalComponent {
 	public data?: Doctor;
 
 	// ANCHOR : Constructor
-	constructor(private _fb: FormBuilder, private _modalSvc: ModalService) {}
+	constructor(
+		private _fb: FormBuilder,
+		private _modalSvc: ModalService,
+		private _doctorSignals: DoctorSignalsService
+	) {}
 
 	ngOnInit(): void {
 		//* Si llegan datos, es porque es un update
@@ -68,8 +73,13 @@ export class DoctorModalComponent {
 	 * ? Cierra el modal
 	 * @public
 	 */
-	public close(data?: Hospital) {
-		const response = !!data ? { data, isOk: true } : { isOk: false };
-		this._modalSvc.close(response);
+	public close(data?: Doctor) {
+		// const response = !!data ? { data, isOk: true } : { isOk: false };
+		this._doctorSignals.closeModal.update((current) => {
+			return !!data
+				? { success: true, data }
+				: { ...current, success: false };
+		});
+		this._modalSvc.close();
 	}
 }

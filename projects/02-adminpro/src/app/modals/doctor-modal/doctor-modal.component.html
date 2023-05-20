@@ -1,23 +1,25 @@
 <div class="modal__body row" [formGroup]="doctorForm">
 	<div class="col-6">
 		<div class="form-group">
-			<label for="name">Name</label>
+			<!-- TODO PONER UN SELECT UNICO -->
+			<label for="name">User</label>
 			<input
 				type="text"
 				class="form-control"
 				id="name"
-				placeholder="Name"
-				formControlName="name"
+				placeholder="User"
+				formControlName="user"
 			/>
 		</div>
 		<div class="form-group">
-			<label for="address">Email</label>
+			<!-- TODO PONER UN SELECT MULTIPLE -->
+			<label for="address">Hospitals</label>
 			<input
 				type="text"
 				class="form-control"
 				id="address"
-				placeholder="Address"
-				formControlName="address"
+				placeholder="Hospitals"
+				formControlName="hospitals"
 			/>
 		</div>
 
