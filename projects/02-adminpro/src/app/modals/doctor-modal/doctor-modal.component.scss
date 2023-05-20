@@ -1,0 +1,19 @@
+.hospitals-list {
+	height: 300px;
+	overflow-y: auto;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	background-color: #f9fcff;
+}
+
+.hospital-row {
+	// border: 1px solid #f3f1f1;
+	border: 1px solid white;
+	padding: 3px;
+	&:nth-child(odd) {
+		background-color: #f4f6f9;
+	}
+	&:nth-child(even) {
+		background-color: white;
+	}
+}

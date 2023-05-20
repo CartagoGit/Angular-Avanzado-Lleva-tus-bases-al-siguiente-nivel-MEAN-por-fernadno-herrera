@@ -12,13 +12,18 @@ import { DoctorSignalsService } from '../../pages/support/doctors/services/docto
 @Component({
 	selector: 'app-doctor-modal',
 	templateUrl: './doctor-modal.component.html',
-	styleUrls: ['./doctor-modal.component.css'],
+	styleUrls: ['./doctor-modal.component.scss'],
 })
 export class DoctorModalComponent {
 	// ANCHOR : Variables
 	public doctorForm = this._fb.group({
-		user: [undefined as User | undefined, Validators.required],
-		hospitals: [[] as Hospital[], Validators.minLength(1)], //REVIEW  NO FUNCIONA
+		// user: [undefined as User | undefined, Validators.required],
+		user: [undefined as User | undefined],
+		// hospitals: [
+		// 	[] as Hospital[],
+		// 	[Validators.required, Validators.minLength(1)],
+		// ],
+		hospitals: [[] as string[]],
 		patients: [[] as User[]],
 		images: [[] as FileModel[]],
 	});
@@ -42,7 +47,7 @@ export class DoctorModalComponent {
 		const { user, hospitals, dataImages } = this.data;
 		this.defaultImage = dataImages?.defaultImgSrc || pathNoImage;
 		this.doctorForm.patchValue({
-			hospitals,
+			// hospitals,
 			user,
 		});
 	}
@@ -81,5 +86,15 @@ export class DoctorModalComponent {
 				: { ...current, success: false };
 		});
 		this._modalSvc.close();
+	}
+
+	public addHospital(text: string): void {
+		// TODO cambiar
+		this.doctorForm.controls.hospitals.value?.push(text);
+	}
+
+	public clickRemoveHospital(data: { hospital: string; index: number }): void {
+		const { hospital, index } = data;
+		this.doctorForm.controls.hospitals.value?.splice(index, 1);
 	}
 }

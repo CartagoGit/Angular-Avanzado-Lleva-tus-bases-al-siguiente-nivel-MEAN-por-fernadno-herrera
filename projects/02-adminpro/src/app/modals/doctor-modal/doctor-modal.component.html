@@ -14,15 +14,42 @@
 		<div class="form-group">
 			<!-- TODO PONER UN SELECT MULTIPLE -->
 			<label for="address">Hospitals</label>
-			<input
-				type="text"
-				class="form-control"
-				id="address"
-				placeholder="Hospitals"
-				formControlName="hospitals"
-			/>
+			<div class="combo-hospital d-flex w-100">
+				<input
+					#hospitalControl
+					type="text"
+					class="form-control"
+					id="address"
+					placeholder="Hospitals"
+				/>
+				<button
+					class="btn btn-secondary"
+					(click)="addHospital(hospitalControl.value)"
+				>
+					Add hospital
+				</button>
+			</div>
+			<div class="hospitals-list m-2">
+				<div
+					*ngFor="
+						let hospital of doctorForm.get('hospitals')?.value;
+						let i = index
+					"
+					class="hospital-row d-flex justify-content-between w-100 p2 px-4"
+				>
+					<span>{{ hospital }}</span>
+					<span
+						class="pointer"
+						data-toggle="tooltip"
+						data-original-title="remove"
+						title="Remove"
+						(click)="clickRemoveHospital({hospital, index: i})"
+					>
+						<i class="fa fa-close text-danger"></i>
+					</span>
+				</div>
+			</div>
 		</div>
-
 	</div>
 	<div class="col-6 d-flex">
 		<div class="form-group image-field">
@@ -78,4 +105,3 @@
 		Close
 	</button>
 </div>
-
