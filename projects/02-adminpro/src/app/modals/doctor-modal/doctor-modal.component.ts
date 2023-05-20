@@ -8,6 +8,7 @@ import { Hospital } from '../../shared/models/mongo-models/hospital.model';
 import { pathNoImage } from '../../shared/constants/strings.constants';
 import { ModalService } from '../../shared/services/settings/modal.service';
 import { DoctorSignalsService } from '../../pages/support/doctors/services/doctor-signals.service';
+import { HospitalsService } from '../../shared/services/http/models/hospitals.service';
 
 @Component({
 	selector: 'app-doctor-modal',
@@ -23,7 +24,11 @@ export class DoctorModalComponent {
 		// 	[] as Hospital[],
 		// 	[Validators.required, Validators.minLength(1)],
 		// ],
-		hospitals: [[] as string[]],
+		hospitals: [
+			[] as Hospital[],
+			[Validators.required, Validators.minLength(1)],
+		],
+		hospitalsSelected: [[] as string[]],
 		patients: [[] as User[]],
 		images: [[] as FileModel[]],
 	});
@@ -31,14 +36,19 @@ export class DoctorModalComponent {
 	public defaultImage = pathNoImage;
 	public kindModal: 'create' | 'update' = 'create';
 
+	public hospitalSelected: Hospital | undefined;
+
 	public data?: Doctor;
 
 	// ANCHOR : Constructor
 	constructor(
 		private _fb: FormBuilder,
 		private _modalSvc: ModalService,
-		private _doctorSignals: DoctorSignalsService
-	) {}
+		private _doctorSignals: DoctorSignalsService,
+		private _hospitalSvc: HospitalsService
+	) {
+		this.getHospitals();
+	}
 
 	ngOnInit(): void {
 		//* Si llegan datos, es porque es un update
@@ -53,6 +63,16 @@ export class DoctorModalComponent {
 	}
 
 	// ANCHOR : Methods
+	public getUsers(): void {}
+
+	public getHospitals(): void {
+		this._hospitalSvc.getAll().subscribe((resp) => {
+			const { data } = resp;
+			console.log('❗this._hospitalSvc.getAll  ➽ resp ➽ ⏩', resp);
+
+			this.doctorForm.controls.hospitals.setValue(data || []);
+		});
+	}
 
 	/**
 	 * ? Método para crear un doctor
@@ -88,9 +108,10 @@ export class DoctorModalComponent {
 		this._modalSvc.close();
 	}
 
-	public addHospital(text: string): void {
+	public addHospital(text: any): void {
+		console.log("❗addHospital  ➽ text ➽ ⏩" , {text});
 		// TODO cambiar
-		this.doctorForm.controls.hospitals.value?.push(text);
+		this.doctorForm.controls.hospitalsSelected.value?.push(text);
 	}
 
 	public clickRemoveHospital(data: { hospital: string; index: number }): void {

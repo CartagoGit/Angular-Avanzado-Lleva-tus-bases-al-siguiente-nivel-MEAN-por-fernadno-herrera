@@ -7,8 +7,8 @@
 }
 
 .hospital-row {
-	// border: 1px solid #f3f1f1;
-	border: 1px solid white;
+	border: 1px solid #f3f1f1;
+	// border: 1px solid white;
 	padding: 3px;
 	&:nth-child(odd) {
 		background-color: #f4f6f9;
@@ -16,4 +16,8 @@
 	&:nth-child(even) {
 		background-color: white;
 	}
+}
+
+.hostpital-select {
+	width: 150px;
 }

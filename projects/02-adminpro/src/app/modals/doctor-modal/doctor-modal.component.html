@@ -15,16 +15,28 @@
 			<!-- TODO PONER UN SELECT MULTIPLE -->
 			<label for="address">Hospitals</label>
 			<div class="combo-hospital d-flex w-100">
-				<input
+				<!-- <input
 					#hospitalControl
 					type="text"
 					class="form-control"
 					id="address"
 					placeholder="Hospitals"
-				/>
+				/> -->
+				<!-- [(ngModel)]="hospitalSelected" -->
+				<select #hospitalControl class="form-control hospital-select">
+					<option
+						*ngFor="
+							let hospital of doctorForm.controls.hospitals.value || []
+								| orderBy : 'name'
+						"
+						[value]="hospital"
+					>
+						{{ hospital.name }}
+					</option>
+				</select>
 				<button
 					class="btn btn-secondary"
-					(click)="addHospital(hospitalControl.value)"
+					(click)="addHospital(hospitalControl)"
 				>
 					Add hospital
 				</button>
