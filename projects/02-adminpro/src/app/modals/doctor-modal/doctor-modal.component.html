@@ -1,1 +1,79 @@
-<p>doctor-modal works!</p>
+<div class="modal__body row" [formGroup]="doctorForm">
+	<div class="col-6">
+		<div class="form-group">
+			<label for="name">Name</label>
+			<input
+				type="text"
+				class="form-control"
+				id="name"
+				placeholder="Name"
+				formControlName="name"
+			/>
+		</div>
+		<div class="form-group">
+			<label for="address">Email</label>
+			<input
+				type="text"
+				class="form-control"
+				id="address"
+				placeholder="Address"
+				formControlName="address"
+			/>
+		</div>
+
+	</div>
+	<div class="col-6 d-flex">
+		<div class="form-group image-field">
+			<label for="logo">Image</label>
+			<div class="modal__image-container">
+				<img
+					class="modal__image"
+					[src]="
+						(!!doctorForm.get('images')?.value?.length &&
+							doctorForm.get('images')!.value![0].url) ||
+							data?.dataImages?.defaultImgSrc ||
+							defaultImage | safe
+					"
+					alt="image selected"
+				/>
+			</div>
+			<app-input-file
+				[file]="image"
+				(fileChanged)="imageChanged($event)"
+				[format]="'image'"
+			>
+			</app-input-file>
+		</div>
+	</div>
+</div>
+<div class="modal__footer">
+	<ng-container [ngSwitch]="kindModal">
+		<button
+			*ngSwitchCase="'create'"
+			type="button"
+			class="btn btn-primary"
+			(click)="doctorForm.valid && createDoctor()"
+			[ngClass]="{
+				disabled: doctorForm.invalid
+			}"
+		>
+			Create new doctor
+		</button>
+		<button
+			*ngSwitchCase="'update'"
+			type="button"
+			class="btn btn-info"
+			(click)="doctorForm.valid && updateDoctor()"
+			[ngClass]="{
+				disabled: doctorForm.invalid
+			}"
+		>
+			Update doctor
+		</button>
+	</ng-container>
+
+	<button type="button" class="btn btn-default" (click)="close()">
+		Close
+	</button>
+</div>
+

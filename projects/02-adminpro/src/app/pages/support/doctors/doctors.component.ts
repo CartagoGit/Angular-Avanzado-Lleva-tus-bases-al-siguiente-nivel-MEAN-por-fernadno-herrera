@@ -2,6 +2,7 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	effect,
 } from '@angular/core';
 import { Subscription, skip, debounceTime, finalize } from 'rxjs';
 import { minTimeBeforeLoader } from '../../../shared/constants/time.constants';
@@ -15,6 +16,7 @@ import { SweetAlertService } from '../../../shared/services/helpers/sweet-alert.
 import { DoctorsService } from '../../../shared/services/http/models/doctors.service';
 import { ModalService } from '../../../shared/services/settings/modal.service';
 import { DoctorModalComponent } from './../../../modals/doctor-modal/doctor-modal.component';
+import { DoctorSignalsService } from './services/doctor-signals.service';
 
 @Component({
 	selector: 'page-doctors',
@@ -52,10 +54,15 @@ export class DoctorsComponent {
 		private _doctorsSvc: DoctorsService,
 		private _sweetAlertSvc: SweetAlertService,
 		private _modalSvc: ModalService,
-		private _cd: ChangeDetectorRef
+		private _doctorSignals: DoctorSignalsService
 	) {
 		this.search();
 		this._createSubscriptions();
+		effect(() => {
+			const { success } = this._doctorSignals.closeModal();
+			if (!success) return;
+			this.search();
+		});
 	}
 
 	// ANCHOR : Methods
@@ -143,10 +150,21 @@ export class DoctorsComponent {
 	}
 
 	public clickNew(): void {
-		this._modalSvc.open(DoctorModalComponent);
+		this._modalSvc.open(DoctorModalComponent, {
+			modalOptions: {
+				hasDefaultFooter: false,
+				title: 'Add new doctor',
+			},
+		});
 	}
 
 	public clickEdit(doctor: Doctor): void {
-		console.log('edit doctor');
+		this._modalSvc.open(DoctorModalComponent, {
+			modalOptions: {
+				hasDefaultFooter: false,
+				title: 'Update doctor',
+			},
+			data: doctor,
+		});
 	}
 }

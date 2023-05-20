@@ -44,16 +44,15 @@ export class HospitalModalComponent {
 
 	ngOnInit(): void {
 		//* Si llegan datos, es porque es un update
-		if (this.data && isHospital(this.data)) {
-			this.kindModal = 'update';
-			const { address, name, phone, dataImages } = this.data;
-			this.defaultImage = dataImages?.defaultImgSrc || pathNoImage;
-			this.hospitalForm.patchValue({
-				address,
-				name,
-				phone,
-			});
-		}
+		if (!this.data || !isHospital(this.data)) return;
+		this.kindModal = 'update';
+		const { address, name, phone, dataImages } = this.data;
+		this.defaultImage = dataImages?.defaultImgSrc || pathNoImage;
+		this.hospitalForm.patchValue({
+			address,
+			name,
+			phone,
+		});
 	}
 
 	// ANCHOR : Methods
