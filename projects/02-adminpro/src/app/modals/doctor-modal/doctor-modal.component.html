@@ -1,7 +1,16 @@
 <div class="modal__body row">
 	<div class="col-6">
-		<div class="form-group">
+		<div
+			#inputUserGroup
+			class="form-group"
+			(focus)="onFocus($event, inputUserGroup)"
+			(blur)="onBlur($event, inputUserGroup)"
+		>
+		<!-- TODO Solucionar problema con el blut y el focus que abre el desplegable -->
+			<!-- (blur)="userInputFocused.set(false)" -->
 			<label for="name">User</label>
+			<!-- (blur)="onBlur($event, inputUserGroup)"
+			(focus)="userInputFocused.set(true)" -->
 			<input
 				#userInput
 				type="text"
@@ -9,15 +18,13 @@
 				id="name"
 				placeholder="Name"
 				[value]="data ? data.user.name : ''"
-				(input)="getUsers(userInput.value)"
 				[disabled]="userSelected() !== undefined"
-				(focus)="userInputFocused.set(true)"
-				(blur)="userInputFocused.set(false)"
 			/>
 
 			<span
 				class="remove-user"
 				[hidden]="data || userSelected() === undefined"
+				(click)="userSelected.set(undefined); getUsers(userInput.value)"
 			>
 				<i class="fa fa-close text-danger"> </i>
 			</span>
@@ -25,7 +32,11 @@
 				class="user-options"
 				[hidden]="userOptions().length === 0 || !userInputFocused()"
 			>
-				<div class="user-option" *ngFor="let user of userOptions()">
+				<div
+					class="user-option"
+					*ngFor="let user of userOptions()"
+					(click)="selectUser(user)"
+				>
 					{{ user.name }}
 				</div>
 			</div>

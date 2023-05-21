@@ -1,4 +1,11 @@
-import { Component, WritableSignal, computed, signal } from '@angular/core';
+import {
+	Component,
+	ElementRef,
+	ViewChild,
+	WritableSignal,
+	computed,
+	signal,
+} from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { FileModel } from '../../shared/models/common/file-model';
 import { Doctor } from '../../shared/models/mongo-models/doctor.model';
@@ -10,6 +17,12 @@ import { ModalService } from '../../shared/services/settings/modal.service';
 import { DoctorSignalsService } from '../../pages/support/doctors/services/doctor-signals.service';
 import { HospitalsService } from '../../shared/services/http/models/hospitals.service';
 import { UsersService } from '../../shared/services/http/models/users.service';
+import {
+	Subscription,
+	debounceTime,
+	distinctUntilChanged,
+	fromEvent,
+} from 'rxjs';
 
 @Component({
 	selector: 'app-doctor-modal',
@@ -19,6 +32,7 @@ import { UsersService } from '../../shared/services/http/models/users.service';
 export class DoctorModalComponent {
 	// * Vamos a realizar este ejercicio con signals
 	// ANCHOR : Variables
+	@ViewChild('userInput') userInput!: ElementRef<HTMLInputElement>;
 	public fullHospitals: Hospital[] = [];
 	public userShown: User[] = [];
 	public imageSelected = signal(new FileModel());
@@ -37,6 +51,7 @@ export class DoctorModalComponent {
 	public defaultImage = pathNoImage;
 	public kindModal: 'create' | 'update' = 'create';
 
+	private _subscriptions: Subscription[] = [];
 
 	public form = computed(() => {
 		return {
@@ -80,6 +95,22 @@ export class DoctorModalComponent {
 		this.kindModal = 'update';
 	}
 
+	ngAfterViewInit(): void {
+		const subUserInput = fromEvent(this.userInput.nativeElement, 'input')
+			.pipe(debounceTime(500), distinctUntilChanged())
+			.subscribe({
+				next: (event) => {
+					const text = (event.target as HTMLInputElement)?.value || '';
+					this.getUsers(text);
+				},
+			});
+
+		this._subscriptions.push(subUserInput);
+	}
+
+	ngOnDestroy(): void {
+		this._subscriptions.forEach((sub) => !sub.closed && sub.unsubscribe());
+	}
 	// ANCHOR : Methods
 
 	/**
@@ -87,7 +118,6 @@ export class DoctorModalComponent {
 	 * @public
 	 */
 	public getUsers(text: string): void {
-		// TODO Añadirle un debounde de 500ms
 		if (text.trim().length === 0) {
 			this.userOptions.set([]);
 			return;
@@ -147,7 +177,6 @@ export class DoctorModalComponent {
 	 * @public
 	 */
 	public imageChanged(image: FileModel) {
-		// this.doctorForm.get('images')?.setValue([image]);
 		this.images.set([image]);
 	}
 
@@ -188,5 +217,29 @@ export class DoctorModalComponent {
 		this.hospitalsSelected.update((current) => {
 			return current.filter((hospital) => hospital.id !== hospitalId);
 		});
+	}
+
+	/**
+	 * ? Selecciona un usuario del desplegable de usuarios
+	 * @public
+	 * @param {User} user
+	 */
+	public selectUser(user: User): void {
+		this.userSelected.set(user);
+		this.userInput.nativeElement.value = user.name;
+		this.userInputFocused.set(false);
+		this.userOptions.set([]);
+	}
+
+	// TODO arreglar para arreglar la apertura y cierre del desplegable
+	public onBlur(event: FocusEvent, div: HTMLDivElement): void {
+		console.log(event);
+		if (div.contains(event.relatedTarget as Node)) return;
+		this.userInputFocused.set(false);
+	}
+
+	onFocus(event: FocusEvent, div: HTMLDivElement): void {
+		if (div.contains(event.relatedTarget as Node)) return;
+		this.userInputFocused.set(false);
 	}
 }
