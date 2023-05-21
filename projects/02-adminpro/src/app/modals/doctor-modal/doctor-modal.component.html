@@ -3,21 +3,23 @@
 		<div class="form-group">
 			<!-- TODO PONER UN SELECT UNICO -->
 			<label for="name">User</label>
-			<input
-				type="text"
-				class="form-control"
-				id="name"
-				placeholder="User"
-			/>
+			<input type="text" class="form-control" id="name" placeholder="User" />
 		</div>
 		<div class="form-group">
 			<!-- TODO PONER UN SELECT MULTIPLE -->
 			<label for="address">Hospitals</label>
 			<div class="combo-hospital d-flex w-100">
-				<select #hospitalSelect class="form-control hospital-select">
+				<select
+					#hospitalSelect
+					class="form-control hospital-select"
+					[disabled]="hospitalsUnselected().length === 0"
+				>
 					<option
 						*ngFor="
-							let hospital of hospitalsUnselected() | orderBy : 'name'
+							let hospital of hospitalsUnselected().length !== 0
+								? hospitalsUnselected()
+								: ([{ name: 'There are not hospitals' }]
+								  | orderBy : 'name')
 						"
 						[value]="hospital.id"
 					>
@@ -33,10 +35,7 @@
 			</div>
 			<div class="hospitals-list m-2">
 				<div
-					*ngFor="
-						let hospital of hospitalsSelected() | orderBy : 'name';
-						let i = index
-					"
+					*ngFor="let hospital of hospitalsSelected() | orderBy : 'name'"
 					class="hospital-row d-flex justify-content-between w-100 p2 px-4"
 				>
 					<span>{{ hospital.name }}</span>
@@ -45,7 +44,7 @@
 						data-toggle="tooltip"
 						data-original-title="remove"
 						title="Remove"
-						(click)="clickRemoveHospital({hospital, index: i})"
+						(click)="clickRemoveHospital(hospital.id)"
 					>
 						<i class="fa fa-close text-danger"></i>
 					</span>

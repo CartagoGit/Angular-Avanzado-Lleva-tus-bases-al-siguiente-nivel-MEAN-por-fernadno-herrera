@@ -26,10 +26,6 @@ export class DoctorModalComponent {
 	public userSelected: WritableSignal<User | undefined> = signal(undefined);
 	public hospitalsUnselected = computed(() => {
 		const hospitalsSelected = this.hospitalsSelected();
-		console.log(
-			'❗hospitalsUnselected=computed  ➽ hospitalsSelected ➽ ⏩',
-			hospitalsSelected
-		);
 		return this.fullHospitals.filter(
 			(hospital) =>
 				!hospitalsSelected.some((selected) => selected.id === hospital.id)
@@ -72,13 +68,13 @@ export class DoctorModalComponent {
 		private _doctorSignals: DoctorSignalsService,
 		private _hospitalSvc: HospitalsService
 	) {
-		console.log('1 DATA', this.data);
+
 		this.getHospitals();
-		console.log('2 DATA', this.data);
+
 	}
 
 	ngOnInit(): void {
-		console.log('3 DATA', this.data);
+
 		//* Si llegan datos, es porque es un update
 		if (!this.data || !isDoctor(this.data)) return;
 		this.kindModal = 'update';
@@ -87,14 +83,17 @@ export class DoctorModalComponent {
 		this.hospitalsSelected.set(hospitals);
 		this.userSelected.set(user);
 
-		console.log(this.form());
 	}
 
 	// ANCHOR : Methods
 	public getUsers(): void {}
 
+
+	/**
+	 * ? Recupera todos los hospitales
+	 * @public
+	 */
 	public getHospitals(): void {
-		console.log('DATA 2.5', this.data);
 		this._hospitalSvc.getAll().subscribe((resp) => {
 			const { data: hospitals } = resp;
 			this.fullHospitals = hospitals || [];
@@ -136,21 +135,33 @@ export class DoctorModalComponent {
 		this._modalSvc.close();
 	}
 
+
+	/**
+	 * ? Agrega un hospital a la lista de hospitales seleccionados
+	 * @public
+	 * @param {string} idHospital
+	 */
 	public addHospital(idHospital: string): void {
-		// const selectedHospital =
-		// 	this.doctorForm.controls.hospitals.value?.find(
-		// 		(hospital) => hospital.id === idHospital
-		// 	) || undefined;
-		// // const hospital = select.value as Hospital
-		// // TODO cambiar
-		// this.doctorForm.controls.hospitalsSelected.value?.push(selectedHospital);
+		this.hospitalsSelected.update((current) => {
+			const hospital = this.fullHospitals.find(
+				(hospital) => hospital.id === idHospital
+			);
+			if (!hospital) return current;
+			return [...current, hospital];
+		});
 	}
 
-	public clickRemoveHospital(data: {
-		hospital: Hospital;
-		index: number;
-	}): void {
-		const { hospital, index } = data;
-		// this.doctorForm.controls.hospitals.value?.splice(index, 1);
+
+	/**
+	 * ? Elimina un hospital de la lista de hospitales seleccionados
+	 * @public
+	 * @param {string} hospitalId
+	 */
+	public clickRemoveHospital(hospitalId: string): void {
+
+		this.hospitalsSelected.update((current) => {
+			return current.filter((hospital) => hospital.id !== hospitalId);
+		});
+
 	}
 }
