@@ -11,6 +11,8 @@
 				[value]="data ? data.user.name : ''"
 				(input)="getUsers(userInput.value)"
 				[disabled]="userSelected() !== undefined"
+				(focus)="userInputFocused.set(true)"
+				(blur)="userInputFocused.set(false)"
 			/>
 
 			<span
@@ -21,9 +23,7 @@
 			</span>
 			<div
 				class="user-options"
-				[hidden]="
-					userOptions().length === 0! || (userInput | isActiveElement)
-				"
+				[hidden]="userOptions().length === 0 || !userInputFocused()"
 			>
 				<div class="user-option" *ngFor="let user of userOptions()">
 					{{ user.name }}

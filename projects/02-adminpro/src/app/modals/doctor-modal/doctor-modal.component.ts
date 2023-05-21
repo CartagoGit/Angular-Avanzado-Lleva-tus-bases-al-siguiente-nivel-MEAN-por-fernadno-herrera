@@ -26,6 +26,7 @@ export class DoctorModalComponent {
 	public hospitalsSelected: WritableSignal<Hospital[]> = signal([]);
 	public userSelected: WritableSignal<User | undefined> = signal(undefined);
 	public userOptions = signal<User[]>([]);
+	public userInputFocused = signal(false);
 	public hospitalsUnselected = computed(() => {
 		const hospitalsSelected = this.hospitalsSelected();
 		return this.fullHospitals.filter(
@@ -35,7 +36,7 @@ export class DoctorModalComponent {
 	});
 	public defaultImage = pathNoImage;
 	public kindModal: 'create' | 'update' = 'create';
-	
+
 
 	public form = computed(() => {
 		return {
@@ -86,6 +87,7 @@ export class DoctorModalComponent {
 	 * @public
 	 */
 	public getUsers(text: string): void {
+		// TODO Añadirle un debounde de 500ms
 		if (text.trim().length === 0) {
 			this.userOptions.set([]);
 			return;
