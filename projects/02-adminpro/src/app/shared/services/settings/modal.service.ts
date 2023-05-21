@@ -108,7 +108,7 @@ export class ModalService {
 		component: Type<C>,
 		options?: { data?: D; modalOptions?: ModalOptions }
 	): Store<ModalState<Returned, C, D>> {
-		let { data = {} as D, modalOptions = {} } = options || {};
+		let { data, modalOptions = {} } = options || {};
 		modalOptions = {
 			...this._getDefaultModalOptions(),
 			...modalOptions,

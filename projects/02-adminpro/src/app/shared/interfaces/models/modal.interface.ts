@@ -13,7 +13,7 @@ import { ModalComponent } from '../../components/modal/modal.component';
 export interface ModalState<Returned = any, C = any, D = any> {
 	isOpen: boolean;
 	component: Type<C>;
-	data: D;
+	data?: D;
 	options: ModalOptions;
 	afterClosedSubject: Subject<Returned>;
 }

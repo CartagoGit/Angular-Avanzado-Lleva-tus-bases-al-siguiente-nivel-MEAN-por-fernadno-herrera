@@ -26,6 +26,10 @@ export class DoctorModalComponent {
 	public userSelected: WritableSignal<User | undefined> = signal(undefined);
 	public hospitalsUnselected = computed(() => {
 		const hospitalsSelected = this.hospitalsSelected();
+		console.log(
+			'❗hospitalsUnselected=computed  ➽ hospitalsSelected ➽ ⏩',
+			hospitalsSelected
+		);
 		return this.fullHospitals.filter(
 			(hospital) =>
 				!hospitalsSelected.some((selected) => selected.id === hospital.id)
@@ -60,7 +64,7 @@ export class DoctorModalComponent {
 		return !Object.values(errors).some((error) => error.isError);
 	});
 
-	public readonly data?: Doctor;
+	public readonly data?: Doctor = undefined;
 
 	// ANCHOR : Constructor
 	constructor(
@@ -68,10 +72,13 @@ export class DoctorModalComponent {
 		private _doctorSignals: DoctorSignalsService,
 		private _hospitalSvc: HospitalsService
 	) {
+		console.log('1 DATA', this.data);
 		this.getHospitals();
+		console.log('2 DATA', this.data);
 	}
 
 	ngOnInit(): void {
+		console.log('3 DATA', this.data);
 		//* Si llegan datos, es porque es un update
 		if (!this.data || !isDoctor(this.data)) return;
 		this.kindModal = 'update';
@@ -79,15 +86,19 @@ export class DoctorModalComponent {
 		this.defaultImage = dataImages?.defaultImgSrc || pathNoImage;
 		this.hospitalsSelected.set(hospitals);
 		this.userSelected.set(user);
+
+		console.log(this.form());
 	}
 
 	// ANCHOR : Methods
 	public getUsers(): void {}
 
 	public getHospitals(): void {
+		console.log('DATA 2.5', this.data);
 		this._hospitalSvc.getAll().subscribe((resp) => {
 			const { data: hospitals } = resp;
 			this.fullHospitals = hospitals || [];
+
 			if (!this.data) this.hospitalsSelected.set([]);
 		});
 	}
