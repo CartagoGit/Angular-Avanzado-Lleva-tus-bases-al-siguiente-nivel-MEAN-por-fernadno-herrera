@@ -1,4 +1,4 @@
-<div class="modal__body row" [formGroup]="doctorForm">
+<div class="modal__body row">
 	<div class="col-6">
 		<div class="form-group">
 			<!-- TODO PONER UN SELECT UNICO -->
@@ -15,28 +15,19 @@
 			<!-- TODO PONER UN SELECT MULTIPLE -->
 			<label for="address">Hospitals</label>
 			<div class="combo-hospital d-flex w-100">
-				<!-- <input
-					#hospitalControl
-					type="text"
-					class="form-control"
-					id="address"
-					placeholder="Hospitals"
-				/> -->
-				<!-- [(ngModel)]="hospitalSelected" -->
-				<select #hospitalControl class="form-control hospital-select">
+				<select #hospitalSelect class="form-control hospital-select">
 					<option
 						*ngFor="
-							let hospital of doctorForm.controls.hospitals.value || []
-								| orderBy : 'name'
+							let hospital of hospitalsUnselected() | orderBy : 'name'
 						"
-						[value]="hospital"
+						[value]="hospital.id"
 					>
 						{{ hospital.name }}
 					</option>
 				</select>
 				<button
 					class="btn btn-secondary"
-					(click)="addHospital(hospitalControl)"
+					(click)="addHospital(hospitalSelect.value)"
 				>
 					Add hospital
 				</button>
@@ -44,12 +35,12 @@
 			<div class="hospitals-list m-2">
 				<div
 					*ngFor="
-						let hospital of doctorForm.get('hospitals')?.value;
+						let hospital of hospitalsSelected() | orderBy : 'name';
 						let i = index
 					"
 					class="hospital-row d-flex justify-content-between w-100 p2 px-4"
 				>
-					<span>{{ hospital }}</span>
+					<span>{{ hospital.name }}</span>
 					<span
 						class="pointer"
 						data-toggle="tooltip"

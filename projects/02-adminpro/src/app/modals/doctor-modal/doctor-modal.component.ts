@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, WritableSignal, computed, signal } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { FileModel } from '../../shared/models/common/file-model';
 import { Doctor } from '../../shared/models/mongo-models/doctor.model';
@@ -16,33 +16,52 @@ import { HospitalsService } from '../../shared/services/http/models/hospitals.se
 	styleUrls: ['./doctor-modal.component.scss'],
 })
 export class DoctorModalComponent {
+	// * Vamos a realizar este ejercicio con signals
 	// ANCHOR : Variables
-	public doctorForm = this._fb.group({
-		// user: [undefined as User | undefined, Validators.required],
-		user: [undefined as User | undefined],
-		// hospitals: [
-		// 	[] as Hospital[],
-		// 	[Validators.required, Validators.minLength(1)],
-		// ],
-		hospitals: [
-			[] as Hospital[],
-			[Validators.required, Validators.minLength(1)],
-		],
-		hospitalsSelected: [[] as string[]],
-		patients: [[] as User[]],
-		images: [[] as FileModel[]],
-	});
-	public image = new FileModel();
+	// public doctorForm = this._fb.group({
+	// 	// user: [undefined as User | undefined, Validators.required],
+	// 	user: [undefined as User | undefined],
+	// 	// hospitals: [
+	// 	// 	[] as Hospital[],
+	// 	// 	[Validators.required, Validators.minLength(1)],
+	// 	// ],
+	// 	hospitals: [
+	// 		[] as Hospital[],
+	// 		[Validators.required, Validators.minLength(1)],
+	// 	],
+	// 	hospitalsSelected: [[] as string[]],
+	// 	patients: [[] as User[]],
+	// 	images: [[] as FileModel[]],
+	// });
+	public fullHospitals: Hospital[] = [];
+	public userShown: User[] = [];
+	public image = signal(new FileModel());
+	public hospitalsSelected: WritableSignal<Hospital[]> = signal([]);
+	public userSelected: WritableSignal<User | undefined> = signal(undefined);
+	public hospitalsUnselected: WritableSignal<Hospital[]> = signal([]);
 	public defaultImage = pathNoImage;
 	public kindModal: 'create' | 'update' = 'create';
 
-	public hospitalSelected: Hospital | undefined;
+	public form = computed(() => {
+		return {
+			user: this.userSelected(),
+			hospitals: this.hospitalsSelected(),
+			images: this.image(),
+		};
+	});
+
+	public error = computed(() => {
+		return {
+			user: this.userSelected() === undefined,
+			hospitals: this.hospitalsSelected().length === 0,
+		};
+	});
 
 	public data?: Doctor;
 
 	// ANCHOR : Constructor
 	constructor(
-		private _fb: FormBuilder,
+		// private _fb: FormBuilder,
 		private _modalSvc: ModalService,
 		private _doctorSignals: DoctorSignalsService,
 		private _hospitalSvc: HospitalsService
@@ -56,10 +75,11 @@ export class DoctorModalComponent {
 		this.kindModal = 'update';
 		const { user, hospitals, dataImages } = this.data;
 		this.defaultImage = dataImages?.defaultImgSrc || pathNoImage;
-		this.doctorForm.patchValue({
-			// hospitals,
-			user,
-		});
+		
+		// this.doctorForm.patchValue({
+		// 	// hospitals,
+		// 	user,
+		// });
 	}
 
 	// ANCHOR : Methods
@@ -68,9 +88,8 @@ export class DoctorModalComponent {
 	public getHospitals(): void {
 		this._hospitalSvc.getAll().subscribe((resp) => {
 			const { data } = resp;
-			console.log('❗this._hospitalSvc.getAll  ➽ resp ➽ ⏩', resp);
 
-			this.doctorForm.controls.hospitals.setValue(data || []);
+			// this.doctorForm.controls.hospitals.setValue(data || []);
 		});
 	}
 
@@ -91,7 +110,7 @@ export class DoctorModalComponent {
 	 * @public
 	 */
 	public imageChanged(image: FileModel) {
-		this.doctorForm.get('images')?.setValue([image]);
+		// this.doctorForm.get('images')?.setValue([image]);
 	}
 
 	/**
@@ -108,14 +127,21 @@ export class DoctorModalComponent {
 		this._modalSvc.close();
 	}
 
-	public addHospital(text: any): void {
-		console.log("❗addHospital  ➽ text ➽ ⏩" , {text});
-		// TODO cambiar
-		this.doctorForm.controls.hospitalsSelected.value?.push(text);
+	public addHospital(idHospital: string): void {
+		// const selectedHospital =
+		// 	this.doctorForm.controls.hospitals.value?.find(
+		// 		(hospital) => hospital.id === idHospital
+		// 	) || undefined;
+		// // const hospital = select.value as Hospital
+		// // TODO cambiar
+		// this.doctorForm.controls.hospitalsSelected.value?.push(selectedHospital);
 	}
 
-	public clickRemoveHospital(data: { hospital: string; index: number }): void {
+	public clickRemoveHospital(data: {
+		hospital: Hospital;
+		index: number;
+	}): void {
 		const { hospital, index } = data;
-		this.doctorForm.controls.hospitals.value?.splice(index, 1);
+		// this.doctorForm.controls.hospitals.value?.splice(index, 1);
 	}
 }
