@@ -4,6 +4,7 @@
 	border: 1px solid #ccc;
 	border-radius: 5px;
 	background-color: #f9fcff;
+	margin-top: 15px !important;
 }
 
 .hospital-row {
@@ -24,4 +25,11 @@
 
 .modal__body {
 	width: 850px;
+}
+
+.image-field {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	max-width: 4300px;
 }
