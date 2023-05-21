@@ -42,6 +42,7 @@ export class DoctorModalComponent {
 		};
 	});
 
+	// TODO Colocar los errores para que se muestren
 	public errors = computed(() => {
 		return {
 			user: {
@@ -67,18 +68,12 @@ export class DoctorModalComponent {
 		private _modalSvc: ModalService,
 		private _doctorSignals: DoctorSignalsService,
 		private _hospitalSvc: HospitalsService
-	) {
-		this.getHospitals();
-	}
+	) {}
 
 	ngOnInit(): void {
+		this.getHospitals();
 		//* Si llegan datos, es porque es un update
-		if (!this.data || !isDoctor(this.data)) return;
 		this.kindModal = 'update';
-		const { user, hospitals, dataImages } = this.data;
-		this.defaultImage = dataImages?.defaultImgSrc || pathNoImage;
-		this.hospitalsSelected.set(hospitals);
-		this.userSelected.set(user);
 	}
 
 	// ANCHOR : Methods
@@ -93,7 +88,14 @@ export class DoctorModalComponent {
 			const { data: hospitals } = resp;
 			this.fullHospitals = hospitals || [];
 
-			if (!this.data) this.hospitalsSelected.set([]);
+			if (!this.data || !isDoctor(this.data)) {
+				this.hospitalsSelected.set([]);
+				return;
+			}
+			const { user, hospitals: hospitalsFromDoctor, dataImages } = this.data;
+			this.defaultImage = dataImages?.defaultImgSrc || pathNoImage;
+			this.hospitalsSelected.set(hospitalsFromDoctor);
+			this.userSelected.set(user);
 		});
 	}
 
