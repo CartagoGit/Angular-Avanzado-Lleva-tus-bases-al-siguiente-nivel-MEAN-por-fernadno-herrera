@@ -1,9 +1,16 @@
 <div class="modal__body row">
 	<div class="col-6">
 		<div class="form-group">
-			<!-- TODO PONER UN SELECT UNICO -->
+			<!-- TODO PONER UN Input desplegable con selector unico UNICO -->
 			<label for="name">User</label>
-			<input type="text" class="form-control" id="name" placeholder="User" />
+			<input
+				type="text"
+				class="form-control"
+				id="name"
+				placeholder="User"
+				[value]="data ? data.user.name : ''"
+				[disabled]="data"
+			/>
 		</div>
 		<div class="form-group">
 			<label for="address">Hospitals</label>
