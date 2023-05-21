@@ -35,6 +35,7 @@ export class DoctorModalComponent {
 	});
 	public defaultImage = pathNoImage;
 	public kindModal: 'create' | 'update' = 'create';
+	
 
 	public form = computed(() => {
 		return {

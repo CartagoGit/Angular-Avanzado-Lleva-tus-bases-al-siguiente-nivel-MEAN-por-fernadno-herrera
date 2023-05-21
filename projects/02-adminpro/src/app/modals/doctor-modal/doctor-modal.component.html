@@ -1,7 +1,6 @@
 <div class="modal__body row">
 	<div class="col-6">
 		<div class="form-group">
-			<!-- TODO PONER UN Input desplegable con selector unico UNICO -->
 			<label for="name">User</label>
 			<input
 				#userInput
@@ -10,10 +9,22 @@
 				id="name"
 				placeholder="Name"
 				[value]="data ? data.user.name : ''"
-				[disabled]="data"
 				(input)="getUsers(userInput.value)"
+				[disabled]="userSelected() !== undefined"
 			/>
-			<div class="user-options">
+
+			<span
+				class="remove-user"
+				[hidden]="data || userSelected() === undefined"
+			>
+				<i class="fa fa-close text-danger"> </i>
+			</span>
+			<div
+				class="user-options"
+				[hidden]="
+					userOptions().length === 0! || (userInput | isActiveElement)
+				"
+			>
 				<div class="user-option" *ngFor="let user of userOptions()">
 					{{ user.name }}
 				</div>
