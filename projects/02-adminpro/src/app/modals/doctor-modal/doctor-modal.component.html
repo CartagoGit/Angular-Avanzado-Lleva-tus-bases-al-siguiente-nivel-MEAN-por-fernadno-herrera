@@ -13,19 +13,21 @@
 			/>
 		</div>
 		<div class="form-group">
-			<label for="address">Hospitals</label>
+			<label for="hospitals">Hospitals</label>
 			<div class="combo-hospital d-flex w-100">
+				<!-- size="5" -->
 				<select
+					name="hospitals"
 					#hospitalSelect
 					class="form-control hospital-select"
 					[disabled]="hospitalsUnselected().length === 0"
 				>
 					<option
 						*ngFor="
-							let hospital of hospitalsUnselected().length !== 0
+							let hospital of (hospitalsUnselected().length !== 0
 								? hospitalsUnselected()
-								: ([{ name: 'There are not hospitals' }]
-								  | orderBy : 'name')
+								: [{ name: 'There are not hospitals' }]
+							) | orderBy : 'name'
 						"
 						[value]="hospital.id"
 					>
@@ -39,8 +41,12 @@
 					Add hospital
 				</button>
 			</div>
-			<div class="hospitals-list m-2">
+		</div>
+		<div class="form-group">
+			<label for="selectedHospitals">Hospitals where doctor works</label>
+			<div class="hospitals-list">
 				<div
+					name="selectedHospitals"
 					*ngFor="let hospital of hospitalsSelected() | orderBy : 'name'"
 					class="hospital-row d-flex justify-content-between w-100 p2 px-4"
 				>
@@ -60,22 +66,26 @@
 	</div>
 	<div class="col-6 d-flex">
 		<div class="form-group image-field">
-			<label for="logo">Image</label>
-			<div class="modal__image-container">
-				<img
-					class="modal__image"
-					[src]="
-						(!!images().length && images()[0].url) ||
-							data?.dataImages?.defaultImgSrc ||
-							defaultImage | safe
-					"
-					alt="image selected"
-				/>
+			<div class="image-preview h-100">
+				<label for="logo">Image</label>
+				<div class="modal__image-container d-flex align-items-center h-100">
+					<img
+						class="modal__image"
+						[src]="
+							(!!images().length && images()[0].url) ||
+								data?.dataImages?.defaultImgSrc ||
+								defaultImage | safe
+						"
+						alt="image selected"
+					/>
+				</div>
 			</div>
+
 			<!-- [file]="imageSelected()" -->
 			<app-input-file
 				(fileChanged)="imageChanged($event)"
 				[format]="'image'"
+				class="mt-auto"
 			>
 			</app-input-file>
 		</div>
