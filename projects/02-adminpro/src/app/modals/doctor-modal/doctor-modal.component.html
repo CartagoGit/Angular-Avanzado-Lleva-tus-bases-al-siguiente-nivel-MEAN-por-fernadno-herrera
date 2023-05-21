@@ -61,16 +61,15 @@
 				<img
 					class="modal__image"
 					[src]="
-						(!!doctorForm.get('images')?.value?.length &&
-							doctorForm.get('images')!.value![0].url) ||
+						(!!images().length && images()[0].url) ||
 							data?.dataImages?.defaultImgSrc ||
 							defaultImage | safe
 					"
 					alt="image selected"
 				/>
 			</div>
+			<!-- [file]="imageSelected()" -->
 			<app-input-file
-				[file]="image"
 				(fileChanged)="imageChanged($event)"
 				[format]="'image'"
 			>
@@ -84,9 +83,9 @@
 			*ngSwitchCase="'create'"
 			type="button"
 			class="btn btn-primary"
-			(click)="doctorForm.valid && createDoctor()"
+			(click)="isFormValid() && createDoctor()"
 			[ngClass]="{
-				disabled: doctorForm.invalid
+				disabled: !isFormValid()
 			}"
 		>
 			Create new doctor
@@ -95,9 +94,9 @@
 			*ngSwitchCase="'update'"
 			type="button"
 			class="btn btn-info"
-			(click)="doctorForm.valid && updateDoctor()"
+			(click)="isFormValid() && updateDoctor()"
 			[ngClass]="{
-				disabled: doctorForm.invalid
+				disabled: !isFormValid()
 			}"
 		>
 			Update doctor

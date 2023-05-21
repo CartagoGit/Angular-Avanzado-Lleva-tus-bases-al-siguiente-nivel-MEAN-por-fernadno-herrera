@@ -18,27 +18,19 @@ import { HospitalsService } from '../../shared/services/http/models/hospitals.se
 export class DoctorModalComponent {
 	// * Vamos a realizar este ejercicio con signals
 	// ANCHOR : Variables
-	// public doctorForm = this._fb.group({
-	// 	// user: [undefined as User | undefined, Validators.required],
-	// 	user: [undefined as User | undefined],
-	// 	// hospitals: [
-	// 	// 	[] as Hospital[],
-	// 	// 	[Validators.required, Validators.minLength(1)],
-	// 	// ],
-	// 	hospitals: [
-	// 		[] as Hospital[],
-	// 		[Validators.required, Validators.minLength(1)],
-	// 	],
-	// 	hospitalsSelected: [[] as string[]],
-	// 	patients: [[] as User[]],
-	// 	images: [[] as FileModel[]],
-	// });
 	public fullHospitals: Hospital[] = [];
 	public userShown: User[] = [];
-	public image = signal(new FileModel());
+	public imageSelected = signal(new FileModel());
+	public images = signal<FileModel[]>([]);
 	public hospitalsSelected: WritableSignal<Hospital[]> = signal([]);
 	public userSelected: WritableSignal<User | undefined> = signal(undefined);
-	public hospitalsUnselected: WritableSignal<Hospital[]> = signal([]);
+	public hospitalsUnselected = computed(() => {
+		const hospitalsSelected = this.hospitalsSelected();
+		return this.fullHospitals.filter(
+			(hospital) =>
+				!hospitalsSelected.some((selected) => selected.id === hospital.id)
+		);
+	});
 	public defaultImage = pathNoImage;
 	public kindModal: 'create' | 'update' = 'create';
 
@@ -46,22 +38,32 @@ export class DoctorModalComponent {
 		return {
 			user: this.userSelected(),
 			hospitals: this.hospitalsSelected(),
-			images: this.image(),
+			images: this.images(),
 		};
 	});
 
-	public error = computed(() => {
+	public errors = computed(() => {
 		return {
-			user: this.userSelected() === undefined,
-			hospitals: this.hospitalsSelected().length === 0,
+			user: {
+				isError: this.userSelected() === undefined,
+				message: 'User is required',
+			},
+			hospitals: {
+				isError: this.hospitalsSelected().length === 0,
+				message: 'Some hospital is required',
+			},
 		};
 	});
 
-	public data?: Doctor;
+	public isFormValid = computed(() => {
+		const errors = this.errors();
+		return !Object.values(errors).some((error) => error.isError);
+	});
+
+	public readonly data?: Doctor;
 
 	// ANCHOR : Constructor
 	constructor(
-		// private _fb: FormBuilder,
 		private _modalSvc: ModalService,
 		private _doctorSignals: DoctorSignalsService,
 		private _hospitalSvc: HospitalsService
@@ -75,11 +77,8 @@ export class DoctorModalComponent {
 		this.kindModal = 'update';
 		const { user, hospitals, dataImages } = this.data;
 		this.defaultImage = dataImages?.defaultImgSrc || pathNoImage;
-		
-		// this.doctorForm.patchValue({
-		// 	// hospitals,
-		// 	user,
-		// });
+		this.hospitalsSelected.set(hospitals);
+		this.userSelected.set(user);
 	}
 
 	// ANCHOR : Methods
@@ -87,9 +86,9 @@ export class DoctorModalComponent {
 
 	public getHospitals(): void {
 		this._hospitalSvc.getAll().subscribe((resp) => {
-			const { data } = resp;
-
-			// this.doctorForm.controls.hospitals.setValue(data || []);
+			const { data: hospitals } = resp;
+			this.fullHospitals = hospitals || [];
+			if (!this.data) this.hospitalsSelected.set([]);
 		});
 	}
 
@@ -118,7 +117,6 @@ export class DoctorModalComponent {
 	 * @public
 	 */
 	public close(data?: Doctor) {
-		// const response = !!data ? { data, isOk: true } : { isOk: false };
 		this._doctorSignals.closeModal.update((current) => {
 			return !!data
 				? { success: true, data }
