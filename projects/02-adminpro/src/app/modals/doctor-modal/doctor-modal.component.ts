@@ -68,13 +68,10 @@ export class DoctorModalComponent {
 		private _doctorSignals: DoctorSignalsService,
 		private _hospitalSvc: HospitalsService
 	) {
-
 		this.getHospitals();
-
 	}
 
 	ngOnInit(): void {
-
 		//* Si llegan datos, es porque es un update
 		if (!this.data || !isDoctor(this.data)) return;
 		this.kindModal = 'update';
@@ -82,12 +79,10 @@ export class DoctorModalComponent {
 		this.defaultImage = dataImages?.defaultImgSrc || pathNoImage;
 		this.hospitalsSelected.set(hospitals);
 		this.userSelected.set(user);
-
 	}
 
 	// ANCHOR : Methods
 	public getUsers(): void {}
-
 
 	/**
 	 * ? Recupera todos los hospitales
@@ -120,6 +115,7 @@ export class DoctorModalComponent {
 	 */
 	public imageChanged(image: FileModel) {
 		// this.doctorForm.get('images')?.setValue([image]);
+		this.images.set([image]);
 	}
 
 	/**
@@ -134,7 +130,6 @@ export class DoctorModalComponent {
 		});
 		this._modalSvc.close();
 	}
-
 
 	/**
 	 * ? Agrega un hospital a la lista de hospitales seleccionados
@@ -151,17 +146,14 @@ export class DoctorModalComponent {
 		});
 	}
 
-
 	/**
 	 * ? Elimina un hospital de la lista de hospitales seleccionados
 	 * @public
 	 * @param {string} hospitalId
 	 */
 	public clickRemoveHospital(hospitalId: string): void {
-
 		this.hospitalsSelected.update((current) => {
 			return current.filter((hospital) => hospital.id !== hospitalId);
 		});
-
 	}
 }
