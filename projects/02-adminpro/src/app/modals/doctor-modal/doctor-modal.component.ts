@@ -9,6 +9,7 @@ import { pathNoImage } from '../../shared/constants/strings.constants';
 import { ModalService } from '../../shared/services/settings/modal.service';
 import { DoctorSignalsService } from '../../pages/support/doctors/services/doctor-signals.service';
 import { HospitalsService } from '../../shared/services/http/models/hospitals.service';
+import { UsersService } from '../../shared/services/http/models/users.service';
 
 @Component({
 	selector: 'app-doctor-modal',
@@ -24,6 +25,7 @@ export class DoctorModalComponent {
 	public images = signal<FileModel[]>([]);
 	public hospitalsSelected: WritableSignal<Hospital[]> = signal([]);
 	public userSelected: WritableSignal<User | undefined> = signal(undefined);
+	public userOptions = signal<User[]>([]);
 	public hospitalsUnselected = computed(() => {
 		const hospitalsSelected = this.hospitalsSelected();
 		return this.fullHospitals.filter(
@@ -42,7 +44,6 @@ export class DoctorModalComponent {
 		};
 	});
 
-	// TODO Colocar los errores para que se muestren
 	public errors = computed(() => {
 		return {
 			user: {
@@ -51,7 +52,7 @@ export class DoctorModalComponent {
 			},
 			hospitals: {
 				isError: this.hospitalsSelected().length === 0,
-				message: 'Some hospital is required',
+				message: 'Doctor must work in some hospital',
 			},
 		};
 	});
@@ -67,7 +68,8 @@ export class DoctorModalComponent {
 	constructor(
 		private _modalSvc: ModalService,
 		private _doctorSignals: DoctorSignalsService,
-		private _hospitalSvc: HospitalsService
+		private _hospitalSvc: HospitalsService,
+		private _usersSvc: UsersService
 	) {}
 
 	ngOnInit(): void {
@@ -77,7 +79,33 @@ export class DoctorModalComponent {
 	}
 
 	// ANCHOR : Methods
-	public getUsers(): void {}
+
+	/**
+	 * ? Busca usuarios por nombre y devuelve 5 resultados
+	 * @public
+	 */
+	public getUsers(text: string): void {
+		if (text.trim().length === 0) {
+			this.userOptions.set([]);
+			return;
+		}
+		this._usersSvc
+			.getByQuery(
+				{ name: text, email: text },
+				{
+					include: true,
+					limit: 5,
+					pagination: true,
+					page: 1,
+					someQuery: true,
+				}
+			)
+			.subscribe((resp) => {
+				const { data: users } = resp;
+				console.log('❗.subscribe  ➽ resp ➽ ⏩', resp);
+				this.userOptions.set(users || []);
+			});
+	}
 
 	/**
 	 * ? Recupera todos los hospitales

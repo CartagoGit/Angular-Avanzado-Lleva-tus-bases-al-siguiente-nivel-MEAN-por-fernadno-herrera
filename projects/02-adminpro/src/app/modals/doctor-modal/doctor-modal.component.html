@@ -4,13 +4,23 @@
 			<!-- TODO PONER UN Input desplegable con selector unico UNICO -->
 			<label for="name">User</label>
 			<input
+				#userInput
 				type="text"
 				class="form-control"
 				id="name"
-				placeholder="User"
+				placeholder="Name"
 				[value]="data ? data.user.name : ''"
 				[disabled]="data"
+				(input)="getUsers(userInput.value)"
 			/>
+			<div class="user-options">
+				<div class="user-option" *ngFor="let user of userOptions()">
+					{{ user.name }}
+				</div>
+			</div>
+			<span class="error-message" [hidden]="!errors().user.isError">{{
+				errors().user.message
+			}}</span>
 		</div>
 		<div class="form-group">
 			<label for="hospitals">Hospitals</label>
@@ -62,6 +72,10 @@
 					</span>
 				</div>
 			</div>
+			<span [hidden]="!errors().hospitals.isError" class="error-message">{{
+				errors().hospitals.message
+			}}</span>
+			<!-- hidden -->
 		</div>
 	</div>
 	<div class="col-6 d-flex">

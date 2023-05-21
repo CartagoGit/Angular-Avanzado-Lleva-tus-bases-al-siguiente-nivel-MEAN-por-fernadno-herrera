@@ -32,3 +32,36 @@
 	width: 100%;
 	max-width: 4300px;
 }
+
+.error-message {
+	position: absolute;
+	color: red;
+	bottom: -14px;
+	left: 0px;
+	font-size: 10px;
+	font-weight: 500;
+	opacity: 0.8;
+}
+
+.form-group {
+	position: relative;
+}
+.user-options {
+	position: absolute;
+	top: 67px;
+	left: 0px;
+	width: 100%;
+	border: 1px solid #80bdff;
+	border-top-style: dashed;
+	z-index: 2;
+	background-color: #f9fcff;
+	border-radius: 0 0 10px 10px;
+	padding: 10px;
+}
+
+.user-option {
+	cursor: pointer;
+	&:hover {
+		background-color: #f3f1f1;
+	}
+}
