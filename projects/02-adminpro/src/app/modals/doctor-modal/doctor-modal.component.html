@@ -1,18 +1,11 @@
 <div class="modal__body row">
 	<div class="col-6">
-		<div
-			#inputUserGroup
-			class="form-group"
-			(focus)="onFocus($event, inputUserGroup)"
-			(blur)="onBlur($event, inputUserGroup)"
-		>
-		<!-- TODO Solucionar problema con el blut y el focus que abre el desplegable -->
-			<!-- (blur)="userInputFocused.set(false)" -->
+		<div #inputUserGroup class="form-group">
 			<label for="name">User</label>
-			<!-- (blur)="onBlur($event, inputUserGroup)"
-			(focus)="userInputFocused.set(true)" -->
 			<input
 				#userInput
+				(focus)="onFocus($event, inputUserGroup)"
+				(blur)="onBlur($event, inputUserGroup)"
 				type="text"
 				class="form-control"
 				id="name"
@@ -24,7 +17,7 @@
 			<span
 				class="remove-user"
 				[hidden]="data || userSelected() === undefined"
-				(click)="userSelected.set(undefined); getUsers(userInput.value)"
+				(click)="removeUser(userInput)"
 			>
 				<i class="fa fa-close text-danger"> </i>
 			</span>
@@ -33,6 +26,7 @@
 				[hidden]="userOptions().length === 0 || !userInputFocused()"
 			>
 				<div
+					tabindex="0"
 					class="user-option"
 					*ngFor="let user of userOptions()"
 					(click)="selectUser(user)"

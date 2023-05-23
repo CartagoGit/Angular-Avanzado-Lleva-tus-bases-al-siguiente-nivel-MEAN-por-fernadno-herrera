@@ -233,13 +233,18 @@ export class DoctorModalComponent {
 
 	// TODO arreglar para arreglar la apertura y cierre del desplegable
 	public onBlur(event: FocusEvent, div: HTMLDivElement): void {
-		console.log(event);
 		if (div.contains(event.relatedTarget as Node)) return;
 		this.userInputFocused.set(false);
 	}
 
-	onFocus(event: FocusEvent, div: HTMLDivElement): void {
+	public onFocus(event: FocusEvent, div: HTMLDivElement): void {
 		if (div.contains(event.relatedTarget as Node)) return;
-		this.userInputFocused.set(false);
+		this.userInputFocused.set(true);
+	}
+
+	public removeUser(userInput: HTMLInputElement): void {
+		this.userSelected.set(undefined);
+		this.getUsers(userInput.value);
+		userInput.focus();
 	}
 }
