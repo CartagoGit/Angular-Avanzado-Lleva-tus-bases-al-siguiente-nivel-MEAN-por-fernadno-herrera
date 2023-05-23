@@ -13,6 +13,11 @@ import { usersMiddlewares } from '../middlewares/users.middleware';
  */
 export const usersRoutes: Routes = new Routes({
 	...coreRoutes.routes,
+	get: {
+		...coreRoutes.routes['get'],
+		modelController: usersController.getByQuery,
+		hasSameUserValidator: true,
+	},
 	post: {
 		...coreRoutes.routes['post'],
 		//* Llamamos al controllador de usuarios para este metodo ya que difiere del core

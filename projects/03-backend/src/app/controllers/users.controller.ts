@@ -16,6 +16,7 @@ import { HospitalSchema } from '../models/mongo-models/hospital.model';
 /**
  * ? Controladores especificos de los metodos para el modelo de usuarios
  * @type {{
+	get: (req: Request) => Promise<any>;
 	post: (req: Request) => Promise<any>;
 	put: (req: Request) => Promise<any>;
 	isDoctor: (req: Request) => Promise<any>;
@@ -24,12 +25,22 @@ import { HospitalSchema } from '../models/mongo-models/hospital.model';
 }}
  */
 export const usersController: {
+	getByQuery: (req: Request) => Promise<any>;
 	post: (req: Request) => Promise<any>;
 	put: (req: Request) => Promise<any>;
 	isDoctor: (req: Request) => Promise<any>;
 	getDoctors: (req: Request) => Promise<any>;
 	getHospitals: (req: Request) => Promise<any>;
 } = {
+	getByQuery: async (req) => {
+		//TODO añadir parametro para buscar los que solo sean doctores, o los que no lo sean
+		// const users = await UserModel.find({
+		// 	id: {
+		// 	  $nin: await DoctorModel.distinct('user'),
+		// 	},
+		//  });
+		return req.body;
+	},
 	post: async (req) => {
 		//* Encriptamos la contraseña
 		const { password } = req.body;
