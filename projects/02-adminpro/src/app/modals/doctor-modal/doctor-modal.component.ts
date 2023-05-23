@@ -4,6 +4,7 @@ import {
 	ViewChild,
 	WritableSignal,
 	computed,
+	effect,
 	signal,
 } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
@@ -87,7 +88,17 @@ export class DoctorModalComponent {
 		private _doctorSignals: DoctorSignalsService,
 		private _hospitalSvc: HospitalsService,
 		private _usersSvc: UsersService
-	) {}
+	) {
+		//* Focusea el input si se cargan usuarios en el desplegable
+		//* Para hacer focus cuando se elimina el usuario seleccionado
+		effect(
+			() => {
+				if (this.userOptions().length > 0)
+					this.userInput.nativeElement.focus();
+			},
+			{ allowSignalWrites: true }
+		);
+	}
 
 	ngOnInit(): void {
 		this.getHospitals();
@@ -231,20 +242,35 @@ export class DoctorModalComponent {
 		this.userOptions.set([]);
 	}
 
-	// TODO arreglar para arreglar la apertura y cierre del desplegable
-	public onBlur(event: FocusEvent, div: HTMLDivElement): void {
+	/**
+	 * ? Evento cuando el usuario hace click fuera del input de usuario
+	 * @public
+	 * @param {FocusEvent} event
+	 * @param {HTMLDivElement} div
+	 */
+	public onBlurUserInput(event: FocusEvent, div: HTMLDivElement): void {
 		if (div.contains(event.relatedTarget as Node)) return;
 		this.userInputFocused.set(false);
 	}
 
-	public onFocus(event: FocusEvent, div: HTMLDivElement): void {
+	/**
+	 * ? Evento cuando el usuario hace focus en el input de usuario
+	 * @public
+	 * @param {FocusEvent} event
+	 * @param {HTMLDivElement} div
+	 */
+	public onFocusUserInput(event: FocusEvent, div: HTMLDivElement): void {
 		if (div.contains(event.relatedTarget as Node)) return;
 		this.userInputFocused.set(true);
 	}
 
+	/**
+	 * ? Elimina el usuario seleccionado
+	 * @public
+	 * @param {HTMLInputElement} userInput
+	 */
 	public removeUser(userInput: HTMLInputElement): void {
 		this.userSelected.set(undefined);
 		this.getUsers(userInput.value);
-		userInput.focus();
 	}
 }
