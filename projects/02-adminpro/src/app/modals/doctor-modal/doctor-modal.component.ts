@@ -1,15 +1,19 @@
 import {
+	ChangeDetectionStrategy,
 	Component,
 	ElementRef,
+	Signal,
 	ViewChild,
 	WritableSignal,
 	computed,
 	effect,
 	signal,
 } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
 import { FileModel } from '../../shared/models/common/file-model';
-import { Doctor } from '../../shared/models/mongo-models/doctor.model';
+import {
+	Doctor,
+	DoctorProps,
+} from '../../shared/models/mongo-models/doctor.model';
 import { isDoctor } from '../../shared/helpers/models.helpers';
 import { User } from '../../shared/models/mongo-models/user.model';
 import { Hospital } from '../../shared/models/mongo-models/hospital.model';
@@ -23,19 +27,27 @@ import {
 	debounceTime,
 	distinctUntilChanged,
 	fromEvent,
+	map,
+	of,
+	switchMap,
 } from 'rxjs';
+import { DefaultErrorResponse } from '../../shared/interfaces/http/response.interfaces';
+import { SweetAlertService } from '../../shared/services/helpers/sweet-alert.service';
+import { DoctorsService } from '../../shared/services/http/models/doctors.service';
+import { BaseModelsProps } from '../../shared/models/mongo-models/adds/base-models.model';
+import { FilesService } from '../../shared/services/http/files.service';
 
 @Component({
 	selector: 'app-doctor-modal',
 	templateUrl: './doctor-modal.component.html',
 	styleUrls: ['./doctor-modal.component.scss'],
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DoctorModalComponent {
 	// * Vamos a realizar este ejercicio con signals
 	// ANCHOR : Variables
 	@ViewChild('userInput') userInput!: ElementRef<HTMLInputElement>;
 	public fullHospitals: Hospital[] = [];
-	public userShown: User[] = [];
 	public imageSelected = signal(new FileModel());
 	public images = signal<FileModel[]>([]);
 	public hospitalsSelected: WritableSignal<Hospital[]> = signal([]);
@@ -54,11 +66,13 @@ export class DoctorModalComponent {
 
 	private _subscriptions: Subscription[] = [];
 
-	public form = computed(() => {
+	public form: Signal<
+		Partial<Omit<Doctor, keyof BaseModelsProps | 'images'>>
+	> = computed(() => {
 		return {
 			user: this.userSelected(),
 			hospitals: this.hospitalsSelected(),
-			images: this.images(),
+			patients: [],
 		};
 	});
 
@@ -87,7 +101,10 @@ export class DoctorModalComponent {
 		private _modalSvc: ModalService,
 		private _doctorSignals: DoctorSignalsService,
 		private _hospitalSvc: HospitalsService,
-		private _usersSvc: UsersService
+		private _doctorSvc: DoctorsService,
+		private _usersSvc: UsersService,
+		private _filesSvc: FilesService,
+		private _sweetAlertSvc: SweetAlertService
 	) {
 		//* Focusea el input si se cargan usuarios en el desplegable
 		//* Para hacer focus cuando se elimina el usuario seleccionado
@@ -103,12 +120,12 @@ export class DoctorModalComponent {
 	ngOnInit(): void {
 		this.getHospitals();
 		//* Si llegan datos, es porque es un update
-		this.kindModal = 'update';
+		this.kindModal = this.data ? 'update' : 'create';
 	}
 
 	ngAfterViewInit(): void {
 		const subUserInput = fromEvent(this.userInput.nativeElement, 'input')
-			.pipe(debounceTime(500), distinctUntilChanged())
+			.pipe(debounceTime(300), distinctUntilChanged())
 			.subscribe({
 				next: (event) => {
 					const text = (event.target as HTMLInputElement)?.value || '';
@@ -144,10 +161,14 @@ export class DoctorModalComponent {
 					someQuery: true,
 				}
 			)
-			.subscribe((resp) => {
-				const { data: users } = resp;
-				console.log('❗.subscribe  ➽ resp ➽ ⏩', resp);
-				this.userOptions.set(users || []);
+			.subscribe({
+				next: (resp) => {
+					const { data: users } = resp;
+					this.userOptions.set(users || []);
+				},
+				error: (error: DefaultErrorResponse) => {
+					this._sweetAlertSvc.alertError(error.error_message);
+				},
 			});
 	}
 
@@ -156,18 +177,27 @@ export class DoctorModalComponent {
 	 * @public
 	 */
 	public getHospitals(): void {
-		this._hospitalSvc.getAll().subscribe((resp) => {
-			const { data: hospitals } = resp;
-			this.fullHospitals = hospitals || [];
+		this._hospitalSvc.getAll().subscribe({
+			next: (resp) => {
+				const { data: hospitals } = resp;
+				this.fullHospitals = hospitals || [];
 
-			if (!this.data || !isDoctor(this.data)) {
-				this.hospitalsSelected.set([]);
-				return;
-			}
-			const { user, hospitals: hospitalsFromDoctor, dataImages } = this.data;
-			this.defaultImage = dataImages?.defaultImgSrc || pathNoImage;
-			this.hospitalsSelected.set(hospitalsFromDoctor);
-			this.userSelected.set(user);
+				if (!this.data || !isDoctor(this.data)) {
+					this.hospitalsSelected.set([]);
+					return;
+				}
+				const {
+					user,
+					hospitals: hospitalsFromDoctor,
+					dataImages,
+				} = this.data;
+				this.defaultImage = dataImages?.defaultImgSrc || pathNoImage;
+				this.hospitalsSelected.set(hospitalsFromDoctor);
+				this.userSelected.set(user);
+			},
+			error: (error: DefaultErrorResponse) => {
+				this._sweetAlertSvc.alertError(error.error_message);
+			},
 		});
 	}
 
@@ -175,7 +205,38 @@ export class DoctorModalComponent {
 	 * ? Método para crear un doctor
 	 * @public
 	 */
-	public createDoctor(): void {}
+	public createDoctor(): void {
+		this._doctorSvc
+			.post(this.form())
+			.pipe(
+				switchMap((resp) => {
+					const { model } = resp;
+					if (!resp || !model) throw 'Could not create the hospital';
+					if (!this.images() || !this.images().length) return of(resp);
+					return this._filesSvc.uploadFile(
+						{
+							filesToUpload: this.images().map((img) => img.file!),
+							id: model.id,
+							typeFile: 'images',
+							typeModel: 'doctors',
+						},
+						{ replaceAll: true }
+					).pipe(map(() => resp));
+				})
+			)
+			.subscribe({
+				next: (resp) => {
+					const { model } = resp;
+					this._sweetAlertSvc.alertSuccess(
+						'Doctor created successfully'
+					);
+					this.close(model);
+				},
+				error: (error: DefaultErrorResponse) => {
+					this._sweetAlertSvc.alertError(error.error_message);
+				},
+			});
+	}
 
 	/**
 	 * ? Método para actualizar un doctor
