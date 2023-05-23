@@ -122,30 +122,21 @@
 	</div>
 </div>
 <div class="modal__footer">
-	<ng-container [ngSwitch]="kindModal">
-		<button
-			*ngSwitchCase="'create'"
-			type="button"
-			class="btn btn-primary"
-			(click)="isFormValid() && createDoctor()"
-			[ngClass]="{
-				disabled: !isFormValid()
-			}"
-		>
-			Create new doctor
-		</button>
-		<button
-			*ngSwitchCase="'update'"
-			type="button"
-			class="btn btn-info"
-			(click)="isFormValid() && updateDoctor()"
-			[ngClass]="{
-				disabled: !isFormValid()
-			}"
-		>
-			Update doctor
-		</button>
-	</ng-container>
+	<button
+		type="button"
+		class="btn"
+		(click)="
+			isFormValid() &&
+				(kindModal === 'create' ? createDoctor() : updateDoctor())
+		"
+		[ngClass]="{
+			disabled: !isFormValid(),
+			'btn-primary': kindModal === 'create',
+			'btn-info': kindModal === 'update'
+		}"
+	>
+		{{ kindModal === 'create' ? 'Create new doctor' : 'Update doctor' }}
+	</button>
 
 	<button type="button" class="btn btn-default" (click)="close()">
 		Close

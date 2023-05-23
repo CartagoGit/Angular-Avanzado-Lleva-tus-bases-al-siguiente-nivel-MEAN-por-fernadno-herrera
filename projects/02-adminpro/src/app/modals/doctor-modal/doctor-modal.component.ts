@@ -76,6 +76,7 @@ export class DoctorModalComponent {
 		};
 	});
 
+	// TODO : Validar que el usuario no sea ya un doctor
 	public errors = computed(() => {
 		return {
 			user: {
@@ -206,30 +207,31 @@ export class DoctorModalComponent {
 	 * @public
 	 */
 	public createDoctor(): void {
+		if (!this.isFormValid()) return;
 		this._doctorSvc
 			.post(this.form())
 			.pipe(
 				switchMap((resp) => {
 					const { model } = resp;
-					if (!resp || !model) throw 'Could not create the hospital';
+					if (!resp || !model) throw 'Could not create the doctor';
 					if (!this.images() || !this.images().length) return of(resp);
-					return this._filesSvc.uploadFile(
-						{
-							filesToUpload: this.images().map((img) => img.file!),
-							id: model.id,
-							typeFile: 'images',
-							typeModel: 'doctors',
-						},
-						{ replaceAll: true }
-					).pipe(map(() => resp));
+					return this._filesSvc
+						.uploadFile(
+							{
+								filesToUpload: this.images().map((img) => img.file!),
+								id: model.id,
+								typeFile: 'images',
+								typeModel: 'doctors',
+							},
+							{ replaceAll: true }
+						)
+						.pipe(map(() => resp));
 				})
 			)
 			.subscribe({
 				next: (resp) => {
 					const { model } = resp;
-					this._sweetAlertSvc.alertSuccess(
-						'Doctor created successfully'
-					);
+					this._sweetAlertSvc.alertSuccess('Doctor created successfully');
 					this.close(model);
 				},
 				error: (error: DefaultErrorResponse) => {
@@ -242,7 +244,39 @@ export class DoctorModalComponent {
 	 * ? Método para actualizar un doctor
 	 * @public
 	 */
-	public updateDoctor(): void {}
+	public updateDoctor(): void {
+		if (!this.isFormValid()) return;
+		this._doctorSvc
+			.put({ ...this.form(), id: this.data!.id })
+			.pipe(
+				switchMap((resp) => {
+					const { data } = resp;
+					if (!resp || !data) throw 'Could not update the doctor';
+					if (!this.images() || !this.images().length) return of(resp);
+					return this._filesSvc
+						.uploadFile(
+							{
+								filesToUpload: this.images().map((img) => img.file!),
+								id: data.id,
+								typeFile: 'images',
+								typeModel: 'hospitals',
+							},
+							{ replaceAll: true }
+						)
+						.pipe(map(() => resp));
+				})
+			)
+			.subscribe({
+				next: (resp) => {
+					const { data } = resp;
+					this._sweetAlertSvc.alertSuccess('Doctor updated successfully');
+					this.close(data);
+				},
+				error: (err: DefaultErrorResponse) => {
+					this._sweetAlertSvc.alertError(err.error_message);
+				},
+			});
+	}
 
 	/**
 	 * ? Evento cuando la imagen cambia en el input file
