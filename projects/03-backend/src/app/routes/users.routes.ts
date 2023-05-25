@@ -13,8 +13,8 @@ import { usersMiddlewares } from '../middlewares/users.middleware';
  */
 export const usersRoutes: Routes = new Routes({
 	...coreRoutes.routes,
-	get: {
-		...coreRoutes.routes['get'],
+	getByQuery: {
+		...coreRoutes.routes['getByQuery'],
 		modelController: usersController.getByQuery,
 		hasSameUserValidator: true,
 	},
@@ -59,4 +59,5 @@ export const usersRoutes: Routes = new Routes({
 		modelController: usersController.getHospitals,
 		hasAdminValidator: false,
 	},
+
 });
