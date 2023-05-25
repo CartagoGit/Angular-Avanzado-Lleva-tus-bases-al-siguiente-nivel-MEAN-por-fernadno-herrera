@@ -78,6 +78,8 @@ export const coreController: {
 			optionsFromQuery
 		);
 
+		console.log(req.body['doctors']);
+
 		return {
 			optionsFromQuery,
 			modelParamsInQuery,

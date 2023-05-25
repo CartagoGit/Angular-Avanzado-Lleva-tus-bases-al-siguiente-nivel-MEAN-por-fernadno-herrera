@@ -16,7 +16,6 @@ export const usersRoutes: Routes = new Routes({
 	getByQuery: {
 		...coreRoutes.routes['getByQuery'],
 		modelController: usersController.getByQuery,
-		hasSameUserValidator: true,
 	},
 	post: {
 		...coreRoutes.routes['post'],
@@ -59,5 +58,4 @@ export const usersRoutes: Routes = new Routes({
 		modelController: usersController.getHospitals,
 		hasAdminValidator: false,
 	},
-
 });

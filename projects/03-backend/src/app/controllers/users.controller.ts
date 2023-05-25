@@ -33,12 +33,8 @@ export const usersController: {
 	getHospitals: (req: Request) => Promise<any>;
 } = {
 	getByQuery: async (req) => {
-		//TODO añadir parametro para buscar los que solo sean doctores, o los que no lo sean
-		// const users = await UserModel.find({
-		// 	id: {
-		// 	  $nin: await DoctorModel.distinct('user'),
-		// 	},
-		//  });
+		//TODO añadir parametro para buscar los que solo sean doctores, o los que no lo sean si da por hacer todo correcto. Lo dejamos asi ya que las bases ya se han aprendido a lo largo del curso y las pruebas y seria complicarse en exceso para la finalidad del proyecto
+
 		return req.body;
 	},
 	post: async (req) => {

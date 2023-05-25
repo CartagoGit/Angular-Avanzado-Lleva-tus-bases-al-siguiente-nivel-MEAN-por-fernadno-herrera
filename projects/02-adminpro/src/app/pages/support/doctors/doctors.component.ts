@@ -1,8 +1,4 @@
-import {
-	ChangeDetectionStrategy,
-	Component,
-	effect,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect } from '@angular/core';
 import { Subscription, skip, debounceTime, finalize } from 'rxjs';
 import { minTimeBeforeLoader } from '../../../shared/constants/time.constants';
 import { Pagination } from '../../../shared/interfaces/http/pagination.interface';
@@ -59,7 +55,7 @@ export class DoctorsComponent {
 		this._createSubscriptions();
 		effect(() => {
 			const { success } = this._doctorSignals.closeModal();
-			console.log("❗effect  ➽ success ➽ ⏩" , success);
+			console.log('❗effect  ➽ success ➽ ⏩', success);
 			if (!success) return;
 			this.search();
 		});
@@ -149,20 +145,15 @@ export class DoctorsComponent {
 		});
 	}
 
-	public clickNew(): void {
+	/**
+	 * ? Abre el modal para crear un nuevo doctor o editarlo
+	 * @public
+	 */
+	public clickDoctorModal(doctor?: Doctor): void {
 		this._modalSvc.open(DoctorModalComponent, {
 			modalOptions: {
 				hasDefaultFooter: false,
-				title: 'Add new doctor',
-			},
-		});
-	}
-
-	public clickEdit(doctor: Doctor): void {
-		this._modalSvc.open(DoctorModalComponent, {
-			modalOptions: {
-				hasDefaultFooter: false,
-				title: 'Update doctor',
+				title: doctor ? 'Update doctor' : 'Add new doctor',
 			},
 			data: doctor,
 		});

@@ -26,6 +26,7 @@ import {
 	Subscription,
 	debounceTime,
 	distinctUntilChanged,
+	filter,
 	fromEvent,
 	map,
 	of,
@@ -151,16 +152,37 @@ export class DoctorModalComponent {
 			this.userOptions.set([]);
 			return;
 		}
-		this._usersSvc
-			.getByQuery(
-				{ name: text, email: text },
-				{
-					include: true,
-					limit: 5,
-					pagination: true,
-					page: 1,
-					someQuery: true,
-				}
+		this._doctorSvc
+			.getAll()
+			.pipe(
+				switchMap((resp) => {
+					const { data: doctors } = resp;
+					return this._usersSvc
+						.getByQuery(
+							{ name: text, email: text },
+							{
+								include: true,
+								limit: 5,
+								pagination: true,
+								page: 1,
+								someQuery: true,
+							}
+						)
+						.pipe(
+							map((resp) => {
+								const { data: users } = resp;
+								if (!users) return { data: [] };
+								return {
+									data: users.filter(
+										(user) =>
+											!doctors?.some(
+												(doctor) => doctor.user.id === user.id
+											)
+									),
+								};
+							})
+						);
+				})
 			)
 			.subscribe({
 				next: (resp) => {
