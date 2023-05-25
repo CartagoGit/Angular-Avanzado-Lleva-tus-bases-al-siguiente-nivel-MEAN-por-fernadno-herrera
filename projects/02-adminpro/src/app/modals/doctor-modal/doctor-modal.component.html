@@ -1,7 +1,10 @@
 <div class="modal__body row">
 	<div class="col-6">
 		<div #inputUserGroup class="form-group">
-			<label for="name">User</label>
+			<label for="name" class="d-flex w-100 justify-content-between">
+				<span>User</span>
+				<span>{{ userSelected() ? userSelected()?.email : '' }}</span>
+			</label>
 			<input
 				#userInput
 				(focus)="onFocusUserInput($event, inputUserGroup)"
@@ -27,11 +30,12 @@
 			>
 				<div
 					tabindex="0"
-					class="user-option"
+					class="user-option d-flex justify-content-between g-10"
 					*ngFor="let user of userOptions()"
 					(click)="selectUser(user)"
 				>
-					{{ user.name }}
+					<span>{{ user.name }}</span>
+					<span>{{ user.email }}</span>
 				</div>
 			</div>
 			<span class="error-message" [hidden]="!errors().user.isError">{{
