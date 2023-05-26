@@ -229,9 +229,10 @@ export class DoctorModalComponent {
 	 * @public
 	 */
 	public createDoctor(): void {
+		console.log(this.form());
 		if (!this.isFormValid()) return;
 		this._doctorSvc
-			.post(this.form())
+			.post({...this.form(), user: this.form()?.user?.id} as any)
 			.pipe(
 				switchMap((resp) => {
 					const { model } = resp;
