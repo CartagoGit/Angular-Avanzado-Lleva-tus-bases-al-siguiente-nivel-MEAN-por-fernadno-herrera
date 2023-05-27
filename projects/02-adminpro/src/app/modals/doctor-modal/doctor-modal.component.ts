@@ -276,8 +276,17 @@ export class DoctorModalComponent {
 	 */
 	public updateDoctor(): void {
 		if (!this.isFormValid()) return;
+		const user_id = this.form()?.user?.id;
+		const hospitals_id = this.form()?.hospitals?.map(
+			(hospital) => hospital.id
+		);
 		this._doctorSvc
-			.put({ ...this.form(), id: this.data!.id })
+			.put({
+				...this.form(),
+				user: user_id as any,
+				hospitals: hospitals_id as any,
+				id: this.data!.id,
+			})
 			.pipe(
 				switchMap((resp) => {
 					const { data } = resp;
