@@ -298,7 +298,7 @@ export class DoctorModalComponent {
 								filesToUpload: this.images().map((img) => img.file!),
 								id: data.id,
 								typeFile: 'images',
-								typeModel: 'hospitals',
+								typeModel: 'doctors',
 							},
 							{ replaceAll: true }
 						)
