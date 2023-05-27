@@ -79,7 +79,7 @@ export class DoctorsOfHospitalModalComponent {
 			);
 			this.close();
 		}
-		this._getDoctorsOfHospital();
+		// this._getDoctorsOfHospital();
 		this._getDoctorsWithoutHospital();
 	}
 
@@ -89,34 +89,38 @@ export class DoctorsOfHospitalModalComponent {
 	 * ? Obtiene los doctores del hospital
 	 * @public
 	 */
-	public _getDoctorsOfHospital() {
-		this._hospitalsSvc.getDoctors(this.data.id).subscribe({
-			next: (res) => {
-				const { data: doctors } = res;
-				if (!res || !doctors) {
-					this._sweerAlertSvc.alertError(
-						'Some error ocurred getting doctors of hospital'
-					);
-					this.close();
-					return;
-				}
-				this.doctorsOfHospital = doctors.map(
-					(doctor) => new Doctor(doctor)
-				);
-			},
-			error: (error: DefaultErrorResponse) => {
-				this._sweerAlertSvc.alertError(error.error_message);
-				this.close();
-			},
-		});
-	}
+	// NOTE: Se comenta ya que por fines educativos vamos a pedir todos los doctores y entonces no es necesario hacer dos consultas con informacion distinta, podemos sacar toda la informacion de una unica consulta
+	// public _getDoctorsOfHospital() {
+	// 	this._hospitalsSvc.getDoctors(this.data.id).subscribe({
+	// 		next: (res) => {
+	// 			const { data: doctors } = res;
+	// 			if (!res || !doctors) {
+	// 				this._sweerAlertSvc.alertError(
+	// 					'Some error ocurred getting doctors of hospital'
+	// 				);
+	// 				this.close();
+	// 				return;
+	// 			}
+	// 			this.doctorsOfHospital = doctors.map(
+	// 				(doctor) => new Doctor(doctor)
+	// 			);
+	// 			this._getDoctorsWithoutHospital();
+	// 		},
+	// 		error: (error: DefaultErrorResponse) => {
+	// 			this._sweerAlertSvc.alertError(error.error_message);
+	// 			this.close();
+	// 		},
+	// 	});
+	// }
 
 	/**
 	 * ? Obtiene los doctores sin hospital
 	 * @public
 	 */
 	public _getDoctorsWithoutHospital() {
-		this._doctorsSvc.getByQuery({ hospitals: [] }).subscribe({
+		// NOTE : Se deja asi por fines educativos para no tener que seguir modificando el backend
+		// this._doctorsSvc.getByQuery({ hospitals: [] }).subscribe({
+		this._doctorsSvc.getAll().subscribe({
 			next: (res) => {
 				const { data: doctors } = res;
 				if (!res || !doctors) {
@@ -126,9 +130,24 @@ export class DoctorsOfHospitalModalComponent {
 					this.close();
 					return;
 				}
-				this.doctorsWithoutHospital = doctors.map(
-					(doctor) => new Doctor(doctor)
-				);
+				// NOTE: Se deja por fines educativos, lo mas correcto seria que el backend devolviera los doctores sin hospital
+				// * y no tener que filtrarlos desde el front
+				this.doctorsWithoutHospital = doctors
+					.filter(
+						(doctor) =>
+							!doctor.hospitals
+								.map((hospital) => hospital.id)
+								.includes(this.data.id)
+					)
+					.map((doctor) => new Doctor(doctor));
+
+				this.doctorsOfHospital = doctors
+					.filter((doctor) =>
+						doctor.hospitals
+							.map((hospital) => hospital.id)
+							.includes(this.data.id)
+					)
+					.map((doctor) => new Doctor(doctor));
 			},
 			error: (error: DefaultErrorResponse) => {
 				this._sweerAlertSvc.alertError(error.error_message);
