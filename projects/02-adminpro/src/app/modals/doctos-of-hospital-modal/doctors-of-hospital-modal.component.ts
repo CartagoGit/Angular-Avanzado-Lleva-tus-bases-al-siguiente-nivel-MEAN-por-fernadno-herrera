@@ -129,7 +129,6 @@ export class DoctorsOfHospitalModalComponent {
 				this.doctorsWithoutHospital = doctors.map(
 					(doctor) => new Doctor(doctor)
 				);
-
 			},
 			error: (error: DefaultErrorResponse) => {
 				this._sweerAlertSvc.alertError(error.error_message);
@@ -155,11 +154,10 @@ export class DoctorsOfHospitalModalComponent {
 		this.doctorsOfHospitalFiltered = this.doctorsOfHospital.filter((doctor) =>
 			doctor.user.name.toLowerCase().includes(text.toLowerCase())
 		);
-		this.doctorsWithoutHospitalFiltered = this.doctorsWithoutHospital.filter((doctor) =>
-			doctor.user.name.toLowerCase().includes(text.toLowerCase())
+		this.doctorsWithoutHospitalFiltered = this.doctorsWithoutHospital.filter(
+			(doctor) => doctor.user.name.toLowerCase().includes(text.toLowerCase())
 		);
 	}
-
 
 	/**
 	 * ? Elemento que se esta arrastrando
@@ -193,15 +191,23 @@ export class DoctorsOfHospitalModalComponent {
 		if (!event || !event.target) return;
 		const { destination } = data;
 		const stringObject = event.dataTransfer?.getData('object')!;
-		const { from, ...doctor } = JSON.parse(stringObject);
-		console.log('❗onDrop  ➽ from ➽ ⏩', from);
+		const { from, ...doctorData } = JSON.parse(stringObject);
+		console.log('❗onDrop  ➽ from ➽ ⏩', doctorData);
 		if (from === destination) return;
 		if (destination === 'of-hospital') {
+			const doctor = this.doctorsOfHospital.find(
+				(doctorOrigin) => doctorOrigin.id === doctorData.id
+			);
+			if (!doctor) return;
 			this.doctorsWithoutHospital.push(doctor);
 			this.doctorsOfHospital = this.doctorsOfHospital.filter(
 				(doctorOrigin) => doctorOrigin.id !== doctor.id
 			);
 		} else {
+			const doctor = this.doctorsWithoutHospital.find(
+				(doctorOrigin) => doctorOrigin.id === doctorData.id
+			);
+			if (!doctor) return;
 			this.doctorsOfHospital.push(doctor);
 			this.doctorsWithoutHospital = this.doctorsWithoutHospital.filter(
 				(doctorOrigin) => doctorOrigin.id !== doctor.id
