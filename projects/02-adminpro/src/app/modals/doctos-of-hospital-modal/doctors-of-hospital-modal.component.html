@@ -33,7 +33,10 @@
 				<!-- <li *ngFor="let doctor of doctorsWithoutHospital"> -->
 				<!-- {{ doctor.user.name }} -->
 				<li
-					*ngFor="let doctor of doctorsOfHospital"
+					*ngFor="
+						let doctor of doctorsOfHospitalFiltered
+							| orderBy : 'user.name'
+					"
 					[draggable]="true"
 					(dragstart)="
 						onDragStart(
@@ -73,7 +76,10 @@
 			>
 				<!-- <li *ngFor="let doctor of doctorsOfHospital"> -->
 				<li
-					*ngFor="let doctor of doctorsWithoutHospital"
+					*ngFor="
+						let doctor of doctorsWithoutHospitalFiltered
+							| orderBy : 'user.name'
+					"
 					[draggable]="true"
 					(dragstart)="
 						onDragStart(

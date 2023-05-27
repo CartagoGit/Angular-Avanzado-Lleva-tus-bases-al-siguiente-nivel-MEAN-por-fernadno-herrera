@@ -26,3 +26,14 @@ export const isEqual = (x: any, y: any): boolean => {
 		objectKeys(x).every((key) => isEqual(x[key], y[key]))
 	);
 };
+
+
+/**
+ * ? Recyoera el valor de la propiedad aniadida en un objeto pasandole el objeto y un string
+ * @param {*} obj
+ * @param {string} path
+ * @returns {*}
+ */
+export const  getPropertyByString = (obj: any, path: string) : any => {
+	return path.split(".").reduce((acc, part) => acc && acc[part], obj);
+ }

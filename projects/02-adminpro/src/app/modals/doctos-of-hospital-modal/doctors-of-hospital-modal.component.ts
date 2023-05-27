@@ -140,7 +140,8 @@ export class DoctorsOfHospitalModalComponent {
 								.includes(this.data.id)
 					)
 					.map((doctor) => new Doctor(doctor));
-
+				this.doctorsWithoutHospitalFiltered =
+					this.doctorsWithoutHospital.map((doctor) => new Doctor(doctor));
 				this.doctorsOfHospital = doctors
 					.filter((doctor) =>
 						doctor.hospitals
@@ -148,6 +149,9 @@ export class DoctorsOfHospitalModalComponent {
 							.includes(this.data.id)
 					)
 					.map((doctor) => new Doctor(doctor));
+				this.doctorsOfHospitalFiltered = this.doctorsOfHospital.map(
+					(doctor) => new Doctor(doctor)
+				);
 			},
 			error: (error: DefaultErrorResponse) => {
 				this._sweerAlertSvc.alertError(error.error_message);
