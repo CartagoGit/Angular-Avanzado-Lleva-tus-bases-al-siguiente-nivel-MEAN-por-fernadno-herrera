@@ -3,10 +3,12 @@
 		Drag doctors between list, and update when you will finish
 	</h3>
 	<div class="search">
-
 		<div class="input-group">
 			<!-- <span class="input-group-addon pointer" (click)="search()"> -->
-			<span class="input-group-addon pointer" (click)="search(inputSearch.value)">
+			<span
+				class="input-group-addon pointer"
+				(click)="search(inputSearch.value)"
+			>
 				<i class="ti-search"></i>
 			</span>
 
@@ -16,7 +18,7 @@
 				class="form-control"
 				placeholder="Search doctor..."
 				(input)="search(inputSearch.value)"
-				/>
+			/>
 			<!-- (keyup.enter)="search()" -->
 		</div>
 	</div>
@@ -31,19 +33,31 @@
 				<!-- <li *ngFor="let doctor of doctorsWithoutHospital"> -->
 				<!-- {{ doctor.user.name }} -->
 				<li
-					*ngFor="let doctor of array1Filtered"
+					*ngFor="let doctor of doctorsOfHospital"
 					[draggable]="true"
-					(dragstart)="onDragStart($event, doctor, 'without-hospital')"
+					(dragstart)="
+						onDragStart(
+							$event,
+							{ id: doctor.id, name: doctor.user.name },
+							'without-hospital'
+						)
+					"
 					class="table-grid__row"
 				>
 					<!-- {{ doctor.user.name }} -->
 					<div class="table-grid__field center-items">
 						<img class="portrait" src="" alt="doctor image" />
 					</div>
-					<div class="table-grid__field ellipsis" [title]="doctor.name">
-						<span class="ellipsis">{{ doctor.name }}</span>
+					<div
+						class="table-grid__field ellipsis"
+						[title]="doctor.user.name"
+					>
+						<span class="ellipsis">{{ doctor.user.name }}</span>
 					</div>
-					<div class="table-grid__field ellipsis" [title]="doctor.name">
+					<div
+						class="table-grid__field ellipsis"
+						[title]="doctor.user.name"
+					>
 						<!-- TODO cambiar el title por el email del doctor -->
 						<span class="ellipsis">email</span>
 					</div>
@@ -59,9 +73,15 @@
 			>
 				<!-- <li *ngFor="let doctor of doctorsOfHospital"> -->
 				<li
-					*ngFor="let doctor of array2Filtered"
+					*ngFor="let doctor of doctorsWithoutHospital"
 					[draggable]="true"
-					(dragstart)="onDragStart($event, doctor, 'of-hospital')"
+					(dragstart)="
+						onDragStart(
+							$event,
+							{ id: doctor.id, name: doctor.user.name },
+							'of-hospital'
+						)
+					"
 					class="table-grid__row"
 				>
 					<!-- {{ doctor.user.name }} -->
@@ -69,10 +89,16 @@
 					<div class="table-grid__field center-items">
 						<img class="portrait" src="" alt="doctor image" />
 					</div>
-					<div class="table-grid__field ellipsis" [title]="doctor.name">
-						<span class="ellipsis">{{ doctor.name }}</span>
+					<div
+						class="table-grid__field ellipsis"
+						[title]="doctor.user.name"
+					>
+						<span class="ellipsis">{{ doctor.user.name }}</span>
 					</div>
-					<div class="table-grid__field ellipsis" [title]="doctor.name">
+					<div
+						class="table-grid__field ellipsis"
+						[title]="doctor.user.name"
+					>
 						<!-- TODO cambiar el title por el email del doctor -->
 						<span class="ellipsis">email</span>
 					</div>

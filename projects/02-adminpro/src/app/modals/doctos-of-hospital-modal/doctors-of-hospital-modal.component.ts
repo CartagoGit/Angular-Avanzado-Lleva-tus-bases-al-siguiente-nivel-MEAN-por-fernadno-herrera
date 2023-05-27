@@ -29,39 +29,39 @@ export class DoctorsOfHospitalModalComponent {
 
 	public areDoctorsChanged: boolean = false;
 
-	public array1 = [
-		{ id: 1, name: 'John' },
-		{ id: 2, name: 'Doe' },
-		{ id: 3, name: 'Jane' },
-		{ id: 4, name: 'Pepe' },
-		{ id: 5, name: 'Juan' },
-		{ id: 6, name: 'Pablo' },
-		{ id: 7, name: 'Pedro' },
-		{ id: 8, name: 'Pepito' },
-		{ id: 9, name: 'Pepa' },
-		{ id: 10, name: 'Pepita' },
-		{ id: 11, name: 'Pepin' },
-		{ id: 12, name: 'Pepinillo' },
-		{ id: 13, name: 'Anibal' },
-		{ id: 14, name: 'Anibalito' },
-		{ id: 15, name: 'Anibalina' },
-	];
-	public array1Filtered = this.array1.map((item) => item);
+	// public array1 = [
+	// 	{ id: 1, name: 'John' },
+	// 	{ id: 2, name: 'Doe' },
+	// 	{ id: 3, name: 'Jane' },
+	// 	{ id: 4, name: 'Pepe' },
+	// 	{ id: 5, name: 'Juan' },
+	// 	{ id: 6, name: 'Pablo' },
+	// 	{ id: 7, name: 'Pedro' },
+	// 	{ id: 8, name: 'Pepito' },
+	// 	{ id: 9, name: 'Pepa' },
+	// 	{ id: 10, name: 'Pepita' },
+	// 	{ id: 11, name: 'Pepin' },
+	// 	{ id: 12, name: 'Pepinillo' },
+	// 	{ id: 13, name: 'Anibal' },
+	// 	{ id: 14, name: 'Anibalito' },
+	// 	{ id: 15, name: 'Anibalina' },
+	// ];
+	// public array1Filtered = this.array1.map((item) => item);
 
-	public array2 = [
-		{ id: 1, name: 'Urraca' },
-		{ id: 2, name: 'Urracita' },
-		{ id: 3, name: 'Urracito' },
-		{ id: 4, name: 'Urracina' },
-		{ id: 5, name: 'Teruel' },
-		{ id: 6, name: 'Teruelita' },
-		{ id: 7, name: 'Teruelito' },
-	];
-	public array2Filtered = this.array2.map((item) => item);
+	// public array2 = [
+	// 	{ id: 1, name: 'Urraca' },
+	// 	{ id: 2, name: 'Urracita' },
+	// 	{ id: 3, name: 'Urracito' },
+	// 	{ id: 4, name: 'Urracina' },
+	// 	{ id: 5, name: 'Teruel' },
+	// 	{ id: 6, name: 'Teruelita' },
+	// 	{ id: 7, name: 'Teruelito' },
+	// ];
+	// public array2Filtered = this.array2.map((item) => item);
 
-	public relation: Record<fromTo, { id: number; name: string }[]> = {
-		'without-hospital': this.array1,
-		'of-hospital': this.array2,
+	public relation: Record<fromTo, Doctor[]> = {
+		'without-hospital': this.doctorsOfHospital,
+		'of-hospital': this.doctorsWithoutHospital,
 	};
 
 	// ANCHOR : Constructor
@@ -152,11 +152,11 @@ export class DoctorsOfHospitalModalComponent {
 	}
 
 	public search(text: string): void {
-		this.array1Filtered = this.array1.filter((item) =>
-			item.name.toLowerCase().includes(text.toLowerCase())
+		this.doctorsOfHospitalFiltered = this.doctorsOfHospital.filter((doctor) =>
+			doctor.user.name.toLowerCase().includes(text.toLowerCase())
 		);
-		this.array2Filtered = this.array2.filter((item) =>
-			item.name.toLowerCase().includes(text.toLowerCase())
+		this.doctorsWithoutHospitalFiltered = this.doctorsWithoutHospital.filter((doctor) =>
+			doctor.user.name.toLowerCase().includes(text.toLowerCase())
 		);
 	}
 
@@ -168,7 +168,7 @@ export class DoctorsOfHospitalModalComponent {
 	 */
 	public onDragStart(
 		event: DragEvent,
-		data: { id: number; name: string },
+		data: { id: string; name: string },
 		from: fromTo
 	): void {
 		const stringObject = JSON.stringify({ ...data, from });
@@ -197,13 +197,13 @@ export class DoctorsOfHospitalModalComponent {
 		console.log('❗onDrop  ➽ from ➽ ⏩', from);
 		if (from === destination) return;
 		if (destination === 'of-hospital') {
-			this.array2.push(doctor);
-			this.array1 = this.array1.filter(
+			this.doctorsWithoutHospital.push(doctor);
+			this.doctorsOfHospital = this.doctorsOfHospital.filter(
 				(doctorOrigin) => doctorOrigin.id !== doctor.id
 			);
 		} else {
-			this.array1.push(doctor);
-			this.array2 = this.array2.filter(
+			this.doctorsOfHospital.push(doctor);
+			this.doctorsWithoutHospital = this.doctorsWithoutHospital.filter(
 				(doctorOrigin) => doctorOrigin.id !== doctor.id
 			);
 		}
