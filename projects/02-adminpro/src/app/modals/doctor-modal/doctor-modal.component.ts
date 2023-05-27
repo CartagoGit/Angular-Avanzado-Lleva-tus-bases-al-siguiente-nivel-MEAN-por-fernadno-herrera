@@ -229,10 +229,17 @@ export class DoctorModalComponent {
 	 * @public
 	 */
 	public createDoctor(): void {
-		console.log(this.form());
+		const user_id = this.form()?.user?.id;
+		const hospitals_id = this.form()?.hospitals?.map(
+			(hospital) => hospital.id
+		);
 		if (!this.isFormValid()) return;
 		this._doctorSvc
-			.post({...this.form(), user: this.form()?.user?.id} as any)
+			.post({
+				...this.form(),
+				user: user_id as any,
+				hospitals: hospitals_id as any,
+			})
 			.pipe(
 				switchMap((resp) => {
 					const { model } = resp;
