@@ -1,4 +1,4 @@
-import { Component, WritableSignal, signal } from '@angular/core';
+import { Component, WritableSignal, effect, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EverywhereService } from '../../../shared/services/http/everywhere.service';
 import { DefaultErrorResponse } from '../../../shared/interfaces/http/response.interfaces';
@@ -22,7 +22,11 @@ export class GlobalSearchComponent {
 		private _activatedRoute: ActivatedRoute,
 		private _everywhereSvc: EverywhereService,
 		private _sweetAlertSvc: SweetAlertService
-	) {}
+	) {
+		effect(() => {
+			console.log(this.results()?.Doctors.data);
+		});
+	}
 
 	ngOnInit(): void {
 		this._activatedRoute.params.subscribe((params) => {

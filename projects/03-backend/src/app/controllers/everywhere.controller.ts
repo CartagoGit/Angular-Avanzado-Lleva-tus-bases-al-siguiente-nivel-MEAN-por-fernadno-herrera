@@ -33,12 +33,16 @@ export const everywhereController: {
 				if (modelName === 'Doctors') {
 					//* Hacemos un apaño para no liarnos mas con el curso cambiando el backend, aunque no sea lo optimo realmente, pero el proyecto es de prueba y no merece la pena perder mas tiempo modificando el backend
 					console.log('❗Object.entries  ➽ field ➽ ⏩', field);
-					const doctors = await DoctorModel.find({}, { populate: 'user' });
+					const doctors = await DoctorModel.find();
 					const doctorsFiltered = doctors.filter((doctor) => {
 						const user = doctor.user;
 						const userField = (user as any)[field];
 						return userField.includes(searching);
 					});
+					console.log(
+						'❗doctorsFiltered  ➽ doctorsFiltered ➽ ⏩',
+						doctorsFiltered
+					);
 
 					resultModel = {
 						pagination: undefined,

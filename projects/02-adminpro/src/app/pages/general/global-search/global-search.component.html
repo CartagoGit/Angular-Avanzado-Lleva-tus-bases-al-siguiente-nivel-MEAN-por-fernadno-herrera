@@ -72,7 +72,7 @@
 								>
 									<td class="avatar-td">
 										<img
-											[src]="doctor.dataImages?.defaultImgSrc"
+											[src]="doctor.dataImages?.defaultImgSrc! | safe"
 											[alt]="'Image from doctor ' + doctor.user.name"
 										/>
 									</td>
