@@ -110,7 +110,7 @@ export class CoreHttp<Endpoints> {
 		endpoint: keyof ({
 			root: '/';
 		} & Endpoints),
-		id?: TypeId
+		id?: TypeId,
 	): string {
 		if (!this.endpoints[endpoint]) throw new Error('Invalid endpoint');
 		return this.modelRoute + this.endpoints[endpoint] + (id || '');
