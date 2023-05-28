@@ -49,7 +49,11 @@
 				>
 					<!-- {{ doctor.user.name }} -->
 					<div class="table-grid__field center-items">
-						<img class="portrait" src="" alt="doctor image" />
+						<img
+							class="portrait"
+							[src]="doctor.dataImages.defaultImgSrc"
+							[alt]="'doctor image ' + doctor.user.name"
+						/>
 					</div>
 					<div
 						class="table-grid__field ellipsis"
@@ -61,8 +65,9 @@
 						class="table-grid__field ellipsis"
 						[title]="doctor.user.name"
 					>
-						<!-- TODO cambiar el title por el email del doctor -->
-						<span class="ellipsis">email</span>
+						<span class="ellipsis" [title]="doctor.user.email">{{
+							doctor.user.email
+						}}</span>
 					</div>
 				</li>
 			</ul>
@@ -93,7 +98,11 @@
 					<!-- {{ doctor.user.name }} -->
 					<!-- {{ doctor.user.email }} -->
 					<div class="table-grid__field center-items">
-						<img class="portrait" src="" alt="doctor image" />
+						<img
+							class="portrait"
+							[src]="doctor.dataImages.defaultImgSrc"
+							[alt]="'doctor image ' + doctor.user.name"
+						/>
 					</div>
 					<div
 						class="table-grid__field ellipsis"
@@ -105,8 +114,9 @@
 						class="table-grid__field ellipsis"
 						[title]="doctor.user.name"
 					>
-						<!-- TODO cambiar el title por el email del doctor -->
-						<span class="ellipsis">email</span>
+						<span class="ellipsis" [title]="doctor.user.email">{{
+							doctor.user.email
+						}}</span>
 					</div>
 				</li>
 			</ul>
