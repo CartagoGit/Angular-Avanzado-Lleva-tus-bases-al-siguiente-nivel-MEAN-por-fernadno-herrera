@@ -3,6 +3,8 @@ import { ResponseReturnData } from '../interfaces/response.interface';
 import { getErrorNotParam } from '../helpers/default-responses.helper';
 import { ApiModels } from '../models/mongo.models';
 import { getQueryIncludeAndPaginate } from '../helpers/query.helpers';
+import { DoctorModel } from '../models/mongo-models/doctors.model';
+import { UserModel, UserSchema } from '../models/mongo-models/user.model';
 
 /**
  * ? Controladores especificos para las busquedas en todos los modelos
@@ -26,20 +28,34 @@ export const everywhereController: {
 		const nameModels: string[] = [];
 		const datas = await Promise.all(
 			Object.entries(ApiModels).map(async ([modelName, model]) => {
-				if (modelName === 'Doctor') {
-					field = 'user.' + field;
-				}
-				// await model.collection.createIndex({ '$**': 'text' });
-				// return model.find({ $text: { $search: searching, $caseSensitive: false } });
 				nameModels.push(modelName);
-				return (model as any).paginate(
-					{
-						[field]: wantInclude
-							? { $regex: searching, $options: 'i' }
-							: searching,
-					},
-					optionsFromQuery
-				);
+				let resultModel;
+				if (modelName === 'Doctors') {
+					//* Hacemos un apaño para no liarnos mas con el curso cambiando el backend, aunque no sea lo optimo realmente, pero el proyecto es de prueba y no merece la pena perder mas tiempo modificando el backend
+					console.log('❗Object.entries  ➽ field ➽ ⏩', field);
+					const doctors = await DoctorModel.find({}, { populate: 'user' });
+					const doctorsFiltered = doctors.filter((doctor) => {
+						const user = doctor.user;
+						const userField = (user as any)[field];
+						return userField.includes(searching);
+					});
+
+					resultModel = {
+						pagination: undefined,
+						data: doctorsFiltered,
+					};
+				} else {
+					resultModel = await (model as any).paginate(
+						{
+							[field]: wantInclude
+								? { $regex: searching, $options: 'i' }
+								: searching,
+						},
+						optionsFromQuery
+					);
+				}
+
+				return resultModel;
 			})
 		);
 		let objData = {};

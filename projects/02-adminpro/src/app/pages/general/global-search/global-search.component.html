@@ -19,19 +19,21 @@
 						<table class="table">
 							<thead>
 								<tr>
-									<th>Avatar</th>
+									<th class="avatar-td">Avatar</th>
 									<th>Name</th>
+									<th>Email</th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr *ngFor="let user of results()?.Users?.data || []">
-									<td>
+									<td class="avatar-td">
 										<img
 											[src]="user.dataImages?.defaultImgSrc"
 											[alt]="'Image from user ' + user.name"
 										/>
 									</td>
 									<td>{{ user.name }}</td>
+									<td>{{ user.email }}</td>
 								</tr>
 							</tbody>
 						</table>
@@ -59,21 +61,23 @@
 						<table class="table">
 							<thead>
 								<tr>
-									<th>Avatar</th>
+									<th class="avatar-td">Avatar</th>
 									<th>Name</th>
+									<th>Email</th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr
 									*ngFor="let doctor of results()?.Doctors?.data || []"
 								>
-									<td>
+									<td class="avatar-td">
 										<img
 											[src]="doctor.dataImages?.defaultImgSrc"
 											[alt]="'Image from doctor ' + doctor.user.name"
 										/>
 									</td>
 									<td>{{ doctor.user.name }}</td>
+									<td>{{ doctor.user.email }}</td>
 								</tr>
 							</tbody>
 						</table>
@@ -101,8 +105,9 @@
 						<table class="table">
 							<thead>
 								<tr>
-									<th>Avatar</th>
+									<th class="avatar-td">Avatar</th>
 									<th>Name</th>
+									<th>Phone</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -111,13 +116,14 @@
 										let hospital of results()?.Hospitals?.data || []
 									"
 								>
-									<td>
+									<td class="avatar-td">
 										<img
 											[src]="hospital.dataImages?.defaultImgSrc"
 											[alt]="'Image from user ' + hospital.name"
 										/>
 									</td>
 									<td>{{ hospital.name }}</td>
+									<td>{{ hospital.phone }}</td>
 								</tr>
 							</tbody>
 						</table>
