@@ -3,6 +3,7 @@ import { paths } from '../../constants/paths.constant';
 import { StateService } from '../../services/settings/state.service';
 import { User } from '../../models/mongo-models/user.model';
 import { debounceTime, fromEvent } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
 	selector: 'app-header',
@@ -25,7 +26,7 @@ export class HeaderComponent {
 	private _lastSearch: string = '';
 
 	// ANCHOR : Constructor
-	constructor(private _stateSvc: StateService) {
+	constructor(private _stateSvc: StateService, private _router:Router) {
 		this.user = this._stateSvc.user!;
 	}
 
@@ -55,6 +56,7 @@ export class HeaderComponent {
 	 */
 	public search(text: string): void {
 		this._lastSearch = text;
-		console.log('Buscando...', text);
+		this._router.navigateByUrl(`${paths.getPath('global-search')?.fullPath}/${text}`);
+
 	}
 }

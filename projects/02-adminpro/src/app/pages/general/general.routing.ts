@@ -20,7 +20,7 @@ const routes: Routes = [
 		component: ProfileComponent,
 	},
 	{
-		path: globalSearchPath?.name,
+		path: `${globalSearchPath?.name}/:query`,
 		data: { titulo: globalSearchPath?.title },
 		component: GlobalSearchComponent,
 	},

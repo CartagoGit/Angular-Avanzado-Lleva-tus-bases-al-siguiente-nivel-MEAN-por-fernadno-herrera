@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
 	selector: 'app-global-search',
@@ -9,8 +10,17 @@ export class GlobalSearchComponent {
 	// ANCHOR : Variables
 
 	// ANCHOR : Constructor
-	constructor() {}
+	constructor(private _activatedRoute: ActivatedRoute) {}
+
+	ngOnInit(): void {
+
+		this._activatedRoute.params.subscribe((params) => {
+			const { query } = params;
+			
+		});
+
+	}
 
 	// ANCHOR : Methods
-	
+
 }
