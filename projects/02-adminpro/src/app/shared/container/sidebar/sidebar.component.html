@@ -28,8 +28,6 @@
 								>My Profile
 							</a>
 						</li>
-						<li><a href="#">My Balance</a></li>
-						<li><a href="#">Inbox</a></li>
 						<li>
 							<a
 								[routerLink]="[settingsPath?.fullPath]"
@@ -54,7 +52,7 @@
 							!item.needAdmin
 						"
 					>
-					<div *ngIf="item.needAdmin" class="badge admin">Admin</div>
+						<div *ngIf="item.needAdmin" class="badge admin">Admin</div>
 						<a
 							class="has-arrow waves-effect waves-dark"
 							href="#"
