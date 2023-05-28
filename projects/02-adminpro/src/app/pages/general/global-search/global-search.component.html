@@ -25,7 +25,12 @@
 							</thead>
 							<tbody>
 								<tr *ngFor="let user of results()?.Users?.data || []">
-									<td>{{ user }}</td>
+									<td>
+										<img
+											[src]="user.dataImages?.defaultImgSrc"
+											[alt]="'Image from user ' + user.name"
+										/>
+									</td>
 									<td>{{ user.name }}</td>
 								</tr>
 							</tbody>
@@ -62,7 +67,12 @@
 								<tr
 									*ngFor="let doctor of results()?.Doctors?.data || []"
 								>
-									<td>{{ doctor }}</td>
+									<td>
+										<img
+											[src]="doctor.dataImages?.defaultImgSrc"
+											[alt]="'Image from doctor ' + doctor.user.name"
+										/>
+									</td>
 									<td>{{ doctor.user.name }}</td>
 								</tr>
 							</tbody>
@@ -101,7 +111,12 @@
 										let hospital of results()?.Hospitals?.data || []
 									"
 								>
-									<td>{{ hospital }}</td>
+									<td>
+										<img
+											[src]="hospital.dataImages?.defaultImgSrc"
+											[alt]="'Image from user ' + hospital.name"
+										/>
+									</td>
 									<td>{{ hospital.name }}</td>
 								</tr>
 							</tbody>
