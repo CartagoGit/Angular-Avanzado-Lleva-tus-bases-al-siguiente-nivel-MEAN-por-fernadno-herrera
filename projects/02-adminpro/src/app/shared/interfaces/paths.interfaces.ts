@@ -12,7 +12,7 @@ export type NotLogedSections = 'maintenance' | 'auth' | 'no-page-found';
 export type LogedSections = 'general' | 'dashboard' | 'support';
 
 //* Secciones internas hijas
-export type GeneralSections = 'settings' | 'profile';
+export type GeneralSections = 'settings' | 'profile' | 'global-search';
 
 export type DashboardSections =
 	| 'main'

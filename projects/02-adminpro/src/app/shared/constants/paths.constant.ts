@@ -5,7 +5,7 @@ class PathConstants {
 	// ANCHOR : Variables
 
 	public static pathsTree = {
-		loged: {
+		notLoged: {
 			auth: new Path({
 				name: 'auth',
 				title: 'Authenticacion',
@@ -31,7 +31,7 @@ class PathConstants {
 				title: 'No Page Found',
 			}),
 		},
-		notLoged: {
+		loged: {
 			general: new Path({
 				name: 'general',
 				title: 'General',
@@ -42,6 +42,10 @@ class PathConstants {
 				settings: {
 					title: 'Settings',
 					name: 'settings',
+				},
+				'global-search': {
+					title: 'Global Search',
+					name: 'global-search',
 				},
 			}),
 			dashboard: new Path({
@@ -71,27 +75,25 @@ class PathConstants {
 				signals: {
 					title: 'Signals',
 					name: 'signals',
-				}
-
+				},
 			}),
 			support: new Path({
 				name: 'support',
 				title: 'Support',
 				icon: 'mdi mdi-folder-lock-open',
-				users :{
+				users: {
 					title: 'Users',
 					name: 'users',
 				},
-				hospitals :{
+				hospitals: {
 					title: 'Hospitals',
 					name: 'hospitals',
 				},
-				doctors :{
+				doctors: {
 					title: 'Doctors',
 					name: 'doctors',
 				},
-
-			})
+			}),
 		},
 	};
 
