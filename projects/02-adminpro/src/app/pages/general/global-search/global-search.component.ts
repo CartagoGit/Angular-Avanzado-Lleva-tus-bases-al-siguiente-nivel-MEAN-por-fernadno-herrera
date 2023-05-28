@@ -57,6 +57,7 @@ export class GlobalSearchComponent {
 					const {
 						data: { Users, Doctors, Hospitals },
 					} = resp;
+					this.results.set({ Users, Doctors, Hospitals });
 
 					console.log('Users', Users);
 					console.log('Doctors', Doctors);

@@ -28,7 +28,7 @@ export interface RequestEverywhere {
  * @typedef {CollectionModels}
  */
 export interface CollectionModels {
-	Users: DefaultResponse<User>;
-	Hospitals: DefaultResponse<Hospital>;
-	Doctors: DefaultResponse<Doctor>;
+	Users: DefaultResponse<User[]>;
+	Hospitals: DefaultResponse<Hospital[]>;
+	Doctors: DefaultResponse<Doctor[]>;
 }

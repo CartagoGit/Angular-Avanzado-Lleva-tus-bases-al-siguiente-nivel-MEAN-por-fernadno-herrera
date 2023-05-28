@@ -1,8 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { CoreHttp } from '../../models/http/core-http.model';
 import { QueryOptions } from '../../interfaces/http/request.interface';
+import { RequestEverywhere } from '../../interfaces/http/everywhere.interfaces';
+import { User } from '../../models/mongo-models/user.model';
+import { Doctor } from '../../models/mongo-models/doctor.model';
+import { Hospital } from '../../models/mongo-models/hospital.model';
 
 /**
  * ? Endpoints del modelo
@@ -45,10 +49,32 @@ export class EverywhereService extends CoreHttp<Endpoints> {
 			options: JSON.stringify(options),
 		};
 		const { field, search } = data;
-		return this._http.get(
-			this.getUrlEndpoint('root').slice(0, -1) +
-				modelEndpoints.getFrom(field, search),
-			{ params }
-		);
+		return this._http
+			.get<RequestEverywhere>(
+				this.getUrlEndpoint('root').slice(0, -1) +
+					modelEndpoints.getFrom(field, search),
+				{ params }
+			)
+			.pipe(
+				map((res) => {
+					const { data } = res;
+					const Users =
+						data?.Users?.data?.map((user) => {
+							return new User(user);
+						}) || ([] as User[]);
+					const Doctors =
+						data?.Doctors?.data?.map((doctor) => {
+							return new Doctor(doctor);
+						}) || ([] as Doctor[]);
+					const Hospitals =
+						data?.Hospitals?.data?.map((hospital) => {
+							return new Hospital(hospital);
+						}) || ([] as Hospital[]);
+					res.data.Users.data = Users;
+					res.data.Doctors.data = Doctors;
+					res.data.Hospitals.data = Hospitals;
+					return res;
+				})
+			);
 	}
 }
