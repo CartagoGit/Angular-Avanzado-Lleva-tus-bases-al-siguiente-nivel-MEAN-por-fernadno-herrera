@@ -17,7 +17,7 @@ const modelEndpoints: {
 type Endpoints = typeof modelEndpoints;
 
 //* Ruta del modelo
-const modelRouteEndpoint = '/files';
+const modelRouteEndpoint = '/everywhere';
 
 @Injectable({
 	providedIn: 'root',
@@ -45,6 +45,10 @@ export class EverywhereService extends CoreHttp<Endpoints> {
 			options: JSON.stringify(options),
 		};
 		const { field, search } = data;
-		return this._http.get(modelEndpoints.getFrom(field, search), { params });
+		return this._http.get(
+			this.getUrlEndpoint('root').slice(0, -1) +
+				modelEndpoints.getFrom(field, search),
+			{ params }
+		);
 	}
 }
