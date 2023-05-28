@@ -1,1 +1,77 @@
-<p>global-search works!</p>
+<div class="row">
+	<div class="col-4">
+		<div class="card">
+			<div class="card-body">
+				<h3>Users</h3>
+
+				<div class="table-responsive">
+					<table class="table">
+						<thead>
+							<tr>
+								<th>Avatar</th>
+								<th>Name</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr *ngFor="let user of ['PePe', 'Maria']">
+								<td>{{ user }}</td>
+								<td>hard</td>
+							</tr>
+
+
+
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-4">
+		<div class="card">
+			<div class="card-body"><h3>Doctor</h3>
+				<div class="table-responsive">
+					<table class="table">
+						<thead>
+							<tr>
+								<th>Avatar</th>
+								<th>Name</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr *ngFor="let doctor of ['PePe', 'Maria']">
+								<td>{{ doctor }}</td>
+								<td>hard</td>
+							</tr>
+
+
+
+						</tbody>
+					</table>
+				</div></div>
+		</div>
+	</div>
+	<div class="col-4">
+		<div class="card">
+			<div class="card-body"><h3>Hospital</h3>
+				<div class="table-responsive">
+					<table class="table">
+						<thead>
+							<tr>
+								<th>Avatar</th>
+								<th>Name</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr *ngFor="let hospital of ['PePe', 'Maria']">
+								<td>{{ hospital }}</td>
+								<td>hard</td>
+							</tr>
+
+
+
+						</tbody>
+					</table>
+				</div></div>
+		</div>
+	</div>
+</div>

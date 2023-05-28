@@ -51,7 +51,7 @@ export class HeaderComponent {
 				)
 					return;
 				if (text.trim().length === 0) {
-					this._router.navigateByUrl(this._lastRoute);
+					this._router.navigateByUrl(this._lastRoute|| paths.getPath('dashboard')?.fullPath!);
 					return;
 				}
 				this.search(text.trim());
