@@ -46,13 +46,7 @@
 		"sweetalert2": "^11.7.5",
 		"tslib": "^2.5.0",
 		"uuid": "^9.0.0",
-		"zone.js": "~0.13.0"
-	},
-	"devDependencies": {
-		"@angular-devkit/build-angular": "~16.0.1",
-		"@angular/cli": "~16.0.1",
-		"@angular/compiler-cli": "~16.0.1",
-		"@angular/language-service": "~16.0.1",
+		"zone.js": "~0.13.0",
 		"@nx/angular": "16.1.0",
 		"@nx/cypress": "16.1.0",
 		"@nx/esbuild": "16.1.0",
@@ -61,7 +55,13 @@
 		"@nx/node": "16.1.0",
 		"@nx/web": "16.1.0",
 		"@nx/webpack": "16.1.0",
-		"@nx/workspace": "16.1.0",
+		"@nx/workspace": "16.1.0"
+	},
+	"devDependencies": {
+		"@angular-devkit/build-angular": "~16.0.1",
+		"@angular/cli": "~16.0.1",
+		"@angular/compiler-cli": "~16.0.1",
+		"@angular/language-service": "~16.0.1",
 		"@types/bcryptjs": "^2.4.2",
 		"@types/cors": "^2.8.13",
 		"@types/crypto-js": "^4.1.1",
