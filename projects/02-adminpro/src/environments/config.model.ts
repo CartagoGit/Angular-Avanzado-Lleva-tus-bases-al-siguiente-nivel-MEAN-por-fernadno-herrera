@@ -8,7 +8,7 @@ export type Mode = 'production' | 'development';
  */
 interface ConfigProps {
 	MODE: Mode;
-	API_PORT: number;
+	API_PORT: number | undefined;
 	API_URL_BASE: string;
 	GOOGLE_ID: string;
 	MAPBOX_KEY: string;
@@ -27,7 +27,7 @@ export class Config implements ConfigProps {
 	public MODE!: Mode;
 	public API_URL_BASE!: string;
 	public GOOGLE_ID!: string;
-	public API_PORT!: number;
+	public API_PORT!: number | undefined;
 	public MAPBOX_KEY: string;
 
 	get API_URL() {
@@ -37,7 +37,6 @@ export class Config implements ConfigProps {
 	get API_ENDPOINT() {
 		return this.API_URL + '/api';
 	}
-
 
 	// ANCHOR : Constructor
 	constructor(data: ConfigProps) {
