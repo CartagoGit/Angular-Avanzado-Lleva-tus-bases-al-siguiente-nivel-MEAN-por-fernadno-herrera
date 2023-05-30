@@ -35,7 +35,6 @@ export class Config implements ConfigProps {
 	}
 
 	get API_ENDPOINT() {
-		console.log('[ URL API ] ', this.API_URL + '/api');
 		return this.API_URL + '/api';
 	}
 
