@@ -31,7 +31,7 @@ export class Config implements ConfigProps {
 	public MAPBOX_KEY: string;
 
 	get API_URL() {
-		return this.API_URL_BASE + this.API_PORT;
+		return this.API_URL_BASE + (this.API_PORT || '');
 	}
 
 	get API_ENDPOINT() {
