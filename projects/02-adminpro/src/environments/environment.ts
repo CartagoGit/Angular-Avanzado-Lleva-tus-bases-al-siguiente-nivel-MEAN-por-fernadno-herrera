@@ -1,5 +1,13 @@
-import { hide_environments } from 'global/hide_environments';
+// import { hide_environments } from 'global/hide_environments';
 import { Config } from './config.model';
+
+let hide_environments: any;
+
+try {
+	hide_environments = require('global/hide_environments');
+} catch (error) {
+	hide_environments = {};
+}
 
 const { MAPBOX_KEY } = hide_environments;
 

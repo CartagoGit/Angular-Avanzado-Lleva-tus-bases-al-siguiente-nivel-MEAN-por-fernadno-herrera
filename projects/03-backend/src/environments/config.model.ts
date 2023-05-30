@@ -1,4 +1,4 @@
-import { hide_environments } from '../../../../global/hide_environments';
+// import { hide_environments } from '../../../../global/hide_environments';
 import { getSha256 } from '../app/helpers/encrypt.helper';
 import { OAuth2Client } from 'google-auth-library';
 
@@ -26,6 +26,14 @@ import { OAuth2Client } from 'google-auth-library';
 // 	GOOGLE_SECRET: 'la_clave_secreta_de_google'
 //    MAPBOX_KEY: 'el token de map box
 // }
+
+let hide_environments: any;
+
+try {
+	hide_environments = require('../../../../global/hide_environments');
+} catch (error) {
+	hide_environments = {};
+}
 
 //* Posibles modos o estado de la aplicacion
 export type Mode = 'production' | 'development';
