@@ -1,5 +1,8 @@
 import { Config } from './config.model';
 
+import * as dotenv from 'dotenv';
+dotenv.config();
+
 export const environment: Config = new Config({
 	API_PORT: process.env['PORT'] || undefined,
 	MODE: 'production',
