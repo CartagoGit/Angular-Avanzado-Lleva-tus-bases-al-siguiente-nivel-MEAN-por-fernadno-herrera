@@ -4,7 +4,8 @@ import { Config } from './config.model';
 // dotenv.config();
 
 export const environment: Config = new Config({
-	API_PORT: process.env['PORT'] || undefined,
+	API_PORT: undefined,
+	// process.env['PORT'] || undefined,
 	MODE: 'production',
 	API_URL_BASE: 'https://backend-angular-avanzado.onrender.com',
 	// process.env['API_URL_BASE'] || '',
