@@ -55,7 +55,9 @@
 		"@nx/node": "16.1.0",
 		"@nx/web": "16.1.0",
 		"@nx/webpack": "16.1.0",
-		"@nx/workspace": "16.1.0"
+		"@nx/workspace": "16.1.0",
+		"nx": "16.1.0",
+		"nx-cloud": "16.0.5"
 	},
 	"devDependencies": {
 		"@angular-devkit/build-angular": "~16.0.1",
@@ -90,8 +92,6 @@
 		"karma-coverage": "~2.2.0",
 		"karma-jasmine": "~5.1.0",
 		"karma-jasmine-html-reporter": "~2.0.0",
-		"nx": "16.1.0",
-		"nx-cloud": "16.0.5",
 		"prettier": "^2.8.8",
 		"ts-jest": "29.1.0",
 		"ts-node": "10.9.1",
