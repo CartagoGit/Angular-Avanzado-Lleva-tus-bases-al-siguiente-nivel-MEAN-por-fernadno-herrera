@@ -8,7 +8,7 @@ export type Mode = 'production' | 'development';
  */
 interface ConfigProps {
 	MODE: Mode;
-	API_PORT: number | undefined;
+	API_PORT: number | string | undefined;
 	API_URL_BASE: string;
 	GOOGLE_ID: string;
 	MAPBOX_KEY: string;
@@ -35,14 +35,16 @@ export class Config implements ConfigProps {
 	}
 
 	get API_ENDPOINT() {
-		console.log('[ URL API ] ',this.API_URL + '/api')
+		console.log('[ URL API ] ', this.API_URL + '/api');
 		return this.API_URL + '/api';
 	}
 
 	// ANCHOR : Constructor
 	constructor(data: ConfigProps) {
 		this.MODE = data.MODE;
-		this.API_PORT = data.API_PORT;
+		this.API_PORT = isNaN(Number(data.API_PORT))
+			? undefined
+			: Number(data.API_PORT);
 		this.API_URL_BASE = data.API_URL_BASE;
 		this.GOOGLE_ID = data.GOOGLE_ID;
 		this.MAPBOX_KEY = data.MAPBOX_KEY;
