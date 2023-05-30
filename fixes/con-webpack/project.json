@@ -1,5 +1,5 @@
 {
-	"name": "03-backend",
+	"name": "03-backend-con-webpack",
 	"$schema": "../../node_modules/nx/schemas/project-schema.json",
 	"sourceRoot": "projects/03-backend/src",
 	"projectType": "application",

@@ -72,19 +72,19 @@ export class Config implements ConfigProps {
 	// public UPLOAD_FOLDER: string = `/uploads`;
 	public GOOGLE_CLIENT!: { GOOGLE_ID: string; GOOGLE_CLIENT: OAuth2Client };
 	private _MONGO_PASSWORD: string =
-		process.env['MONGO_PASSWORD'] || hide_environments.MONGO_PASSWORD;
+		process.env['MONGO_PASSWORD'] || hide_environments?.MONGO_PASSWORD;
 	private _MONGO_USERNAME: string =
-		process.env['MONGO_USERNAME'] || hide_environments.MONGO_USERNAME;
+		process.env['MONGO_USERNAME'] || hide_environments?.MONGO_USERNAME;
 	private _MONGO_CLUSTER: string =
-		process.env['MONGO_CLUSTER'] || hide_environments.MONGO_CLUSTER;
+		process.env['MONGO_CLUSTER'] || hide_environments?.MONGO_CLUSTER;
 	private _MONGO_OPTIONS: {} | string =
-		process.env['MONGO_OPTIONS'] || hide_environments.MONGO_OPTIONS || {};
+		process.env['MONGO_OPTIONS'] || hide_environments?.MONGO_OPTIONS || {};
 	private _MONGO_DB: string =
-		process.env['MONGO_DB'] || hide_environments.MONGO_DB || '';
+		process.env['MONGO_DB'] || hide_environments?.MONGO_DB || '';
 	private _JWT_SECRET: string =
-		process.env['JWT_SECRET'] || hide_environments.JWT_SECRET;
+		process.env['JWT_SECRET'] || hide_environments?.JWT_SECRET;
 	private _GOOGLE_SECRET: string =
-		process.env['GOOGLE_SECRET'] || hide_environments.JWT_SECRET;
+		process.env['GOOGLE_SECRET'] || hide_environments?.JWT_SECRET;
 
 	get API_URL() {
 		return this.API_URL_BASE + this.PORT + '/api';

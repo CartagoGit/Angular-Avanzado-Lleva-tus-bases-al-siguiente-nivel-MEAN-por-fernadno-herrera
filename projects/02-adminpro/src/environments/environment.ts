@@ -9,7 +9,7 @@ try {
 	hide_environments = {};
 }
 
-const { MAPBOX_KEY } = hide_environments;
+const { MAPBOX_KEY = '' } = hide_environments || {};
 
 export const environment: Config = new Config({
 	API_PORT: 5000,
