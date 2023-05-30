@@ -6,7 +6,7 @@
 		"ng": "ng",
 		"update": "npm i -g npm-check-updates && ncu -u && npm i --save --legacy-peer-deps && npm i",
 		"start": "ng serve",
-		"start:backend": "nx serve --project='03-backend' --configuration production ",
+		"start:backend": "npx nx serve --project='03-backend' --configuration production ",
 		"build": "ng build",
 		"build:adminpro": "nx build --project='02-adminpro' --configuration production",
 		"watch": "ng build --watch --configuration development",
@@ -16,7 +16,7 @@
 		"dev:adminpro": "nx serve --project='02-adminpro'",
 		"dev:adminpro:config": "nx serve --project='02-adminpro' --configuration=development",
 		"dev:backend": "nx serve --project='03-backend'",
-		"build:backend": "nx build --project='03-backend' --configuration production"
+		"build:backend": "npx nx build --project='03-backend' --configuration production"
 	},
 	"private": true,
 	"dependencies": {
