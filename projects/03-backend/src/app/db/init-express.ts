@@ -38,6 +38,9 @@ export const initExpress = () => {
 	//* Crea las rutas para las peticiones
 	app.use('/api', rootRoutes.router);
 
+	//* Para cualquier otra ruta, devuelve el index.html de la carpeta public
+	app.use('*', express.static(__dirname + '/public'));
+
 	//* Inicia el servidor en el puerto establecido
 	app.listen(port, () => {
 		log({ msg: initLog, logType: 'EXPRESS' });
