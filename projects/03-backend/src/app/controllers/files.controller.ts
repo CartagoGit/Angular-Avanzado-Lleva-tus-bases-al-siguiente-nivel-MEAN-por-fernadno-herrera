@@ -29,7 +29,7 @@ export const filesController: {
 } = {
 	upload: async (req: Request) => {
 		const options = req.query['options'] as any;
-		const { replace, replaceAll } = options;
+		const { replace, replaceAll } = options || {};
 		//* Si se recibe el valor replace, elimina los archivos que existieran en el anterior path del modelo, sino simplemente añade nuevos
 		const isReplace = !!replace;
 		//* Si se recibe el valor 'replaceAll', elimina TODOS los archivos de ese tipo que existan de esa id
