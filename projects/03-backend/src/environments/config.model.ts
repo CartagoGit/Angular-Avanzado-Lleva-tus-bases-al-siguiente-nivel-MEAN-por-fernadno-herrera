@@ -44,7 +44,7 @@ export type Mode = 'production' | 'development';
  * @typedef {ConfigProps}
  */
 interface ConfigProps {
-	PORT: number;
+	PORT: number | undefined;
 	MODE: Mode;
 	API_URL_BASE: string;
 	GOOGLE_ID: string;
@@ -60,7 +60,7 @@ interface ConfigProps {
 export class Config implements ConfigProps {
 	// ANCHOR : Variables
 	//* ConfigProps
-	public PORT!: number;
+	public PORT: number | undefined = undefined;
 	public MODE!: Mode;
 	public API_URL_BASE!: string;
 	public GOOGLE_ID!: string;
