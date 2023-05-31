@@ -87,7 +87,7 @@ export class Config implements ConfigProps {
 		process.env['GOOGLE_SECRET'] || hide_environments?.JWT_SECRET;
 
 	get API_URL() {
-		return this.API_URL_BASE + this.PORT + '/api';
+		return this.API_URL_BASE + (this.PORT ?? '') + '/api';
 	}
 
 	get UPLOAD_FOLDER() {
